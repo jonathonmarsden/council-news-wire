@@ -242,19 +242,7 @@ def post_new_articles(
             print(f"  {marker} {article.council_name}: {article.title[:50]}...")
         return posted_urls
     
-    last_post_time = state.get('last_post_time')
-    
-    # Check 5-minute gap requirement (TEMPORARY: reduced from 15 to clear backlog)
-    if last_post_time:
-        last_post_dt = datetime.fromisoformat(last_post_time)
-        time_since_last = datetime.now() - last_post_dt
-        min_gap = timedelta(minutes=5)
-        
-        if time_since_last < min_gap:
-            wait_seconds = (min_gap - time_since_last).total_seconds()
-            print(f"\n⏳ Must wait {int(wait_seconds)}s before next post (5-min gap)")
-            print(f"   Last post: {last_post_dt.strftime('%H:%M:%S')}")
-            return posted_urls
+    # TEMPORARY: Skip gap check - posting multiple articles per run to clear backlog
     
     # Initialize poster
     poster = BlueSkyPoster()
@@ -262,28 +250,38 @@ def post_new_articles(
         print("Failed to authenticate with BlueSky")
         return posted_urls
     
-    # Post only ONE article (respect 15-min gap by posting one at a time)
-    article = prioritized[0]
-    is_new = article.url not in known_urls
-    
-    if poster.post_article(
-        article.council_name, 
-        article.title, 
-        article.url,
-        date=article.date,
-        excerpt=article.excerpt
-    ):
-        posted_urls.add(article.url)
-        # Update state
-        state['posted_urls'] = list(posted_urls)
-        state['last_post_time'] = datetime.now().isoformat()
-        # Add all scraped URLs to known_urls
-        all_scraped_urls = [a.url for a in fresh_articles]
-        state['known_urls'] = list(set(known_urls) | set(all_scraped_urls))
-        save_bot_state(state)
+    # Post articles up to the limit
+    # TEMPORARY: Skip gap check to clear backlog faster (posting multiple per run)
+    posted_count = 0
+    for article in prioritized:
+        is_new = article.url not in known_urls
         
-        marker = "🆕 NEW" if is_new else "📰 BACKLOG"
-        print(f"\n✅ Posted 1 {marker} article. {len(prioritized) - 1} remaining.")
+        if poster.post_article(
+            article.council_name, 
+            article.title, 
+            article.url,
+            date=article.date,
+            excerpt=article.excerpt
+        ):
+            posted_urls.add(article.url)
+            posted_count += 1
+            marker = "🆕 NEW" if is_new else "📰 BACKLOG"
+            print(f"✅ Posted {marker}: {article.title[:50]}...")
+        
+        # Small delay between posts to avoid rate limiting
+        if posted_count < len(prioritized):
+            import time
+            time.sleep(2)
+    
+    # Update state after all posts
+    state['posted_urls'] = list(posted_urls)
+    state['last_post_time'] = datetime.now().isoformat()
+    # Add all scraped URLs to known_urls
+    all_scraped_urls = [a.url for a in fresh_articles]
+    state['known_urls'] = list(set(known_urls) | set(all_scraped_urls))
+    save_bot_state(state)
+    
+    print(f"\n✅ Posted {posted_count} articles. {len(prioritized) - posted_count} remaining in queue.")
     
     return posted_urls
 
