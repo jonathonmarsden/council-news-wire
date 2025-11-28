@@ -244,15 +244,15 @@ def post_new_articles(
     
     last_post_time = state.get('last_post_time')
     
-    # Check 15-minute gap requirement
+    # Check 5-minute gap requirement (TEMPORARY: reduced from 15 to clear backlog)
     if last_post_time:
         last_post_dt = datetime.fromisoformat(last_post_time)
         time_since_last = datetime.now() - last_post_dt
-        min_gap = timedelta(minutes=15)
+        min_gap = timedelta(minutes=5)
         
         if time_since_last < min_gap:
             wait_seconds = (min_gap - time_since_last).total_seconds()
-            print(f"\n⏳ Must wait {int(wait_seconds)}s before next post (15-min gap)")
+            print(f"\n⏳ Must wait {int(wait_seconds)}s before next post (5-min gap)")
             print(f"   Last post: {last_post_dt.strftime('%H:%M:%S')}")
             return posted_urls
     
@@ -319,6 +319,11 @@ def main():
         default=0,
         help='Maximum number of articles to post (0 = no limit)'
     )
+    parser.add_argument(
+        '--post-only',
+        action='store_true',
+        help='Post from backlog without scraping (for overnight runs)'
+    )
     
     args = parser.parse_args()
     
@@ -345,10 +350,34 @@ def main():
             print(f"Council '{args.council}' not found")
             sys.exit(1)
     
-    # Scrape articles
-    articles = scrape_all_councils(councils, enabled_only=not args.all)
-    
-    print(f"\nTotal: {len(articles)} articles scraped")
+    # Post-only mode: skip scraping, post from existing backlog
+    if args.post_only:
+        print("Post-only mode: skipping scrape, posting from backlog...")
+        state = load_bot_state()
+        known_urls = set(state.get('known_urls', []))
+        
+        if not known_urls:
+            print("No articles in backlog to post")
+            sys.exit(0)
+        
+        # Create minimal article objects from known URLs for posting
+        # We need to re-scrape just to get article data, but only for unposted ones
+        unposted_urls = known_urls - posted_urls
+        if not unposted_urls:
+            print("No unposted articles in backlog")
+            sys.exit(0)
+        
+        print(f"Found {len(unposted_urls)} unposted articles in backlog")
+        
+        # We still need to scrape to get article details, but this is quick
+        articles = scrape_all_councils(councils, enabled_only=not args.all)
+        # Filter to only unposted backlog items
+        articles = [a for a in articles if a.url in unposted_urls]
+        print(f"Matched {len(articles)} articles for posting")
+    else:
+        # Normal mode: scrape articles
+        articles = scrape_all_councils(councils, enabled_only=not args.all)
+        print(f"\nTotal: {len(articles)} articles scraped")
     
     # Post new articles (state is saved inside post_new_articles)
     posted_urls = post_new_articles(articles, posted_urls, dry_run=args.dry_run, limit=args.limit)
