@@ -29,8 +29,9 @@
       "name": "Benalla Rural City Council",
       "news_url": "https://www.benalla.vic.gov.au/latest-news/",
       "scraper": "card_scraper",
-      "enabled": true,
-      "category": "A"
+      "enabled": false,
+      "category": "A",
+      "note": "Carousel-only news display - no individual article URLs"
     },
     {
       "id": "buloke",
@@ -247,8 +248,9 @@
       "name": "Moonee Valley City Council",
       "news_url": "https://mvcc.vic.gov.au/play/my-week/news/",
       "scraper": "card_scraper",
-      "enabled": true,
-      "category": "B"
+      "enabled": false,
+      "category": "C",
+      "note": "WAF blocked (Incapsula)"
     },
     {
       "id": "banyule",
