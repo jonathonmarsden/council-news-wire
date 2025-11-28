@@ -9,6 +9,7 @@ import argparse
 import json
 import os
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Set
 
@@ -22,6 +23,9 @@ POSTED_FILE = DATA_DIR / 'posted_articles.json'
 CONFIG_DIR = Path(__file__).parent / 'config'
 COUNCILS_FILE = CONFIG_DIR / 'councils.json'
 
+# Maximum age for articles (in days) - Chris wants fresh content only
+MAX_ARTICLE_AGE_DAYS = 7
+
 
 def load_councils() -> List[Dict]:
     """Load council configuration from JSON file."""
@@ -30,23 +34,58 @@ def load_councils() -> List[Dict]:
     return data.get('councils', [])
 
 
-def load_posted_articles() -> Set[str]:
-    """Load the set of previously posted article URLs."""
+def load_bot_state() -> Dict:
+    """
+    Load the bot's persistent state.
+    
+    State includes:
+    - posted_urls: Set of URLs already posted
+    - last_post_time: ISO timestamp of last post (for 15-min gap)
+    - initial_scrape_done: Whether first full scrape is complete
+    - backlog_urls: List of URLs in the backlog queue (older articles)
+    """
     if not POSTED_FILE.exists():
-        return set()
+        return {
+            'posted_urls': [],
+            'last_post_time': None,
+            'initial_scrape_done': False,
+            'backlog_urls': []
+        }
     
     with open(POSTED_FILE, 'r') as f:
         data = json.load(f)
     
-    return set(data.get('posted_urls', []))
+    # Handle legacy format (just posted_urls list)
+    if isinstance(data.get('posted_urls'), list) and 'last_post_time' not in data:
+        return {
+            'posted_urls': data.get('posted_urls', []),
+            'last_post_time': None,
+            'initial_scrape_done': False,
+            'backlog_urls': []
+        }
+    
+    return data
 
 
-def save_posted_articles(posted_urls: Set[str]) -> None:
-    """Save the set of posted article URLs."""
+def save_bot_state(state: Dict) -> None:
+    """Save the bot's persistent state."""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     
     with open(POSTED_FILE, 'w') as f:
-        json.dump({'posted_urls': list(posted_urls)}, f, indent=2)
+        json.dump(state, f, indent=2)
+
+
+def load_posted_articles() -> Set[str]:
+    """Load the set of previously posted article URLs (legacy helper)."""
+    state = load_bot_state()
+    return set(state.get('posted_urls', []))
+
+
+def save_posted_articles(posted_urls: Set[str]) -> None:
+    """Save the set of posted article URLs (legacy helper)."""
+    state = load_bot_state()
+    state['posted_urls'] = list(posted_urls)
+    save_bot_state(state)
 
 
 def get_scraper(council: Dict) -> CardScraper:
@@ -100,6 +139,44 @@ def scrape_all_councils(councils: List[Dict], enabled_only: bool = True) -> List
     return all_articles
 
 
+def filter_fresh_articles(articles: List[NewsArticle], max_age_days: int = MAX_ARTICLE_AGE_DAYS) -> List[NewsArticle]:
+    """
+    Filter articles to only include those within the freshness window.
+    
+    Articles without a date are assumed to be fresh (included).
+    
+    Args:
+        articles: List of articles to filter
+        max_age_days: Maximum age in days (default: 7)
+        
+    Returns:
+        List of fresh articles
+    """
+    cutoff_date = datetime.now() - timedelta(days=max_age_days)
+    fresh = []
+    stale_count = 0
+    
+    for article in articles:
+        if article.date is None:
+            # No date - assume fresh
+            fresh.append(article)
+        else:
+            # Handle timezone-aware dates by comparing naive
+            article_date = article.date
+            if hasattr(article_date, 'tzinfo') and article_date.tzinfo is not None:
+                article_date = article_date.replace(tzinfo=None)
+            
+            if article_date >= cutoff_date:
+                fresh.append(article)
+            else:
+                stale_count += 1
+    
+    if stale_count > 0:
+        print(f"  Filtered out {stale_count} articles older than {max_age_days} days")
+    
+    return fresh
+
+
 def post_new_articles(
     articles: List[NewsArticle],
     posted_urls: Set[str],
@@ -118,7 +195,10 @@ def post_new_articles(
     Returns:
         Updated set of posted URLs
     """
-    new_articles = [a for a in articles if a.url not in posted_urls]
+    # Filter to fresh articles only (max 7 days old)
+    fresh_articles = filter_fresh_articles(articles)
+    
+    new_articles = [a for a in fresh_articles if a.url not in posted_urls]
     
     if limit > 0:
         new_articles = new_articles[:limit]
@@ -135,22 +215,43 @@ def post_new_articles(
             print(f"  📰 {article.council_name}: {article.title[:50]}...")
         return posted_urls
     
+    # Load full state for timing checks
+    state = load_bot_state()
+    last_post_time = state.get('last_post_time')
+    
+    # Check 15-minute gap requirement
+    if last_post_time:
+        last_post_dt = datetime.fromisoformat(last_post_time)
+        time_since_last = datetime.now() - last_post_dt
+        min_gap = timedelta(minutes=15)
+        
+        if time_since_last < min_gap:
+            wait_seconds = (min_gap - time_since_last).total_seconds()
+            print(f"\n⏳ Must wait {int(wait_seconds)}s before next post (15-min gap)")
+            print(f"   Last post: {last_post_dt.strftime('%H:%M:%S')}")
+            return posted_urls
+    
     # Initialize poster
     poster = BlueSkyPoster()
     if not poster.authenticate():
         print("Failed to authenticate with BlueSky")
         return posted_urls
     
-    # Post new articles
-    for article in new_articles:
-        if poster.post_article(
-            article.council_name, 
-            article.title, 
-            article.url,
-            date=article.date,
-            excerpt=article.excerpt
-        ):
-            posted_urls.add(article.url)
+    # Post only ONE article (respect 15-min gap by posting one at a time)
+    article = new_articles[0]
+    if poster.post_article(
+        article.council_name, 
+        article.title, 
+        article.url,
+        date=article.date,
+        excerpt=article.excerpt
+    ):
+        posted_urls.add(article.url)
+        # Update last post time
+        state['posted_urls'] = list(posted_urls)
+        state['last_post_time'] = datetime.now().isoformat()
+        save_bot_state(state)
+        print(f"\n✅ Posted 1 article. {len(new_articles) - 1} remaining in queue.")
     
     return posted_urls
 
