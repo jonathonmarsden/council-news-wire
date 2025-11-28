@@ -50,8 +50,16 @@ def load_bot_state() -> Dict:
             'known_urls': []
         }
     
-    with open(POSTED_FILE, 'r') as f:
-        data = json.load(f)
+    try:
+        with open(POSTED_FILE, 'r') as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"Warning: Could not parse {POSTED_FILE}: {e}")
+        return {
+            'posted_urls': [],
+            'last_post_time': None,
+            'known_urls': []
+        }
     
     # Handle legacy format (just posted_urls list)
     if isinstance(data.get('posted_urls'), list) and 'last_post_time' not in data:
@@ -342,13 +350,8 @@ def main():
     
     print(f"\nTotal: {len(articles)} articles scraped")
     
-    # Post new articles
+    # Post new articles (state is saved inside post_new_articles)
     posted_urls = post_new_articles(articles, posted_urls, dry_run=args.dry_run, limit=args.limit)
-    
-    # Save updated posted list
-    if not args.dry_run:
-        save_posted_articles(posted_urls)
-        print(f"\nSaved {len(posted_urls)} posted URLs")
 
 
 if __name__ == '__main__':
