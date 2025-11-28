@@ -84,6 +84,47 @@ def save_bot_state(state: Dict) -> None:
         json.dump(state, f, indent=2)
 
 
+def _diversify_by_council(articles: List) -> List:
+    """
+    Reorder articles to spread them across different councils.
+    
+    Instead of posting all articles from one council in sequence,
+    this interleaves articles from different councils for feed diversity.
+    
+    Args:
+        articles: List of NewsArticle objects
+        
+    Returns:
+        Reordered list with articles spread across councils
+    """
+    if not articles:
+        return articles
+    
+    # Group articles by council
+    by_council: Dict[str, List] = {}
+    for article in articles:
+        council_id = article.council_id
+        if council_id not in by_council:
+            by_council[council_id] = []
+        by_council[council_id].append(article)
+    
+    # Round-robin through councils to interleave articles
+    result = []
+    council_queues = list(by_council.values())
+    
+    while council_queues:
+        # Take one article from each council in turn
+        next_round = []
+        for queue in council_queues:
+            if queue:
+                result.append(queue.pop(0))
+            if queue:  # Still has articles
+                next_round.append(queue)
+        council_queues = next_round
+    
+    return result
+
+
 def load_posted_articles() -> Set[str]:
     """Load the set of previously posted article URLs (legacy helper)."""
     state = load_bot_state()
@@ -220,7 +261,8 @@ def post_new_articles(
     backlog = [a for a in new_articles if a.url in known_urls]
     
     # Prioritize newly discovered, then backlog
-    prioritized = newly_discovered + backlog
+    # But spread across councils for diversity in the feed
+    prioritized = _diversify_by_council(newly_discovered) + _diversify_by_council(backlog)
     
     if limit > 0:
         prioritized = prioritized[:limit]
