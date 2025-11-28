@@ -138,7 +138,13 @@ def post_new_articles(
     
     # Post new articles
     for article in new_articles:
-        if poster.post_article(article.council_name, article.title, article.url):
+        if poster.post_article(
+            article.council_name, 
+            article.title, 
+            article.url,
+            date=article.date,
+            excerpt=article.excerpt
+        ):
             posted_urls.add(article.url)
     
     return posted_urls
