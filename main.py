@@ -41,15 +41,13 @@ def load_bot_state() -> Dict:
     State includes:
     - posted_urls: Set of URLs already posted
     - last_post_time: ISO timestamp of last post (for 15-min gap)
-    - initial_scrape_done: Whether first full scrape is complete
-    - backlog_urls: List of URLs in the backlog queue (older articles)
+    - known_urls: URLs seen in previous scrapes (for prioritizing new discoveries)
     """
     if not POSTED_FILE.exists():
         return {
             'posted_urls': [],
             'last_post_time': None,
-            'initial_scrape_done': False,
-            'backlog_urls': []
+            'known_urls': []
         }
     
     with open(POSTED_FILE, 'r') as f:
@@ -60,9 +58,12 @@ def load_bot_state() -> Dict:
         return {
             'posted_urls': data.get('posted_urls', []),
             'last_post_time': None,
-            'initial_scrape_done': False,
-            'backlog_urls': []
+            'known_urls': data.get('posted_urls', [])  # Treat posted as known
         }
+    
+    # Ensure known_urls exists
+    if 'known_urls' not in data:
+        data['known_urls'] = data.get('posted_urls', [])
     
     return data
 
@@ -186,6 +187,9 @@ def post_new_articles(
     """
     Post new articles to BlueSky.
     
+    Prioritizes newly discovered articles (not seen in previous scrapes)
+    over backlog items.
+    
     Args:
         articles: List of scraped articles
         posted_urls: Set of already posted URLs
@@ -198,25 +202,38 @@ def post_new_articles(
     # Filter to fresh articles only (max 7 days old)
     fresh_articles = filter_fresh_articles(articles)
     
+    # Load state for known URLs tracking
+    state = load_bot_state()
+    known_urls = set(state.get('known_urls', []))
+    
+    # Separate into newly discovered vs backlog
     new_articles = [a for a in fresh_articles if a.url not in posted_urls]
+    newly_discovered = [a for a in new_articles if a.url not in known_urls]
+    backlog = [a for a in new_articles if a.url in known_urls]
+    
+    # Prioritize newly discovered, then backlog
+    prioritized = newly_discovered + backlog
     
     if limit > 0:
-        new_articles = new_articles[:limit]
+        prioritized = prioritized[:limit]
     
-    if not new_articles:
+    if not prioritized:
         print("No new articles to post")
+        # Still update known_urls with all scraped URLs
+        all_scraped_urls = [a.url for a in fresh_articles]
+        state['known_urls'] = list(set(known_urls) | set(all_scraped_urls))
+        save_bot_state(state)
         return posted_urls
     
-    print(f"\nFound {len(new_articles)} new articles")
+    print(f"\nFound {len(prioritized)} new articles ({len(newly_discovered)} newly discovered, {len(backlog)} backlog)")
     
     if dry_run:
         print("\nDry run - would post:")
-        for article in new_articles:
-            print(f"  📰 {article.council_name}: {article.title[:50]}...")
+        for article in prioritized:
+            marker = "🆕" if article.url not in known_urls else "📰"
+            print(f"  {marker} {article.council_name}: {article.title[:50]}...")
         return posted_urls
     
-    # Load full state for timing checks
-    state = load_bot_state()
     last_post_time = state.get('last_post_time')
     
     # Check 15-minute gap requirement
@@ -238,7 +255,9 @@ def post_new_articles(
         return posted_urls
     
     # Post only ONE article (respect 15-min gap by posting one at a time)
-    article = new_articles[0]
+    article = prioritized[0]
+    is_new = article.url not in known_urls
+    
     if poster.post_article(
         article.council_name, 
         article.title, 
@@ -247,11 +266,16 @@ def post_new_articles(
         excerpt=article.excerpt
     ):
         posted_urls.add(article.url)
-        # Update last post time
+        # Update state
         state['posted_urls'] = list(posted_urls)
         state['last_post_time'] = datetime.now().isoformat()
+        # Add all scraped URLs to known_urls
+        all_scraped_urls = [a.url for a in fresh_articles]
+        state['known_urls'] = list(set(known_urls) | set(all_scraped_urls))
         save_bot_state(state)
-        print(f"\n✅ Posted 1 article. {len(new_articles) - 1} remaining in queue.")
+        
+        marker = "🆕 NEW" if is_new else "📰 BACKLOG"
+        print(f"\n✅ Posted 1 {marker} article. {len(prioritized) - 1} remaining.")
     
     return posted_urls
 
