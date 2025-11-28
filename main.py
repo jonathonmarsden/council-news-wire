@@ -103,7 +103,8 @@ def scrape_all_councils(councils: List[Dict], enabled_only: bool = True) -> List
 def post_new_articles(
     articles: List[NewsArticle],
     posted_urls: Set[str],
-    dry_run: bool = False
+    dry_run: bool = False,
+    limit: int = 0
 ) -> Set[str]:
     """
     Post new articles to BlueSky.
@@ -112,11 +113,15 @@ def post_new_articles(
         articles: List of scraped articles
         posted_urls: Set of already posted URLs
         dry_run: If True, don't actually post
+        limit: Maximum number of articles to post (0 = no limit)
         
     Returns:
         Updated set of posted URLs
     """
     new_articles = [a for a in articles if a.url not in posted_urls]
+    
+    if limit > 0:
+        new_articles = new_articles[:limit]
     
     if not new_articles:
         print("No new articles to post")
@@ -175,6 +180,12 @@ def main():
         action='store_true',
         help='Test BlueSky connection'
     )
+    parser.add_argument(
+        '--limit',
+        type=int,
+        default=0,
+        help='Maximum number of articles to post (0 = no limit)'
+    )
     
     args = parser.parse_args()
     
@@ -207,7 +218,7 @@ def main():
     print(f"\nTotal: {len(articles)} articles scraped")
     
     # Post new articles
-    posted_urls = post_new_articles(articles, posted_urls, dry_run=args.dry_run)
+    posted_urls = post_new_articles(articles, posted_urls, dry_run=args.dry_run, limit=args.limit)
     
     # Save updated posted list
     if not args.dry_run:
