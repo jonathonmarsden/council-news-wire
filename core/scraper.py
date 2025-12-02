@@ -400,6 +400,36 @@ class CardScraper(BaseScraper):
                 
         return " ".join(filter(None, text_parts))
 
+    def _clean_excerpt(self, excerpt: str, title: str) -> Optional[str]:
+        """Clean excerpt by removing title if it's duplicated."""
+        if not excerpt or not title:
+            return excerpt
+            
+        # Normalize for comparison
+        excerpt_clean = excerpt.strip()
+        title_clean = title.strip()
+        
+        # Check for exact match or title + ellipsis
+        if excerpt_clean == title_clean:
+            return None
+        if excerpt_clean == title_clean + "...":
+            return None
+            
+        # Check if excerpt starts with title
+        if excerpt_clean.startswith(title_clean):
+            # Remove title
+            cleaned = excerpt_clean[len(title_clean):].strip()
+            
+            # Remove common separators at the start
+            cleaned = re.sub(r'^[-:–—]\s*', '', cleaned).strip()
+            
+            # If what remains is just punctuation (like ...), return None
+            if not cleaned or cleaned in ["...", ".", "-", ":"]:
+                return None
+            return cleaned
+            
+        return excerpt
+
     def scrape(self) -> List[NewsArticle]:
         """Scrape news articles from the news page."""
         articles = []
@@ -585,7 +615,8 @@ class CardScraper(BaseScraper):
             if excerpt_selector:
                 excerpt_elem = item.select_one(excerpt_selector)
                 if excerpt_elem:
-                    excerpt = excerpt_elem.get_text(" ", strip=True)
+                    raw_excerpt = excerpt_elem.get_text(" ", strip=True)
+                    excerpt = self._clean_excerpt(raw_excerpt, title)
             
             if title and url:
                 return self.create_article(title, url, date, excerpt)
