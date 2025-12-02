@@ -552,7 +552,16 @@ class CardScraper(BaseScraper):
                 link_text_full
             )
             if date_match:
-                date = self.parse_date(date_match.group(1))
+                date_str = date_match.group(1)
+                date = self.parse_date(date_str)
+                
+                # Extra cleanup: If the title ends with this date, strip it
+                # This handles cases where _get_clean_title failed to exclude the date element
+                # or where the date is concatenated directly (e.g. "TitleDate")
+                if text.endswith(date_str):
+                    text = text[:-len(date_str)].strip()
+                elif text.endswith(date_str.replace(" ", "")):
+                     text = text[:-len(date_str.replace(" ", ""))].strip()
             
             # 2. Check parent/siblings if not found
             if not date:
