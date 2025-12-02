@@ -52,14 +52,13 @@
         {
             "id": "brisbane",
             "name": "Brisbane Council",
-            "news_url": "https://www.brisbane.qld.gov.au/about-council/council-information-and-rates/news-and-publications/living-in-brisbane-newsletter",
+            "news_url": "https://www.brisbane.qld.gov.au/about-council/your-brisbane",
             "scraper": "curl_scraper",
             "enabled": true,
-            "item_selector": "div.cmp-download",
-            "title_selector": "span.download-heading",
-            "link_selector": "a.download-card-outer",
-            "date_selector": "p.body3",
-            "content_selector": "p.body3"
+            "item_selector": "a.compact-card-link",
+            "title_selector": "p.compact-card-title span",
+            "link_selector": "self",
+            "date_selector": "meta[name='bcc:publication_date']"
         },
         {
             "id": "bulloo",
@@ -214,7 +213,12 @@
             "name": "Gold Coast Council",
             "news_url": "https://www.goldcoast.qld.gov.au/Council/City-news",
             "scraper": "curl_scraper",
-            "enabled": true
+            "enabled": true,
+            "item_selector": "article",
+            "title_selector": "h2.list-item-title",
+            "link_selector": "a",
+            "date_selector": ".published-on",
+            "excerpt_selector": "p:not([class])"
         },
         {
             "id": "goondiwindi",

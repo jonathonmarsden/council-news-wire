@@ -484,7 +484,12 @@ class CardScraper(BaseScraper):
             if date_selector:
                 date_elem = soup.select_one(date_selector)
                 if date_elem:
-                    text = date_elem.get_text(strip=True)
+                    # Handle meta tags
+                    if date_elem.name == 'meta' and date_elem.has_attr('content'):
+                        text = date_elem['content']
+                    else:
+                        text = date_elem.get_text(strip=True)
+                    
                     # Remove common prefixes
                     text = re.sub(r'^(Published|Date|Posted|Updated):\s*', '', text, flags=re.IGNORECASE)
                     article.date = self.parse_date(text)
@@ -1132,7 +1137,7 @@ class ScraperFactory:
             Configured scraper instance
         """
         scraper_type = council.get('scraper', 'card_scraper')
-        use_curl = scraper_type == 'curl_scraper'
+        use_curl = scraper_type == 'curl_scraper' or council.get('use_curl', False)
         mobile_mode = council.get('mobile_mode', False)
         limit = council.get('limit')
         

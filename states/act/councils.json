@@ -1,0 +1,11 @@
+{
+  "councils": [
+    {
+      "id": "act_gov",
+      "name": "ACT Government",
+      "news_url": "http://www.act.gov.au/our-canberra/rss-feed",
+      "scraper": "rss_scraper",
+      "enabled": true
+    }
+  ]
+}

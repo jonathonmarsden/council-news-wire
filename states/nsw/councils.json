@@ -23,7 +23,11 @@
             "name": "Blue Mountains City Council",
             "news_url": "https://www.bmcc.nsw.gov.au/media-centre",
             "scraper": "card_scraper",
-            "enabled": true
+            "enabled": true,
+            "item_selector": "article.node--type-media-release",
+            "title_selector": "h3 a",
+            "link_selector": "h3 a",
+            "date_selector": "time.datetime"
         },
         {
             "id": "burwood-council",
@@ -94,9 +98,12 @@
             "id": "cumberland-city-council",
             "name": "Cumberland City Council",
             "news_url": "https://www.cumberland.nsw.gov.au/media-releases",
-            "scraper": "card_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
-            "date_selector": ".tag"
+            "item_selector": "a.content-card",
+            "title_selector": ".content-card__title",
+            "date_selector": ".content-card__date",
+            "excerpt_selector": ".content-card__copy"
         },
         {
             "id": "dubbo-regional-council",
@@ -180,9 +187,14 @@
         {
             "id": "liverpool-city-council",
             "name": "Liverpool City Council",
-            "news_url": "https://www.liverpool.nsw.gov.au/council/news",
+            "news_url": "https://www.liverpool.nsw.gov.au/council/Media",
             "scraper": "curl_scraper",
-            "enabled": true
+            "enabled": true,
+            "item_selector": ".article-list__item",
+            "title_selector": ".article-list__title",
+            "link_selector": "a",
+            "date_selector": ".article-list__date",
+            "excerpt_selector": ".article-list__text"
         },
         {
             "id": "maitland-city-council",

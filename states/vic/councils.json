@@ -6,13 +6,18 @@
       "news_url": "https://www.ballarat.vic.gov.au/news",
       "scraper": "card_scraper",
       "enabled": true,
-      "category": "A"
+      "category": "A",
+      "item_selector": ".card.card--news",
+      "title_selector": ".title",
+      "date_selector": ".date",
+      "link_selector": "self"
     },
     {
       "id": "bass-coast",
       "name": "Bass Coast Shire Council",
-      "news_url": "https://www.basscoast.vic.gov.au//feeds/news.rss",
+      "news_url": "https://www.basscoast.vic.gov.au/feeds/news.rss",
       "scraper": "rss_scraper",
+      "use_curl": true,
       "enabled": true,
       "category": "A"
     },
