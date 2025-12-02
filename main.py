@@ -164,7 +164,7 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
 
 def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database, 
                   council_lookup: Dict[str, str], hashtags: List[str],
-                  limit: int = 0, dry_run: bool = False):
+                  limit: int = 0, dry_run: bool = False, max_per_council: int = 5):
     """Post articles to BlueSky."""
     if not articles:
         print("No articles to post")
@@ -174,12 +174,18 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
     
     if limit > 0:
         articles = articles[:limit]
-        print(f"Limiting to {limit} posts")
+        print(f"Limiting to {limit} posts total")
         
     if dry_run:
         print("\nDry run - would post:")
+        council_counts = {}
         for article in articles:
-            council_name = council_lookup.get(article['council_id'], article['council_id'])
+            c_id = article['council_id']
+            if council_counts.get(c_id, 0) >= max_per_council:
+                continue
+            council_counts[c_id] = council_counts.get(c_id, 0) + 1
+            
+            council_name = council_lookup.get(c_id, c_id)
             print(f"  📰 {council_name}: {article['title']}")
         return
 
@@ -189,7 +195,15 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
         return
 
     posted_count = 0
+    council_counts = {}
+    
     for article in articles:
+        # Check per-council limit
+        c_id = article['council_id']
+        if council_counts.get(c_id, 0) >= max_per_council:
+            print(f"  ⚠️ Skipping {article['title'][:30]}... (Max {max_per_council} posts reached for {c_id})")
+            continue
+
         # Parse date string back to datetime if needed
         article_date = None
         if article.get('date'):
@@ -198,7 +212,7 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             except Exception:
                 pass
         
-        council_name = council_lookup.get(article['council_id'], article['council_id'])
+        council_name = council_lookup.get(c_id, c_id)
         
         if poster.post_article(
             council_name,
@@ -210,6 +224,7 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
         ):
             db.mark_as_posted(article['url'], poster.handle)
             posted_count += 1
+            council_counts[c_id] = council_counts.get(c_id, 0) + 1
             print(f"✅ Posted: {article['title'][:50]}...")
             
             # Rate limiting delay
@@ -225,11 +240,13 @@ def main():
     parser = argparse.ArgumentParser(description='Council News Bot')
     parser.add_argument('--state', type=str, default=DEFAULT_STATE, help='State code (vic, nsw, etc)')
     parser.add_argument('--dry-run', action='store_true', help='Scrape but do not post')
-    parser.add_argument('--limit', type=int, default=0, help='Max posts')
+    parser.add_argument('--limit', type=int, default=0, help='Max posts total')
+    parser.add_argument('--max-per-council', type=int, default=5, help='Max posts per council per run')
     parser.add_argument('--post-only', action='store_true', help='Skip scrape, post from backlog')
     parser.add_argument('--scrape-only', action='store_true', help='Scrape and save to DB, but do not post')
     parser.add_argument('--proxy', type=str, help='Proxy URL (e.g. http://user:pass@host:port)')
     parser.add_argument('--concurrency', type=int, default=5, help='Number of concurrent scrapers')
+    parser.add_argument('--council', type=str, help='Run for a specific council ID only')
     
     args = parser.parse_args()
     
@@ -247,14 +264,7 @@ def main():
     print(f"=== Council News Bot: {state_data['config']['state_name']} ===")
     
     # Initialize DB
-    # Allow DB path to be overridden by env var (useful for Docker)
-    default_db_path = os.path.join(os.path.dirname(__file__), 'bot.db')
-    db_path = os.environ.get('DB_PATH', default_db_path)
-    
-    # Ensure directory exists if using a custom path
-    os.makedirs(os.path.dirname(db_path), exist_ok=True)
-    
-    db = Database(db_path)
+    db = Database()
     
     # Initialize Poster
     handle = os.environ.get(state_data['config']['bluesky_handle_env'])
@@ -262,12 +272,19 @@ def main():
     poster = BlueSkyPoster(handle, password)
     
     # Prepare council lookup and hashtags
+    councils_to_scrape = state_data['councils']
+    if args.council:
+        councils_to_scrape = [c for c in councils_to_scrape if c['id'] == args.council]
+        if not councils_to_scrape:
+            print(f"Error: Council '{args.council}' not found in {state_code} configuration.")
+            sys.exit(1)
+            
     council_lookup = {c['id']: c['name'] for c in state_data['councils']}
     hashtags = state_data['config'].get('hashtags', [])
     
     # Scrape (unless post-only)
     if not args.post_only:
-        articles = scrape_councils(state_data['councils'], db=db, proxy=proxy_url, max_workers=args.concurrency)
+        articles = scrape_councils(councils_to_scrape, db=db, proxy=proxy_url, max_workers=args.concurrency)
         unposted = process_articles(articles, db, state_code)
     else:
         print("Skipping scrape, checking backlog...")
@@ -275,7 +292,10 @@ def main():
         
     # Post
     if not args.scrape_only:
-        post_articles(unposted, poster, db, council_lookup, hashtags, limit=args.limit, dry_run=args.dry_run)
+        post_articles(unposted, poster, db, council_lookup, hashtags, 
+                      limit=args.limit, 
+                      dry_run=args.dry_run,
+                      max_per_council=args.max_per_council)
 
 if __name__ == "__main__":
     main()

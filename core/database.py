@@ -8,18 +8,23 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Dict, Set, Tuple
+from core.config import DB_PATH
 
 class Database:
     """SQLite database handler."""
     
-    def __init__(self, db_path: str = "bot.db"):
+    def __init__(self, db_path: str = None):
         """
         Initialize database connection.
         
         Args:
-            db_path: Path to the SQLite database file
+            db_path: Path to the SQLite database file. If None, uses default from config.
         """
-        self.db_path = db_path
+        self.db_path = db_path if db_path else str(DB_PATH)
+        
+        # Ensure directory exists
+        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
+        
         self._init_db()
     
     def _get_conn(self) -> sqlite3.Connection:

@@ -31,73 +31,49 @@ Published: [Date if available]
 
 ## Project Structure
 
-> **For Developers & AI Agents:** Please refer to `AI_CONTEXT.md` for detailed architecture, workflows, and debugging guides.
+> **For Developers:** Please refer to `docs/DEVELOPER_GUIDE.md` for detailed architecture, workflows, and debugging guides.
 
 ```text
 council-news-bot/
-├── main.py                 # CLI Entry Point (legacy/manual usage)
-├── scheduler.py            # Main Service Loop (runs on VPS)
 ├── core/                   # Core Application Logic
-│   ├── scraper.py          # Scraper implementations (BaseScraper, CardScraper)
-│   ├── database.py         # SQLite database handler
-│   ├── poster.py           # BlueSky API client
-│   └── utils.py            # Logging and utilities
 ├── states/                 # Configuration by State
-│   ├── vic/
-│   │   └── councils.json   # VIC Council configurations
-│   └── nsw/
-│       └── councils.json   # NSW Council configurations
-├── scripts/                # Utility scripts
-└── bot.db                  # SQLite Database (stores article history)
+├── scripts/                # Utility scripts (maintenance, deployment, analysis)
+├── main.py                 # CLI Entry Point
+└── scheduler.py            # Main Service Loop
 ```
 
 ## Commands
 
 ```bash
-# Run full scrape and post
+# Run full scrape and post (defaults to VIC)
 python main.py
+
+# Scrape specific state
+python main.py --state nsw
 
 # Dry run (scrape but don't post)
 python main.py --dry-run
 
-# Post without scraping (for overnight backlog clearing)
+# Post without scraping (for backlog clearing)
 python main.py --post-only
 
-# Scrape specific council
-python main.py --council cardinia
-
-# Limit posts per run
-python main.py --limit 1
-
-# Test BlueSky connection
-python main.py --test
-
-# Run tests
-pytest
+# Limit posts per council (Safety Valve)
+python main.py --max-per-council 5
 ```
 
 ## Environment Variables
 
-- `BLUESKY_HANDLE` - BlueSky handle (roundupnewsbot.bsky.social)
-- `BLUESKY_PASSWORD` - BlueSky app password
+See `docs/DEVELOPER_GUIDE.md` for full configuration details.
 
 ## Deployment
 
-The bot is deployed on a DigitalOcean VPS running Ubuntu. It uses `systemd` to ensure continuous operation.
-
-See `AI_CONTEXT.md` for deployment details.
+The bot is deployed on a DigitalOcean VPS running Ubuntu.
+See `docs/DEVELOPER_GUIDE.md` for deployment instructions.
 
 ## Council Status
 
-| Category | Count | Description |
-|----------|-------|-------------|
-| Enabled | 27 | Actively scraping and posting |
-| Direct Access | 21 | Simple HTTP requests |
-| Redirect | 10 | Follow redirects |
-| WAF Protected | 46 | Requires curl bypass (most disabled) |
-| URL Issues | 2 | Needs investigation |
+Run `python3 scripts/maintenance/health_check.py` to generate the latest `HEALTH_REPORT.md`.
 
-## State Management
 
 The bot maintains state in `bot.db` (SQLite):
 

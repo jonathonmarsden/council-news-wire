@@ -66,7 +66,7 @@ class BaseScraper(ABC):
         'Upgrade-Insecure-Requests': '1',
     }
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None):
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
         """
         Initialize the scraper.
         
@@ -78,6 +78,7 @@ class BaseScraper(ABC):
             mobile_mode: Whether to impersonate a mobile device (iPhone)
             limit: Maximum number of articles to scrape
             proxy: Proxy URL (e.g. http://user:pass@host:port)
+            impersonate: Browser to impersonate when using curl (e.g. chrome110, safari15_5)
         """
         self.council_id = council_id
         self.council_name = council_name
@@ -86,6 +87,7 @@ class BaseScraper(ABC):
         self.mobile_mode = mobile_mode
         self.limit = limit
         self.proxy = proxy
+        self.impersonate = impersonate
         self.session = requests.Session()
         self.session.headers.update(self.HEADERS)
         
@@ -157,8 +159,8 @@ class BaseScraper(ABC):
                 if use_proxy and self.proxy:
                     proxies = {"http": self.proxy, "https": self.proxy}
                 
-                # Use chrome impersonation by default
-                impersonate = "chrome"
+                # Use configured impersonation
+                impersonate = self.impersonate
                 
                 response = curl_requests.get(
                     url, 
@@ -168,6 +170,11 @@ class BaseScraper(ABC):
                 )
                 
                 if response.status_code == 200:
+                    # Check for Incapsula block
+                    if "Incapsula" in response.text or "Request unsuccessful" in response.text:
+                        print("DEBUG: curl_cffi blocked by Incapsula")
+                        return None
+                        
                     print(f"DEBUG: curl_cffi success, length: {len(response.text)}")
                     return response.text
                 else:
@@ -359,8 +366,8 @@ class CardScraper(BaseScraper):
     DATE_SELECTOR = '.date, .published, time, .meta-date, .field--name-created, .news-date, .card__meta'
     EXCERPT_SELECTOR = '.card__description, .excerpt, .summary, .description, .field--name-body, .teaser, p'
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None):
-        super().__init__(council_id, council_name, news_url, use_curl, mobile_mode, limit, proxy)
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
+        super().__init__(council_id, council_name, news_url, use_curl, mobile_mode, limit, proxy, impersonate)
         self.selectors = selectors or {}
 
     def _get_clean_title(self, element) -> str:
@@ -1073,8 +1080,8 @@ class InnerWestScraper(CardScraper):
 class RSSScraper(BaseScraper):
     """Scraper for RSS feeds."""
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None):
-        super().__init__(council_id, council_name, news_url, use_curl, mobile_mode, limit, proxy)
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
+        super().__init__(council_id, council_name, news_url, use_curl, mobile_mode, limit, proxy, impersonate)
         self.selectors = selectors or {}
     
     def scrape(self) -> List[NewsArticle]:
@@ -1163,6 +1170,9 @@ class ScraperFactory:
         # Use CLI proxy if provided, otherwise check council config
         use_proxy = proxy or council.get('proxy')
         
+        # Get impersonation setting (default to chrome110)
+        impersonate = council.get('impersonate', 'chrome110')
+        
         return scraper_class(
             council_id=council['id'],
             council_name=council['name'],
@@ -1171,5 +1181,6 @@ class ScraperFactory:
             mobile_mode=mobile_mode,
             selectors=selectors,
             limit=limit,
-            proxy=use_proxy
+            proxy=use_proxy,
+            impersonate=impersonate
         )
