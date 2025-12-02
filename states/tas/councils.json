@@ -1,0 +1,114 @@
+{
+  "councils": [
+  {
+    "id": "hobart",
+    "name": "City of Hobart",
+    "news_url": "https://www.hobartcity.com.au/Council/News-and-publications/Media-releases",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "launceston",
+    "name": "City of Launceston",
+    "news_url": "https://www.launceston.tas.gov.au/News-Media",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "clarence",
+    "name": "Clarence City Council",
+    "news_url": "https://www.ccc.tas.gov.au/latest-news/",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "glenorchy",
+    "name": "Glenorchy City Council",
+    "news_url": "https://www.gcc.tas.gov.au/news/",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "burnie",
+    "name": "Burnie City Council",
+    "news_url": "https://www.burnie.tas.gov.au/Council/News",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "devonport",
+    "name": "Devonport City Council",
+    "news_url": "https://www.devonport.tas.gov.au/news-media/",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "kingborough",
+    "name": "Kingborough Council",
+    "news_url": "https://www.kingborough.tas.gov.au/news-media/news/",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "huon-valley",
+    "name": "Huon Valley Council",
+    "news_url": "https://www.huonvalley.tas.gov.au/news-and-media/",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "west-tamar",
+    "name": "West Tamar Council",
+    "news_url": "https://www.wtc.tas.gov.au/",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  },
+  {
+    "id": "meander-valley",
+    "name": "Meander Valley Council",
+    "news_url": "https://www.meander.tas.gov.au/latest-news",
+    "scraper": "card_scraper",
+    "enabled": true,
+    "item_selector": "",
+    "title_selector": "",
+    "date_selector": "",
+    "link_selector": ""
+  }
+]
+}
