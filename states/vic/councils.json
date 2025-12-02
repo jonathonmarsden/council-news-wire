@@ -11,8 +11,8 @@
     {
       "id": "bass-coast",
       "name": "Bass Coast Shire Council",
-      "news_url": "https://www.basscoast.vic.gov.au/about-council/news-listing",
-      "scraper": "card_scraper",
+      "news_url": "https://www.basscoast.vic.gov.au//feeds/news.rss",
+      "scraper": "rss_scraper",
       "enabled": true,
       "category": "A"
     },
@@ -48,11 +48,10 @@
     {
       "id": "cardinia",
       "name": "Cardinia Shire Council",
-      "news_url": "https://www.cardinia.vic.gov.au/news",
-      "scraper": "card_scraper",
+      "news_url": "https://www.cardinia.vic.gov.au/rss/news",
+      "scraper": "rss_scraper",
       "enabled": true,
-      "category": "A",
-      "date_selector": ".date"
+      "category": "A"
     },
     {
       "id": "casey",
@@ -127,11 +126,10 @@
     {
       "id": "south-gippsland",
       "name": "South Gippsland Shire Council",
-      "news_url": "https://www.southgippsland.vic.gov.au/news",
-      "scraper": "card_scraper",
+      "news_url": "https://www.southgippsland.vic.gov.au/rss/news",
+      "scraper": "rss_scraper",
       "enabled": true,
-      "category": "A",
-      "date_selector": ".editor small"
+      "category": "A"
     },
     {
       "id": "strathbogie",
@@ -222,8 +220,8 @@
     {
       "id": "greater-dandenong",
       "name": "City of Greater Dandenong",
-      "news_url": "https://www.greaterdandenong.vic.gov.au/contact-us/news-and-media",
-      "scraper": "card_scraper",
+      "news_url": "https://www.greaterdandenong.vic.gov.au/rss.xml",
+      "scraper": "rss_scraper",
       "enabled": true,
       "category": "B"
     },
@@ -255,10 +253,10 @@
     {
       "id": "mitchell",
       "name": "Mitchell Shire Council",
-      "news_url": "https://www.mitchellshire.vic.gov.au/about-council/news-and-media/news-archive",
-      "scraper": "card_scraper",
+      "news_url": "https://www.mitchellshire.vic.gov.au//feeds/news.rss",
+      "scraper": "rss_scraper",
       "enabled": true,
-      "category": "B"
+      "category": "C"
     },
     {
       "id": "moonee-valley",
