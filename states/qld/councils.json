@@ -450,7 +450,12 @@
             "name": "Southern Downs Council",
             "news_url": "https://www.sdrc.qld.gov.au/council/news-notices/latest-news",
             "scraper": "curl_scraper",
-            "enabled": true
+            "enabled": true,
+            "item_selector": "div.item",
+            "title_selector": "h5",
+            "link_selector": "a",
+            "date_selector": "span.startdate",
+            "content_selector": "p"
         },
         {
             "id": "sunshine-coast",
