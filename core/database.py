@@ -31,6 +31,9 @@ class Database:
     def _init_db(self):
         """Initialize the database schema."""
         with self._get_conn() as conn:
+            # Enable WAL mode for better concurrency
+            conn.execute("PRAGMA journal_mode=WAL;")
+            
             # Articles table
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS articles (
@@ -50,6 +53,18 @@ class Database:
             # Create index for faster lookups
             conn.execute("CREATE INDEX IF NOT EXISTS idx_url ON articles(url)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_state_posted ON articles(state, posted_at)")
+            
+            # Council Health table (Circuit Breaker)
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS council_health (
+                    council_id TEXT PRIMARY KEY,
+                    consecutive_failures INTEGER DEFAULT 0,
+                    last_failure_at TIMESTAMP,
+                    last_success_at TIMESTAMP,
+                    is_disabled BOOLEAN DEFAULT 0,
+                    disabled_at TIMESTAMP
+                )
+            """)
             conn.commit()
     
     def article_exists(self, url: str) -> bool:
@@ -97,6 +112,42 @@ class Database:
                 cursor = conn.execute("SELECT id FROM articles WHERE url = ?", (article['url'],))
                 row = cursor.fetchone()
                 return row['id'] if row else -1
+
+    def add_articles_bulk(self, articles: List[Dict], state: str) -> int:
+        """
+        Add multiple articles to the database in a single transaction.
+        Ignores duplicates (INSERT OR IGNORE).
+        
+        Returns:
+            Number of new articles added.
+        """
+        if not articles:
+            return 0
+            
+        with self._get_conn() as conn:
+            # Prepare data for executemany
+            data = [
+                (
+                    a['url'],
+                    a['council_id'],
+                    a['title'],
+                    a['date'],
+                    a['excerpt'],
+                    state
+                )
+                for a in articles
+            ]
+            
+            # Use INSERT OR IGNORE to handle duplicates gracefully in bulk
+            cursor = conn.executemany(
+                """
+                INSERT OR IGNORE INTO articles (url, council_id, title, date, excerpt, state)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                data
+            )
+            conn.commit()
+            return cursor.rowcount
 
     def mark_as_posted(self, url: str, handle: str):
         """Mark an article as posted."""
@@ -158,6 +209,67 @@ class Database:
                         break
                         
         return varied_articles
+
+    def get_council_health(self, council_id: str) -> Dict:
+        """Get health status for a council."""
+        with self._get_conn() as conn:
+            cursor = conn.execute(
+                "SELECT * FROM council_health WHERE council_id = ?", 
+                (council_id,)
+            )
+            row = cursor.fetchone()
+            if row:
+                return dict(row)
+            return {
+                'council_id': council_id,
+                'consecutive_failures': 0,
+                'is_disabled': 0
+            }
+
+    def record_success(self, council_id: str):
+        """Record a successful scrape."""
+        with self._get_conn() as conn:
+            conn.execute("""
+                INSERT INTO council_health (council_id, consecutive_failures, last_success_at, is_disabled)
+                VALUES (?, 0, CURRENT_TIMESTAMP, 0)
+                ON CONFLICT(council_id) DO UPDATE SET
+                    consecutive_failures = 0,
+                    last_success_at = CURRENT_TIMESTAMP,
+                    is_disabled = 0,
+                    disabled_at = NULL
+            """, (council_id,))
+            conn.commit()
+
+    def record_failure(self, council_id: str) -> bool:
+        """
+        Record a failed scrape.
+        Returns True if the council is now disabled.
+        """
+        with self._get_conn() as conn:
+            # Get current failures
+            cursor = conn.execute(
+                "SELECT consecutive_failures FROM council_health WHERE council_id = ?", 
+                (council_id,)
+            )
+            row = cursor.fetchone()
+            current_failures = row['consecutive_failures'] if row else 0
+            new_failures = current_failures + 1
+            
+            is_disabled = 1 if new_failures >= 5 else 0
+            disabled_at = datetime.now() if is_disabled else None
+            
+            conn.execute("""
+                INSERT INTO council_health (council_id, consecutive_failures, last_failure_at, is_disabled, disabled_at)
+                VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)
+                ON CONFLICT(council_id) DO UPDATE SET
+                    consecutive_failures = ?,
+                    last_failure_at = CURRENT_TIMESTAMP,
+                    is_disabled = ?,
+                    disabled_at = ?
+            """, (council_id, new_failures, is_disabled, disabled_at, new_failures, is_disabled, disabled_at))
+            conn.commit()
+            
+            return is_disabled == 1
             
     def get_stats(self, state: str) -> Dict:
         """Get statistics for a state."""

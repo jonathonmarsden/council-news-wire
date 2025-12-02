@@ -19,7 +19,7 @@ from typing import Dict, List, Set, Optional
 from dotenv import load_dotenv
 from dateutil import parser as date_parser
 
-from core.scraper import CardScraper, NewsArticle, InnerWestScraper, RSSScraper
+from core.scraper import CardScraper, NewsArticle, InnerWestScraper, RSSScraper, ScraperFactory
 from core.poster import BlueSkyPoster
 from core.database import Database
 from core.utils import setup_logging
@@ -50,58 +50,47 @@ def load_state_config(state_code: str) -> Dict:
 
 def get_scraper(council: Dict, proxy: Optional[str] = None) -> CardScraper:
     """Get the appropriate scraper for a council."""
-    
-    scraper_type = council.get('scraper', 'card_scraper')
-    use_curl = scraper_type == 'curl_scraper'
-    mobile_mode = council.get('mobile_mode', False)
-    limit = council.get('limit')
-    
-    selectors = {
-        'item_selector': council.get('item_selector'),
-        'title_selector': council.get('title_selector'),
-        'link_selector': council.get('link_selector'),
-        'date_selector': council.get('date_selector'),
-        'content_selector': council.get('content_selector')
-    }
-    
-    # Registry of custom scrapers
-    # TODO: Move this to a separate registry file if it grows
-    scraper_classes = {
-        'inner_west_scraper': InnerWestScraper,
-        'card_scraper': CardScraper,
-        'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
-        'rss_scraper': RSSScraper,
-    }
-    
-    scraper_class = scraper_classes.get(scraper_type, CardScraper)
-    
-    # Use CLI proxy if provided, otherwise check council config
-    use_proxy = proxy or council.get('proxy')
-    
-    return scraper_class(
-        council_id=council['id'],
-        council_name=council['name'],
-        news_url=council['news_url'],
-        use_curl=use_curl,
-        mobile_mode=mobile_mode,
-        selectors=selectors,
-        limit=limit,
-        proxy=use_proxy
-    )
+    return ScraperFactory.create_scraper(council, proxy)
 
-def scrape_single_council(council: Dict, proxy: Optional[str] = None) -> List[NewsArticle]:
+def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Optional[Database] = None) -> List[NewsArticle]:
     """Helper to scrape a single council."""
+    
+    # Check Circuit Breaker
+    if db:
+        health = db.get_council_health(council['id'])
+        if health.get('is_disabled'):
+            print(f"Skipping {council['name']} (DISABLED due to {health.get('consecutive_failures')} failures)")
+            return []
+            
     print(f"Scraping {council['name']}...")
+    
+    # Check for rotating proxy requirement
+    if council.get('use_rotating_proxy'):
+        rotating_proxy = os.environ.get('COUNCIL_BOT_ROTATING_PROXY')
+        if rotating_proxy:
+            proxy = rotating_proxy
+            print(f"  Using rotating proxy for {council['name']}")
+        else:
+            print(f"  Warning: {council['name']} requests rotating proxy but COUNCIL_BOT_ROTATING_PROXY is not set.")
+            
     try:
         scraper = get_scraper(council, proxy=proxy)
         articles = scraper.scrape()
         print(f"  {council['name']}: Found {len(articles)} articles")
+        
+        if db:
+            db.record_success(council['id'])
+            
         return articles
     except Exception as e:
         print(f"  Error scraping {council['name']}: {e}")
+        if db:
+            is_disabled = db.record_failure(council['id'])
+            if is_disabled:
+                print(f"  ⚠️ CRITICAL: {council['name']} has been DISABLED after 5 consecutive failures!")
         return []
 
-def scrape_councils(councils: List[Dict], enabled_only: bool = True, proxy: Optional[str] = None, max_workers: int = 5) -> List[NewsArticle]:
+def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = True, proxy: Optional[str] = None, max_workers: int = 5) -> List[NewsArticle]:
     """Scrape news from configured councils concurrently."""
     all_articles = []
     
@@ -113,7 +102,7 @@ def scrape_councils(councils: List[Dict], enabled_only: bool = True, proxy: Opti
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all tasks
         future_to_council = {
-            executor.submit(scrape_single_council, council, proxy): council 
+            executor.submit(scrape_single_council, council, proxy, db): council 
             for council in active_councils
         }
         
@@ -164,16 +153,9 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
     if skipped_count > 0:
         print(f"Skipped {skipped_count} articles older than {MAX_ARTICLE_AGE_DAYS} days")
     
-    new_count = 0
-    for article in filtered_articles:
-        # Convert NewsArticle to dict for DB
-        article_data = article.to_dict()
-        
-        # Add to DB (returns ID if new, or existing ID)
-        # We ignore the return value for now, just ensuring it's in the DB
-        if not db.article_exists(article.url):
-            db.add_article(article_data, state_code)
-            new_count += 1
+    # Bulk insert
+    articles_data = [a.to_dict() for a in filtered_articles]
+    new_count = db.add_articles_bulk(articles_data, state_code)
             
     print(f"Added {new_count} new articles to database")
     
@@ -285,7 +267,7 @@ def main():
     
     # Scrape (unless post-only)
     if not args.post_only:
-        articles = scrape_councils(state_data['councils'], proxy=proxy_url, max_workers=args.concurrency)
+        articles = scrape_councils(state_data['councils'], db=db, proxy=proxy_url, max_workers=args.concurrency)
         unposted = process_articles(articles, db, state_code)
     else:
         print("Skipping scrape, checking backlog...")
