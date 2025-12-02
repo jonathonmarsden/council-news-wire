@@ -37,3 +37,6 @@ bot.db
 data/posted_articles.json
 scraped_documents.json
 posted_documents.json
+
+# Secrets
+scripts/deploy_secrets.py
