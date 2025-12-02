@@ -1,0 +1,8 @@
+{
+  "state_code": "VIC",
+  "state_name": "Victoria",
+  "bluesky_handle_env": "BLUESKY_HANDLE_VIC",
+  "bluesky_password_env": "BLUESKY_PASSWORD_VIC",
+  "timezone": "Australia/Melbourne",
+  "hashtags": ["#LGNewsRoundup", "#VLGA", "#VicCouncils"]
+}

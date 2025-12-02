@@ -11,7 +11,7 @@ Council News Bot monitors news pages from Victorian local councils and automatic
 ## Features
 
 - **27 Victorian Councils** - Currently enabled and posting (79 configured)
-- **Automated Posting** - Runs every 5 minutes via GitHub Actions (temporary for backlog clearing)
+- **Automated Posting** - Runs 24/7 on VPS
 - **BlueSky Integration** - Posts with clickable titles, excerpts, and hashtags
 - **Deduplication** - Tracks posted articles to avoid duplicates
 - **Priority Queuing** - New articles posted before backlog items
@@ -20,7 +20,7 @@ Council News Bot monitors news pages from Victorian local councils and automatic
 
 ## Post Format
 
-```
+```text
 [Clickable Title]
 
 [Excerpt if available]
@@ -31,24 +31,24 @@ Published: [Date if available]
 
 ## Project Structure
 
-```
+> **For Developers & AI Agents:** Please refer to `AI_CONTEXT.md` for detailed architecture, workflows, and debugging guides.
+
+```text
 council-news-bot/
-├── main.py                 # Main entry point and orchestration
-├── poster.py               # BlueSky posting with facets for clickable links
-├── requirements.txt        # Python dependencies
-├── pytest.ini              # Test configuration
-├── config/
-│   └── councils.json       # Council configuration (79 councils)
-├── scrapers/
-│   ├── __init__.py
-│   └── base_scraper.py     # BaseScraper, CardScraper, NewsArticle
-├── data/
-│   └── posted_articles.json # State: posted URLs, known URLs, last post time
-├── tests/
-│   └── test_scrapers.py    # Unit tests
-└── .github/
-    └── workflows/
-        └── scrape.yml      # GitHub Actions workflow
+├── main.py                 # CLI Entry Point (legacy/manual usage)
+├── scheduler.py            # Main Service Loop (runs on VPS)
+├── core/                   # Core Application Logic
+│   ├── scraper.py          # Scraper implementations (BaseScraper, CardScraper)
+│   ├── database.py         # SQLite database handler
+│   ├── poster.py           # BlueSky API client
+│   └── utils.py            # Logging and utilities
+├── states/                 # Configuration by State
+│   ├── vic/
+│   │   └── councils.json   # VIC Council configurations
+│   └── nsw/
+│       └── councils.json   # NSW Council configurations
+├── scripts/                # Utility scripts
+└── bot.db                  # SQLite Database (stores article history)
 ```
 
 ## Commands
@@ -81,17 +81,11 @@ pytest
 - `BLUESKY_HANDLE` - BlueSky handle (roundupnewsbot.bsky.social)
 - `BLUESKY_PASSWORD` - BlueSky app password
 
-## GitHub Actions
+## Deployment
 
-The workflow runs automatically with:
-- **Schedule:** Every 5 minutes (temporary) → will return to 15 minutes
-- **Hours:** 24/7 (temporary) → will return to Melbourne business hours (5am-10pm)
-- **Concurrency:** Only one run at a time (prevents duplicate posts)
-- **Overnight:** Post-only mode (no scraping)
+The bot is deployed on a DigitalOcean VPS running Ubuntu. It uses `systemd` to ensure continuous operation.
 
-### Required Secrets
-- `BLUESKY_HANDLE`
-- `BLUESKY_PASSWORD`
+See `AI_CONTEXT.md` for deployment details.
 
 ## Council Status
 
@@ -105,12 +99,10 @@ The workflow runs automatically with:
 
 ## State Management
 
-The bot maintains state in `data/posted_articles.json`:
-- `posted_urls` - URLs already posted to BlueSky
-- `known_urls` - URLs seen in previous scrapes (for priority detection)
-- `last_post_time` - Timestamp of last post (for gap enforcement)
+The bot maintains state in `bot.db` (SQLite):
 
-New articles (not in `known_urls`) are prioritized over backlog items.
+- **Articles Table**: Stores URLs, titles, dates, and posting status.
+- **Deduplication**: Ensures we don't post the same article twice.
 
 ## BlueSky Account
 

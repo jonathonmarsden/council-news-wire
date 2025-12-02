@@ -1,0 +1,600 @@
+{
+    "councils": [
+        {
+            "id": "aurukun",
+            "name": "Aurukun Council",
+            "news_url": "https://www.aurukun.qld.gov.au/blog/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "balonne",
+            "name": "Balonne Council",
+            "news_url": "https://www.balonne.qld.gov.au/About-Council/Publications-Media/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "banana",
+            "name": "Banana Council",
+            "news_url": "https://www.banana.qld.gov.au/news/category/latest-news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "barcaldine",
+            "name": "Barcaldine Council",
+            "news_url": "https://www.barcaldinerc.qld.gov.au/Our-Council/Media-Releases-Public-Notices",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "barcoo",
+            "name": "Barcoo Council",
+            "news_url": "https://www.barcoo.qld.gov.au/news-and-events/news?format=feed&type=rss",
+            "scraper": "rss_scraper",
+            "enabled": true
+        },
+        {
+            "id": "blackall-tambo",
+            "name": "Blackall-Tambo Council",
+            "news_url": "https://www.btrc.qld.gov.au/Home/Tabs/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "boulia",
+            "name": "Boulia Council",
+            "news_url": "https://www.boulia.qld.gov.au/News-articles",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "brisbane",
+            "name": "Brisbane Council",
+            "news_url": "https://www.brisbane.qld.gov.au/about-council/council-information-and-rates/news-and-publications/living-in-brisbane-newsletter",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": "div.cmp-download",
+            "title_selector": "span.download-heading",
+            "link_selector": "a.download-card-outer",
+            "date_selector": "p.body3",
+            "content_selector": "p.body3"
+        },
+        {
+            "id": "bulloo",
+            "name": "Bulloo Council",
+            "news_url": "https://www.bulloo.qld.gov.au/About-Council/Council-Publications/Council-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "bundaberg",
+            "name": "Bundaberg Council",
+            "news_url": "https://www.bundabergnow.com/category/news/",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": "div.tdb_module_loop",
+            "title_selector": "h3.entry-title a",
+            "link_selector": "h3.entry-title a",
+            "date_selector": "time.entry-date",
+            "content_selector": "div.td-excerpt"
+        },
+        {
+            "id": "burdekin",
+            "name": "Burdekin Council",
+            "news_url": "https://www.burdekin.qld.gov.au/latest-news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "burke",
+            "name": "Burke Council",
+            "news_url": "https://www.burke.qld.gov.au/news/category/all",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "cairns",
+            "name": "Cairns Council",
+            "news_url": "https://www.cairns.qld.gov.au/council/news-notices/media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": "div.card.flex-fill",
+            "title_selector": "h3.card-title a",
+            "link_selector": "h3.card-title a",
+            "date_selector": "div.card-footer small",
+            "content_selector": "p.card-description"
+        },
+        {
+            "id": "carpentaria",
+            "name": "Carpentaria Council",
+            "news_url": "https://www.carpentaria.qld.gov.au/news/category/all",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "cassowary-coast",
+            "name": "Cassowary Coast Council",
+            "news_url": "https://www.cassowarycoast.qld.gov.au/homepage/178/council-news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "central-highlands",
+            "name": "Central Highlands Council",
+            "news_url": "https://www.chrc.qld.gov.au/about-council/news/",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": ".blog-post",
+            "title_selector": "h4",
+            "link_selector": "a.post-top",
+            "date_selector": ".full-date",
+            "content_selector": ".text-container p"
+        },
+        {
+            "id": "charters-towers",
+            "name": "Charters Towers Council",
+            "news_url": "https://www.charterstowers.qld.gov.au/news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "cherbourg-aboriginal-shire",
+            "name": "Cherbourg Aboriginal Shire",
+            "news_url": "https://cherbourg.qld.gov.au/news-events/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "cloncurry",
+            "name": "Cloncurry Council",
+            "news_url": "https://www.cloncurry.qld.gov.au/News-articles",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "cook",
+            "name": "Cook Council",
+            "news_url": "https://www.cook.qld.gov.au/council/news-public-notices-and-media-releases/news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "croydon",
+            "name": "Croydon Council",
+            "news_url": "https://www.croydon.qld.gov.au/News-articles",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "diamantina",
+            "name": "Diamantina Council",
+            "news_url": "https://www.diamantina.qld.gov.au/News/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "douglas",
+            "name": "Douglas Council",
+            "news_url": "https://douglas.qld.gov.au/category/general-news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "etheridge",
+            "name": "Etheridge Council",
+            "news_url": "https://www.etheridge.qld.gov.au/Home/Tabs/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "flinders",
+            "name": "Flinders Council",
+            "news_url": "https://www.flinders.qld.gov.au/Your-Council/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "fraser-coast",
+            "name": "Fraser Coast Council",
+            "news_url": "https://www.frasercoast.qld.gov.au/media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "gladstone",
+            "name": "Gladstone Council",
+            "news_url": "https://www.gladstone.qld.gov.au/news/category/all",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "gold-coast",
+            "name": "Gold Coast Council",
+            "news_url": "https://www.goldcoast.qld.gov.au/Council/City-news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "goondiwindi",
+            "name": "Goondiwindi Council",
+            "news_url": "https://www.grc.qld.gov.au/News-and-Community/News/Council-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "gympie",
+            "name": "Gympie Council",
+            "news_url": "https://www.gympie.qld.gov.au/Council/News-and-Notices/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "livingstone",
+            "name": "Livingstone Council",
+            "news_url": "https://www.livingstone.qld.gov.au/Your-Council/Publications-and-Media/Media-Releases",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "lockhart-river",
+            "name": "Lockhart River Council",
+            "news_url": "https://lockhart.nsw.gov.au/council/latest-news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "lockyer-valley",
+            "name": "Lockyer Valley Council",
+            "news_url": "https://www.lockyervalley.qld.gov.au/our-council/news",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "mobile_mode": true
+        },
+        {
+            "id": "logan",
+            "name": "Logan Council",
+            "news_url": "https://www.logan.qld.gov.au/about-council/media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": ".list-item-container",
+            "title_selector": ".list-item-title",
+            "date_selector": ".published-on",
+            "link_selector": "a"
+        },
+        {
+            "id": "longreach",
+            "name": "Longreach Council",
+            "news_url": "https://www.longreach.qld.gov.au/About-Council/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "mackay",
+            "name": "Mackay Council",
+            "news_url": "https://www.mackay.qld.gov.au/about_council/news_and_media/media_releases",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": "div.inside-content-news-item",
+            "title_selector": "h3",
+            "link_selector": "a",
+            "date_selector": "p",
+            "content_selector": "p"
+        },
+        {
+            "id": "mapoon",
+            "name": "Mapoon Council",
+            "news_url": "https://www.mapoon.qld.gov.au/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "maranoa",
+            "name": "Maranoa Council",
+            "news_url": "https://www.maranoa.qld.gov.au/About-Council/Publications-and-Media/Latest-Council-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "mareeba",
+            "name": "Mareeba Council",
+            "news_url": "https://msc.qld.gov.au/council/news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "mckinlay",
+            "name": "McKinlay Council",
+            "news_url": "https://www.mckinlay.qld.gov.au/News/Media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "moreton-bay",
+            "name": "Moreton Bay Council",
+            "news_url": "https://www.moretonbay.qld.gov.au/News/Media",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": ".list-item-container",
+            "title_selector": ".list-item-title",
+            "date_selector": "p.small-text",
+            "link_selector": "a"
+        },
+        {
+            "id": "mornington",
+            "name": "Mornington Council",
+            "news_url": "https://www.mornington.qld.gov.au/news/latest-news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "mount-isa",
+            "name": "Mount Isa Council",
+            "news_url": "https://www.mountisa.qld.gov.au/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "murweh",
+            "name": "Murweh Council",
+            "news_url": "https://www.murweh.qld.gov.au/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "napranum",
+            "name": "Napranum Council",
+            "news_url": "https://www.napranum.qld.gov.au/news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "noosa",
+            "name": "Noosa Council",
+            "news_url": "https://www.noosa.qld.gov.au/About-Council/News-and-publications/Media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "north-burnett",
+            "name": "North Burnett Council",
+            "news_url": "https://northburnett.qld.gov.au/communications/media-releases-public-notices/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "northern-peninsula-area",
+            "name": "Northern Peninsula Area Council",
+            "news_url": "https://www.nparc.qld.gov.au/Our-council/Public-notice",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "palm-island",
+            "name": "Palm Island Council",
+            "news_url": "https://www.palmcouncil.qld.gov.au/News-articles",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "paroo",
+            "name": "Paroo Council",
+            "news_url": "https://www.paroo.qld.gov.au/News-and-Events/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "pormpuraaw",
+            "name": "Pormpuraaw Council",
+            "news_url": "https://www.pormpuraaw.qld.gov.au/public-news-notices",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "quilpie",
+            "name": "Quilpie Council",
+            "news_url": "https://quilpie.qld.gov.au/news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "redland",
+            "name": "Redland Council",
+            "news_url": "https://www.redlandscoasttoday.com.au/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "richmond",
+            "name": "Richmond Council",
+            "news_url": "https://www.richmond.qld.gov.au/monthly-newsletters",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "rockhampton",
+            "name": "Rockhampton Council",
+            "news_url": "https://www.rockhamptonregion.qld.gov.au/AboutCouncil/News-and-announcements/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": "div.list-item-container",
+            "title_selector": "h2.list-item-title a",
+            "link_selector": "h2.list-item-title a",
+            "date_selector": "div.list-item-date",
+            "content_selector": "div.list-item-content"
+        },
+        {
+            "id": "scenic-rim",
+            "name": "Scenic Rim Council",
+            "news_url": "https://www.scenicrim.qld.gov.au/our-council/connect-with-council/news-and-announcements",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "somerset",
+            "name": "Somerset Council",
+            "news_url": "https://www.somerset.qld.gov.au/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "south-burnett",
+            "name": "South Burnett Council",
+            "news_url": "https://www.southburnett.qld.gov.au/about-council/news/media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "southern-downs",
+            "name": "Southern Downs Council",
+            "news_url": "https://www.sdrc.qld.gov.au/council/news-notices/latest-news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "sunshine-coast",
+            "name": "Sunshine Coast Council",
+            "news_url": "https://www.sunshinecoast.qld.gov.au/news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "tablelands",
+            "name": "Tablelands Council",
+            "news_url": "https://www.trc.qld.gov.au/category/news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "toowoomba",
+            "name": "Toowoomba Council",
+            "news_url": "https://www.tr.qld.gov.au/about-council/news-publications/media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "torres",
+            "name": "Torres Council",
+            "news_url": "https://www.torres.qld.gov.au/Council/Media-Release",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "torres-strait-island",
+            "name": "Torres Strait Island Council",
+            "news_url": "https://tsirc.qld.gov.au/news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "townsville",
+            "name": "Townsville Council",
+            "news_url": "https://www.townsville.qld.gov.au/about-council/news-and-publications/media-releases?collection=tcc~sp-tcc-corporate-media-releases&profile=media-releases",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "item_selector": "li.result",
+            "title_selector": "div.media-release__title",
+            "link_selector": "a.media-release",
+            "date_selector": "time.media-release__date",
+            "content_selector": "p.media-release__summary"
+        },
+        {
+            "id": "weipa-town-authority",
+            "name": "Weipa Town Authority",
+            "news_url": "https://www.weipatownauthority.com.au/Your-WTA/Publications-and-Media/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "western-downs",
+            "name": "Western Downs Council",
+            "news_url": "https://www.wdrc.qld.gov.au/Council/News-Public-Updates/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "whitsunday",
+            "name": "Whitsunday Council",
+            "news_url": "https://www.whitsundayrc.qld.gov.au/Our-Council/Publications-and-Media/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "winton",
+            "name": "Winton Council",
+            "news_url": "https://www.winton.qld.gov.au/News/Latest-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "woorabinda",
+            "name": "Woorabinda Council",
+            "news_url": "https://www.woorabinda.qld.gov.au/News-and-Updates/Council-News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "wujal-wujal",
+            "name": "Wujal Wujal Council",
+            "news_url": "https://www.wujalwujalcouncil.qld.gov.au/council/newsandnotices/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "yarrabah",
+            "name": "Yarrabah Council",
+            "news_url": "https://www.yarrabah.qld.gov.au/yarrabah-news/",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "doomadgee",
+            "name": "Doomadgee Council",
+            "news_url": "https://www.doomadgee.qld.gov.au/news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "hinchinbrook",
+            "name": "Hinchinbrook Council",
+            "news_url": "https://www.hinchinbrook.qld.gov.au/our-council/news-and-announcements/latest-news/",
+            "scraper": "curl_scraper",
+            "enabled": true,
+            "mobile_mode": true,
+            "item_selector": ".infinates .item",
+            "title_selector": "h5",
+            "date_selector": ".date",
+            "link_selector": "a.obutton",
+            "content_selector": ".text p:not(.date)"
+        },
+        {
+            "id": "hope-vale",
+            "name": "Hope Vale Council",
+            "news_url": "https://www.hopevale.qld.gov.au/news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "ipswich",
+            "name": "Ipswich Council",
+            "news_url": "https://www.ipswich.qld.gov.au/About-Council/Media-and-Publications/News",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "isaac",
+            "name": "Isaac Council",
+            "news_url": "https://www.isaac.qld.gov.au/news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        },
+        {
+            "id": "kowanyama",
+            "name": "Kowanyama Council",
+            "news_url": "https://www.kowanyama.qld.gov.au/news",
+            "scraper": "curl_scraper",
+            "enabled": true
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: council_news_bot
+    restart: unless-stopped
+    # Pass environment variables from .env file
+    env_file:
+      - .env
+    # Persist the database and logs
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    # Set timezone to match target audience
+    environment:
+      - TZ=Australia/Sydney
+      - DB_PATH=/app/data/bot.db
+    # Resource limits (good for cheap VPS)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M

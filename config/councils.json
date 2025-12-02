@@ -29,9 +29,13 @@
       "name": "Benalla Rural City Council",
       "news_url": "https://www.benalla.vic.gov.au/latest-news/",
       "scraper": "card_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "A",
-      "note": "Carousel-only news display - no individual article URLs"
+      "item_selector": "div.nn-post-archive-item",
+      "title_selector": "h3",
+      "link_selector": "a.nn-post-preview",
+      "date_selector": "div.text-secondary-lake",
+      "content_selector": "div.site-content"
     },
     {
       "id": "buloke",
@@ -70,9 +74,13 @@
       "name": "Glen Eira City Council",
       "news_url": "https://www.gleneira.vic.gov.au/about-council/news/latest-news",
       "scraper": "card_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "A",
-      "note": "Single-page news listing with no individual article URLs"
+      "item_selector": "a.listing",
+      "title_selector": "h1.h3",
+      "link_selector": "self",
+      "date_selector": "p.h5",
+      "content_selector": "div.layout__main-content"
     },
     {
       "id": "golden-plains",
@@ -231,7 +239,7 @@
       "name": "City of Melbourne",
       "news_url": "https://www.melbourne.vic.gov.au/melbourne-news",
       "scraper": "card_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C",
       "note": "WAF protected - may need curl bypass"
     },
@@ -247,8 +255,8 @@
       "id": "moonee-valley",
       "name": "Moonee Valley City Council",
       "news_url": "https://mvcc.vic.gov.au/play/my-week/news/",
-      "scraper": "card_scraper",
-      "enabled": false,
+      "scraper": "curl_scraper",
+      "enabled": true,
       "category": "C",
       "note": "WAF blocked (Incapsula)"
     },
@@ -257,7 +265,7 @@
       "name": "Banyule City Council",
       "news_url": "https://www.banyule.vic.gov.au/About-us/More-in-about-us/News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -265,7 +273,7 @@
       "name": "Baw Baw Shire Council",
       "news_url": "https://www.bawbawshire.vic.gov.au/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -273,7 +281,7 @@
       "name": "Campaspe Shire Council",
       "news_url": "https://www.campaspe.vic.gov.au/Our-council/News-media/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -281,7 +289,7 @@
       "name": "Central Goldfields Shire Council",
       "news_url": "https://www.centralgoldfields.vic.gov.au/Council/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -289,7 +297,7 @@
       "name": "Colac Otway Shire Council",
       "news_url": "https://www.colacotway.vic.gov.au/News-media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -297,15 +305,15 @@
       "name": "Corangamite Shire Council",
       "news_url": "https://www.corangamite.vic.gov.au/Council/News-and-Media/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
       "id": "darebin",
       "name": "City of Darebin",
-      "news_url": "https://www.darebin.vic.gov.au/About-Council/News-and-Media",
+      "news_url": "https://www.darebin.vic.gov.au/About-council/News-and-Media/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -313,7 +321,7 @@
       "name": "Frankston City Council",
       "news_url": "https://www.frankston.vic.gov.au/Your_Council/Media_and_Publications/Latest_News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -321,7 +329,7 @@
       "name": "Gannawarra Shire Council",
       "news_url": "https://www.gannawarra.vic.gov.au/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -329,15 +337,15 @@
       "name": "Glenelg Shire Council",
       "news_url": "https://www.glenelg.vic.gov.au/News-and-Media-Releases",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
       "id": "hepburn",
       "name": "Hepburn Shire Council",
-      "news_url": "https://www.hepburn.vic.gov.au/",
+      "news_url": "https://www.hepburn.vic.gov.au/Council/News/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -345,7 +353,7 @@
       "name": "Hindmarsh Shire Council",
       "news_url": "https://www.hindmarsh.vic.gov.au/news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -353,7 +361,7 @@
       "name": "Hobsons Bay City Council",
       "news_url": "https://www.hobsonsbay.vic.gov.au/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -361,7 +369,7 @@
       "name": "Horsham Rural City Council",
       "news_url": "https://www.hrcc.vic.gov.au/Our-Council/News-and-Media/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -369,7 +377,7 @@
       "name": "Hume City Council",
       "news_url": "https://www.hume.vic.gov.au/Residents/Things-to-See-and-Do/Latest-News/Media-Releases",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -377,7 +385,7 @@
       "name": "Indigo Shire Council",
       "news_url": "https://www.indigoshire.vic.gov.au/Council/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -385,7 +393,7 @@
       "name": "City of Kingston",
       "news_url": "https://www.kingston.vic.gov.au/council/news/latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -393,7 +401,7 @@
       "name": "Loddon Shire Council",
       "news_url": "https://www.loddon.vic.gov.au/News-and-public-notices/News-articles",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -401,7 +409,7 @@
       "name": "Macedon Ranges Shire Council",
       "news_url": "https://www.mrsc.vic.gov.au/About-Council/News/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -409,7 +417,7 @@
       "name": "Mansfield Shire Council",
       "news_url": "https://www.mansfield.vic.gov.au/news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -417,7 +425,7 @@
       "name": "Maribyrnong City Council",
       "news_url": "https://www.maribyrnong.vic.gov.au/News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -425,7 +433,7 @@
       "name": "Maroondah City Council",
       "news_url": "https://www.maroondah.vic.gov.au/About-Council/News/Maroondah-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -433,7 +441,7 @@
       "name": "City of Melton",
       "news_url": "https://www.melton.vic.gov.au/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -441,7 +449,7 @@
       "name": "Mildura Rural City Council",
       "news_url": "https://www.mildura.vic.gov.au/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -449,7 +457,7 @@
       "name": "Moira Shire Council",
       "news_url": "https://www.moira.vic.gov.au/Our-Council/News-and-information/Media-releases",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -457,7 +465,7 @@
       "name": "City of Monash",
       "news_url": "https://www.monash.vic.gov.au/About-Us/News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -465,7 +473,7 @@
       "name": "Moorabool Shire Council",
       "news_url": "https://www.moorabool.vic.gov.au/news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -473,7 +481,7 @@
       "name": "Mornington Peninsula Shire Council",
       "news_url": "https://www.mornpen.vic.gov.au/About-Us/News-Media-Publications/News-and-Media-Releases",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -481,7 +489,7 @@
       "name": "Mount Alexander Shire Council",
       "news_url": "http://www.mountalexander.vic.gov.au/News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -489,7 +497,7 @@
       "name": "Moyne Shire Council",
       "news_url": "https://www.moyne.vic.gov.au/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -497,7 +505,7 @@
       "name": "Murrindindi Shire Council",
       "news_url": "https://www.murrindindi.vic.gov.au/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -505,7 +513,7 @@
       "name": "Nillumbik Shire Council",
       "news_url": "https://www.nillumbik.vic.gov.au/Council/Council-news-and-publications/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -513,7 +521,7 @@
       "name": "Northern Grampians Shire Council",
       "news_url": "https://www.ngshire.vic.gov.au/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -521,7 +529,7 @@
       "name": "Pyrenees Shire Council",
       "news_url": "https://www.pyrenees.vic.gov.au/About-Pyrenees-Shire-Council/News-Media",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -529,7 +537,7 @@
       "name": "Borough of Queenscliffe",
       "news_url": "https://www.queenscliffe.vic.gov.au/Your-Council/News-and-projects/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -537,7 +545,7 @@
       "name": "Southern Grampians Shire Council",
       "news_url": "https://www.sthgrampians.vic.gov.au/Home/Latest-News/Media-Releases",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -545,7 +553,7 @@
       "name": "City of Stonnington",
       "news_url": "https://www.stonnington.vic.gov.au/News-and-notices",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -553,7 +561,7 @@
       "name": "Surf Coast Shire Council",
       "news_url": "https://www.surfcoast.vic.gov.au/About-us/News-and-media/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -561,7 +569,7 @@
       "name": "Swan Hill Rural City Council",
       "news_url": "https://www.swanhill.vic.gov.au/Our-Council/News-and-publications/News-and-public-notices",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -569,7 +577,7 @@
       "name": "Rural City of Wangaratta",
       "news_url": "https://www.wangaratta.vic.gov.au/News-articles",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -577,7 +585,7 @@
       "name": "Warrnambool City Council",
       "news_url": "https://www.warrnambool.vic.gov.au/news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -585,7 +593,7 @@
       "name": "West Wimmera Shire Council",
       "news_url": "https://www.westwimmera.vic.gov.au/Council/News-and-media/Latest-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -593,7 +601,7 @@
       "name": "City of Whittlesea",
       "news_url": "https://www.whittlesea.vic.gov.au/about-us/news-publications/latest-news/",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -601,23 +609,24 @@
       "name": "City of Yarra",
       "news_url": "https://www.yarracity.vic.gov.au/news",
       "scraper": "curl_scraper",
-      "enabled": false,
-      "category": "C"
+      "enabled": true,
+      "category": "C",
+      "mobile_mode": true
     },
     {
       "id": "yarra-ranges",
       "name": "Yarra Ranges Shire Council",
       "news_url": "https://www.yarraranges.vic.gov.au/Council/Latest-news",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
       "id": "yarriambiack",
       "name": "Yarriambiack Shire Council",
-      "news_url": "https://www.yarriambiack.vic.gov.au/Home",
+      "news_url": "https://www.yarriambiack.vic.gov.au/Engage-With-Us/Council-News",
       "scraper": "curl_scraper",
-      "enabled": false,
+      "enabled": true,
       "category": "C"
     },
     {
@@ -625,18 +634,16 @@
       "name": "Alpine Shire Council",
       "news_url": "https://www.alpineshire.vic.gov.au/news",
       "scraper": "card_scraper",
-      "enabled": false,
-      "category": "D",
-      "notes": "URL needs verification - original had trailing hyphen"
+      "enabled": true,
+      "category": "A"
     },
     {
       "id": "port-phillip",
       "name": "City of Port Phillip",
       "news_url": "https://www.portphillip.vic.gov.au/about-the-council/news-and-media",
       "scraper": "card_scraper",
-      "enabled": false,
-      "category": "D",
-      "notes": "URL needs verification - returned 404"
+      "enabled": true,
+      "category": "A"
     }
   ]
 }

@@ -30,3 +30,10 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# Application Data
+bot.db
+*.log
+data/posted_articles.json
+scraped_documents.json
+posted_documents.json

@@ -1,0 +1,8 @@
+{
+  "state_code": "NSW",
+  "state_name": "New South Wales",
+  "bluesky_handle_env": "BLUESKY_HANDLE_NSW",
+  "bluesky_password_env": "BLUESKY_PASSWORD_NSW",
+  "timezone": "Australia/Sydney",
+  "hashtags": ["#LGNewsRoundup", "#VLGA", "#NSWCouncils"]
+}

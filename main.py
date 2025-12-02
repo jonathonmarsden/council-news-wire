@@ -2,426 +2,298 @@
 """
 Council News Bot - Main Entry Point
 
-Scrapes news articles from Victorian council websites and posts them to BlueSky.
+Scrapes news articles from Australian council websites and posts them to BlueSky.
+Supports multiple states via the --state argument.
 """
 
 import argparse
 import json
 import os
 import sys
+import time
+import concurrent.futures
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Optional
 
-from scrapers.base_scraper import CardScraper, NewsArticle
-from poster import BlueSkyPoster
+from dotenv import load_dotenv
+from dateutil import parser as date_parser
 
+from core.scraper import CardScraper, NewsArticle, InnerWestScraper, RSSScraper
+from core.poster import BlueSkyPoster
+from core.database import Database
+from core.utils import setup_logging
 
-# Path to data files
-DATA_DIR = Path(__file__).parent / 'data'
-POSTED_FILE = DATA_DIR / 'posted_articles.json'
-CONFIG_DIR = Path(__file__).parent / 'config'
-COUNCILS_FILE = CONFIG_DIR / 'councils.json'
-
-# Maximum age for articles (in days) - Chris wants fresh content only
+# Constants
 MAX_ARTICLE_AGE_DAYS = 7
+DEFAULT_STATE = 'vic'
 
-
-def load_councils() -> List[Dict]:
-    """Load council configuration from JSON file."""
-    with open(COUNCILS_FILE, 'r') as f:
-        data = json.load(f)
-    return data.get('councils', [])
-
-
-def load_bot_state() -> Dict:
-    """
-    Load the bot's persistent state.
+def load_state_config(state_code: str) -> Dict:
+    """Load configuration for a specific state."""
+    base_path = Path(__file__).parent / 'states' / state_code.lower()
+    config_file = base_path / 'config.json'
+    councils_file = base_path / 'councils.json'
     
-    State includes:
-    - posted_urls: Set of URLs already posted
-    - last_post_time: ISO timestamp of last post (for 15-min gap)
-    - known_urls: URLs seen in previous scrapes (for prioritizing new discoveries)
-    """
-    if not POSTED_FILE.exists():
-        return {
-            'posted_urls': [],
-            'last_post_time': None,
-            'known_urls': []
-        }
-    
-    try:
-        with open(POSTED_FILE, 'r') as f:
-            data = json.load(f)
-    except (json.JSONDecodeError, ValueError) as e:
-        print(f"Warning: Could not parse {POSTED_FILE}: {e}")
-        return {
-            'posted_urls': [],
-            'last_post_time': None,
-            'known_urls': []
-        }
-    
-    # Handle legacy format (just posted_urls list)
-    if isinstance(data.get('posted_urls'), list) and 'last_post_time' not in data:
-        return {
-            'posted_urls': data.get('posted_urls', []),
-            'last_post_time': None,
-            'known_urls': data.get('posted_urls', [])  # Treat posted as known
-        }
-    
-    # Ensure known_urls exists
-    if 'known_urls' not in data:
-        data['known_urls'] = data.get('posted_urls', [])
-    
-    return data
-
-
-def save_bot_state(state: Dict) -> None:
-    """Save the bot's persistent state."""
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    
-    with open(POSTED_FILE, 'w') as f:
-        json.dump(state, f, indent=2)
-
-
-def _diversify_by_council(articles: List) -> List:
-    """
-    Reorder articles to spread them across different councils.
-    
-    Instead of posting all articles from one council in sequence,
-    this interleaves articles from different councils for feed diversity.
-    
-    Args:
-        articles: List of NewsArticle objects
+    if not config_file.exists():
+        raise ValueError(f"State configuration not found: {state_code}")
         
-    Returns:
-        Reordered list with articles spread across councils
-    """
-    if not articles:
-        return articles
-    
-    # Group articles by council
-    by_council: Dict[str, List] = {}
-    for article in articles:
-        council_id = article.council_id
-        if council_id not in by_council:
-            by_council[council_id] = []
-        by_council[council_id].append(article)
-    
-    # Round-robin through councils to interleave articles
-    result = []
-    council_queues = list(by_council.values())
-    
-    while council_queues:
-        # Take one article from each council in turn
-        next_round = []
-        for queue in council_queues:
-            if queue:
-                result.append(queue.pop(0))
-            if queue:  # Still has articles
-                next_round.append(queue)
-        council_queues = next_round
-    
-    return result
-
-
-def load_posted_articles() -> Set[str]:
-    """Load the set of previously posted article URLs (legacy helper)."""
-    state = load_bot_state()
-    return set(state.get('posted_urls', []))
-
-
-def save_posted_articles(posted_urls: Set[str]) -> None:
-    """Save the set of posted article URLs (legacy helper)."""
-    state = load_bot_state()
-    state['posted_urls'] = list(posted_urls)
-    save_bot_state(state)
-
-
-def get_scraper(council: Dict) -> CardScraper:
-    """
-    Get the appropriate scraper for a council.
-    
-    Args:
-        council: Council configuration dictionary
+    with open(config_file, 'r') as f:
+        config = json.load(f)
         
-    Returns:
-        Configured scraper instance
-    """
+    with open(councils_file, 'r') as f:
+        councils_data = json.load(f)
+        
+    return {
+        'config': config,
+        'councils': councils_data.get('councils', [])
+    }
+
+def get_scraper(council: Dict, proxy: Optional[str] = None) -> CardScraper:
+    """Get the appropriate scraper for a council."""
+    
     scraper_type = council.get('scraper', 'card_scraper')
     use_curl = scraper_type == 'curl_scraper'
+    mobile_mode = council.get('mobile_mode', False)
+    limit = council.get('limit')
     
-    return CardScraper(
+    selectors = {
+        'item_selector': council.get('item_selector'),
+        'title_selector': council.get('title_selector'),
+        'link_selector': council.get('link_selector'),
+        'date_selector': council.get('date_selector'),
+        'content_selector': council.get('content_selector')
+    }
+    
+    # Registry of custom scrapers
+    # TODO: Move this to a separate registry file if it grows
+    scraper_classes = {
+        'inner_west_scraper': InnerWestScraper,
+        'card_scraper': CardScraper,
+        'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
+        'rss_scraper': RSSScraper,
+    }
+    
+    scraper_class = scraper_classes.get(scraper_type, CardScraper)
+    
+    # Use CLI proxy if provided, otherwise check council config
+    use_proxy = proxy or council.get('proxy')
+    
+    return scraper_class(
         council_id=council['id'],
         council_name=council['name'],
         news_url=council['news_url'],
-        use_curl=use_curl
+        use_curl=use_curl,
+        mobile_mode=mobile_mode,
+        selectors=selectors,
+        limit=limit,
+        proxy=use_proxy
     )
 
+def scrape_single_council(council: Dict, proxy: Optional[str] = None) -> List[NewsArticle]:
+    """Helper to scrape a single council."""
+    print(f"Scraping {council['name']}...")
+    try:
+        scraper = get_scraper(council, proxy=proxy)
+        articles = scraper.scrape()
+        print(f"  {council['name']}: Found {len(articles)} articles")
+        return articles
+    except Exception as e:
+        print(f"  Error scraping {council['name']}: {e}")
+        return []
 
-def scrape_all_councils(councils: List[Dict], enabled_only: bool = True) -> List[NewsArticle]:
-    """
-    Scrape news from all configured councils.
-    
-    Args:
-        councils: List of council configurations
-        enabled_only: Only scrape enabled councils
-        
-    Returns:
-        List of all scraped articles
-    """
+def scrape_councils(councils: List[Dict], enabled_only: bool = True, proxy: Optional[str] = None, max_workers: int = 5) -> List[NewsArticle]:
+    """Scrape news from configured councils concurrently."""
     all_articles = []
     
-    for council in councils:
-        if enabled_only and not council.get('enabled', False):
-            continue
-        
-        print(f"Scraping {council['name']}...")
-        
-        try:
-            scraper = get_scraper(council)
-            articles = scraper.scrape()
-            all_articles.extend(articles)
-            print(f"  Found {len(articles)} articles")
-        except Exception as e:
-            print(f"  Error: {e}")
+    # Filter enabled councils first
+    active_councils = [c for c in councils if not enabled_only or c.get('enabled', False)]
     
+    print(f"Scraping {len(active_councils)} councils with {max_workers} workers...")
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all tasks
+        future_to_council = {
+            executor.submit(scrape_single_council, council, proxy): council 
+            for council in active_councils
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_council):
+            council = future_to_council[future]
+            try:
+                articles = future.result()
+                all_articles.extend(articles)
+            except Exception as e:
+                print(f"  Unhandled error scraping {council['name']}: {e}")
+            
     return all_articles
 
-
-def filter_fresh_articles(articles: List[NewsArticle], max_age_days: int = MAX_ARTICLE_AGE_DAYS) -> List[NewsArticle]:
+def process_articles(articles: List[NewsArticle], db: Database, state_code: str) -> List[Dict]:
     """
-    Filter articles to only include those within the freshness window.
-    
-    Articles without a date are assumed to be fresh (included).
-    
-    Args:
-        articles: List of articles to filter
-        max_age_days: Maximum age in days (default: 7)
-        
-    Returns:
-        List of fresh articles
+    Process scraped articles:
+    1. Filter by age
+    2. Add to database (if new)
+    3. Return list of unposted articles
     """
-    cutoff_date = datetime.now() - timedelta(days=max_age_days)
-    fresh = []
-    stale_count = 0
+    cutoff_date = datetime.now() - timedelta(days=MAX_ARTICLE_AGE_DAYS)
+    filtered_articles = []
+    skipped_count = 0
     
     for article in articles:
-        if article.date is None:
-            # No date - assume fresh
-            fresh.append(article)
-        else:
-            # Handle timezone-aware dates by comparing naive
-            article_date = article.date
-            if hasattr(article_date, 'tzinfo') and article_date.tzinfo is not None:
-                article_date = article_date.replace(tzinfo=None)
+        # Filter by age if date is available
+        if article.date:
+            # Handle timezone awareness mismatch
+            # If article.date is aware, we need an aware cutoff
+            check_date = article.date
+            check_cutoff = cutoff_date
             
-            if article_date >= cutoff_date:
-                fresh.append(article)
-            else:
-                stale_count += 1
+            if check_date.tzinfo is not None and check_date.tzinfo.utcoffset(check_date) is not None:
+                # Article is aware, make cutoff aware using same timezone
+                check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=MAX_ARTICLE_AGE_DAYS)
+            
+            if check_date < check_cutoff:
+                skipped_count += 1
+                continue
+            
+            filtered_articles.append(article)
+        else:
+            # Skip articles with no date to prevent "ghost" articles
+            # We can't verify freshness without a date
+            skipped_count += 1
+            continue
+            
+    if skipped_count > 0:
+        print(f"Skipped {skipped_count} articles older than {MAX_ARTICLE_AGE_DAYS} days")
     
-    if stale_count > 0:
-        print(f"  Filtered out {stale_count} articles older than {max_age_days} days")
-    
-    return fresh
-
-
-def post_new_articles(
-    articles: List[NewsArticle],
-    posted_urls: Set[str],
-    dry_run: bool = False,
-    limit: int = 0
-) -> Set[str]:
-    """
-    Post new articles to BlueSky.
-    
-    Prioritizes newly discovered articles (not seen in previous scrapes)
-    over backlog items.
-    
-    Args:
-        articles: List of scraped articles
-        posted_urls: Set of already posted URLs
-        dry_run: If True, don't actually post
-        limit: Maximum number of articles to post (0 = no limit)
+    new_count = 0
+    for article in filtered_articles:
+        # Convert NewsArticle to dict for DB
+        article_data = article.to_dict()
         
-    Returns:
-        Updated set of posted URLs
-    """
-    # Filter to fresh articles only (max 7 days old)
-    fresh_articles = filter_fresh_articles(articles)
+        # Add to DB (returns ID if new, or existing ID)
+        # We ignore the return value for now, just ensuring it's in the DB
+        if not db.article_exists(article.url):
+            db.add_article(article_data, state_code)
+            new_count += 1
+            
+    print(f"Added {new_count} new articles to database")
     
-    # Load state for known URLs tracking
-    state = load_bot_state()
-    known_urls = set(state.get('known_urls', []))
-    
-    # Separate into newly discovered vs backlog
-    new_articles = [a for a in fresh_articles if a.url not in posted_urls]
-    newly_discovered = [a for a in new_articles if a.url not in known_urls]
-    backlog = [a for a in new_articles if a.url in known_urls]
-    
-    # Prioritize newly discovered, then backlog
-    # But spread across councils for diversity in the feed
-    prioritized = _diversify_by_council(newly_discovered) + _diversify_by_council(backlog)
+    # Return unposted articles from DB
+    return db.get_unposted_articles(state_code)
+
+def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database, 
+                  council_lookup: Dict[str, str], hashtags: List[str],
+                  limit: int = 0, dry_run: bool = False):
+    """Post articles to BlueSky."""
+    if not articles:
+        print("No articles to post")
+        return
+
+    print(f"Found {len(articles)} unposted articles")
     
     if limit > 0:
-        prioritized = prioritized[:limit]
-    
-    if not prioritized:
-        print("No new articles to post")
-        # Still update known_urls with all scraped URLs
-        all_scraped_urls = [a.url for a in fresh_articles]
-        state['known_urls'] = list(set(known_urls) | set(all_scraped_urls))
-        save_bot_state(state)
-        return posted_urls
-    
-    print(f"\nFound {len(prioritized)} new articles ({len(newly_discovered)} newly discovered, {len(backlog)} backlog)")
-    
+        articles = articles[:limit]
+        print(f"Limiting to {limit} posts")
+        
     if dry_run:
         print("\nDry run - would post:")
-        for article in prioritized:
-            marker = "🆕" if article.url not in known_urls else "📰"
-            print(f"  {marker} {article.council_name}: {article.title[:50]}...")
-        return posted_urls
-    
-    # TEMPORARY: Skip gap check - posting multiple articles per run to clear backlog
-    
-    # Initialize poster
-    poster = BlueSkyPoster()
+        for article in articles:
+            council_name = council_lookup.get(article['council_id'], article['council_id'])
+            print(f"  📰 {council_name}: {article['title']}")
+        return
+
+    # Authenticate
     if not poster.authenticate():
         print("Failed to authenticate with BlueSky")
-        return posted_urls
-    
-    # Post articles up to the limit
-    # TEMPORARY: Skip gap check to clear backlog faster (posting multiple per run)
+        return
+
     posted_count = 0
-    for article in prioritized:
-        is_new = article.url not in known_urls
+    for article in articles:
+        # Parse date string back to datetime if needed
+        article_date = None
+        if article.get('date'):
+            try:
+                article_date = date_parser.parse(article['date'])
+            except Exception:
+                pass
+        
+        council_name = council_lookup.get(article['council_id'], article['council_id'])
         
         if poster.post_article(
-            article.council_name, 
-            article.title, 
-            article.url,
-            date=article.date,
-            excerpt=article.excerpt
+            council_name,
+            article['title'],
+            article['url'],
+            date=article_date,
+            excerpt=article['excerpt'],
+            hashtags=hashtags
         ):
-            posted_urls.add(article.url)
+            db.mark_as_posted(article['url'], poster.handle)
             posted_count += 1
-            marker = "🆕 NEW" if is_new else "📰 BACKLOG"
-            print(f"✅ Posted {marker}: {article.title[:50]}...")
-        
-        # Small delay between posts to avoid rate limiting
-        if posted_count < len(prioritized):
-            import time
-            time.sleep(2)
-    
-    # Update state after all posts
-    state['posted_urls'] = list(posted_urls)
-    state['last_post_time'] = datetime.now().isoformat()
-    # Add all scraped URLs to known_urls
-    all_scraped_urls = [a.url for a in fresh_articles]
-    state['known_urls'] = list(set(known_urls) | set(all_scraped_urls))
-    save_bot_state(state)
-    
-    print(f"\n✅ Posted {posted_count} articles. {len(prioritized) - posted_count} remaining in queue.")
-    
-    return posted_urls
-
+            print(f"✅ Posted: {article['title'][:50]}...")
+            
+            # Rate limiting delay
+            if posted_count < len(articles):
+                time.sleep(2)
+                
+    print(f"\n✅ Posted {posted_count} articles")
 
 def main():
-    """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description='Council News Bot - Scrapes and posts Victorian council news'
-    )
-    parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Scrape but do not post to BlueSky'
-    )
-    parser.add_argument(
-        '--council',
-        type=str,
-        help='Scrape only a specific council (by ID)'
-    )
-    parser.add_argument(
-        '--all',
-        action='store_true',
-        help='Include disabled councils'
-    )
-    parser.add_argument(
-        '--test',
-        action='store_true',
-        help='Test BlueSky connection'
-    )
-    parser.add_argument(
-        '--limit',
-        type=int,
-        default=0,
-        help='Maximum number of articles to post (0 = no limit)'
-    )
-    parser.add_argument(
-        '--post-only',
-        action='store_true',
-        help='Post from backlog without scraping (for overnight runs)'
-    )
+    # Load environment variables
+    load_dotenv()
+    
+    parser = argparse.ArgumentParser(description='Council News Bot')
+    parser.add_argument('--state', type=str, default=DEFAULT_STATE, help='State code (vic, nsw, etc)')
+    parser.add_argument('--dry-run', action='store_true', help='Scrape but do not post')
+    parser.add_argument('--limit', type=int, default=0, help='Max posts')
+    parser.add_argument('--post-only', action='store_true', help='Skip scrape, post from backlog')
+    parser.add_argument('--scrape-only', action='store_true', help='Scrape and save to DB, but do not post')
+    parser.add_argument('--proxy', type=str, help='Proxy URL (e.g. http://user:pass@host:port)')
+    parser.add_argument('--concurrency', type=int, default=5, help='Number of concurrent scrapers')
     
     args = parser.parse_args()
     
-    # Test mode
-    if args.test:
-        poster = BlueSkyPoster()
-        if poster.test_connection():
-            print("BlueSky connection successful!")
-            sys.exit(0)
-        else:
-            print("BlueSky connection failed!")
-            sys.exit(1)
+    # Determine proxy: CLI arg > Env Var > None
+    proxy_url = args.proxy or os.environ.get('COUNCIL_BOT_PROXY')
     
-    # Load configuration
-    councils = load_councils()
-    posted_urls = load_posted_articles()
+    state_code = args.state.upper()
     
-    print(f"Loaded {len(councils)} councils, {len(posted_urls)} previously posted articles")
+    try:
+        state_data = load_state_config(state_code)
+    except ValueError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+        
+    print(f"=== Council News Bot: {state_data['config']['state_name']} ===")
     
-    # Filter to specific council if requested
-    if args.council:
-        councils = [c for c in councils if c['id'] == args.council]
-        if not councils:
-            print(f"Council '{args.council}' not found")
-            sys.exit(1)
+    # Initialize DB
+    # Allow DB path to be overridden by env var (useful for Docker)
+    default_db_path = os.path.join(os.path.dirname(__file__), 'bot.db')
+    db_path = os.environ.get('DB_PATH', default_db_path)
     
-    # Post-only mode: skip scraping, post from existing backlog
-    if args.post_only:
-        print("Post-only mode: skipping scrape, posting from backlog...")
-        state = load_bot_state()
-        known_urls = set(state.get('known_urls', []))
-        
-        if not known_urls:
-            print("No articles in backlog to post")
-            sys.exit(0)
-        
-        # Create minimal article objects from known URLs for posting
-        # We need to re-scrape just to get article data, but only for unposted ones
-        unposted_urls = known_urls - posted_urls
-        if not unposted_urls:
-            print("No unposted articles in backlog")
-            sys.exit(0)
-        
-        print(f"Found {len(unposted_urls)} unposted articles in backlog")
-        
-        # We still need to scrape to get article details, but this is quick
-        articles = scrape_all_councils(councils, enabled_only=not args.all)
-        # Filter to only unposted backlog items
-        articles = [a for a in articles if a.url in unposted_urls]
-        print(f"Matched {len(articles)} articles for posting")
+    # Ensure directory exists if using a custom path
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    
+    db = Database(db_path)
+    
+    # Initialize Poster
+    handle = os.environ.get(state_data['config']['bluesky_handle_env'])
+    password = os.environ.get(state_data['config']['bluesky_password_env'])
+    poster = BlueSkyPoster(handle, password)
+    
+    # Prepare council lookup and hashtags
+    council_lookup = {c['id']: c['name'] for c in state_data['councils']}
+    hashtags = state_data['config'].get('hashtags', [])
+    
+    # Scrape (unless post-only)
+    if not args.post_only:
+        articles = scrape_councils(state_data['councils'], proxy=proxy_url, max_workers=args.concurrency)
+        unposted = process_articles(articles, db, state_code)
     else:
-        # Normal mode: scrape articles
-        articles = scrape_all_councils(councils, enabled_only=not args.all)
-        print(f"\nTotal: {len(articles)} articles scraped")
-    
-    # Post new articles (state is saved inside post_new_articles)
-    posted_urls = post_new_articles(articles, posted_urls, dry_run=args.dry_run, limit=args.limit)
+        print("Skipping scrape, checking backlog...")
+        unposted = db.get_unposted_articles(state_code)
+        
+    # Post
+    if not args.scrape_only:
+        post_articles(unposted, poster, db, council_lookup, hashtags, limit=args.limit, dry_run=args.dry_run)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
