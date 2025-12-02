@@ -28,7 +28,7 @@
         {
             "id": "burwood-council",
             "name": "Burwood Council",
-            "news_url": "https://www.burwood.nsw.gov.au/News-Media",
+            "news_url": "https://www.burwood.nsw.gov.au/Our-Council/News-and-Media/News-Stories",
             "scraper": "curl_scraper",
             "enabled": true
         },
@@ -234,7 +234,10 @@
             "name": "City of Parramatta",
             "news_url": "https://www.cityofparramatta.nsw.gov.au/about-parramatta/news",
             "scraper": "curl_scraper",
-            "enabled": true
+            "enabled": true,
+            "item_selector": "article",
+            "title_selector": "h2.list-item-title",
+            "date_selector": "p.published-on"
         },
         {
             "id": "penrith-city-council",
@@ -271,7 +274,7 @@
         {
             "id": "city-of-ryde",
             "name": "City of Ryde",
-            "news_url": "https://www.ryde.nsw.gov.au/Council/News-and-Media",
+            "news_url": "https://www.ryde.nsw.gov.au/Council/Media-Centre/News-and-Public-Notices",
             "scraper": "curl_scraper",
             "enabled": true
         },
