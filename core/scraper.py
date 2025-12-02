@@ -17,6 +17,12 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser as date_parser
 
+try:
+    from curl_cffi import requests as curl_requests
+    CURL_CFFI_AVAILABLE = True
+except ImportError:
+    CURL_CFFI_AVAILABLE = False
+
 
 @dataclass
 class NewsArticle:
@@ -144,6 +150,32 @@ class BaseScraper(ABC):
     def _fetch_with_curl(self, url: str, use_proxy: bool = False) -> Optional[str]:
         """Fetch page using curl for WAF bypass."""
         print(f"DEBUG: Fetching with curl (Proxy: {use_proxy}): {url}")
+        
+        if CURL_CFFI_AVAILABLE:
+            try:
+                proxies = None
+                if use_proxy and self.proxy:
+                    proxies = {"http": self.proxy, "https": self.proxy}
+                
+                # Use chrome impersonation by default
+                impersonate = "chrome"
+                
+                response = curl_requests.get(
+                    url, 
+                    impersonate=impersonate, 
+                    proxies=proxies, 
+                    timeout=60
+                )
+                
+                if response.status_code == 200:
+                    print(f"DEBUG: curl_cffi success, length: {len(response.text)}")
+                    return response.text
+                else:
+                    print(f"DEBUG: curl_cffi failed with status {response.status_code}")
+            except Exception as e:
+                print(f"DEBUG: curl_cffi exception: {e}")
+                # Fallback to subprocess curl if curl_cffi fails
+        
         try:
             # Try simple curl first (often works better than spoofed headers for Akamai)
             cmd = [
