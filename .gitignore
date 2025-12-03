@@ -33,6 +33,8 @@ build/
 
 # Application Data
 bot.db
+bot.db-shm
+bot.db-wal
 *.log
 data/posted_articles.json
 scraped_documents.json

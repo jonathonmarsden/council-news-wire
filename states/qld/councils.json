@@ -4,7 +4,7 @@
             "id": "aurukun",
             "name": "Aurukun Council",
             "news_url": "https://www.aurukun.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -96,7 +96,7 @@
         {
             "id": "burke",
             "name": "Burke Council",
-            "news_url": "https://www.burke.qld.gov.au/news/category/all",
+            "news_url": "https://www.burke.qld.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true
@@ -153,9 +153,14 @@
             "id": "cherbourg-aboriginal-shire",
             "name": "Cherbourg Aboriginal Shire",
             "news_url": "https://cherbourg.qld.gov.au/news-events/",
-            "scraper": "curl_scraper",
+            "scraper": "html",
             "enabled": true,
-            "use_curl": true
+            "use_curl": true,
+            "item_selector": "article.post",
+            "title_selector": "h2.entry-title a",
+            "link_selector": "h2.entry-title a",
+            "date_selector": "time.entry-date.published",
+            "content_selector": ".entry-summary"
         },
         {
             "id": "cloncurry",
@@ -169,7 +174,7 @@
             "id": "cook",
             "name": "Cook Council",
             "news_url": "https://www.cook.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -192,7 +197,7 @@
             "id": "douglas",
             "name": "Douglas Council",
             "news_url": "https://douglas.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -266,9 +271,14 @@
         {
             "id": "lockhart-river",
             "name": "Lockhart River Council",
-            "news_url": "https://lockhart.nsw.gov.au/feed/",
+            "news_url": "https://lockhart.qld.gov.au/waanta-newsletters",
             "scraper": "curl_scraper",
-            "enabled": true
+            "enabled": true,
+            "use_curl": true,
+            "item_selector": "div.card-grid a.card-no-bs",
+            "title_selector": "h5.card-title",
+            "link_selector": "self",
+            "date_selector": "h5.card-title"
         },
         {
             "id": "lockyer-valley",
@@ -380,7 +390,7 @@
             "id": "napranum",
             "name": "Napranum Council",
             "news_url": "https://www.napranum.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -395,7 +405,7 @@
             "id": "north-burnett",
             "name": "North Burnett Council",
             "news_url": "https://northburnett.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -440,7 +450,7 @@
             "id": "redland",
             "name": "Redland Council",
             "news_url": "https://www.redlandscoasttoday.com.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -482,7 +492,7 @@
         {
             "id": "south-burnett",
             "name": "South Burnett Council",
-            "news_url": "https://www.southburnett.qld.gov.au/about-council/news/media-releases",
+            "news_url": "https://www.southburnett.qld.gov.au/News-Articles",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true
@@ -510,14 +520,14 @@
             "id": "tablelands",
             "name": "Tablelands Council",
             "news_url": "https://www.trc.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
             "id": "toowoomba",
             "name": "Toowoomba Council",
             "news_url": "https://www.tr.qld.gov.au/about-council/news-publications/media-releases?format=feed&type=rss",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -597,14 +607,14 @@
             "id": "yarrabah",
             "name": "Yarrabah Council",
             "news_url": "https://www.yarrabah.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
             "id": "doomadgee",
             "name": "Doomadgee Council",
             "news_url": "https://www.doomadgee.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
@@ -623,7 +633,7 @@
         {
             "id": "hope-vale",
             "name": "Hope Vale Council",
-            "news_url": "https://www.hopevale.qld.gov.au/news",
+            "news_url": "https://www.hopevale.qld.gov.au/Council/News-and-Notices/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true
@@ -648,7 +658,7 @@
             "id": "kowanyama",
             "name": "Kowanyama Council",
             "news_url": "https://www.kowanyama.qld.gov.au/feed/",
-            "scraper": "curl_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         }
     ]
