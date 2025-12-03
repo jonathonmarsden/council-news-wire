@@ -65,7 +65,12 @@ class CardScraper(BaseScraper):
             elif child.string:
                 text_parts.append(child.string.strip())
                 
-        return " ".join(filter(None, text_parts))
+        text = " ".join(filter(None, text_parts))
+        
+        # Remove common prefixes
+        text = re.sub(r'^(Media Release|Press Release|News Release)[:\s-]*', '', text, flags=re.IGNORECASE)
+        
+        return text.strip()
 
     def _clean_excerpt(self, excerpt: str, title: str) -> Optional[str]:
         """Clean excerpt by removing title if it's duplicated."""
