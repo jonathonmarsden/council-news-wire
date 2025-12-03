@@ -3,7 +3,7 @@ Tests for Council News Bot scrapers.
 """
 
 import pytest
-from scrapers.base_scraper import BaseScraper, CardScraper, NewsArticle
+from core.scrapers import BaseScraper, CardScraper, NewsArticle
 from datetime import datetime
 
 

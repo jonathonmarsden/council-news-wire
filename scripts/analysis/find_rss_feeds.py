@@ -23,7 +23,7 @@ import concurrent.futures
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.scraper import BaseScraper
+from core.scrapers import BaseScraper
 
 def load_councils(state):
     config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'states', state, 'councils.json')

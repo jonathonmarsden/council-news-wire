@@ -19,7 +19,7 @@ from typing import Dict, List, Set, Optional
 from dotenv import load_dotenv
 from dateutil import parser as date_parser
 
-from core.scraper import CardScraper, NewsArticle, InnerWestScraper, RSSScraper, ScraperFactory
+from core.scrapers import CardScraper, NewsArticle, InnerWestScraper, RSSScraper, ScraperFactory
 from core.poster import BlueSkyPoster
 from core.database import Database
 from core.utils import setup_logging

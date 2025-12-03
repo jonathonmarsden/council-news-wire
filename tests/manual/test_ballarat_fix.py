@@ -4,7 +4,7 @@ import os
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from core.scraper import CardScraper
+from core.scrapers import CardScraper
 
 def test_ballarat():
     selectors = {

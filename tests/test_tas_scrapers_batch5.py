@@ -1,5 +1,5 @@
 import pytest
-from core.scraper import ScraperFactory
+from core.scrapers import ScraperFactory
 from core.database import Database
 import json
 import os

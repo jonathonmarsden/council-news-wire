@@ -1,5 +1,5 @@
 import pytest
-from core.scraper import CardScraper
+from core.scrapers import CardScraper, ScraperFactory
 import json
 import os
 
@@ -21,17 +21,7 @@ def test_tas_scraper_batch3(council_id):
     config = get_council_config(council_id)
     assert config is not None, f"Council {council_id} not found in config"
     
-    scraper = CardScraper(
-        council_id=config['id'],
-        council_name=config['name'],
-        news_url=config['news_url'],
-        selectors={
-            "item_selector": config['item_selector'],
-            "title_selector": config['title_selector'],
-            "date_selector": config['date_selector'],
-            "link_selector": config['link_selector']
-        }
-    )
+    scraper = ScraperFactory.create_scraper(config)
     
     # Use a limit to avoid fetching too many pages
     scraper.limit = 5

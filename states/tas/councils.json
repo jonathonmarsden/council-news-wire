@@ -115,19 +115,15 @@
             "id": "break-o-day",
             "name": "Break O'Day Council",
             "news_url": "https://www.bodc.tas.gov.au/feed/",
-            "scraper": "card_scraper",
-            "enabled": true,
-            "item_selector": "div[id^='tab-'] p",
-            "link_selector": "a"
+            "scraper": "rss_scraper",
+            "enabled": true
         },
         {
             "id": "brighton",
             "name": "Brighton Council",
             "news_url": "https://www.brighton.tas.gov.au/feed/",
-            "scraper": "card_scraper",
-            "enabled": true,
-            "item_selector": ".main p a",
-            "link_selector": "self"
+            "scraper": "rss_scraper",
+            "enabled": true
         },
         {
             "id": "central-coast",
@@ -216,10 +212,8 @@
             "id": "glamorgan-spring-bay",
             "name": "Glamorgan\u2013Spring Bay Council",
             "news_url": "https://gsbc.tas.gov.au/feed/",
-            "scraper": "card_scraper",
-            "enabled": true,
-            "item_selector": "div[id^='tab-']",
-            "link_selector": "a"
+            "scraper": "rss_scraper",
+            "enabled": true
         },
         {
             "id": "kentish",

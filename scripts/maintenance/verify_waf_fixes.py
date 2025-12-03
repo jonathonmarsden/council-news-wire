@@ -17,7 +17,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 sys.path.append(project_root)
 
 from core.config import CONFIG_PATHS
-from core.scraper import ScraperFactory
+from core.scrapers import ScraperFactory
 
 def load_curl_councils():
     councils = []
