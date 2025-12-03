@@ -18,10 +18,11 @@
         {
             "id": "banana",
             "name": "Banana Council",
-            "news_url": "https://www.banana.qld.gov.au/news/category/latest-news",
+            "news_url": "https://www.banana.qld.gov.au/About-Council/Publication-Scheme-Publications-and-Documents/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
-            "use_curl": true
+            "use_curl": true,
+            "impersonate": "chrome120"
         },
         {
             "id": "barcaldine",
@@ -116,18 +117,20 @@
         {
             "id": "carpentaria",
             "name": "Carpentaria Council",
-            "news_url": "https://www.carpentaria.qld.gov.au/news/category/all",
+            "news_url": "https://www.carpentaria.qld.gov.au/Council/Public-Notices",
             "scraper": "curl_scraper",
             "enabled": true,
-            "use_curl": true
+            "use_curl": true,
+            "impersonate": "chrome120"
         },
         {
             "id": "cassowary-coast",
             "name": "Cassowary Coast Council",
-            "news_url": "https://www.cassowarycoast.qld.gov.au/homepage/178/council-news",
+            "news_url": "https://www.cassowarycoast.qld.gov.au/Our-Council/Publications/Council-News",
             "scraper": "curl_scraper",
             "enabled": true,
-            "use_curl": true
+            "use_curl": true,
+            "impersonate": "chrome120"
         },
         {
             "id": "central-highlands",

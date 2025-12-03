@@ -54,6 +54,7 @@ def get_scraper(council: Dict, proxy: Optional[str] = None) -> CardScraper:
 
 def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Optional[Database] = None) -> List[NewsArticle]:
     """Helper to scrape a single council."""
+    start_time = time.time()
     
     # Check Circuit Breaker
     if db:
@@ -76,16 +77,23 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
     try:
         scraper = get_scraper(council, proxy=proxy)
         articles = scraper.scrape()
-        print(f"  {council['name']}: Found {len(articles)} articles")
+        count = len(articles)
+        print(f"  {council['name']}: Found {count} articles")
         
         if db:
             db.record_success(council['id'])
+            duration_ms = int((time.time() - start_time) * 1000)
+            status = 'ok' if count > 0 else 'empty'
+            db.log_scraper_run(council['id'], count, status, duration_ms)
             
         return articles
     except Exception as e:
         print(f"  Error scraping {council['name']}: {e}")
         if db:
             is_disabled = db.record_failure(council['id'])
+            duration_ms = int((time.time() - start_time) * 1000)
+            db.log_scraper_run(council['id'], 0, 'error', duration_ms)
+            
             if is_disabled:
                 print(f"  ⚠️ CRITICAL: {council['name']} has been DISABLED after 5 consecutive failures!")
         return []
@@ -124,8 +132,8 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
     3. Return list of unposted articles
     """
     cutoff_date = datetime.now() - timedelta(days=MAX_ARTICLE_AGE_DAYS)
-    filtered_articles = []
-    skipped_count = 0
+    fresh_articles = []
+    archived_articles = []
     
     for article in articles:
         # Filter by age if date is available
@@ -140,24 +148,31 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
                 check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=MAX_ARTICLE_AGE_DAYS)
             
             if check_date < check_cutoff:
-                skipped_count += 1
-                continue
-            
-            filtered_articles.append(article)
+                archived_articles.append(article)
+            else:
+                fresh_articles.append(article)
         else:
             # Skip articles with no date to prevent "ghost" articles
-            # We can't verify freshness without a date
-            skipped_count += 1
-            continue
+            # We can't verify freshness without a date, so we archive them to be safe
+            # but we still record them to know the scraper is working
+            archived_articles.append(article)
             
-    if skipped_count > 0:
-        print(f"Skipped {skipped_count} articles older than {MAX_ARTICLE_AGE_DAYS} days")
+    # Bulk insert fresh articles
+    fresh_data = [a.to_dict() for a in fresh_articles]
+    new_fresh_count = db.add_articles_bulk(fresh_data, state_code, status='new')
     
-    # Bulk insert
-    articles_data = [a.to_dict() for a in filtered_articles]
-    new_count = db.add_articles_bulk(articles_data, state_code)
+    # Bulk insert archived articles
+    archived_data = [a.to_dict() for a in archived_articles]
+    new_archived_count = db.add_articles_bulk(archived_data, state_code, status='archived')
+    
+    total_found = len(articles)
+    total_new_db = new_fresh_count + new_archived_count
+    duplicates = total_found - total_new_db
             
-    print(f"Added {new_count} new articles to database")
+    print(f"Processing Summary: Found {total_found} total")
+    print(f"  - {new_fresh_count} new fresh articles (queued)")
+    print(f"  - {new_archived_count} new archived articles (too old)")
+    print(f"  - {duplicates} duplicates (already known)")
     
     # Return unposted articles from DB
     return db.get_unposted_articles(state_code)

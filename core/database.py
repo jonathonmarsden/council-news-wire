@@ -49,15 +49,24 @@ class Database:
                     date TEXT,
                     excerpt TEXT,
                     state TEXT NOT NULL,
+                    status TEXT DEFAULT 'new',
                     first_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     posted_at TIMESTAMP,
                     posted_to_handle TEXT
                 )
             """)
             
+            # Migration: Add status column if it doesn't exist
+            try:
+                conn.execute("ALTER TABLE articles ADD COLUMN status TEXT DEFAULT 'new'")
+            except sqlite3.OperationalError:
+                # Column likely already exists
+                pass
+            
             # Create index for faster lookups
             conn.execute("CREATE INDEX IF NOT EXISTS idx_url ON articles(url)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_state_posted ON articles(state, posted_at)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_status ON articles(status)")
             
             # Council Health table (Circuit Breaker)
             conn.execute("""
@@ -70,6 +79,21 @@ class Database:
                     disabled_at TIMESTAMP
                 )
             """)
+            
+            # Scraper Stats table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS scraper_stats (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    council_id TEXT NOT NULL,
+                    run_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    articles_found INTEGER DEFAULT 0,
+                    articles_saved INTEGER DEFAULT 0,
+                    status TEXT,
+                    duration_ms INTEGER
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_stats_council_run ON scraper_stats(council_id, run_at)")
+            
             conn.commit()
     
     def article_exists(self, url: str) -> bool:
@@ -118,7 +142,7 @@ class Database:
                 row = cursor.fetchone()
                 return row['id'] if row else -1
 
-    def add_articles_bulk(self, articles: List[Dict], state: str) -> int:
+    def add_articles_bulk(self, articles: List[Dict], state: str, status: str = 'new') -> int:
         """
         Add multiple articles to the database in a single transaction.
         Ignores duplicates (INSERT OR IGNORE).
@@ -138,7 +162,8 @@ class Database:
                     a['title'],
                     a['date'],
                     a['excerpt'],
-                    state
+                    state,
+                    status
                 )
                 for a in articles
             ]
@@ -146,8 +171,8 @@ class Database:
             # Use INSERT OR IGNORE to handle duplicates gracefully in bulk
             cursor = conn.executemany(
                 """
-                INSERT OR IGNORE INTO articles (url, council_id, title, date, excerpt, state)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT OR IGNORE INTO articles (url, council_id, title, date, excerpt, state, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 data
             )
@@ -181,7 +206,7 @@ class Database:
             cursor = conn.execute(
                 """
                 SELECT * FROM articles 
-                WHERE state = ? AND posted_at IS NULL
+                WHERE state = ? AND posted_at IS NULL AND status != 'archived'
                 ORDER BY first_seen_at DESC
                 LIMIT ?
                 """,
@@ -275,6 +300,15 @@ class Database:
             conn.commit()
             
             return is_disabled == 1
+
+    def log_scraper_run(self, council_id: str, articles_found: int, status: str, duration_ms: int, articles_saved: int = 0):
+        """Log a scraper run execution."""
+        with self._get_conn() as conn:
+            conn.execute("""
+                INSERT INTO scraper_stats (council_id, articles_found, articles_saved, status, duration_ms)
+                VALUES (?, ?, ?, ?, ?)
+            """, (council_id, articles_found, articles_saved, status, duration_ms))
+            conn.commit()
             
     def get_stats(self, state: str) -> Dict:
         """Get statistics for a state."""

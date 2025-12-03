@@ -144,10 +144,15 @@
         {
             "id": "strathbogie",
             "name": "Strathbogie Shire Council",
-            "news_url": "https://www.strathbogie.vic.gov.au/",
+            "news_url": "https://www.strathbogie.vic.gov.au/latest-news/",
             "scraper": "card_scraper",
             "enabled": true,
-            "category": "A"
+            "category": "A",
+            "item_selector": ".c-news-tile",
+            "title_selector": ".c-news-tile__title",
+            "link_selector": "a.c-news-tile__inner",
+            "date_selector": ".postedDate",
+            "content_selector": ".c-news-tile__content"
         },
         {
             "id": "towong",
@@ -236,10 +241,14 @@
         {
             "id": "greater-dandenong",
             "name": "City of Greater Dandenong",
-            "news_url": "https://www.greaterdandenong.vic.gov.au/rss.xml",
-            "scraper": "rss_scraper",
+            "news_url": "https://www.greaterdandenong.vic.gov.au/news",
+            "scraper": "card_scraper",
             "enabled": true,
-            "category": "B"
+            "category": "B",
+            "item_selector": ".view-news .views-row",
+            "title_selector": ".right-side a",
+            "link_selector": ".right-side a",
+            "date_selector": ".date time"
         },
         {
             "id": "knox",
@@ -650,10 +659,15 @@
             "id": "warrnambool",
             "name": "Warrnambool City Council",
             "news_url": "https://www.warrnambool.vic.gov.au/news",
-            "scraper": "curl_scraper",
+            "scraper": "card_scraper",
             "enabled": true,
             "category": "C",
-            "use_curl": true
+            "use_curl": true,
+            "impersonate": "chrome120",
+            "item_selector": ".listing.views-row",
+            "title_selector": ".listing_title",
+            "date_selector": ".listing_date time",
+            "link_selector": "a"
         },
         {
             "id": "west-wimmera",
