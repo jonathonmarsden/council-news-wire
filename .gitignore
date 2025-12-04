@@ -42,3 +42,16 @@ posted_documents.json
 
 # Secrets
 scripts/deploy_secrets.py
+
+# Database
+council_news.db
+council_news.db-shm
+council_news.db-wal
+
+# Debug files
+debug_*.html
+debug_*.py
+debug_*.txt
+debug_html/
+test_db.sqlite*
+

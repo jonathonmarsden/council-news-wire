@@ -1,0 +1,8 @@
+{
+  "state_code": "NT",
+  "state_name": "Northern Territory",
+  "bluesky_handle_env": "BLUESKY_HANDLE_NT",
+  "bluesky_password_env": "BLUESKY_PASSWORD_NT",
+  "timezone": "Australia/Darwin",
+  "hashtags": ["#LGNewsRoundup", "#LGA_NT", "#NTCouncils"]
+}

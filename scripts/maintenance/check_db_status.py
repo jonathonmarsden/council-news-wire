@@ -20,15 +20,15 @@ def check_status():
     c.execute("SELECT COUNT(*) FROM articles")
     total = c.fetchone()[0]
     
-    # Count unposted articles
-    c.execute("SELECT COUNT(*) FROM articles WHERE posted_at IS NULL")
+    # Count unposted articles (excluding archived)
+    c.execute("SELECT COUNT(*) FROM articles WHERE posted_at IS NULL AND status != 'archived'")
     unposted = c.fetchone()[0]
     
     # Get breakdown by council for unposted
     c.execute("""
         SELECT council_id, COUNT(*) 
         FROM articles 
-        WHERE posted_at IS NULL 
+        WHERE posted_at IS NULL AND status != 'archived'
         GROUP BY council_id 
         ORDER BY COUNT(*) DESC
     """)

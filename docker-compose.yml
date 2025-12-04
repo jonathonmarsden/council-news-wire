@@ -16,9 +16,9 @@ services:
     environment:
       - TZ=Australia/Sydney
       - DB_PATH=/app/data/bot.db
-    # Resource limits (good for cheap VPS)
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
+    # Resource limits (removed for 4GB VPS)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 512M

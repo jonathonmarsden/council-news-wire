@@ -1,32 +1,59 @@
 # Council News Bot
 
-Automated scraper and BlueSky poster for Victorian local government news and media releases.
+Automated scraper and BlueSky poster for Australian local government news and media releases.
 
 **Live:** [@roundupnewsbot.bsky.social](https://bsky.app/profile/roundupnewsbot.bsky.social)
 
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![Coverage](https://img.shields.io/badge/coverage-73%25-yellow)]()
+[![Python](https://img.shields.io/badge/python-3.9+-blue)]()
+
 ## Overview
 
-Council News Bot monitors news pages from Victorian local councils and automatically posts new articles to BlueSky for [LG News Roundup](https://lgnewsroundup.com). It tracks press releases, media statements, community announcements, and other council news.
+Council News Bot monitors news pages from local councils across **Victoria**, **New South Wales**, and **Queensland**. It automatically posts new articles to BlueSky for [LG News Roundup](https://lgnewsroundup.com).
+
+It is designed to be resilient, scalable, and polite:
+*   **Resilient**: Uses `curl_cffi` to bypass WAFs (Cloudflare/Incapsula).
+*   **Scalable**: Scrapes concurrently and supports hundreds of councils.
+*   **Polite**: "Drips" posts out slowly to avoid flooding the feed.
 
 ## Features
 
-- **27 Victorian Councils** - Currently enabled and posting (79 configured)
-- **Automated Posting** - Runs 24/7 on VPS
-- **BlueSky Integration** - Posts with clickable titles, excerpts, and hashtags
-- **Deduplication** - Tracks posted articles to avoid duplicates
-- **Priority Queuing** - New articles posted before backlog items
-- **7-Day Freshness** - Only posts articles from the last week
-- **Multiple Scraper Patterns** - Handles various council website structures
+- **Multi-State Support**: VIC, NSW, QLD (expanding to all of Australia).
+- **WAF Bypass**: Advanced impersonation of real browsers to scrape protected sites.
+- **"Record Everything"**: Tracks all articles (even old ones) to monitor scraper health.
+- **Automated Posting**: Runs 24/7 on VPS via Docker.
+- **BlueSky Integration**: Posts with clickable titles, excerpts, and hashtags.
+- **Deduplication**: Tracks posted articles to avoid duplicates.
 
-## Post Format
+## Quick Start
 
-```text
-[Clickable Title]
+### Option 1: Docker (Recommended)
 
-[Excerpt if available]
-[Council Name]
-Published: [Date if available]
-#LGNewsRoundup #VLGA #VicCouncils #CouncilName
+```bash
+# 1. Clone the repo
+git clone https://github.com/jonathonmarsden/council-news-bot.git
+cd council-news-bot
+
+# 2. Create .env file
+cp .env.example .env
+# Edit .env with your BlueSky credentials
+
+# 3. Run with Docker Compose
+docker compose up -d --build
+```
+
+### Option 2: Local Development
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Run a scrape for Victoria
+python main.py --state vic
+
+# 3. Run a specific council (debug mode)
+python main.py --council warrnambool --dry-run
 ```
 
 ## Project Structure
@@ -35,8 +62,8 @@ Published: [Date if available]
 
 ```text
 council-news-bot/
-├── core/                   # Core Application Logic
-├── states/                 # Configuration by State
+├── core/                   # Core Application Logic (Scrapers, DB, Poster)
+├── states/                 # Configuration by State (JSON files)
 ├── scripts/                # Utility scripts (maintenance, deployment, analysis)
 ├── main.py                 # CLI Entry Point
 └── scheduler.py            # Main Service Loop
@@ -54,41 +81,21 @@ python main.py --state nsw
 # Dry run (scrape but don't post)
 python main.py --dry-run
 
+# Debug a specific council
+python main.py --council warrnambool --dry-run
+
 # Post without scraping (for backlog clearing)
 python main.py --post-only
-
-# Limit posts per council (Safety Valve)
-python main.py --max-per-council 5
 ```
-
-## Environment Variables
-
-See `docs/DEVELOPER_GUIDE.md` for full configuration details.
 
 ## Deployment
 
 The bot is deployed on a DigitalOcean VPS running Ubuntu.
-See `docs/DEVELOPER_GUIDE.md` for deployment instructions.
+See `docs/DEPLOY_TO_DIGITALOCEAN.md` for deployment instructions.
 
 ## Council Status
 
-Run `python3 scripts/maintenance/health_check.py` to generate the latest `HEALTH_REPORT.md`.
-
-
-The bot maintains state in `bot.db` (SQLite):
-
-- **Articles Table**: Stores URLs, titles, dates, and posting status.
-- **Deduplication**: Ensures we don't post the same article twice.
-
-## BlueSky Account
-
-- **Display Name:** LG News Roundup Newsfeed
-- **Handle:** @roundupnewsbot.bsky.social
-- **Owner:** Chris Eddy (LG News Roundup)
-
-## Related Projects
-
-- [council-bot](https://github.com/jonathonmarsden/council-bot) - Council meeting documents bot
+Run `python3 scripts/maintenance/daily_health_check.py` to generate the latest health report.
 
 ## License
 

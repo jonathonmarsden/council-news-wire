@@ -1,0 +1,8 @@
+{
+  "state_code": "SA",
+  "state_name": "South Australia",
+  "bluesky_handle_env": "BLUESKY_HANDLE_SA",
+  "bluesky_password_env": "BLUESKY_PASSWORD_SA",
+  "timezone": "Australia/Adelaide",
+  "hashtags": ["#LGNewsRoundup", "#LGA_SA", "#SACouncils"]
+}

@@ -1,7 +1,22 @@
+"""
+Debug Batch Script
+
+This script allows developers to debug specific council scrapers by:
+1. Fetching the live HTML from the council's news page.
+2. Saving the HTML to `debug_html/` for inspection.
+3. Running the scraper logic against the fetched content.
+4. Reporting the number of articles found.
+
+Usage:
+    python3 scripts/maintenance/debug_batch.py --councils warrnambool ballarat
+    python3 scripts/maintenance/debug_batch.py --state vic --empty-only
+"""
+
 import json
 import os
 import sys
 import logging
+import argparse
 from pathlib import Path
 
 # Add project root to path
@@ -15,7 +30,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def load_council_config(council_id):
-    # Find the config for this council
+    """Load configuration for a specific council ID from any state file."""
     import glob
     state_files = glob.glob("states/*/councils.json")
     for fpath in state_files:
@@ -27,6 +42,7 @@ def load_council_config(council_id):
     return None
 
 def debug_council(council_id):
+    """Run debug process for a single council."""
     print(f"\n=== Debugging {council_id} ===")
     config = load_council_config(council_id)
     if not config:
@@ -47,6 +63,7 @@ def debug_council(council_id):
             return
             
         # 2. Save HTML
+        Path("debug_html").mkdir(exist_ok=True)
         save_path = Path(f"debug_html/{council_id}.html")
         save_path.parent.mkdir(exist_ok=True)
         with open(save_path, "w", encoding="utf-8") as f:

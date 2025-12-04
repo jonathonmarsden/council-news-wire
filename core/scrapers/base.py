@@ -23,6 +23,12 @@ try:
 except ImportError:
     CURL_CFFI_AVAILABLE = False
 
+try:
+    import cloudscraper
+    CLOUDSCRAPER_AVAILABLE = True
+except ImportError:
+    CLOUDSCRAPER_AVAILABLE = False
+
 
 @dataclass
 class NewsArticle:
@@ -66,7 +72,7 @@ class BaseScraper(ABC):
         'Upgrade-Insecure-Requests': '1',
     }
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
         """
         Initialize the scraper.
         
@@ -75,6 +81,7 @@ class BaseScraper(ABC):
             council_name: Human-readable council name
             news_url: URL of the council's news page
             use_curl: Whether to use curl for WAF bypass
+            use_cloudscraper: Whether to use cloudscraper for Cloudflare bypass
             mobile_mode: Whether to impersonate a mobile device (iPhone)
             limit: Maximum number of articles to scrape
             proxy: Proxy URL (e.g. http://user:pass@host:port)
@@ -84,12 +91,18 @@ class BaseScraper(ABC):
         self.council_name = council_name
         self.news_url = news_url
         self.use_curl = use_curl
+        self.use_cloudscraper = use_cloudscraper
         self.mobile_mode = mobile_mode
         self.limit = limit
         self.proxy = proxy
         self.impersonate = impersonate
         self.session = requests.Session()
         self.session.headers.update(self.HEADERS)
+        
+        if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
+            self.scraper = cloudscraper.create_scraper()
+        else:
+            self.scraper = None
         
         # Don't set proxies immediately - we'll try direct first in fetch_page
         # unless we decide otherwise later.
@@ -110,7 +123,9 @@ class BaseScraper(ABC):
         self.session.proxies = {}
         
         content = None
-        if self.use_curl:
+        if self.use_cloudscraper and self.scraper:
+            content = self._fetch_with_cloudscraper(url)
+        elif self.use_curl:
             content = self._fetch_with_curl(url, use_proxy=False)
         else:
             content = self._fetch_with_requests(url)
@@ -126,6 +141,14 @@ class BaseScraper(ABC):
                 'https': self.proxy
             }
             
+            if self.use_cloudscraper and self.scraper:
+                # Cloudscraper handles proxies internally if configured, but here we might need to set it
+                # For now, let's assume cloudscraper doesn't use the session proxies directly unless configured
+                # But we can try to set it on the scraper object if needed.
+                # Simpler to just retry with curl or requests if cloudscraper failed?
+                # Or maybe cloudscraper failed because of IP block.
+                pass 
+            
             if self.use_curl:
                 return self._fetch_with_curl(url, use_proxy=True)
             else:
@@ -133,6 +156,22 @@ class BaseScraper(ABC):
                 
         return None
     
+    def _fetch_with_cloudscraper(self, url: str) -> Optional[str]:
+        """Fetch a URL using cloudscraper to bypass Cloudflare."""
+        if not CLOUDSCRAPER_AVAILABLE:
+            print("Cloudscraper not available")
+            return None
+            
+        try:
+            print(f"Using cloudscraper for {url}")
+            scraper = cloudscraper.create_scraper()
+            response = scraper.get(url)
+            response.raise_for_status()
+            return response.text
+        except Exception as e:
+            print(f"Cloudscraper error for {url}: {e}")
+            return None
+
     def _fetch_with_requests(self, url: str) -> Optional[str]:
         """Fetch page using requests library."""
         try:

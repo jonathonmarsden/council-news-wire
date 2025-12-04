@@ -23,19 +23,22 @@ class CardScraper(BaseScraper):
     """
     
     # CSS selectors - override these in subclasses for different structures
-    ARTICLE_SELECTOR = 'article.news-item, article.listing, .news-card, .listing-item, .views-row, .content-card, .article-container, .media-item, a.card--news, a.card__news-listing, a.card[href*="/news/"], div.card, .article-item, a.cont-item-news, .card-medium, .i-tile, .list-item-container, a.card-y'
+    ARTICLE_SELECTOR = 'article.news-item, article.listing, .news-card, .listing-item, .views-row, .content-card, .article-container, .media-item, a.card--news, a.card__news-listing, a.card[href*="/news/"], div.card, .article-item, a.cont-item-news, .card-medium, .i-tile, .list-item-container, a.card-y, div.result-container, div.news-listing__item'
     TITLE_SELECTOR = 'h2 a, h3 a, .title a, a.title, .field--name-title a, .news-title a, a[href*="/news/"]'
     DATE_SELECTOR = '.date, .published, time, .meta-date, .field--name-created, .news-date, .card__meta'
     EXCERPT_SELECTOR = '.card__description, .excerpt, .summary, .description, .field--name-body, .teaser, p'
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
-        super().__init__(council_id, council_name, news_url, use_curl, mobile_mode, limit, proxy, impersonate)
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
+        super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, mobile_mode, limit, proxy, impersonate)
         self.selectors = selectors or {}
 
     def _get_clean_title(self, element) -> str:
         """Extract title text from an element, excluding date/metadata elements."""
         if not element:
             return ""
+            
+        # Debug
+        # print(f"Cleaning title from: {str(element)[:100]}")
             
         # If element has no children (just text), return it
         if not hasattr(element, 'children'):
@@ -61,9 +64,13 @@ class CardScraper(BaseScraper):
                     continue
                     
                 # Recursively get text from child
-                text_parts.append(child.get_text(" ", strip=True))
+                text = child.get_text(" ", strip=True)
+                # print(f"  Child {child.name} text: '{text}'")
+                text_parts.append(text)
             elif child.string:
-                text_parts.append(child.string.strip())
+                text = child.string.strip()
+                # print(f"  String child text: '{text}'")
+                text_parts.append(text)
                 
         text = " ".join(filter(None, text_parts))
         
@@ -116,12 +123,17 @@ class CardScraper(BaseScraper):
         # Use configured selector if available, otherwise use default list
         article_selector = self.selectors.get('item_selector') or self.ARTICLE_SELECTOR
         
-        for item in soup.select(article_selector):
+        items = soup.select(article_selector)
+        print(f"Found {len(items)} items with selector {article_selector}")
+        
+        for item in items:
             if self.limit and len(articles) >= self.limit:
                 break
             article = self._parse_article(item)
             if article:
                 articles.append(article)
+            else:
+                print("Failed to parse article from item")
         
         # If no articles found, try finding news links directly
         if not articles:
@@ -259,6 +271,7 @@ class CardScraper(BaseScraper):
     
     def _parse_article(self, item) -> Optional[NewsArticle]:
         """Parse a single article item from the page."""
+        print(f"Parsing item: {item.prettify()[:1000]}...")
         title = None
         url = None
         date = None
@@ -276,13 +289,23 @@ class CardScraper(BaseScraper):
                 
                 if link_elem:
                     url = link_elem.get('href', '')
+                else:
+                    # Debug
+                    # print(f"Could not find link with selector {link_selector} in {str(item)[:50]}...")
+                    pass
             
             # Title
             title_selector = self.selectors.get('title_selector')
             if title_selector:
                 title_elem = item.select_one(title_selector)
                 if title_elem:
+                    print(f"Found title elem: {str(title_elem)[:100]}")
                     title = self._get_clean_title(title_elem)
+                    print(f"Extracted title: '{title}'")
+                else:
+                    # Debug
+                    # print(f"Could not find title with selector {title_selector} in {str(item)[:50]}...")
+                    pass
             
             # Date
             date_selector = self.selectors.get('date_selector')
@@ -301,7 +324,20 @@ class CardScraper(BaseScraper):
                     excerpt = self._clean_excerpt(raw_excerpt, title)
             
             if title and url:
+                # Fallback: Try to extract date from URL if not found
+                if not date:
+                    # Match /YYYY/MM/DD/ pattern
+                    date_match = re.search(r'/(\d{4})/(\d{1,2})/(\d{1,2})/', url)
+                    if date_match:
+                        try:
+                            year, month, day = map(int, date_match.groups())
+                            date = datetime(year, month, day)
+                        except ValueError:
+                            pass
+                
                 return self.create_article(title, url, date, excerpt)
+            else:
+                print(f"Missing title or url. Title: '{title}', URL: '{url}'")
 
         # Strategy 0: Card div with link inside containing .card__title (Golden Plains/GovCMS pattern)
         if item.name == 'div' and 'card' in item.get('class', []):

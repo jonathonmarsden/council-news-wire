@@ -1,10 +1,13 @@
-
 import sqlite3
 import re
 import os
 
 def fix_warren_db():
     db_path = "bot.db"
+    if not os.path.exists(db_path):
+        # Try absolute path on VPS
+        db_path = "/opt/council-news-bot/data/bot.db"
+        
     if not os.path.exists(db_path):
         print(f"Database not found at {db_path}")
         return
@@ -26,12 +29,13 @@ def fix_warren_db():
             
         new_title = original_title
         
-        # 1. Remove date suffix
-        # Pattern: matches date at end of string, possibly with no space before it
-        # e.g. "Station27 November 2025"
-        # We use a lookbehind or just match the end
-        date_pattern = r'\d{1,2}\s+[A-Za-z]+\s+\d{4}$'
-        new_title = re.sub(date_pattern, '', new_title).strip()
+        # 1. Remove date suffix (Robust method)
+        # Pattern: matches date at end of string: "DD Month YYYY"
+        date_pattern = r'(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+20\d{2})$'
+        match = re.search(date_pattern, new_title, re.IGNORECASE)
+        if match:
+            # Cut the string before the date
+            new_title = new_title[:match.start()].strip()
         
         # 2. Remove prefix
         prefix_pattern = r'^(Media Release|Press Release|News Release)[:\s-]*'

@@ -26,16 +26,20 @@ class ScraperFactory:
         """
         scraper_type = council.get('scraper', 'card_scraper')
         use_curl = scraper_type == 'curl_scraper' or council.get('use_curl', False)
+        use_cloudscraper = council.get('use_cloudscraper', False)
         mobile_mode = council.get('mobile_mode', False)
         limit = council.get('limit')
         
+        # Extract selectors from nested 'selectors' dict or top-level keys
+        council_selectors = council.get('selectors', {})
+        
         selectors = {
-            'item_selector': council.get('item_selector'),
-            'title_selector': council.get('title_selector'),
-            'link_selector': council.get('link_selector'),
-            'date_selector': council.get('date_selector'),
-            'content_selector': council.get('content_selector'),
-            'excerpt_selector': council.get('excerpt_selector')
+            'item_selector': council_selectors.get('container') or council.get('item_selector'),
+            'title_selector': council_selectors.get('title') or council.get('title_selector'),
+            'link_selector': council_selectors.get('link') or council.get('link_selector'),
+            'date_selector': council_selectors.get('date') or council.get('date_selector'),
+            'content_selector': council_selectors.get('content') or council.get('content_selector'),
+            'excerpt_selector': council_selectors.get('excerpt') or council.get('excerpt_selector')
         }
         
         # Registry of custom scrapers
@@ -59,6 +63,7 @@ class ScraperFactory:
             council_name=council['name'],
             news_url=council['news_url'],
             use_curl=use_curl,
+            use_cloudscraper=use_cloudscraper,
             mobile_mode=mobile_mode,
             selectors=selectors,
             limit=limit,
