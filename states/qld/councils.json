@@ -52,7 +52,7 @@
     {
       "id": "blackall-tambo",
       "name": "Blackall-Tambo Council",
-      "news_url": "https://www.btrc.qld.gov.au/Home/Tabs/News",
+      "news_url": "https://www.btrc.qld.gov.au/Our-Council/News-and-Events",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,

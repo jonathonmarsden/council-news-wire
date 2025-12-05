@@ -139,7 +139,7 @@
     {
       "id": "broome",
       "name": "Broome",
-      "news_url": "https://www.broome.wa.gov.au/News-and-media/Latest-news",
+      "news_url": "https://www.broome.wa.gov.au/Council/Media-Centre",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true
@@ -181,7 +181,7 @@
     {
       "id": "cambridge",
       "name": "Cambridge",
-      "news_url": "https://www.cambridge.wa.gov.au/Town-Council/News-and-Public-Notices",
+      "news_url": "https://www.cambridge.wa.gov.au/About/News",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true

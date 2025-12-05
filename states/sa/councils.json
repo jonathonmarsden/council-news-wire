@@ -53,6 +53,7 @@
       "name": "Alexandrina Council",
       "news_url": "https://www.alexandrina.sa.gov.au/discover/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -85,6 +86,7 @@
       "name": "Barunga West Council",
       "news_url": "https://www.barungawest.sa.gov.au/community-information/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -179,6 +181,7 @@
       "name": "Clare and Gilbert Valleys Council",
       "news_url": "https://www.claregilbertvalleys.sa.gov.au/community-information/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -227,6 +230,7 @@
       "name": "Coorong District Council",
       "news_url": "https://www.coorong.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -593,6 +597,7 @@
       "name": "Naracoorte Lucindale Council",
       "news_url": "https://www.naracoortelucindale.sa.gov.au/newsroom",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_cloudscraper": true,
       "selectors": {
@@ -609,6 +614,7 @@
       "name": "Northern Areas Council",
       "news_url": "https://www.nacouncil.sa.gov.au/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_cloudscraper": true,
       "selectors": {
@@ -657,6 +663,7 @@
       "name": "District Council of Orroroo Carrieton",
       "news_url": "https://www.orroroo.sa.gov.au/community/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_cloudscraper": true,
       "selectors": {
@@ -673,6 +680,7 @@
       "name": "District Council of Peterborough",
       "news_url": "https://www.peterborough.sa.gov.au/district-info/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_cloudscraper": true,
       "selectors": {
@@ -689,6 +697,7 @@
       "name": "City of Playford",
       "news_url": "https://www.playford.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -705,6 +714,7 @@
       "name": "Port Augusta City Council",
       "news_url": "https://www.portaugusta.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -737,6 +747,7 @@
       "name": "Port Pirie Regional Council",
       "news_url": "https://www.pirie.sa.gov.au/noticeboard/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -753,6 +764,7 @@
       "name": "City of Prospect",
       "news_url": "https://www.prospect.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -769,6 +781,7 @@
       "name": "Renmark Paringa Council",
       "news_url": "https://www.renmarkparinga.sa.gov.au/noticeboard/latest-news/2025",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -785,6 +798,7 @@
       "name": "District Council of Robe",
       "news_url": "https://www.robe.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -801,6 +815,7 @@
       "name": "Roxby Downs (Municipal Council of)",
       "news_url": "https://www.roxbydowns.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -817,6 +832,7 @@
       "name": "City of Salisbury",
       "news_url": "https://www.salisbury.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -833,6 +849,7 @@
       "name": "Southern Mallee District Council",
       "news_url": "https://www.southernmallee.sa.gov.au/community/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -849,6 +866,7 @@
       "name": "District Council of Streaky Bay",
       "news_url": "https://www.streakybay.sa.gov.au/your-council/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -865,6 +883,7 @@
       "name": "Tatiara District Council",
       "news_url": "https://www.tatiara.sa.gov.au/community-information/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -897,6 +916,7 @@
       "name": "District Council of Tumby Bay",
       "news_url": "https://www.tumbybay.sa.gov.au/community/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -930,6 +950,7 @@
       "name": "City of Victor Harbor",
       "news_url": "https://www.victor.sa.gov.au/notice-board/the-latest/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -946,6 +967,7 @@
       "name": "Wakefield Regional Council",
       "news_url": "https://www.wrc.sa.gov.au/our-community/latest-news/latest-updates",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -962,6 +984,7 @@
       "name": "Town of Walkerville",
       "news_url": "https://www.walkerville.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -978,6 +1001,7 @@
       "name": "Wattle Range Council",
       "news_url": "https://www.wattlerange.sa.gov.au/our-council/news-and-media/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -1010,6 +1034,7 @@
       "name": "City of Whyalla",
       "news_url": "https://www.whyalla.sa.gov.au/our-city/news-and-events/latest-news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -1026,6 +1051,7 @@
       "name": "Wudinna District Council",
       "news_url": "https://www.wudinna.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -1042,6 +1068,7 @@
       "name": "District Council of Yankalilla",
       "news_url": "https://www.yankalilla.sa.gov.au/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {
@@ -1072,6 +1099,7 @@
       "name": "City of Port Adelaide Enfield",
       "news_url": "https://www.cityofpae.sa.gov.au/connect/news",
       "enabled": true,
+      "scraper": "card_scraper",
       "parser": "html",
       "use_curl": true,
       "selectors": {

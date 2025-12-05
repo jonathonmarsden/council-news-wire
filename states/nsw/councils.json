@@ -222,7 +222,7 @@
     {
       "id": "lake-macquarie-city-council",
       "name": "Lake Macquarie City Council",
-      "news_url": "https://www.lakemac.com.au/News",
+      "news_url": "https://www.lakemac.com.au/For-residents/History-and-heritage/News",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -356,7 +356,7 @@
     {
       "id": "port-macquarie-hastings-council",
       "name": "Port Macquarie-Hastings Council",
-      "news_url": "https://www.pmhc.nsw.gov.au/Council/News-and-media",
+      "news_url": "https://www.pmhc.nsw.gov.au/Your-Council/News-Notices",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -446,7 +446,7 @@
     {
       "id": "the-hills-shire-council",
       "name": "The Hills Shire Council",
-      "news_url": "https://www.thehills.nsw.gov.au/News-and-Publications/News",
+      "news_url": "https://www.thehills.nsw.gov.au/Community/Hills-Shire-News-Community-Magazine",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -456,7 +456,7 @@
     {
       "id": "tweed-shire-council",
       "name": "Tweed Shire Council",
-      "news_url": "https://www.tweed.nsw.gov.au/Council/News-and-media",
+      "news_url": "https://www.tweed.nsw.gov.au/news",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -519,7 +519,7 @@
     {
       "id": "armidale-regional-council",
       "name": "Armidale Regional Council",
-      "news_url": "https://www.armidaleregional.nsw.gov.au/Council/News-and-Media",
+      "news_url": "https://www.armidale.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -614,7 +614,7 @@
     {
       "id": "bellingen-shire-council",
       "name": "Bellingen Shire Council",
-      "news_url": "https://www.bellingen.nsw.gov.au/News",
+      "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Communications-Engagement-and-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -680,7 +680,7 @@
     {
       "id": "broken-hill-city-council",
       "name": "Broken Hill City Council",
-      "news_url": "https://www.brokenhill.nsw.gov.au/News",
+      "news_url": "https://www.brokenhill.nsw.gov.au/Community/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -729,7 +729,7 @@
     {
       "id": "clarence-valley-council",
       "name": "Clarence Valley Council",
-      "news_url": "https://www.clarence.nsw.gov.au/News",
+      "news_url": "https://www.clarence.nsw.gov.au/Business-and-infrastructure/Doing-business-in-the-Clarence-Valley/Industry-Business-Newsletters",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -805,7 +805,7 @@
     {
       "id": "federation-council",
       "name": "Federation Council",
-      "news_url": "https://www.federationcouncil.nsw.gov.au/News",
+      "news_url": "https://www.federationcouncil.nsw.gov.au/Council/News-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -834,7 +834,7 @@
     {
       "id": "glen-innes-severn-council",
       "name": "Glen Innes Severn Council",
-      "news_url": "https://www.gisc.nsw.gov.au/News",
+      "news_url": "https://www.gisc.nsw.gov.au/News-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -929,7 +929,7 @@
     {
       "id": "kempsey-shire-council",
       "name": "Kempsey Shire Council",
-      "news_url": "https://www.kempsey.nsw.gov.au/News",
+      "news_url": "https://www.kempsey.nsw.gov.au/Your-Council/Council-news-public-notices/Council-news-updates",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -958,7 +958,7 @@
     {
       "id": "lachlan-shire-council",
       "name": "Lachlan Shire Council",
-      "news_url": "https://www.lachlan.nsw.gov.au/News",
+      "news_url": "https://www.lachlan.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -968,7 +968,7 @@
     {
       "id": "leeton-shire-council",
       "name": "Leeton Shire Council",
-      "news_url": "https://www.leeton.nsw.gov.au/News",
+      "news_url": "https://www.leeton.nsw.gov.au/Your-Council/Council-News",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1006,7 +1006,7 @@
     {
       "id": "mid-western-regional-council",
       "name": "Mid-Western Regional Council",
-      "news_url": "https://www.midwestern.nsw.gov.au/News",
+      "news_url": "https://www.midwestern.nsw.gov.au/Business/Business-support/Business-Newsletter",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1025,7 +1025,7 @@
     {
       "id": "murray-river-council",
       "name": "Murray River Council",
-      "news_url": "https://www.murrayriver.nsw.gov.au/News",
+      "news_url": "https://www.murrayriver.nsw.gov.au/Council/News",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1035,7 +1035,7 @@
     {
       "id": "murrumbidgee-council",
       "name": "Murrumbidgee Council",
-      "news_url": "https://www.murrumbidgee.nsw.gov.au/News",
+      "news_url": "https://www.murrumbidgee.nsw.gov.au/News-notices",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1054,7 +1054,7 @@
     {
       "id": "nambucca-valley-council",
       "name": "Nambucca Valley Council",
-      "news_url": "https://www.nambucca.nsw.gov.au/News",
+      "news_url": "https://www.nambucca.nsw.gov.au/Council/News-Community-Feedback",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1093,7 +1093,7 @@
     {
       "id": "oberon-council",
       "name": "Oberon Council",
-      "news_url": "https://www.oberon.nsw.gov.au/News",
+      "news_url": "https://www.oberon.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1103,7 +1103,7 @@
     {
       "id": "parkes-shire-council",
       "name": "Parkes Shire Council",
-      "news_url": "https://www.parkes.nsw.gov.au/News",
+      "news_url": "https://www.parkes.nsw.gov.au/Council/News-media-and-projects/Community-News",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1151,7 +1151,7 @@
     {
       "id": "temora-shire-council",
       "name": "Temora Shire Council",
-      "news_url": "https://www.temora.nsw.gov.au/News",
+      "news_url": "https://www.temora.nsw.gov.au/Community/Narraburra-News",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1190,7 +1190,7 @@
     {
       "id": "uralla-shire-council",
       "name": "Uralla Shire Council",
-      "news_url": "https://www.uralla.nsw.gov.au/News",
+      "news_url": "https://www.uralla.nsw.gov.au/Council/Council-News-and-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1229,7 +1229,7 @@
     {
       "id": "warrumbungle-shire-council",
       "name": "Warrumbungle Shire Council",
-      "news_url": "https://www.warrumbungle.nsw.gov.au/News",
+      "news_url": "https://www.warrumbungle.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
