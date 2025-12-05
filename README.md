@@ -5,12 +5,24 @@ Automated scraper and BlueSky poster for Australian local government news and me
 **Live:** [@roundupnewsbot.bsky.social](https://bsky.app/profile/roundupnewsbot.bsky.social)
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![Coverage](https://img.shields.io/badge/coverage-73%25-yellow)]()
+[![Coverage](https://img.shields.io/badge/councils-540%2F541-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.9+-blue)]()
 
 ## Overview
 
-Council News Bot monitors news pages from local councils across **Victoria**, **New South Wales**, and **Queensland**. It automatically posts new articles to BlueSky for [LG News Roundup](https://lgnewsroundup.com).
+Council News Bot monitors news pages from local councils across **all 8 Australian States & Territories**:
+*   **Victoria (VIC)** - 79 councils
+*   **New South Wales (NSW)** - 128 councils
+*   **Queensland (QLD)** - 77 councils
+*   **Western Australia (WA)** - 137 councils
+*   **Tasmania (TAS)** - 29 councils
+*   **South Australia (SA)** - 68 councils
+*   **Northern Territory (NT)** - 17 councils
+*   **Australian Capital Territory (ACT)** - 5+ entities
+
+**99.8% coverage** (540/541 councils enabled)
+
+It automatically posts new articles to BlueSky for [LG News Roundup](https://lgnewsroundup.com).
 
 It is designed to be resilient, scalable, and polite:
 *   **Resilient**: Uses `curl_cffi` to bypass WAFs (Cloudflare/Incapsula).
@@ -19,7 +31,7 @@ It is designed to be resilient, scalable, and polite:
 
 ## Features
 
-- **Multi-State Support**: VIC, NSW, QLD (expanding to all of Australia).
+- **Multi-State Support**: VIC, NSW, QLD, TAS, SA, NT, ACT.
 - **WAF Bypass**: Advanced impersonation of real browsers to scrape protected sites.
 - **"Record Everything"**: Tracks all articles (even old ones) to monitor scraper health.
 - **Automated Posting**: Runs 24/7 on VPS via Docker.

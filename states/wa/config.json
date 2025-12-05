@@ -1,0 +1,8 @@
+{
+  "state_code": "WA",
+  "state_name": "Western Australia",
+  "bluesky_handle_env": "BLUESKY_HANDLE_WA",
+  "bluesky_password_env": "BLUESKY_PASSWORD_WA",
+  "timezone": "Australia/Perth",
+  "hashtags": ["#LGNewsRoundup", "#WALGA", "#WACouncils"]
+}

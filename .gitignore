@@ -51,7 +51,17 @@ council_news.db-wal
 # Debug files
 debug_*.html
 debug_*.py
+debug_*.json
+debug_*.sh
 debug_*.txt
 debug_html/
 test_db.sqlite*
+_debug_archive/
+diagnosis_results*.txt
+rss_discoveries.txt
+wa_selector_report.json
+
+# Temporary files
+*.tmp
+*.bak
 

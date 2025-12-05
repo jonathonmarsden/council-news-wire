@@ -7,6 +7,7 @@ Provides common functionality for scraping news articles from Victorian council 
 import re
 import subprocess
 import time
+import html
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
@@ -308,6 +309,12 @@ class BaseScraper(ABC):
             
         if not isinstance(text, str):
             return str(text)
+
+        # 1. Unescape HTML entities first (handles &lt;p&gt; -> <p>)
+        text = html.unescape(text)
+
+        # 2. Remove HTML tags
+        text = re.sub(r'<[^>]+>', ' ', text)
 
         # Fix common mojibake (UTF-8 bytes interpreted as Windows-1252/Latin-1)
         replacements = {

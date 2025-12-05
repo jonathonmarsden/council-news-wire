@@ -141,12 +141,26 @@ class CardScraper(BaseScraper):
             if self.limit:
                 articles = articles[:self.limit]
             
-        # If we have articles but missing dates, and a date_selector is configured,
-        # try fetching the detail page to find the date.
+        # Check if we need to fetch details (for date, full content, or full title)
+        should_fetch_details = False
         if self.selectors.get('date_selector'):
+            should_fetch_details = True
+        if self.selectors.get('full_content_selector'):
+            should_fetch_details = True
+        if self.selectors.get('full_title_selector'):
+            should_fetch_details = True
+            
+        if should_fetch_details:
+            print(f"Fetching details for up to 10 articles (Selectors: date={bool(self.selectors.get('date_selector'))}, content={bool(self.selectors.get('full_content_selector'))}, title={bool(self.selectors.get('full_title_selector'))})")
             # Limit to first 10 to avoid excessive requests
             for article in articles[:10]:
-                if not article.date:
+                # Fetch if missing date OR if we want full content OR full title
+                condition_date = (not article.date and self.selectors.get('date_selector'))
+                condition_content = bool(self.selectors.get('full_content_selector'))
+                condition_title = bool(self.selectors.get('full_title_selector'))
+                
+                if condition_date or condition_content or condition_title:
+                    print(f"Fetching details for: {article.url}")
                     self._fetch_article_details(article)
                     # Be polite
                     time.sleep(0.2)
@@ -154,7 +168,7 @@ class CardScraper(BaseScraper):
         return articles
     
     def _fetch_article_details(self, article: NewsArticle):
-        """Fetch article page to find the date."""
+        """Fetch article page to find the date and optionally full content."""
         try:
             html = self.fetch_page(article.url)
             if not html:
@@ -164,7 +178,7 @@ class CardScraper(BaseScraper):
             
             # Try configured date_selector
             date_selector = self.selectors.get('date_selector')
-            if date_selector:
+            if date_selector and not article.date:
                 date_elem = soup.select_one(date_selector)
                 if date_elem:
                     # Handle meta tags
@@ -176,6 +190,37 @@ class CardScraper(BaseScraper):
                     # Remove common prefixes
                     text = re.sub(r'^(Published|Date|Posted|Updated):\s*', '', text, flags=re.IGNORECASE)
                     article.date = self.parse_date(text)
+
+            # Try configured full_title_selector
+            title_selector = self.selectors.get('full_title_selector')
+            if title_selector:
+                title_elem = soup.select_one(title_selector)
+                if title_elem:
+                    text = self._get_clean_title(title_elem)
+                    print(f"  Found full title: '{text}' (Old: '{article.title}')")
+                    if text and (len(text) > len(article.title) or article.title.endswith('...')):
+                        # Only update if the new title is longer (assuming the list one was truncated)
+                        # or if the list one was very short/ellipsis OR ends with ...
+                        article.title = text
+                else:
+                    print(f"  Full title selector '{title_selector}' found nothing.")
+
+            # Try configured full_content_selector
+            content_selector = self.selectors.get('full_content_selector')
+            if content_selector:
+                content_elem = soup.select_one(content_selector)
+                if content_elem:
+                    # Use clean_text to strip tags and normalize
+                    text = self.clean_text(str(content_elem))
+                    if text:
+                        print(f"  Found full content (len={len(text)})")
+                        article.excerpt = text
+                else:
+                    print(f"  Full content selector '{content_selector}' found nothing.")
+                    text = self.clean_text(str(content_elem))
+                    if text:
+                        article.excerpt = text
+
         except Exception as e:
             print(f"Error fetching details for {article.url}: {e}")
 

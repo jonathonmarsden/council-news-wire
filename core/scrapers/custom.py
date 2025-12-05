@@ -4,10 +4,104 @@ Custom scraper implementations for specific councils.
 
 import re
 import time
-from typing import List
+from typing import List, Optional, Dict
+from datetime import datetime
+from dateutil import parser as date_parser
 
-from .base import NewsArticle
+from .base import NewsArticle, BaseScraper
 from .card import CardScraper
+
+class WordPressScraper(BaseScraper):
+    """
+    Generic scraper for WordPress sites using the WP API.
+    """
+    def __init__(self, council_id: str, council_name: str, news_url: str, selectors: dict = None, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+        self.selectors = selectors or {}
+        # Allow api_url to be passed in selectors, or derive from news_url
+        self.api_url = self.selectors.get('api_url')
+        if not self.api_url:
+             # Try to guess: base_url + /wp-json/wp/v2/posts
+             from urllib.parse import urlparse
+             parsed = urlparse(news_url)
+             self.api_url = f"{parsed.scheme}://{parsed.netloc}/wp-json/wp/v2/posts"
+
+    def scrape(self) -> List[NewsArticle]:
+        # Use the WordPress API directly as it exposes all data including dates
+        # Default params: per_page=20
+        api_url = self.api_url
+        if '?' not in api_url:
+            api_url += "?per_page=20"
+        else:
+            api_url += "&per_page=20"
+
+        articles = []
+        
+        try:
+            # Fetch API
+            response = self.session.get(api_url, timeout=20, verify=False)
+            if response.status_code != 200:
+                print(f"WordPress API failed for {self.council_name}: {response.status_code}")
+                return []
+                
+            posts = response.json()
+            
+            for post in posts:
+                title = post.get('title', {}).get('rendered')
+                # Use 'link' if available, otherwise construct from slug (fallback)
+                url = post.get('link')
+                if not url and post.get('slug'):
+                     # Fallback, might not work for all sites
+                     from urllib.parse import urlparse
+                     parsed = urlparse(self.news_url)
+                     url = f"{parsed.scheme}://{parsed.netloc}/{post.get('slug')}"
+
+                date_str = post.get('date')
+                
+                if not title or not url:
+                    continue
+                    
+                # Parse date
+                date_obj = None
+                if date_str:
+                    try:
+                        date_obj = date_parser.parse(date_str)
+                    except:
+                        pass
+                
+                # Clean title
+                if title:
+                    from bs4 import BeautifulSoup
+                    title = BeautifulSoup(title, "html.parser").get_text()
+
+                # Get content - prefer full content, fall back to excerpt
+                content = post.get('content', {}).get('rendered', '')
+                if not content:
+                    content = post.get('excerpt', {}).get('rendered', '')
+
+                article = self.create_article(
+                    title=title,
+                    url=url,
+                    date=date_obj,
+                    excerpt=content
+                )
+                articles.append(article)
+                
+        except Exception as e:
+            print(f"Error scraping WordPress for {self.council_name}: {e}")
+            
+        return articles
+
+class BunburyScraper(WordPressScraper):
+    """
+    Scraper for City of Bunbury (Next.js / API).
+    Kept for backward compatibility, but now inherits from WordPressScraper.
+    """
+    def __init__(self, council_id: str, council_name: str, news_url: str, selectors: dict = None, **kwargs):
+        # Bunbury has a specific CDN URL for the API
+        selectors = selectors or {}
+        selectors['api_url'] = "https://cdn.bunbury.wa.gov.au/wp-json/wp/v2/posts"
+        super().__init__(council_id, council_name, news_url, selectors, **kwargs)
 
 class InnerWestScraper(CardScraper):
     """
@@ -73,3 +167,219 @@ class InnerWestScraper(CardScraper):
                 
         except Exception as e:
             print(f"Error fetching details for {article.url}: {e}")
+
+class OpenCitiesScraper(BaseScraper):
+    """
+    Scraper for OpenCities based websites.
+    Handles standard OpenCities layouts and Funnelback/Squiz variations.
+    """
+    def __init__(self, council_id: str, council_name: str, news_url: str, selectors: Dict = None, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+        self.selectors = selectors or {}
+
+    def scrape(self) -> List[NewsArticle]:
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+        soup = self.parse_html(html)
+
+        articles = []
+        
+        # Strategy 1: Standard OpenCities (e.g. Goulburn)
+        # Container: .list-container.news-list-container .list-item-container
+        items = soup.select('.list-container.news-list-container .list-item-container')
+        
+        if not items:
+            # Strategy 2: Squiz/Funnelback (e.g. Albury)
+            # Container: .card
+            items = soup.select('.card')
+            
+        for item in items:
+            try:
+                # Title
+                title_elem = item.select_one('h2.list-item-title, h5')
+                if not title_elem:
+                    continue
+                title = title_elem.get_text(strip=True)
+                
+                # Link
+                link_elem = item.select_one('article > a, a')
+                if not link_elem:
+                    continue
+                link = link_elem.get('href')
+                
+                # Handle Funnelback redirects
+                if link and 'funnelback' in link and 'url=' in link:
+                    from urllib.parse import parse_qs, urlparse
+                    parsed = urlparse(link)
+                    qs = parse_qs(parsed.query)
+                    if 'url' in qs:
+                        link = qs['url'][0]
+                
+                # Resolve relative URLs
+                if link and not link.startswith('http'):
+                    from urllib.parse import urljoin
+                    link = urljoin(self.news_url, link)
+                
+                # Date
+                date_elem = item.select_one('.published-on, .date_updated')
+                date_obj = None
+                if date_elem:
+                    date_text = date_elem.get_text(strip=True).replace('Published on', '').strip()
+                    try:
+                        date_obj = date_parser.parse(date_text)
+                    except:
+                        pass
+                
+                article = self.create_article(
+                    title=title,
+                    url=link,
+                    date=date_obj
+                )
+                articles.append(article)
+            except Exception as e:
+                print(f"Error parsing item in OpenCitiesScraper: {e}")
+                continue
+                
+        return articles
+
+class APYScraper(BaseScraper):
+    """
+    Scraper for Anangu Pitjantjatjara Yankunytjatjara (APY) media releases.
+    
+    APY publishes news as PDF files with dates encoded in the filename.
+    Format examples:
+        - APY-GMAppoint-Media-041225-F1.pdf (04 December 2025)
+        - APY-Kulilaya-Media-250324-F1.pdf (25 March 2024)
+        - APY_New_Board_Members.pdf (no date, use folder year)
+    """
+    
+    def __init__(self, council_id: str, council_name: str, news_url: str, selectors: Dict = None, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+        self.selectors = selectors or {}
+    
+    def scrape(self) -> List[NewsArticle]:
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+            
+        soup = self.parse_html(html)
+        articles = []
+        
+        # Find all PDF links
+        pdf_links = soup.find_all('a', href=lambda x: x and 'PDF' in x.upper() if x else False)
+        
+        for link in pdf_links:
+            try:
+                href = link.get('href', '')
+                title = link.get_text(strip=True) or link.get('title', '')
+                
+                if not title or not href:
+                    continue
+                    
+                # Make URL absolute
+                if href.startswith('/'):
+                    from urllib.parse import urljoin
+                    href = urljoin(self.news_url, href)
+                    
+                # Try to extract date from filename
+                date_obj = self._extract_date_from_filename(href)
+                
+                article = self.create_article(
+                    title=title,
+                    url=href,
+                    date=date_obj
+                )
+                articles.append(article)
+                
+            except Exception as e:
+                print(f"Error parsing APY link: {e}")
+                continue
+                
+        return articles
+    
+    def _extract_date_from_filename(self, url: str) -> Optional[datetime]:
+        """Extract date from APY PDF filename patterns."""
+        import os
+        from urllib.parse import urlparse
+        
+        path = urlparse(url).path
+        filename = os.path.basename(path)
+        
+        # Pattern 1: DDMMYY format (e.g., 041225 = 04 Dec 2025)
+        match = re.search(r'-(\d{2})(\d{2})(\d{2})-', filename)
+        if match:
+            day, month, year = match.groups()
+            try:
+                year_full = 2000 + int(year)
+                return datetime(year_full, int(month), int(day))
+            except ValueError:
+                pass
+        
+        # Pattern 2: Year from folder path (e.g., /2024/ or /2025/)
+        year_match = re.search(r'/(\d{4})/', url)
+        if year_match:
+            year = int(year_match.group(1))
+            # Return January 1 of that year as a fallback date
+            return datetime(year, 1, 1)
+            
+        return None
+
+
+class AspNetScraper(CardScraper):
+    """
+    Scraper for ASP.NET (Kentico/Spark CMS) sites (e.g. Busselton, Cockburn).
+    Follows section links and extracts articles from nested tables/divs.
+    """
+    def scrape(self) -> List[NewsArticle]:
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+        soup = self.parse_html(html)
+
+        # Find section links (e.g., /News-From-The-City, /Newsletter, /Media-Releases-and-Responses)
+        section_links = []
+        for a in soup.find_all('a', href=True):
+            href = a['href']
+            if (
+                ('news' in href.lower() or 'media' in href.lower() or 'newsletter' in href.lower())
+                and href.startswith('/')
+                and len(href) > 10
+            ):
+                section_links.append(self.make_absolute_url(href))
+
+        articles = []
+        # Visit each section and extract articles using CardScraper logic
+        for section_url in section_links[:3]:  # Limit to first 3 sections for speed
+            try:
+                section_html = self.fetch_page(section_url)
+                if not section_html:
+                    continue
+                section_soup = self.parse_html(section_html)
+                # Use CardScraper logic on section_soup
+                items = section_soup.select(self.ARTICLE_SELECTOR)
+                for item in items:
+                    title_elem = item.select_one(self.TITLE_SELECTOR)
+                    if not title_elem:
+                        continue
+                    title = self._get_clean_title(title_elem)
+                    link_elem = item.select_one('a[href]')
+                    link = link_elem['href'] if link_elem else section_url
+                    if link and not link.startswith('http'):
+                        link = self.make_absolute_url(link)
+                    date_elem = item.select_one(self.DATE_SELECTOR)
+                    date_obj = None
+                    if date_elem:
+                        date_text = date_elem.get_text(strip=True)
+                        try:
+                            date_obj = date_parser.parse(date_text)
+                        except:
+                            pass
+                    excerpt_elem = item.select_one(self.EXCERPT_SELECTOR)
+                    excerpt = excerpt_elem.get_text(strip=True) if excerpt_elem else None
+                    article = self.create_article(title, link, date_obj, excerpt)
+                    articles.append(article)
+            except Exception as e:
+                print(f"Error scraping section {section_url}: {e}")
+                continue
+        return articles

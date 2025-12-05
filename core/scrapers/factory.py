@@ -7,7 +7,8 @@ from typing import Dict, Optional
 from .base import BaseScraper
 from .card import CardScraper
 from .rss import RSSScraper
-from .custom import InnerWestScraper
+from .stirling import StirlingScraper
+from .custom import InnerWestScraper, BunburyScraper, WordPressScraper, OpenCitiesScraper, APYScraper
 
 class ScraperFactory:
     """Factory for creating scraper instances."""
@@ -39,15 +40,24 @@ class ScraperFactory:
             'link_selector': council_selectors.get('link') or council.get('link_selector'),
             'date_selector': council_selectors.get('date') or council.get('date_selector'),
             'content_selector': council_selectors.get('content') or council.get('content_selector'),
-            'excerpt_selector': council_selectors.get('excerpt') or council.get('excerpt_selector')
+            'excerpt_selector': council_selectors.get('excerpt') or council.get('excerpt_selector'),
+            'full_content_selector': council.get('full_content_selector'),
+            'full_title_selector': council.get('full_title_selector')
         }
         
         # Registry of custom scrapers
+        from .custom import AspNetScraper
         scraper_classes = {
             'inner_west_scraper': InnerWestScraper,
+            'bunbury_scraper': BunburyScraper,
+            'wordpress_scraper': WordPressScraper,
+            'opencities_scraper': OpenCitiesScraper,
+            'aspnet_scraper': AspNetScraper,
+            'apy_scraper': APYScraper,
             'card_scraper': CardScraper,
             'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
             'rss_scraper': RSSScraper,
+            'stirling_scraper': StirlingScraper,
         }
         
         scraper_class = scraper_classes.get(scraper_type, CardScraper)

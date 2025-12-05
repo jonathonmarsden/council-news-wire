@@ -178,7 +178,7 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
     return db.get_unposted_articles(state_code)
 
 def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database, 
-                  council_lookup: Dict[str, str], hashtags: List[str],
+                  council_lookup: Dict[str, Dict], hashtags: List[str],
                   limit: int = 0, dry_run: bool = False, max_per_council: int = 5):
     """Post articles to BlueSky."""
     if not articles:
@@ -200,7 +200,8 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
                 continue
             council_counts[c_id] = council_counts.get(c_id, 0) + 1
             
-            council_name = council_lookup.get(c_id, c_id)
+            council_config = council_lookup.get(c_id, {})
+            council_name = council_config.get('name', c_id)
             print(f"  📰 {council_name}: {article['title']}")
         return
 
@@ -227,14 +228,20 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             except Exception:
                 pass
         
-        council_name = council_lookup.get(c_id, c_id)
+        council_config = council_lookup.get(c_id, {})
+        council_name = council_config.get('name', c_id)
+        
+        # Check if excerpt should be skipped
+        excerpt = article['excerpt']
+        if council_config.get('skip_excerpt'):
+            excerpt = None
         
         if poster.post_article(
             council_name,
             article['title'],
             article['url'],
             date=article_date,
-            excerpt=article['excerpt'],
+            excerpt=excerpt,
             hashtags=hashtags
         ):
             db.mark_as_posted(article['url'], poster.handle)
@@ -294,7 +301,7 @@ def main():
             print(f"Error: Council '{args.council}' not found in {state_code} configuration.")
             sys.exit(1)
             
-    council_lookup = {c['id']: c['name'] for c in state_data['councils']}
+    council_lookup = {c['id']: c for c in state_data['councils']}
     hashtags = state_data['config'].get('hashtags', [])
     
     # Scrape (unless post-only)

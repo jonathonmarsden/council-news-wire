@@ -95,6 +95,9 @@ class Database:
             """)
             conn.execute("CREATE INDEX IF NOT EXISTS idx_stats_council_run ON scraper_stats(council_id, run_at)")
             
+            # Fix state consistency (ensure uppercase)
+            conn.execute("UPDATE articles SET state = UPPER(state) WHERE state != UPPER(state)")
+            
             conn.commit()
     
     def article_exists(self, url: str) -> bool:
