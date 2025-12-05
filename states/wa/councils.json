@@ -117,11 +117,12 @@
       "id": "bridgetown-greenbushes",
       "name": "Bridgetown-Greenbushes",
       "news_url": "https://www.bridgetown.wa.gov.au/news/",
-      "scraper": "card_scraper",
+      "scraper": "curl_scraper",
+      "use_curl": true,
       "enabled": true,
-      "item_selector": "div",
-      "title_selector": "span",
-      "date_selector": "span",
+      "item_selector": "div.col-sm-7",
+      "title_selector": "span.h4",
+      "date_selector": "span.h5",
       "link_selector": "a"
     },
     {

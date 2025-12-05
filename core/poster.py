@@ -11,6 +11,8 @@ from typing import Optional, List, Dict, Any
 
 from atproto import Client, models
 
+from core.email_utils import send_email
+
 
 class BlueSkyPoster:
     """Posts council news articles to BlueSky."""
@@ -79,6 +81,24 @@ class BlueSkyPoster:
         try:
             self.client.send_post(text=post_text, facets=facets)
             print(f"Posted: {title[:50]}...")
+
+            # Send notification email (best-effort; failures won't break posting)
+            try:
+                subject = f"Council News Bot post: {council_name}"
+                # Trim body if extremely long
+                max_body = 2000
+                body = f"Council: {council_name}\nTitle: {title}\nURL: {url}\n"
+                if excerpt:
+                    body += f"Excerpt: {excerpt}\n"
+                if date:
+                    body += f"Date: {date.strftime('%Y-%m-%d')}\n"
+                body += f"\nPost text:\n{post_text}"
+                if len(body) > max_body:
+                    body = body[: max_body - 3] + "..."
+
+                send_email(subject=subject, body=body)
+            except Exception as email_err:
+                print(f"Warning: failed to send notification email: {email_err}")
             return True
         except Exception as e:
             print(f"Failed to post: {e}")
