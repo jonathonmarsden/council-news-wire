@@ -360,9 +360,13 @@
       "id": "cunderdin",
       "name": "Cunderdin",
       "news_url": "https://www.cunderdin.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "dalwallinu",
@@ -503,9 +507,13 @@
       "id": "exmouth",
       "name": "Exmouth",
       "news_url": "https://www.exmouth.wa.gov.au/news/?c=2",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "fremantle",
@@ -636,9 +644,13 @@
       "id": "kalgoorlie-boulder",
       "name": "Kalgoorlie-Boulder",
       "news_url": "https://www.ckb.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "karratha",
@@ -664,9 +676,13 @@
       "id": "kellerberrin",
       "name": "Kellerberrin",
       "news_url": "https://www.kellerberrin.wa.gov.au/news",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "kent",
@@ -783,9 +799,13 @@
       "id": "meekatharra",
       "name": "Meekatharra",
       "news_url": "https://www.meekatharra.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "melville",
@@ -897,9 +917,13 @@
       "id": "mundaring",
       "name": "Mundaring",
       "news_url": "https://www.mundaring.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "mosman-park",
@@ -955,9 +979,13 @@
       "id": "nedlands",
       "name": "Nedlands",
       "news_url": "https://www.nedlands.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "ngaanyatjarraku",
@@ -1266,10 +1294,14 @@
       "id": "victoria-park",
       "name": "Victoria Park",
       "news_url": "https://www.victoriapark.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "manual_audit": "All selectors null",
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "victoria-plains",
@@ -1288,10 +1320,14 @@
       "id": "vincent",
       "name": "Vincent",
       "news_url": "https://www.vincent.wa.gov.au/news",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "manual_audit": "All selectors null",
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "wagin",
@@ -1359,9 +1395,13 @@
       "id": "westonia",
       "name": "Westonia",
       "news_url": "https://www.westonia.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "wickepin",
@@ -1447,17 +1487,25 @@
       "id": "yalgoo",
       "name": "Yalgoo",
       "news_url": "https://www.yalgoo.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "yilgarn",
       "name": "Yilgarn",
       "news_url": "https://www.yilgarn.wa.gov.au/news/",
-      "scraper": "opencities_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "york",
