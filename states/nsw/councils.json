@@ -147,7 +147,13 @@
       "scraper": "card_scraper",
       "enabled": true,
       "population": 55855,
-      "region": "Central West"
+      "region": "Central West",
+      "selectors": {
+        "container": ".mainItem, .subItem",
+        "title": ".mainItemHeading, .subItemHeading",
+        "link": "a",
+        "date": ".mainItemDate, .subItemDate"
+      }
     },
     {
       "id": "fairfield-city-council",
@@ -369,7 +375,12 @@
       "news_url": "https://www.portstephens.nsw.gov.au/council/news",
       "scraper": "card_scraper",
       "enabled": true,
-      "item_selector": ".card",
+      "selectors": {
+        "container": ".card",
+        "title": "h5.card-title",
+        "link": "a",
+        "date": "time.card-date"
+      },
       "population": 76000,
       "region": "Hunter"
     },
@@ -437,9 +448,15 @@
     {
       "id": "tamworth-regional-council",
       "name": "Tamworth Regional Council",
-      "news_url": "https://www.tamworth.nsw.gov.au/about/news",
+      "news_url": "https://www.tamworth.nsw.gov.au/about/news/latest-news",
       "scraper": "card_scraper",
       "enabled": true,
+      "selectors": {
+        "container": ".item.margin-bottom-mid",
+        "title": "h5 a",
+        "link": "h5 a",
+        "date": ".date, time"
+      },
       "population": 66310,
       "region": "New England"
     },
@@ -758,8 +775,14 @@
       "id": "coonamble-shire-council",
       "name": "Coonamble Shire Council",
       "news_url": "https://www.coonambleshire.nsw.gov.au/council/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
+      "selectors": {
+        "container": ".news-item",
+        "title": "h3 a",
+        "link": "h3 a",
+        "date": ".date, time"
+      },
       "population": 4000,
       "region": "Central West"
     },
@@ -874,17 +897,23 @@
     {
       "id": "gunnedah-shire-council",
       "name": "Gunnedah Shire Council",
-      "news_url": "https://www.gunnedah.nsw.gov.au/Council/News-and-Media",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.gunnedah.nsw.gov.au/index.php/council/keep-in-touch/latest-news-media",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 13315,
-      "region": "North West"
+      "region": "North West",
+      "selectors": {
+        "container": ".catItemTitle",
+        "title": "a",
+        "link": "a",
+        "date": ".catItemDateCreated, .date"
+      }
     },
     {
       "id": "gwydir-shire-council",
       "name": "Gwydir Shire Council",
-      "news_url": "https://www.gwydir.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.gwydir.nsw.gov.au/Council/Shire-News",
+      "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
       "population": 4945,
@@ -893,11 +922,17 @@
     {
       "id": "hay-shire-council",
       "name": "Hay Shire Council",
-      "news_url": "https://www.hay.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.hay.nsw.gov.au/Inside-Hay-Shire-Council/News-Council-Updates",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 2865,
-      "region": "Western Riverina"
+      "region": "Western Riverina",
+      "selectors": {
+        "container": "article, .item, .list-item",
+        "title": "h2, h3, h4",
+        "link": "a",
+        "date": ".date, time"
+      }
     },
     {
       "id": "hilltops-council",
