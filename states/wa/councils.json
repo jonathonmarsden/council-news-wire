@@ -95,7 +95,13 @@
       "title_selector": "h2",
       "date_selector": ".date",
       "link_selector": "a",
-      "selector_source": "Pattern from OpenCities (see PHASE_3_STRATEGY.md)"
+      "selector_source": "Pattern from OpenCities (see PHASE_3_STRATEGY.md)",
+      "selectors": {
+        "container": ".row:has(.news-image-wrapper)",
+        "title": "span.h4.text-primary, span.h4",
+        "link": "a.btn.btn-primary[href*='/news/']",
+        "date": "span.h5"
+      }
     },
     {
       "id": "boddington",
@@ -226,7 +232,7 @@
       "id": "carnamah",
       "name": "Carnamah",
       "news_url": "https://www.carnamah.wa.gov.au/news/feed/",
-      "scraper": "curl_scraper",
+      "scraper": "rss_scraper",
       "enabled": true,
       "use_curl": true,
       "selector_source": "Pattern from RSS (see PHASE_3_STRATEGY.md)"
@@ -900,7 +906,7 @@
     {
       "id": "mosman-park",
       "name": "Mosman Park",
-      "news_url": "https://www.mosmanpark.wa.gov.au/council-news/rss",
+      "news_url": "https://www.mosmanpark.wa.gov.au/media-releases/feed",
       "scraper": "rss_scraper",
       "enabled": true
     },
