@@ -27,13 +27,19 @@
     {
       "id": "ashburton",
       "name": "Ashburton",
-      "news_url": "https://www.ashburton.wa.gov.au/community/news-information",
+      "news_url": "https://www.ashburton.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": true,
       "item_selector": null,
       "title_selector": "span",
       "date_selector": "span",
-      "link_selector": "a"
+      "link_selector": "a",
+      "selectors": {
+        "container": ".row:has(.news-image-wrapper)",
+        "title": "span.h4.text-primary, span.h4",
+        "link": "a.btn.btn-primary[href*='/news/']",
+        "date": "span.h5"
+      }
     },
     {
       "id": "augusta-margaret-river",
@@ -162,7 +168,13 @@
       "title_selector": "h2.title",
       "date_selector": "span.date",
       "link_selector": "a",
-      "selector_source": "Pattern from ASP.NET (see PHASE_3_STRATEGY.md)"
+      "selector_source": "Pattern from ASP.NET (see PHASE_3_STRATEGY.md)",
+      "selectors": {
+        "container": ".row:has(.news-image-wrapper)",
+        "title": "span.h4.text-primary, span.h4",
+        "link": "a.btn.btn-primary[href*='/news/']",
+        "date": "span.h5"
+      }
     },
     {
       "id": "bunbury",
@@ -415,9 +427,15 @@
       "id": "derby-west-kimberley",
       "name": "Derby-West Kimberley",
       "news_url": "https://www.sdwk.wa.gov.au/news/",
-      "scraper": "rss_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "rss_url": "https://www.linkedin.com/company/5786221/admin/feed/posts/"
+      "rss_url": "https://www.linkedin.com/company/5786221/admin/feed/posts/",
+      "selectors": {
+        "container": ".row:has(.news-image-wrapper)",
+        "title": "span.h4.text-primary, span.h4",
+        "link": "a.btn.btn-primary[href*='/news/']",
+        "date": "span.h5"
+      }
     },
     {
       "id": "donnybrook-balingup",
