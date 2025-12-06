@@ -44,14 +44,10 @@
     {
       "id": "augusta-margaret-river",
       "name": "Augusta Margaret River",
-      "news_url": "https://www.amrshire.wa.gov.au/news",
-      "scraper": "card_scraper",
+      "news_url": "https://www.amrshire.wa.gov.au/shire-and-council/news",
+      "scraper": "curl_scraper",
       "enabled": true,
-      "use_curl": true,
-      "item_selector": null,
-      "title_selector": "a",
-      "date_selector": "span",
-      "link_selector": "a"
+      "use_curl": true
     },
     {
       "id": "bassendean",
@@ -309,9 +305,10 @@
     {
       "id": "collie",
       "name": "Collie",
-      "news_url": "https://www.collie.wa.gov.au/news-events/news/feed",
-      "scraper": "rss_scraper",
-      "enabled": true
+      "news_url": "https://www.collie.wa.gov.au/news-events/",
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "use_curl": true
     },
     {
       "id": "coolgardie",
@@ -347,9 +344,10 @@
     {
       "id": "cranbrook",
       "name": "Cranbrook",
-      "news_url": "https://www.cranbrook.wa.gov.au/news/media-releases/feed",
-      "scraper": "rss_scraper",
-      "enabled": true
+      "news_url": "https://www.cranbrook.wa.gov.au/news/",
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "use_curl": true
     },
     {
       "id": "cuballing",
@@ -629,9 +627,10 @@
     {
       "id": "irwin",
       "name": "Irwin",
-      "news_url": "https://irwin.wa.gov.au/news/feed",
-      "scraper": "rss_scraper",
-      "enabled": true
+      "news_url": "https://irwin.wa.gov.au/news/",
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "use_curl": true
     },
     {
       "id": "jerramungup",
@@ -680,10 +679,10 @@
     {
       "id": "karratha",
       "name": "Karratha",
-      "news_url": "https://www.karratha.wa.gov.au/rss.xml",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.karratha.wa.gov.au/council/news",
+      "scraper": "curl_scraper",
       "enabled": true,
-      "rss_url": "https://www.karratha.wa.gov.au/rss.xml"
+      "use_curl": true
     },
     {
       "id": "katanning",
@@ -839,15 +838,10 @@
     {
       "id": "melville",
       "name": "Melville",
-      "news_url": "https://www.melvillecity.com.au/news-and-media",
-      "scraper": "card_scraper",
+      "news_url": "https://www.melvillecity.com.au/our-city/news",
+      "scraper": "curl_scraper",
       "enabled": true,
-      "use_curl": true,
-      "item_selector": "div",
-      "title_selector": "span",
-      "date_selector": "span",
-      "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)"
+      "use_curl": true
     },
     {
       "id": "menzies",
@@ -911,9 +905,10 @@
     {
       "id": "mosman-park",
       "name": "Mosman Park",
-      "news_url": "https://www.mosmanpark.wa.gov.au/media-releases/feed",
-      "scraper": "rss_scraper",
-      "enabled": true
+      "news_url": "https://www.mosmanpark.wa.gov.au/council/council/news-2/",
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "use_curl": true
     },
     {
       "id": "mount-magnet",
@@ -938,9 +933,10 @@
     {
       "id": "mukinbudin",
       "name": "Mukinbudin",
-      "news_url": "https://www.mukinbudin.wa.gov.au/news/rss/",
-      "scraper": "rss_scraper",
-      "enabled": true
+      "news_url": "https://www.mukinbudin.wa.gov.au/news/?c=7",
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "use_curl": true
     },
     {
       "id": "mundaring",
@@ -953,13 +949,6 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5"
-    },
-    {
-      "id": "mosman-park",
-      "name": "Mosman Park",
-      "news_url": "https://www.mosmanpark.wa.gov.au/media-releases/feed",
-      "scraper": "rss_scraper",
-      "enabled": true
     },
     {
       "id": "gosnells",

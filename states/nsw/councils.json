@@ -59,7 +59,7 @@
     {
       "id": "campbelltown-city-council",
       "name": "Campbelltown City Council",
-      "news_url": "https://www.campbelltown.nsw.gov.au/Council-and-Councillors/News",
+      "news_url": "https://www.campbelltown.nsw.gov.au/News",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -120,7 +120,7 @@
     {
       "id": "coffs-harbour-city-council",
       "name": "Coffs Harbour City Council",
-      "news_url": "https://www.coffsharbour.nsw.gov.au/Council/News-and-media",
+      "news_url": "https://www.coffsharbour.nsw.gov.au/Your-Council/Newsroom",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -177,7 +177,7 @@
     {
       "id": "hawkesbury-city-council",
       "name": "Hawkesbury City Council",
-      "news_url": "https://www.hawkesbury.nsw.gov.au/council/news-and-media",
+      "news_url": "https://www.hawkesbury.nsw.gov.au/your-council/council-news/media-releases",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -248,8 +248,8 @@
     {
       "id": "lismore-city-council",
       "name": "Lismore City Council",
-      "news_url": "https://lismore.nsw.gov.au/news",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.lismore.nsw.gov.au/Council/News-projects/Latest-news",
+      "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
       "population": 44625,
@@ -417,7 +417,7 @@
     {
       "id": "strathfield-council",
       "name": "Strathfield Council",
-      "news_url": "https://www.strathfield.nsw.gov.au/news/",
+      "news_url": "https://www.strathfield.nsw.gov.au/Council/News",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -427,7 +427,7 @@
     {
       "id": "sutherland-shire-council",
       "name": "Sutherland Shire Council",
-      "news_url": "https://www.sutherlandshire.nsw.gov.au/Council/News-and-publications/News",
+      "news_url": "https://www.sutherlandshire.nsw.gov.au/your-council/news-and-publications",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -604,7 +604,7 @@
     {
       "id": "albury-city-council",
       "name": "Albury City Council",
-      "news_url": "https://www.alburycity.nsw.gov.au/News",
+      "news_url": "https://www.alburycity.nsw.gov.au/news",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -707,7 +707,7 @@
     {
       "id": "byron-shire-council",
       "name": "Byron Shire Council",
-      "news_url": "https://www.byron.nsw.gov.au/News",
+      "news_url": "https://www.byron.nsw.gov.au/Council/News",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -818,7 +818,7 @@
     {
       "id": "edward-river-council",
       "name": "Edward River Council",
-      "news_url": "https://www.edwardriver.nsw.gov.au/News",
+      "news_url": "https://www.edwardriver.nsw.gov.au/Council/News",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,

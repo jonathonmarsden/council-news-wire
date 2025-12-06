@@ -123,20 +123,22 @@
     {
       "name": "City of Palmerston",
       "id": "palmerston",
-      "news_url": "https://palmerston.nt.gov.au/rss.xml",
+      "news_url": "https://palmerston.nt.gov.au/news",
       "enabled": true,
       "population": 41490,
       "region": "Top End",
-      "scraper": "rss_scraper"
+      "scraper": "curl_scraper",
+      "use_curl": true
     },
     {
       "name": "Roper Gulf Regional Council",
       "id": "roper_gulf",
-      "news_url": "https://www.ropergulf.nt.gov.au/rss.xml",
+      "news_url": "https://www.ropergulf.nt.gov.au/our-council/news",
       "enabled": true,
       "population": 6915,
       "region": "Big Rivers",
-      "scraper": "rss_scraper"
+      "scraper": "curl_scraper",
+      "use_curl": true
     },
     {
       "name": "Tiwi Islands Regional Council",

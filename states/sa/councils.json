@@ -228,7 +228,7 @@
     {
       "id": "coorong-district",
       "name": "Coorong District Council",
-      "news_url": "https://www.coorong.sa.gov.au/news",
+      "news_url": "https://www.coorong.sa.gov.au/stay-informed/news",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -712,7 +712,7 @@
     {
       "id": "port-augusta-city",
       "name": "Port Augusta City Council",
-      "news_url": "https://www.portaugusta.sa.gov.au/news",
+      "news_url": "https://www.portaugusta.sa.gov.au/news-and-events",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -762,7 +762,7 @@
     {
       "id": "prospect",
       "name": "City of Prospect",
-      "news_url": "https://www.prospect.sa.gov.au/news",
+      "news_url": "https://www.prospect.sa.gov.au/council/news-and-media",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -830,7 +830,7 @@
     {
       "id": "salisbury",
       "name": "City of Salisbury",
-      "news_url": "https://www.salisbury.sa.gov.au/news",
+      "news_url": "https://www.salisbury.sa.gov.au/council/news-media-and-publications",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",

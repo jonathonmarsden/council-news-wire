@@ -18,8 +18,8 @@
     {
       "id": "bass-coast",
       "name": "Bass Coast Shire Council",
-      "news_url": "https://www.basscoast.vic.gov.au/feeds/news.rss",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.basscoast.vic.gov.au/about-council/news-listing",
+      "scraper": "curl_scraper",
       "use_curl": true,
       "enabled": true,
       "category": "A",

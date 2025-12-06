@@ -132,18 +132,20 @@
     {
       "id": "break-o-day",
       "name": "Break O'Day Council",
-      "news_url": "https://www.bodc.tas.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.bodc.tas.gov.au/community/news-events",
+      "scraper": "curl_scraper",
       "enabled": true,
+      "use_curl": true,
       "population": 6540,
       "region": "Northern"
     },
     {
       "id": "brighton",
       "name": "Brighton Council",
-      "news_url": "https://www.brighton.tas.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.brighton.tas.gov.au/council/media-releases-or-announcements/",
+      "scraper": "curl_scraper",
       "enabled": true,
+      "use_curl": true,
       "population": 19255,
       "region": "Greater Hobart"
     },
@@ -244,10 +246,11 @@
     },
     {
       "id": "glamorgan-spring-bay",
-      "name": "Glamorgan\u2013Spring Bay Council",
-      "news_url": "https://gsbc.tas.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "name": "Glamorgan–Spring Bay Council",
+      "news_url": "https://gsbc.tas.gov.au/services-facilities/media-releases/",
+      "scraper": "curl_scraper",
       "enabled": true,
+      "use_curl": true,
       "population": 4815,
       "region": "Southern"
     },
