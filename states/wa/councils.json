@@ -56,13 +56,14 @@
     {
       "id": "bassendean",
       "name": "Bassendean",
-      "news_url": "https://www.bassendean.wa.gov.au/your-town/news-events",
+      "news_url": "https://www.bassendean.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": true,
-      "item_selector": null,
-      "title_selector": "a",
-      "date_selector": "span",
-      "link_selector": "a"
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "bayswater",
@@ -730,10 +731,14 @@
     {
       "id": "koorda",
       "name": "Koorda",
-      "news_url": "https://www.koorda.wa.gov.au/documents/newsletters",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.koorda.wa.gov.au/news/",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "kulin",
@@ -1430,14 +1435,14 @@
     {
       "id": "wickepin",
       "name": "Wickepin",
-      "news_url": "https://www.wickepin.wa.gov.au/community/newsletters.aspx",
+      "news_url": "https://www.wickepin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": true,
-      "item_selector": "div",
-      "title_selector": "span",
-      "date_selector": "span",
-      "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)"
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "williams",
@@ -1490,10 +1495,14 @@
     {
       "id": "wyalkatchem",
       "name": "Wyalkatchem",
-      "news_url": "https://www.wyalkatchem.wa.gov.au/council/noticeboard/council-newsletter.aspx",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.wyalkatchem.wa.gov.au/news/",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary, span.h4",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "date_selector": ".h5, span.h5"
     },
     {
       "id": "wyndham-east-kimberley",
