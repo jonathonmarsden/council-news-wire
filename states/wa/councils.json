@@ -292,7 +292,7 @@
     {
       "id": "cocos-keeling-islands",
       "name": "Cocos (Keeling) Islands",
-      "news_url": "https://www.shire.cc/news",
+      "news_url": "https://www.shire.cc/en/latest-news.html",
       "scraper": "card_scraper",
       "enabled": true,
       "use_curl": true,
@@ -917,7 +917,7 @@
     {
       "id": "mount-magnet",
       "name": "Mount Magnet",
-      "news_url": "https://www.mtmagnet.wa.gov.au/news/",
+      "news_url": "https://www.mtmagnet.wa.gov.au/newsletters",
       "scraper": "card_scraper",
       "enabled": true,
       "use_curl": true,

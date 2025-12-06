@@ -695,17 +695,14 @@
     {
       "id": "playford",
       "name": "City of Playford",
-      "news_url": "https://www.playford.sa.gov.au/news",
+      "news_url": "https://www.playford.sa.gov.au/explore/playford-news",
       "enabled": true,
-      "scraper": "card_scraper",
+      "scraper": "curl_scraper",
       "parser": "html",
       "use_curl": true,
-      "selectors": {
-        "container": "div.result-container, div.news-listing__item, div.list-item-container, div.news-list, div.post-list, div.listing, article",
-        "title": "h2, h3, h4",
-        "date": "span.date, time, div.list-item-date, span.news-listing__item-date",
-        "link": "a"
-      },
+      "item_selector": "li.card-list__item",
+      "title_selector": "a",
+      "link_selector": "a",
       "population": 102595,
       "region": "Adelaide Metro"
     },
@@ -796,7 +793,7 @@
     {
       "id": "robe",
       "name": "District Council of Robe",
-      "news_url": "https://www.robe.sa.gov.au/news",
+      "news_url": "https://www.robe.sa.gov.au/community/latest-news",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -813,7 +810,7 @@
     {
       "id": "roxby-downs",
       "name": "Roxby Downs (Municipal Council of)",
-      "news_url": "https://www.roxbydowns.sa.gov.au/news",
+      "news_url": "https://www.roxbydowns.sa.gov.au/council/latest-news",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -931,7 +928,7 @@
     {
       "id": "unley",
       "name": "City of Unley",
-      "news_url": "https://www.unley.sa.gov.au/news",
+      "news_url": "https://www.unley.sa.gov.au/News-articles",
       "enabled": true,
       "parser": "html",
       "use_curl": true,
@@ -982,7 +979,7 @@
     {
       "id": "walkerville",
       "name": "Town of Walkerville",
-      "news_url": "https://www.walkerville.sa.gov.au/news",
+      "news_url": "https://www.walkerville.sa.gov.au/community/latest-news",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -1049,7 +1046,7 @@
     {
       "id": "wudinna-district",
       "name": "Wudinna District Council",
-      "news_url": "https://www.wudinna.sa.gov.au/news",
+      "news_url": "https://www.wudinna.sa.gov.au/community/latest-news",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",
@@ -1066,7 +1063,7 @@
     {
       "id": "yankalilla",
       "name": "District Council of Yankalilla",
-      "news_url": "https://www.yankalilla.sa.gov.au/news",
+      "news_url": "https://www.yankalilla.sa.gov.au/news-and-events",
       "enabled": true,
       "scraper": "card_scraper",
       "parser": "html",

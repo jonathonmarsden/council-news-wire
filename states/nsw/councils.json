@@ -187,7 +187,7 @@
     {
       "id": "hornsby-shire-council",
       "name": "Hornsby Shire Council",
-      "news_url": "https://www.hornsby.nsw.gov.au/council/about-council/news",
+      "news_url": "https://www.hornsby.nsw.gov.au/Council/Noticeboard/Latest-news",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -483,10 +483,14 @@
     {
       "id": "wagga-wagga-city-council",
       "name": "Wagga Wagga City Council",
-      "news_url": "https://wagga.nsw.gov.au/the-council/news-and-media",
+      "news_url": "https://news.wagga.nsw.gov.au/news-articles",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
+      "item_selector": "section.latestListing > div > div",
+      "title_selector": ".latestListing__name a",
+      "date_selector": ".latestListing__date",
+      "link_selector": ".latestListing__name a",
       "population": 68835,
       "region": "Riverina"
     },
@@ -526,7 +530,7 @@
     {
       "id": "woollahra-municipal-council",
       "name": "Woollahra Municipal Council",
-      "news_url": "https://www.woollahra.nsw.gov.au/Council/News",
+      "news_url": "https://www.woollahra.nsw.gov.au/News/Latest-news",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -556,7 +560,7 @@
     {
       "id": "bega-valley-shire-council",
       "name": "Bega Valley Shire Council",
-      "news_url": "https://begavalley.nsw.gov.au/news",
+      "news_url": "https://www.begavalley.nsw.gov.au/News-and-Events/News",
       "scraper": "card_scraper",
       "enabled": true,
       "use_curl": true,
@@ -736,7 +740,7 @@
     {
       "id": "central-darling-shire-council",
       "name": "Central Darling Shire Council",
-      "news_url": "https://www.centraldarling.nsw.gov.au/News",
+      "news_url": "https://www.centraldarling.nsw.gov.au/News-articles",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1244,7 +1248,7 @@
     {
       "id": "walgett-shire-council",
       "name": "Walgett Shire Council",
-      "news_url": "https://www.walgett.nsw.gov.au/News",
+      "news_url": "https://www.walgett.nsw.gov.au/News-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1310,7 +1314,7 @@
     {
       "id": "yass-valley-council",
       "name": "Yass Valley Council",
-      "news_url": "https://www.yassvalley.nsw.gov.au/News",
+      "news_url": "https://www.yassvalley.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
