@@ -23,6 +23,10 @@
       "use_curl": true,
       "enabled": true,
       "category": "A",
+      "item_selector": "a.news-item",
+      "title_selector": ".news-item__title",
+      "date_selector": ".news-item__date",
+      "link_selector": "self",
       "population": 38790,
       "region": "Gippsland"
     },

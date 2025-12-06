@@ -138,7 +138,11 @@
       "population": 6915,
       "region": "Big Rivers",
       "scraper": "curl_scraper",
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": "article.node--type-news",
+      "title_selector": "h3",
+      "date_selector": ".field--name-field-news-date",
+      "link_selector": "a[href*='/news/']"
     },
     {
       "name": "Tiwi Islands Regional Council",

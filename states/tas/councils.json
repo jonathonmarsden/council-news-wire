@@ -132,10 +132,9 @@
     {
       "id": "break-o-day",
       "name": "Break O'Day Council",
-      "news_url": "https://www.bodc.tas.gov.au/community/news-events",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.bodc.tas.gov.au/feed/",
+      "scraper": "rss_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 6540,
       "region": "Northern"
     },

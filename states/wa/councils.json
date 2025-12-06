@@ -347,7 +347,11 @@
       "news_url": "https://www.cranbrook.wa.gov.au/news/",
       "scraper": "curl_scraper",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": "article",
+      "title_selector": "a.entry-title",
+      "date_selector": ".entry-meta",
+      "link_selector": "a.entry-title"
     },
     {
       "id": "cuballing",
