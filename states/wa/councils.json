@@ -148,9 +148,10 @@
     {
       "id": "broome",
       "name": "Broome",
-      "news_url": "https://www.broome.wa.gov.au/Council/Media-Centre",
+      "news_url": "https://www.broome.wa.gov.au/Council/Media-Centre/Media-Releases",
       "scraper": "opencities_scraper",
-      "enabled": true,
+      "enabled": false,
+      "disabled_reason": "Media releases are PDF downloads organized by year, not scrapable news pages",
       "use_curl": true
     },
     {
@@ -189,9 +190,14 @@
     {
       "id": "busselton",
       "name": "Busselton",
-      "news_url": "https://www.busselton.wa.gov.au/discover/events/saltwater/bpacc-news-centre.aspx",
-      "scraper": "aspnet_scraper",
-      "enabled": true
+      "news_url": "https://www.busselton.wa.gov.au/news/?c=17",
+      "scraper": "card_scraper",
+      "enabled": true,
+      "use_curl": true,
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": ".h4.text-primary",
+      "link_selector": "a.btn.btn-primary",
+      "date_selector": ".h5"
     },
     {
       "id": "cambridge",
@@ -930,9 +936,14 @@
     {
       "id": "mount-marshall",
       "name": "Mount Marshall",
-      "news_url": "https://www.mtmarshall.wa.gov.au/latest-news/rss",
-      "scraper": "rss_scraper",
-      "enabled": true
+      "news_url": "https://mtmarshall.wa.gov.au/council-the-shire/shire-news/",
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "use_curl": true,
+      "item_selector": "article",
+      "title_selector": ".elementor-post__title a",
+      "link_selector": ".elementor-post__title a",
+      "date_selector": ".elementor-post__meta-data span"
     },
     {
       "id": "mukinbudin",

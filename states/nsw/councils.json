@@ -362,7 +362,7 @@
     {
       "id": "port-macquarie-hastings-council",
       "name": "Port Macquarie-Hastings Council",
-      "news_url": "https://www.pmhc.nsw.gov.au/Your-Council/News-Notices",
+      "news_url": "https://www.pmhc.nsw.gov.au/Your-Council/News-Notices/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -497,9 +497,14 @@
     {
       "id": "waverley-council",
       "name": "Waverley Council",
-      "news_url": "https://www.waverley.nsw.gov.au/top/news_and_media/all_news",
+      "news_url": "https://www.waverley.nsw.gov.au/top/news_and_media/council_news",
       "scraper": "curl_scraper",
       "enabled": true,
+      "use_curl": true,
+      "item_selector": "table tr:has(a[href*='council_news'])",
+      "title_selector": "a[href*='council_news']",
+      "link_selector": "a[href*='council_news']",
+      "date_selector": "td strong",
       "population": 74410,
       "region": "Greater Sydney"
     },
@@ -950,9 +955,11 @@
     {
       "id": "inverell-shire-council",
       "name": "Inverell Shire Council",
-      "news_url": "https://inverell.nsw.gov.au/feed/",
-      "scraper": "rss_scraper",
-      "enabled": true,
+      "news_url": "https://inverell.nsw.gov.au/news",
+      "scraper": "curl_scraper",
+      "enabled": false,
+      "disabled_reason": "WPBakery AJAX masonry grid - requires JavaScript rendering. No RSS feed available.",
+      "use_curl": true,
       "population": 17505,
       "region": "New England"
     },
@@ -1007,7 +1014,7 @@
     {
       "id": "leeton-shire-council",
       "name": "Leeton Shire Council",
-      "news_url": "https://www.leeton.nsw.gov.au/Your-Council/Council-News",
+      "news_url": "https://www.leeton.nsw.gov.au/Your-Council/Council-News/Media-Releases",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1045,7 +1052,7 @@
     {
       "id": "mid-western-regional-council",
       "name": "Mid-Western Regional Council",
-      "news_url": "https://www.midwestern.nsw.gov.au/Business/Business-support/Business-Newsletter",
+      "news_url": "https://www.midwestern.nsw.gov.au/Council/Media-and-news/Latest-news",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1093,10 +1100,13 @@
     {
       "id": "nambucca-valley-council",
       "name": "Nambucca Valley Council",
-      "news_url": "https://www.nambucca.nsw.gov.au/Council/News-Community-Feedback",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.nambucca.nsw.gov.au/Council/News-Community-Feedback/Media-Releases",
+      "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
+      "item_selector": "div.list-item-container",
+      "title_selector": "h2.list-item-title",
+      "link_selector": "a",
       "population": 21155,
       "region": "North Coast"
     },
@@ -1190,10 +1200,13 @@
     {
       "id": "temora-shire-council",
       "name": "Temora Shire Council",
-      "news_url": "https://www.temora.nsw.gov.au/Community/Narraburra-News",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.temora.nsw.gov.au/Home/Tabs/News",
+      "scraper": "card_scraper",
       "enabled": true,
       "use_curl": true,
+      "item_selector": "a.profile-list",
+      "title_selector": "self",
+      "link_selector": "self",
       "population": 6355,
       "region": "Riverina"
     },
