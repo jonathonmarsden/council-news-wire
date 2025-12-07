@@ -54,7 +54,7 @@ class BlueSkyPoster:
     
     def post_article(self, council_name: str, title: str, url: str, 
                      date: Optional[datetime] = None, excerpt: Optional[str] = None,
-                     hashtags: List[str] = None) -> bool:
+                     hashtags: List[str] = None) -> Optional[str]:
         """
         Post a news article to BlueSky.
         
@@ -67,22 +67,72 @@ class BlueSkyPoster:
             hashtags: List of hashtags to include
             
         Returns:
-            True if posted successfully, False otherwise
+            Post URI if posted successfully, None otherwise
         """
         if not self._authenticated:
             if not self.authenticate():
-                return False
+                return None
+        
+        # SAFETY VALVE: Clean and validate title before posting
+        title = self._sanitize_title(title)
+        
+        if len(title) > 200:
+            print(f"Skipping post: Title too long ({len(title)} chars). Check scraper for {council_name}.")
+            return None
         
         # Format the post text and get facets for clickable links
         post_text, facets = self._format_post_with_facets(council_name, title, url, date, excerpt, hashtags)
         
         try:
-            self.client.send_post(text=post_text, facets=facets)
+            response = self.client.send_post(text=post_text, facets=facets)
+            post_uri = response.uri
             print(f"Posted: {title[:50]}...")
-            return True
+            return post_uri
         except Exception as e:
             print(f"Failed to post: {e}")
-            return False
+            return None
+    
+    def _sanitize_title(self, title: str) -> str:
+        """
+        Clean and sanitize title to prevent malformed posts.
+        
+        - Removes newlines (takes first line only)
+        - Strips date patterns from start
+        - Removes excessive whitespace
+        """
+        if not title:
+            return ""
+        
+        # Auto-repair multiline titles - take first line only
+        if "\n" in title:
+            title = title.split("\n")[0].strip()
+        
+        # Remove common date patterns from start of title
+        # Patterns like "Fri 28 November", "03 December 2025", etc.
+        import re
+        date_patterns = [
+            r'^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{1,2}\s+\w+\s*',  # "Fri 28 November"
+            r'^\d{1,2}\s+\w+\s+\d{4}\s*',  # "03 December 2025"
+            r'^Published on \d{1,2} \w+ \d{4}\s*',  # "Published on 05 December 2025"
+        ]
+        for pattern in date_patterns:
+            title = re.sub(pattern, '', title, flags=re.IGNORECASE)
+        
+        # Handle concatenated patterns like "TitlePublished on 05 December 2025Body..."
+        # Split at "Published on" or date patterns appearing mid-string
+        mid_patterns = [
+            r'Published on \d{1,2} \w+ \d{4}.*$',  # "Published on 05 December 2025..."
+            r'\s+\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\s+[A-Z].*$',  # " 4 December 2025 Thirty..."
+        ]
+        for pattern in mid_patterns:
+            match = re.search(pattern, title, flags=re.IGNORECASE)
+            if match:
+                title = title[:match.start()].strip()
+        
+        # Clean up whitespace
+        title = ' '.join(title.split())
+        
+        return title.strip()
     
     def _council_to_hashtag(self, council_name: str) -> str:
         """

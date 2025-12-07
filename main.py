@@ -19,6 +19,13 @@ from typing import Dict, List, Set, Optional
 from dotenv import load_dotenv
 from dateutil import parser as date_parser
 
+# Optional Discord logging - fails silently if not configured
+try:
+    from discord_logger import log_post_success, log_error
+    DISCORD_LOGGING = True
+except ImportError:
+    DISCORD_LOGGING = False
+
 from core.scrapers import CardScraper, NewsArticle, InnerWestScraper, RSSScraper, ScraperFactory
 from core.poster import BlueSkyPoster
 from core.database import Database
@@ -236,18 +243,26 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
         if council_config.get('skip_excerpt'):
             excerpt = None
         
-        if poster.post_article(
+        post_uri = poster.post_article(
             council_name,
             article['title'],
             article['url'],
             date=article_date,
             excerpt=excerpt,
             hashtags=hashtags
-        ):
+        )
+        if post_uri:
             db.mark_as_posted(article['url'], poster.handle)
             posted_count += 1
             council_counts[c_id] = council_counts.get(c_id, 0) + 1
             print(f"✅ Posted: {article['title'][:50]}...")
+            
+            # Log to Discord for real-time monitoring
+            if DISCORD_LOGGING:
+                try:
+                    log_post_success(council_name, article['title'], article['url'], post_uri)
+                except Exception as log_err:
+                    print(f"Discord log failed: {log_err}")
             
             # Rate limiting delay
             if posted_count < len(articles):

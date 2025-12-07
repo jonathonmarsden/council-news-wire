@@ -58,9 +58,12 @@ class CardScraper(BaseScraper):
                     classes_str = str(classes)
                 
                 # Skip known metadata elements
-                if any(c in classes_str for c in ['date', 'published', 'time', 'meta', 'label', 'right']):
+                if any(c in classes_str for c in ['date', 'published', 'time', 'meta', 'label', 'right', 'summary', 'excerpt', 'description', 'teaser', 'body']):
                     continue
                 if child.name == 'time':
+                    continue
+                # Skip paragraph tags inside title containers (usually summaries)
+                if child.name == 'p':
                     continue
                     
                 # Recursively get text from child
