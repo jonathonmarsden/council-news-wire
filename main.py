@@ -260,7 +260,14 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             # Log to Discord for real-time monitoring
             if DISCORD_LOGGING:
                 try:
-                    log_post_success(council_name, article['title'], article['url'], post_uri)
+                    log_post_success(
+                        council_name, 
+                        article['title'], 
+                        article['url'], 
+                        post_uri,
+                        date=article_date,
+                        hashtags=hashtags
+                    )
                 except Exception as log_err:
                     print(f"Discord log failed: {log_err}")
             
