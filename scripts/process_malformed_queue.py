@@ -164,12 +164,8 @@ def extract_council_name(text: str) -> str:
 def delete_post(client: Client, uri: str) -> bool:
     """Delete a post by URI."""
     try:
-        # Extract rkey from URI
-        # Format: at://did:plc:xxx/app.bsky.feed.post/rkey
-        parts = uri.split('/')
-        rkey = parts[-1]
-        
-        client.delete_post(rkey)
+        # atproto client accepts a full uri (at://did.../app.bsky.feed.post/..)
+        client.delete_post(uri)
         return True
     except Exception as e:
         print(f"  ❌ Failed to delete post: {e}")
