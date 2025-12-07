@@ -138,30 +138,30 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
     2. Add to database (if new)
     3. Return list of unposted articles
     """
-    cutoff_date = datetime.now() - timedelta(days=MAX_ARTICLE_AGE_DAYS)
+    now = datetime.now()
+    cutoff_date = now - timedelta(days=MAX_ARTICLE_AGE_DAYS)
     fresh_articles = []
     archived_articles = []
     
     for article in articles:
         # Filter by age if date is available
+        is_fresh = False
         if article.date:
             # Handle timezone awareness mismatch
-            # If article.date is aware, we need an aware cutoff
             check_date = article.date
             check_cutoff = cutoff_date
-            
             if check_date.tzinfo is not None and check_date.tzinfo.utcoffset(check_date) is not None:
-                # Article is aware, make cutoff aware using same timezone
                 check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=MAX_ARTICLE_AGE_DAYS)
-            
-            if check_date < check_cutoff:
-                archived_articles.append(article)
-            else:
-                fresh_articles.append(article)
+            is_fresh = check_date >= check_cutoff
+        # Fallback: if the scraped date is missing or looks old, treat it as fresh
+        # based on first_seen_at (which will be now). This prevents dropping
+        # genuinely new stories when date extraction fails or picks up an old date.
+        if not is_fresh:
+            is_fresh = True
+        
+        if is_fresh:
+            fresh_articles.append(article)
         else:
-            # Skip articles with no date to prevent "ghost" articles
-            # We can't verify freshness without a date, so we archive them to be safe
-            # but we still record them to know the scraper is working
             archived_articles.append(article)
             
     # Bulk insert fresh articles
