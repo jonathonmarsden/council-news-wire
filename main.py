@@ -144,7 +144,7 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
     archived_articles = []
     
     for article in articles:
-        # Filter by age if date is available
+        # Only post items with a scraped date inside the freshness window
         is_fresh = False
         if article.date:
             # Handle timezone awareness mismatch
@@ -153,11 +153,6 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
             if check_date.tzinfo is not None and check_date.tzinfo.utcoffset(check_date) is not None:
                 check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=MAX_ARTICLE_AGE_DAYS)
             is_fresh = check_date >= check_cutoff
-        # Fallback: if the scraped date is missing or looks old, treat it as fresh
-        # based on first_seen_at (which will be now). This prevents dropping
-        # genuinely new stories when date extraction fails or picks up an old date.
-        if not is_fresh:
-            is_fresh = True
         
         if is_fresh:
             fresh_articles.append(article)
