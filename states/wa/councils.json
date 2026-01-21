@@ -2,7 +2,7 @@
   "councils": [
     {
       "id": "albany",
-      "name": "Albany",
+      "name": "City of Albany",
       "news_url": "https://www.albany.wa.gov.au/news/",
       "scraper": "curl_scraper",
       "use_curl": true,
@@ -11,9 +11,8 @@
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a",
-      "full_content_selector": "div.news-item-content",
-      "full_title_selector": "h1",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "armadale",
@@ -23,38 +22,35 @@
       "use_curl": true,
       "enabled": false,
       "disabled_reason": "React Server Components (RSC) site - media releases load via JavaScript after page render. API requires auth. No RSS feed. Needs Playwright or public API access.",
-      "notes": "Investigated 2025-12-05: Contentful CMS + Next.js RSC. Space ID: p4i5hqtl4d48. Content fetched client-side from api.my.armadale.wa.gov.au (requires auth token). Facebook: facebook.com/CityofArmadale"
+      "notes": "Investigated 2025-12-05: Contentful CMS + Next.js RSC. Space ID: p4i5hqtl4d48. Content fetched client-side from api.my.armadale.wa.gov.au (requires auth token). Facebook: facebook.com/CityofArmadale",
+      "category": "C"
     },
     {
       "id": "ashburton",
-      "name": "Ashburton",
+      "name": "Shire of Ashburton",
       "news_url": "https://www.ashburton.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "item_selector": null,
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selectors": {
-        "container": ".row:has(.news-image-wrapper)",
-        "title": "span.h4.text-primary, span.h4",
-        "link": "a.btn.btn-primary[href*='/news/']",
-        "date": "span.h5"
-      },
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "augusta-margaret-river",
-      "name": "Augusta Margaret River",
+      "name": "Shire of Augusta Margaret River",
       "news_url": "https://www.amrshire.wa.gov.au/shire-and-council/news",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "bassendean",
-      "name": "Bassendean",
+      "name": "Town of Bassendean",
       "news_url": "https://www.bassendean.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -63,11 +59,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "bayswater",
-      "name": "Bayswater",
+      "name": "City of Bayswater",
       "news_url": "https://www.bayswater.wa.gov.au/city-and-council/news",
       "scraper": "curl_scraper",
       "enabled": false,
@@ -76,21 +73,21 @@
       "date_selector": "body",
       "link_selector": "a[href*='/city-and-council/news/']",
       "use_curl": true,
-      "manual_audit": "Connection reset by peer",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "belmont",
-      "name": "Belmont",
+      "name": "City of Belmont",
       "news_url": "https://www.belmont.wa.gov.au/discover/what-s-happening/latest-news",
       "scraper": "opencities_scraper",
-      "enabled": false,
+      "enabled": true,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "category": "B"
     },
     {
       "id": "beverley",
-      "name": "Beverley",
+      "name": "Shire of Beverley",
       "news_url": "https://www.beverley.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -98,18 +95,13 @@
       "title_selector": "h2",
       "date_selector": ".date",
       "link_selector": "a",
-      "selector_source": "Pattern from OpenCities (see PHASE_3_STRATEGY.md)",
-      "selectors": {
-        "container": ".row:has(.news-image-wrapper)",
-        "title": "span.h4.text-primary, span.h4",
-        "link": "a.btn.btn-primary[href*='/news/']",
-        "date": "span.h5"
-      },
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "boddington",
-      "name": "Boddington",
+      "name": "Shire of Boddington",
       "news_url": "https://www.boddington.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -117,11 +109,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "boyup-brook",
-      "name": "Boyup Brook",
+      "name": "Shire of Boyup Brook",
       "news_url": "https://www.boyupbrook.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -129,11 +123,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "bridgetown-greenbushes",
-      "name": "Bridgetown-Greenbushes",
+      "name": "Shire of Bridgetown-Greenbushes",
       "news_url": "https://www.bridgetown.wa.gov.au/news/",
       "scraper": "curl_scraper",
       "use_curl": true,
@@ -142,11 +138,12 @@
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "brookton",
-      "name": "Brookton",
+      "name": "Shire of Brookton",
       "news_url": "https://www.brookton.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -154,29 +151,33 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "broome",
-      "name": "Broome",
+      "name": "Shire of Broome",
       "news_url": "https://www.broome.wa.gov.au/Council/Media-Centre/Media-Releases",
       "scraper": "opencities_scraper",
       "enabled": false,
       "disabled_reason": "Media releases are PDF downloads organized by year, not scrapable news pages",
-      "use_curl": true
+      "use_curl": true,
+      "category": "C"
     },
     {
       "id": "broomehill-tambellup",
-      "name": "Broomehill-Tambellup",
+      "name": "Shire of Broomehill-Tambellup",
       "news_url": "https://www.shirebt.wa.gov.au/news/",
       "scraper": "opencities_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "bruce-rock",
-      "name": "Bruce Rock",
+      "name": "Shire of Bruce Rock",
       "news_url": "https://www.brucerock.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -184,26 +185,22 @@
       "title_selector": "h2.title",
       "date_selector": "span.date",
       "link_selector": "a",
-      "selector_source": "Pattern from ASP.NET (see PHASE_3_STRATEGY.md)",
-      "selectors": {
-        "container": ".row:has(.news-image-wrapper)",
-        "title": "span.h4.text-primary, span.h4",
-        "link": "a.btn.btn-primary[href*='/news/']",
-        "date": "span.h5"
-      },
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "bunbury",
-      "name": "Bunbury",
+      "name": "City of Bunbury",
       "news_url": "https://www.bunbury.wa.gov.au/news",
       "scraper": "bunbury_scraper",
-      "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "enabled": true,
+      "category": "A",
+      "use_curl": false
     },
     {
       "id": "busselton",
-      "name": "Busselton",
+      "name": "City of Busselton",
       "news_url": "https://www.busselton.wa.gov.au/news/?c=17",
       "scraper": "card_scraper",
       "enabled": false,
@@ -212,20 +209,22 @@
       "title_selector": ".h4.text-primary",
       "link_selector": "a.btn.btn-primary",
       "date_selector": ".h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "cambridge",
-      "name": "Cambridge",
+      "name": "Town of Cambridge",
       "news_url": "https://www.cambridge.wa.gov.au/About/News",
       "scraper": "opencities_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "canning",
-      "name": "Canning",
+      "name": "City of Canning",
       "news_url": "https://www.canning.wa.gov.au/business/business-news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -233,12 +232,13 @@
       "title_selector": "h2",
       "date_selector": ".date",
       "link_selector": "a",
-      "selector_source": "Pattern from OpenCities (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "capel",
-      "name": "Capel",
+      "name": "Shire of Capel",
       "news_url": "https://www.capel.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -246,22 +246,23 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "carnamah",
-      "name": "Carnamah",
+      "name": "Shire of Carnamah",
       "news_url": "https://www.carnamah.wa.gov.au/news/feed/",
       "scraper": "rss_scraper",
       "enabled": false,
       "use_curl": true,
-      "selector_source": "Pattern from RSS (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "carnarvon",
-      "name": "Carnarvon",
+      "name": "Shire of Carnarvon",
       "news_url": "https://www.carnarvon.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -269,12 +270,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "chapman-valley",
-      "name": "Chapman Valley",
+      "name": "Shire of Chapman Valley",
       "news_url": "https://www.chapmanvalley.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -282,12 +284,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "chittering",
-      "name": "Chittering",
+      "name": "Shire of Chittering",
       "news_url": "https://www.chittering.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -295,12 +298,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "claremont",
-      "name": "Claremont",
+      "name": "Town of Claremont",
       "news_url": "https://www.claremont.wa.gov.au/council/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -308,20 +312,23 @@
       "title_selector": "h2",
       "date_selector": ".date",
       "link_selector": "a",
-      "selector_source": "Pattern from OpenCities (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "cockburn",
-      "name": "Cockburn",
+      "name": "City of Cockburn",
       "news_url": "https://www.cockburn.wa.gov.au/City-and-Council/Events-and-News",
       "scraper": "aspnet_scraper",
       "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": true
     },
     {
       "id": "cocos-keeling-islands",
-      "name": "Cocos (Keeling) Islands",
+      "name": "Shire of Cocos (Keeling) Islands",
       "news_url": "https://www.shire.cc/en/latest-news.html",
       "scraper": "card_scraper",
       "enabled": false,
@@ -330,21 +337,22 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "collie",
-      "name": "Collie",
+      "name": "Shire of Collie",
       "news_url": "https://www.collie.wa.gov.au/news-events/",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "coolgardie",
-      "name": "Coolgardie",
+      "name": "Shire of Coolgardie",
       "news_url": "https://www.coolgardie.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -352,20 +360,23 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "coorow",
-      "name": "Coorow",
+      "name": "Shire of Coorow",
       "news_url": "https://coorow.wa.gov.au/news/rss/",
       "scraper": "rss_scraper",
       "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "cottesloe",
-      "name": "Cottesloe",
+      "name": "Town of Cottesloe",
       "news_url": "https://www.cottesloe.wa.gov.au/town/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -373,12 +384,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "cranbrook",
-      "name": "Cranbrook",
+      "name": "Shire of Cranbrook",
       "news_url": "https://www.cranbrook.wa.gov.au/news/",
       "scraper": "curl_scraper",
       "enabled": false,
@@ -387,11 +399,12 @@
       "title_selector": "a.entry-title",
       "date_selector": ".entry-meta",
       "link_selector": "a.entry-title",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "cuballing",
-      "name": "Cuballing",
+      "name": "Shire of Cuballing",
       "news_url": "https://www.cuballing.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -399,12 +412,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "cue",
-      "name": "Cue",
+      "name": "Shire of Cue",
       "news_url": "https://www.cue.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -412,12 +426,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "cunderdin",
-      "name": "Cunderdin",
+      "name": "Shire of Cunderdin",
       "news_url": "https://www.cunderdin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -426,11 +441,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "dalwallinu",
-      "name": "Dalwallinu",
+      "name": "Shire of Dalwallinu",
       "news_url": "https://www.dalwallinu.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -438,12 +454,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "dandaragan",
-      "name": "Dandaragan",
+      "name": "Shire of Dandaragan",
       "news_url": "https://www.dandaragan.wa.gov.au/services/community/newsletter.aspx",
       "scraper": "card_scraper",
       "enabled": false,
@@ -451,12 +468,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "dardanup",
-      "name": "Dardanup",
+      "name": "Shire of Dardanup",
       "news_url": "https://www.dardanup.wa.gov.au/our-shire/news-publications",
       "scraper": "card_scraper",
       "enabled": false,
@@ -464,35 +482,36 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "denmark",
-      "name": "Denmark",
+      "name": "Shire of Denmark",
       "news_url": "https://www.denmark.wa.gov.au/news/rss/",
       "scraper": "rss_scraper",
-      "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "enabled": true,
+      "category": "A",
+      "use_curl": false
     },
     {
       "id": "derby-west-kimberley",
-      "name": "Derby-West Kimberley",
+      "name": "Shire of Derby-West Kimberley",
       "news_url": "https://www.sdwk.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "rss_url": "https://www.linkedin.com/company/5786221/admin/feed/posts/",
-      "selectors": {
-        "container": ".row:has(.news-image-wrapper)",
-        "title": "span.h4.text-primary, span.h4",
-        "link": "a.btn.btn-primary[href*='/news/']",
-        "date": "span.h5"
-      },
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "item_selector": ".row:has(.news-image-wrapper)",
+      "title_selector": "span.h4.text-primary, span.h4",
+      "date_selector": "span.h5",
+      "link_selector": "a.btn.btn-primary[href*='/news/']",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "donnybrook-balingup",
-      "name": "Donnybrook-Balingup",
+      "name": "Shire of Donnybrook Balingup",
       "news_url": "https://www.donnybrook-balingup.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -500,12 +519,13 @@
       "item_selector": "div",
       "title_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "dowerin",
-      "name": "Dowerin",
+      "name": "Shire of Dowerin",
       "news_url": "https://www.dowerin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -513,12 +533,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "dumbleyung",
-      "name": "Dumbleyung",
+      "name": "Shire of Dumbleyung",
       "news_url": "https://www.dumbleyung.wa.gov.au/newsletters",
       "scraper": "card_scraper",
       "enabled": false,
@@ -526,12 +547,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "dundas",
-      "name": "Dundas",
+      "name": "Shire of Dundas",
       "news_url": "https://www.dundas.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -539,12 +561,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "east-fremantle",
-      "name": "East Fremantle",
+      "name": "Town of East Fremantle",
       "news_url": "https://www.eastfremantle.wa.gov.au/our-town/corporate-documents-and-news/corporate-plans-and-strategies/news-page.aspx",
       "scraper": "card_scraper",
       "enabled": false,
@@ -552,12 +575,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "east-pilbara",
-      "name": "East Pilbara",
+      "name": "Shire of East Pilbara",
       "news_url": "https://www.eastpilbara.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -565,12 +589,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "esperance",
-      "name": "Esperance",
+      "name": "Shire of Esperance",
       "news_url": "https://www.esperance.wa.gov.au/community/arts-culture/esperance-public-library/whats-new.aspx",
       "scraper": "card_scraper",
       "enabled": false,
@@ -578,12 +603,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "exmouth",
-      "name": "Exmouth",
+      "name": "Shire of Exmouth",
       "news_url": "https://www.exmouth.wa.gov.au/news/?c=2",
       "scraper": "card_scraper",
       "enabled": false,
@@ -592,19 +618,21 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "fremantle",
-      "name": "Fremantle",
+      "name": "City of Fremantle",
       "news_url": "https://www.fremantle.wa.gov.au/feed",
       "scraper": "rss_scraper",
-      "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "enabled": true,
+      "category": "A",
+      "use_curl": false
     },
     {
       "id": "gingin",
-      "name": "Gingin",
+      "name": "Shire of Gingin",
       "news_url": "https://www.gingin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -612,12 +640,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "gnowangerup",
-      "name": "Gnowangerup",
+      "name": "Shire of Gnowangerup",
       "news_url": "https://www.gnowangerup.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -625,12 +654,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "goomalling",
-      "name": "Goomalling",
+      "name": "Shire of Goomalling",
       "news_url": "https://www.goomalling.wa.gov.au/council/public-documents-forms/newsletter.aspx",
       "scraper": "card_scraper",
       "enabled": false,
@@ -638,20 +668,22 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "gosnells",
-      "name": "Gosnells",
+      "name": "City of Gosnells",
       "news_url": "https://www.gosnells.wa.gov.au/rss.xml",
       "scraper": "rss_scraper",
-      "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "enabled": true,
+      "category": "A",
+      "use_curl": false
     },
     {
       "id": "greater-geraldton",
-      "name": "Greater Geraldton",
+      "name": "City of Greater Geraldton",
       "news_url": "https://www.cgg.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -659,12 +691,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "halls-creek",
-      "name": "Halls Creek",
+      "name": "Shire of Halls Creek",
       "news_url": "https://www.hallscreek.wa.gov.au/council/sohc-news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -672,12 +705,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "harvey",
-      "name": "Harvey",
+      "name": "Shire of Harvey",
       "news_url": "https://www.harvey.wa.gov.au/news-and-events",
       "scraper": "card_scraper",
       "enabled": false,
@@ -685,21 +719,23 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "irwin",
-      "name": "Irwin",
+      "name": "Shire of Irwin",
       "news_url": "https://irwin.wa.gov.au/news/",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "jerramungup",
-      "name": "Jerramungup",
+      "name": "Shire of Jerramungup",
       "news_url": "https://www.jerramungup.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -707,34 +743,37 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "joondalup",
-      "name": "Joondalup",
+      "name": "City of Joondalup",
       "news_url": "https://www.joondalup.wa.gov.au/city-and-council/latest-news-updates",
       "scraper": "card_scraper",
-      "enabled": false,
-      "item_selector": "div",
-      "title_selector": "span",
-      "date_selector": "span",
-      "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "enabled": true,
+      "use_curl": true,
+      "item_selector": "article.news-item, article, .news-card, .news-listing article, .news__item, .listing__item, .card",
+      "title_selector": "h1, h2, h3, h1 a, h2 a, h3 a, .news-card__title a, .title a, .news-item__title a",
+      "date_selector": "time, .date, .meta time, .news-card__date",
+      "link_selector": "self, a[href]",
+      "excerpt_selector": "p, .summary, .teaser, .news-card__summary",
+      "category": "A"
     },
     {
       "id": "kalamunda",
-      "name": "Kalamunda",
+      "name": "City of Kalamunda",
       "news_url": "https://www.kalamunda.wa.gov.au/our-city/news-announcements/media-releases",
       "scraper": "opencities_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "kalgoorlie-boulder",
-      "name": "Kalgoorlie-Boulder",
+      "name": "City of Kalgoorlie-Boulder",
       "news_url": "https://www.ckb.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -743,20 +782,22 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "karratha",
-      "name": "Karratha",
+      "name": "City of Karratha",
       "news_url": "https://www.karratha.wa.gov.au/council/news",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "katanning",
-      "name": "Katanning",
+      "name": "Shire of Katanning",
       "news_url": "https://www.katanning.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -764,12 +805,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "kellerberrin",
-      "name": "Kellerberrin",
+      "name": "Shire of Kellerberrin",
       "news_url": "https://www.kellerberrin.wa.gov.au/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -778,19 +820,22 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "kent",
-      "name": "Kent",
+      "name": "Shire of Kent",
       "news_url": "https://www.kent.wa.gov.au/feed/",
       "scraper": "rss_scraper",
       "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "kojonup",
-      "name": "Kojonup",
+      "name": "Shire of Kojonup",
       "news_url": "https://www.kojonup.wa.gov.au",
       "scraper": "card_scraper",
       "enabled": false,
@@ -798,12 +843,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "koorda",
-      "name": "Koorda",
+      "name": "Shire of Koorda",
       "news_url": "https://www.koorda.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -812,11 +858,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "kulin",
-      "name": "Kulin",
+      "name": "Shire of Kulin",
       "news_url": "https://www.kulin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -824,12 +871,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "kwinana",
-      "name": "Kwinana",
+      "name": "City of Kwinana",
       "news_url": "https://www.kwinana.wa.gov.au/council/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -837,12 +885,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "lake-grace",
-      "name": "Lake Grace",
+      "name": "Shire of Lake Grace",
       "news_url": "https://www.lakegrace.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -850,12 +899,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "laverton",
-      "name": "Laverton",
+      "name": "Shire of Laverton",
       "news_url": "https://www.laverton.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -863,12 +913,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "leonora",
-      "name": "Leonora",
+      "name": "Shire of Leonora",
       "news_url": "https://www.leonora.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -876,12 +927,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "mandurah",
-      "name": "Mandurah",
+      "name": "City of Mandurah",
       "news_url": "https://www.mandurah.wa.gov.au/explore/whats-on/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -889,12 +941,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "manjimup",
-      "name": "Manjimup",
+      "name": "Shire of Manjimup",
       "news_url": "https://www.manjimup.wa.gov.au/our-shire/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -902,12 +955,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "meekatharra",
-      "name": "Meekatharra",
+      "name": "Shire of Meekatharra",
       "news_url": "https://www.meekatharra.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -916,20 +970,22 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "melville",
-      "name": "Melville",
+      "name": "City of Melville",
       "news_url": "https://www.melvillecity.com.au/our-city/news",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "menzies",
-      "name": "Menzies",
+      "name": "Shire of Menzies",
       "news_url": "https://www.menzies.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -937,11 +993,13 @@
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn-primary",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "merredin",
-      "name": "Merredin",
+      "name": "Shire of Merredin",
       "news_url": "https://www.merredin.wa.gov.au/community/news-notices",
       "scraper": "card_scraper",
       "enabled": false,
@@ -949,12 +1007,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "mingenew",
-      "name": "Mingenew",
+      "name": "Shire of Mingenew",
       "news_url": "https://mingenew.wa.gov.au/latest-news/",
       "scraper": "curl_scraper",
       "enabled": false,
@@ -963,11 +1022,12 @@
       "link_selector": ".stretched-link",
       "date_selector": "meta[property='article:published_time']",
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "moora",
-      "name": "Moora",
+      "name": "Shire of Moora",
       "news_url": "https://www.moora.wa.gov.au/council/news-publications",
       "scraper": "card_scraper",
       "enabled": false,
@@ -975,12 +1035,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "morawa",
-      "name": "Morawa",
+      "name": "Shire of Morawa",
       "news_url": "https://www.morawa.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -988,21 +1049,23 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "mosman-park",
-      "name": "Mosman Park",
+      "name": "Town of Mosman Park",
       "news_url": "https://www.mosmanpark.wa.gov.au/council/council/news-2/",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "mount-magnet",
-      "name": "Mount Magnet",
+      "name": "Shire of Mount Magnet",
       "news_url": "https://www.mtmagnet.wa.gov.au/newsletters",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1011,12 +1074,12 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "mount-marshall",
-      "name": "Mount Marshall",
+      "name": "Shire of Mount Marshall",
       "news_url": "https://mtmarshall.wa.gov.au/council-the-shire/shire-news/",
       "scraper": "curl_scraper",
       "enabled": false,
@@ -1025,20 +1088,22 @@
       "title_selector": ".elementor-post__title a",
       "link_selector": ".elementor-post__title a",
       "date_selector": ".elementor-post__meta-data span",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "mukinbudin",
-      "name": "Mukinbudin",
+      "name": "Shire of Mukinbudin",
       "news_url": "https://www.mukinbudin.wa.gov.au/news/?c=7",
       "scraper": "curl_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "mundaring",
-      "name": "Mundaring",
+      "name": "Shire of Mundaring",
       "news_url": "https://www.mundaring.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1047,19 +1112,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
-    },
-    {
-      "id": "gosnells",
-      "name": "Gosnells",
-      "news_url": "https://www.gosnells.wa.gov.au/rss.xml",
-      "scraper": "rss_scraper",
-      "enabled": false,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "nannup",
-      "name": "Nannup",
+      "name": "Shire of Nannup",
       "news_url": "https://www.nannup.wa.gov.au/about-us/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1067,12 +1125,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "narembeen",
-      "name": "Narembeen",
+      "name": "Shire of Narembeen",
       "news_url": "https://www.narembeen.wa.gov.au/discover/news-and-events",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1080,12 +1139,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "narrogin",
-      "name": "Narrogin",
+      "name": "Shire of Narrogin",
       "news_url": "https://www.narrogin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1093,12 +1153,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "nedlands",
-      "name": "Nedlands",
+      "name": "City of Nedlands",
       "news_url": "https://www.nedlands.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1107,11 +1168,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "ngaanyatjarraku",
-      "name": "Ngaanyatjarraku",
+      "name": "Shire of Ngaanyatjarraku",
       "news_url": "https://www.ngaanyatjarraku.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1119,12 +1181,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "northam",
-      "name": "Northam",
+      "name": "Shire of Northam",
       "news_url": "https://www.northam.wa.gov.au/council/news-information",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1132,12 +1195,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "northampton",
-      "name": "Northampton",
+      "name": "Shire of Northampton",
       "news_url": "https://www.northampton.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1145,12 +1209,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "nungarin",
-      "name": "Nungarin",
+      "name": "Shire of Nungarin",
       "news_url": "https://www.nungarin.wa.gov.au/our-community/newslink.aspx",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1158,21 +1223,23 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "peppermint-grove",
-      "name": "Peppermint Grove",
+      "name": "Shire of Peppermint Grove",
       "news_url": "https://www.peppermintgrove.wa.gov.au/council/about-peppermint-grove/peptalk-newsletter.aspx",
       "scraper": "opencities_scraper",
       "enabled": false,
       "use_curl": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "perenjori",
-      "name": "Perenjori",
+      "name": "Shire of Perenjori",
       "news_url": "https://www.perenjori.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1180,12 +1247,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "perth",
-      "name": "Perth",
+      "name": "City of Perth",
       "news_url": "https://perth.wa.gov.au/news-and-updates",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1194,11 +1262,12 @@
       "title_selector": ".card-list__title",
       "date_selector": ".card-list__date",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "pingelly",
-      "name": "Pingelly",
+      "name": "Shire of Pingelly",
       "news_url": "https://www.pingelly.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1206,12 +1275,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "plantagenet",
-      "name": "Plantagenet",
+      "name": "Shire of Plantagenet",
       "news_url": "https://www.plantagenet.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1219,12 +1289,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "port-hedland",
-      "name": "Port Hedland",
+      "name": "Town of Port Hedland",
       "news_url": "https://www.porthedland.wa.gov.au/news/general",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1232,26 +1303,27 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "quairading",
-      "name": "Quairading",
+      "name": "Shire of Quairading",
       "news_url": "https://www.quairading.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "SSL protocol error",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "ravensthorpe",
-      "name": "Ravensthorpe",
+      "name": "Shire of Ravensthorpe",
       "news_url": "https://www.ravensthorpe.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1259,26 +1331,27 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "rockingham",
-      "name": "Rockingham",
+      "name": "City of Rockingham",
       "news_url": "https://www.rockingham.wa.gov.au/your-city/news",
-      "scraper": "card_scraper",
-      "enabled": false,
-      "manual_audit": "All selectors null",
-      "item_selector": "div",
-      "title_selector": "span",
-      "date_selector": "span",
-      "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "scraper": "opencities_scraper",
+      "enabled": true,
+      "use_curl": true,
+      "item_selector": ".news-listing__item, .news-card, .media-release, .row:has(.news-image-wrapper), article, .news-item",
+      "title_selector": "h1, h2, h3, h1 a, h2 a, h3 a, .news-listing__item-title a, .news-card__title a, .h4.text-primary",
+      "date_selector": "time, .news-listing__item-date, .news-card__date, .h5",
+      "link_selector": "self, a[href*='/news'], a[href*='/media']",
+      "excerpt_selector": "p, .news-listing__item-teaser, .news-card__summary",
+      "category": "A"
     },
     {
       "id": "sandstone",
-      "name": "Sandstone",
+      "name": "Shire of Sandstone",
       "news_url": "https://www.sandstone.wa.gov.au/community/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1286,216 +1359,220 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "serpentine-jarrahdale",
-      "name": "Serpentine-Jarrahdale",
+      "name": "Shire of Serpentine Jarrahdale",
       "news_url": "https://www.sjshire.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "shark-bay",
-      "name": "Shark Bay",
+      "name": "Shire of Shark Bay",
       "news_url": "https://www.sharkbay.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "south-perth",
-      "name": "South Perth",
+      "name": "City of South Perth",
       "news_url": "https://www.southperth.wa.gov.au/about-us/news-and-publications",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "stirling",
-      "name": "Stirling",
+      "name": "City of Stirling",
       "news_url": "https://www.stirling.wa.gov.au/city-and-council/news",
-      "scraper": "stirling_scraper",
-      "enabled": false,
-      "manual_audit": "All selectors null",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "scraper": "opencities_scraper",
+      "enabled": true,
+      "use_curl": true,
+      "item_selector": ".news-listing__item, .news-card, .media-release, .row:has(.news-image-wrapper), article, .news-item",
+      "title_selector": "h1, h2, h3, h1 a, h2 a, h3 a, .news-listing__item-title a, .news-card__title a, .h4.text-primary",
+      "date_selector": "time, .news-listing__item-date, .news-card__date, .h5",
+      "link_selector": "self, a[href*='/news'], a[href*='/media']",
+      "excerpt_selector": "p, .news-listing__item-teaser, .news-card__summary",
+      "category": "A"
     },
     {
       "id": "subiaco",
-      "name": "Subiaco",
+      "name": "City of Subiaco",
       "news_url": "https://www.subiaco.wa.gov.au/see-do/good-to-know/news",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "swan",
-      "name": "Swan",
+      "name": "City of Swan",
       "news_url": "https://www.swan.wa.gov.au/city-and-council/news-and-media",
-      "scraper": "card_scraper",
-      "enabled": false,
-      "manual_audit": "All selectors null",
-      "item_selector": "div",
-      "title_selector": "span",
-      "date_selector": "span",
-      "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "scraper": "opencities_scraper",
+      "enabled": true,
+      "use_curl": true,
+      "item_selector": ".news-listing__item, .news-card, .media-release, .row:has(.news-image-wrapper), article, .news-item",
+      "title_selector": "h1, h2, h3, h1 a, h2 a, h3 a, .news-listing__item-title a, .news-card__title a, .h4.text-primary",
+      "date_selector": "time, .news-listing__item-date, .news-card__date, .h5",
+      "link_selector": "self, a[href*='/news'], a[href*='/media']",
+      "excerpt_selector": "p, .news-listing__item-teaser, .news-card__summary",
+      "category": "A"
     },
     {
       "id": "tammin",
-      "name": "Tammin",
+      "name": "Shire of Tammin",
       "news_url": "https://www.tammin.wa.gov.au/council/notices/newsletter.aspx",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "three-springs",
-      "name": "Three Springs",
+      "name": "Shire of Three Springs",
       "news_url": "https://www.threesprings.wa.gov.au/index.php/our-council/news-archive",
       "scraper": "rss_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
-      "rss_url": "https://www.threesprings.wa.gov.au/index.php/our-council/news-archive?format=feed&type=rss",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "toodyay",
-      "name": "Toodyay",
+      "name": "Shire of Toodyay",
       "news_url": "https://www.toodyay.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "trayning",
-      "name": "Trayning",
+      "name": "Shire of Trayning",
       "news_url": "https://www.trayning.wa.gov.au",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "article.news-feed-item",
       "title_selector": "h1.item-title",
       "date_selector": "p.item-date",
       "link_selector": "a.item-link",
       "content_selector": "p.item-summary",
-      "full_content_selector": "div.data-container",
-      "full_title_selector": "div.news-container h1",
-      "skip_excerpt": true,
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "upper-gascoyne",
-      "name": "Upper Gascoyne",
+      "name": "Shire of Upper Gascoyne",
       "news_url": "https://www.uppergascoyne.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "victoria-park",
-      "name": "Victoria Park",
+      "name": "Town of Victoria Park",
       "news_url": "https://www.victoriapark.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "use_curl": true,
       "item_selector": ".row:has(.news-image-wrapper)",
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "victoria-plains",
-      "name": "Victoria Plains",
+      "name": "Shire of Victoria Plains",
       "news_url": "https://www.victoriaplains.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "vincent",
-      "name": "Vincent",
+      "name": "City of Vincent",
       "news_url": "https://www.vincent.wa.gov.au/news",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "use_curl": true,
       "item_selector": ".row:has(.news-image-wrapper)",
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "wagin",
-      "name": "Wagin",
+      "name": "Shire of Wagin",
       "news_url": "https://www.wagin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
-      "manual_audit": "All selectors null",
       "item_selector": "div",
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "wandering",
-      "name": "Wandering",
+      "name": "Shire of Wandering",
       "news_url": "https://www.wandering.wa.gov.au/news",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1503,26 +1580,27 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "wanneroo",
-      "name": "Wanneroo",
+      "name": "City of Wanneroo",
       "news_url": "https://www.wanneroo.wa.gov.au/news",
       "scraper": "card_scraper",
-      "enabled": false,
+      "enabled": true,
+      "use_curl": true,
       "item_selector": "a.item-list__article",
       "title_selector": ".box-header",
       "date_selector": ".subtext",
       "link_selector": "self",
-      "content_selector": "p:not(.subtext)",
-      "manual_audit": "All selectors null",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "excerpt_selector": "p:not(.subtext)",
+      "category": "A"
     },
     {
       "id": "waroona",
-      "name": "Waroona",
+      "name": "Shire of Waroona",
       "news_url": "https://www.waroona.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1530,12 +1608,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "west-arthur",
-      "name": "West Arthur",
+      "name": "Shire of West Arthur",
       "news_url": "https://www.westarthur.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1543,12 +1622,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "westonia",
-      "name": "Westonia",
+      "name": "Shire of Westonia",
       "news_url": "https://www.westonia.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1557,11 +1637,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "wickepin",
-      "name": "Wickepin",
+      "name": "Shire of Wickepin",
       "news_url": "https://www.wickepin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1570,11 +1651,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "williams",
-      "name": "Williams",
+      "name": "Shire of Williams",
       "news_url": "https://www.williams.wa.gov.au/news/?c=2",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1582,12 +1664,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "wiluna",
-      "name": "Wiluna",
+      "name": "Shire of Wiluna",
       "news_url": "https://www.wiluna.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1595,12 +1678,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "wongan-ballidu",
-      "name": "Wongan-Ballidu",
+      "name": "Shire of Wongan-Ballidu",
       "news_url": "https://www.wongan.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1608,12 +1692,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "woodanilling",
-      "name": "Woodanilling",
+      "name": "Shire of Woodanilling",
       "news_url": "https://www.woodanilling.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1621,12 +1706,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "wyalkatchem",
-      "name": "Wyalkatchem",
+      "name": "Shire of Wyalkatchem",
       "news_url": "https://www.wyalkatchem.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1635,11 +1721,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "wyndham-east-kimberley",
-      "name": "Wyndham-East Kimberley",
+      "name": "Shire of Wyndham-East Kimberley",
       "news_url": "https://www.swek.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1647,12 +1734,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "yalgoo",
-      "name": "Yalgoo",
+      "name": "Shire of Yalgoo",
       "news_url": "https://www.yalgoo.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1661,11 +1749,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "yilgarn",
-      "name": "Yilgarn",
+      "name": "Shire of Yilgarn",
       "news_url": "https://www.yilgarn.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1674,11 +1763,12 @@
       "title_selector": ".h4.text-primary, span.h4",
       "link_selector": "a.btn.btn-primary[href*='/news/']",
       "date_selector": ".h5, span.h5",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C"
     },
     {
       "id": "york",
-      "name": "York",
+      "name": "Shire of York",
       "news_url": "https://www.york.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1686,12 +1776,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "selector_source": "Pattern from CardScraper (see PHASE_3_STRATEGY.md)",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "corrigin",
-      "name": "Corrigin",
+      "name": "Shire of Corrigin",
       "news_url": "https://www.corrigin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1699,11 +1790,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "kondinin",
-      "name": "Kondinin",
+      "name": "Shire of Kondinin",
       "news_url": "https://www.kondinin.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1711,11 +1804,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "murchison",
-      "name": "Murchison",
+      "name": "Shire of Murchison",
       "news_url": "https://www.murchison.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1723,11 +1818,13 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     },
     {
       "id": "murray",
-      "name": "Murray",
+      "name": "Shire of Murray",
       "news_url": "https://www.murray.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": false,
@@ -1735,7 +1832,9 @@
       "title_selector": "span",
       "date_selector": "span",
       "link_selector": "a",
-      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07)."
+      "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+      "category": "C",
+      "use_curl": false
     }
   ]
 }
