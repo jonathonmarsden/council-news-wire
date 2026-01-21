@@ -47,8 +47,15 @@ class ScraperFactory:
         
         # Registry of custom scrapers
         from .custom import AspNetScraper
+        from .catalyst import CatalystScraper
+        from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper
         scraper_classes = {
             'inner_west_scraper': InnerWestScraper,
+            'catalyst_scraper': CatalystScraper,
+            'wanneroo_scraper': WannerooScraper,
+            'perth_scraper': PerthScraper,
+            'claremont_scraper': ClaremontScraper,
+            'joondalup_scraper': JoondalupScraper,
             'bunbury_scraper': BunburyScraper,
             'wordpress_scraper': WordPressScraper,
             'opencities_scraper': OpenCitiesScraper,
