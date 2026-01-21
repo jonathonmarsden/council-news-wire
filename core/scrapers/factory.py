@@ -7,7 +7,7 @@ from typing import Dict, Optional
 from .base import BaseScraper
 from .card import CardScraper
 from .rss import RSSScraper
-from .stirling import StirlingScraper
+from .alyka import AlykaScraper
 from .custom import InnerWestScraper, BunburyScraper, WordPressScraper, OpenCitiesScraper, APYScraper
 
 class ScraperFactory:
@@ -64,7 +64,7 @@ class ScraperFactory:
             'card_scraper': CardScraper,
             'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
             'rss_scraper': RSSScraper,
-            'stirling_scraper': StirlingScraper,
+            'alyka_scraper': AlykaScraper,
         }
         
         scraper_class = scraper_classes.get(scraper_type, CardScraper)
