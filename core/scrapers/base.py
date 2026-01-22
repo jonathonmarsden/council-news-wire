@@ -119,11 +119,20 @@ class BaseScraper(ABC):
         Returns:
             HTML content as string, or None if fetch failed
         """
-        # 1. Try Direct First
+        # 0. If proxy is configured, maybe skip direct?
+        # For now, let's try direct unless we know strictly otherwise.
+        # UPDATE: If we have a proxy, let's use it immediately if direct failed previously.
+        # But here valid logic is: try direct -> fail -> try proxy.
+        
+        # 1. Try Direct First (unless forced proxy)
+        content = None
+        
+        # Skip direct if we really want to use the proxy (heuristic: if we have a proxy, use it?)
+        # Actually, let's keep direct first but be strict on validation.
+        
         # Clear proxies for direct attempt
         self.session.proxies = {}
         
-        content = None
         if self.use_cloudscraper and self.scraper:
             content = self._fetch_with_cloudscraper(url)
         elif self.use_curl:
@@ -210,13 +219,30 @@ class BaseScraper(ABC):
                 )
                 
                 if response.status_code == 200:
-                    # Check for Incapsula block
-                    if "Incapsula" in response.text or "Request unsuccessful" in response.text:
+                    # Check for Incapsula or Cloudflare block
+                    r_text = response.text
+                    if "Incapsula" in r_text or "Request unsuccessful" in r_text:
                         print("DEBUG: curl_cffi blocked by Incapsula")
                         return None
-                        
-                    print(f"DEBUG: curl_cffi success, length: {len(response.text)}")
-                    return response.text
+                    
+                    lower_text = r_text.lower()
+                    # Check for specific Cloudflare block indicators, avoiding false positives like cdnjs.cloudflare.com
+                    block_indicators = [
+                        "<title>just a moment...</title>", 
+                        "<title>attention required! | cloudflare</title>",
+                        "cf-error-details",
+                        "ray id:", # Often in block pages
+                        "please wait..."
+                    ]
+                    
+                    # Only flag as blocked if we see strong indicators
+                    if ("error code:" in lower_text and "cloudflare" in lower_text) or \
+                       any(ind in lower_text for ind in block_indicators):
+                         print(f"DEBUG: curl_cffi blocked by Cloudflare (Content detection)")
+                         return None
+
+                    print(f"DEBUG: curl_cffi success, length: {len(r_text)}")
+                    return r_text
                 else:
                     print(f"DEBUG: curl_cffi failed with status {response.status_code}")
             except Exception as e:
@@ -252,9 +278,15 @@ class BaseScraper(ABC):
                 timeout=90
             )
             if result.returncode == 0 and result.stdout:
+                # Validate output
+                lower_stdout = result.stdout.lower()
+                if "error code:" in lower_stdout or "cloudflare" in lower_stdout or "access denied" in lower_stdout:
+                    print(f"DEBUG: Curl blocked by Cloudflare/WAF")
+                    return None
+                    
                 print(f"DEBUG: Curl success, length: {len(result.stdout)}")
                 if len(result.stdout) < 1000:
-                    print(f"DEBUG: Short content: {result.stdout}")
+                    print(f"DEBUG: Short content: {result.stdout[:200]}...")
                 return result.stdout
             print(f"Curl error for {url}: {result.stderr}")
             return None
