@@ -189,10 +189,54 @@ class OpenCitiesScraper(BaseScraper):
         # Container: .list-container.news-list-container .list-item-container
         items = soup.select('.list-container.news-list-container .list-item-container')
         
+        # Strategy 1b: Relaxed OpenCities (e.g. Lake Macquarie - missing .news-list-container)
+        if not items:
+            items = soup.select('.list-container .list-item-container')
+        
         if not items:
             # Strategy 2: Squiz/Funnelback (e.g. Albury)
             # Container: .card
             items = soup.select('.card')
+            
+        # Strategy 3: JSON embedded in #SearchResult script (e.g. Canning, Stirling, Swan)
+        if not items:
+            json_script = soup.select_one('#SearchResult')
+            if json_script and json_script.string:
+                import json
+                try:
+                    data = json.loads(json_script.string)
+                    items_list = data.get('items', [])
+                    for item_data in items_list:
+                        title = item_data.get('name')
+                        url = item_data.get('url')
+                        date_str = item_data.get('releaseDate')
+                        excerpt = item_data.get('image', {}).get('imageAlt')
+                        
+                        if not title or not url:
+                            continue
+                            
+                        # Resolve relative URLs
+                        if not url.startswith('http'):
+                            from urllib.parse import urljoin
+                            url = urljoin(self.news_url, url)
+                            
+                        date_obj = None
+                        if date_str:
+                            try:
+                                date_obj = date_parser.parse(date_str)
+                            except:
+                                pass
+                                
+                        article = self.create_article(
+                            title=title,
+                            url=url,
+                            date=date_obj,
+                            excerpt=excerpt
+                        )
+                        articles.append(article)
+                    return articles
+                except Exception as e:
+                    print(f"Error parsing #SearchResult JSON: {e}")
             
         for item in items:
             try:

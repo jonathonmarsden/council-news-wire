@@ -98,11 +98,8 @@ Review `SELECTOR_SUGGESTIONS.md` for potential fixes, then manually update the r
 The bot runs on a DigitalOcean VPS via Docker Compose.
 
 ### Deploying Code
-```bash
-# Deploy current code to VPS
-./scripts/deployment/deploy_with_password.py
-```
-*Note: Requires `scripts/deployment/deploy_secrets.py` (not in git).*
+
+👉 **See [docs/DEPLOYMENT.md](DEPLOYMENT.md) for full deployment instructions.**
 
 ### VPS Management
 ```bash

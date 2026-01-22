@@ -73,7 +73,7 @@ class BaseScraper(ABC):
         'Upgrade-Insecure-Requests': '1',
     }
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110", **kwargs):
         """
         Initialize the scraper.
         
@@ -87,6 +87,7 @@ class BaseScraper(ABC):
             limit: Maximum number of articles to scrape
             proxy: Proxy URL (e.g. http://user:pass@host:port)
             impersonate: Browser to impersonate when using curl (e.g. chrome110, safari15_5)
+            **kwargs: Additional arguments ignored by base class
         """
         self.council_id = council_id
         self.council_name = council_name

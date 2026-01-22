@@ -13,14 +13,17 @@ Automated scraper and BlueSky poster for Australian local government news and me
 Council News Bot monitors news pages from local councils across **all 8 Australian States & Territories**:
 *   **Victoria (VIC)** - 79 councils
 *   **New South Wales (NSW)** - 128 councils
-*   **Queensland (QLD)** - 77 councils
-*   **Western Australia (WA)** - 137 councils
+*   **Queensland (QLD)** - 78 councils
+*   **Western Australia (WA)** - 138 councils
 *   **Tasmania (TAS)** - 29 councils
-*   **South Australia (SA)** - 68 councils
-*   **Northern Territory (NT)** - 17 councils
-*   **Australian Capital Territory (ACT)** - 5+ entities
+*   **South Australia (SA)** - 69 councils
+*   **Northern Territory (NT)** - 18 councils
+*   **Australian Capital Territory (ACT)** - 1 entity
 
-**99.8% coverage** (540/541 councils enabled)
+**100% configured** (540/540 available councils in codebase).
+*   **Healthy Status (Jan 22, 2026):** 87.2% (471 councils) actively returning news.
+*   **State Health:** TAS (100%), ACT (100%), VIC (97.5%), SA (89.9%), QLD (89.7%), NSW (87.5%), NT (83.3%), WA (76.1%).
+*   **Scraper Strategy:** Uses a mix of `curl` (VIC, QLD, NSW) and custom CMS scrapers (WA Catalyst, OpenCities) to maximize reliability.
 
 It automatically posts new articles to BlueSky for [LG News Roundup](https://lgnewsroundup.com).
 
@@ -31,12 +34,22 @@ It is designed to be resilient, scalable, and polite:
 
 ## Features
 
-- **Multi-State Support**: VIC, NSW, QLD, TAS, SA, NT, ACT.
+- **Multi-State Support**: VIC, NSW, QLD, TAS, SA, NT, ACT, WA.
 - **WAF Bypass**: Advanced impersonation of real browsers to scrape protected sites.
+- **Common CMS Support**: Dedicated scrapers for OpenCities, Catalyst, and WordPress sites.
 - **"Record Everything"**: Tracks all articles (even old ones) to monitor scraper health.
 - **Automated Posting**: Runs 24/7 on VPS via Docker.
 - **BlueSky Integration**: Posts with clickable titles, excerpts, and hashtags.
+- **Post Validator**: Enforces title/excerpt length, hashtag count/order, URL hygiene, and facet spans before posting.
+- **Canonical Hashtags**: State peaks plus per-council tags are generated from configs (`docs/hashtags_map.json`).
 - **Deduplication**: Tracks posted articles to avoid duplicates.
+
+## Documentation
+
+*   **[Developer Guide](docs/DEVELOPER_GUIDE.md)**: Setup, testing, and contribution workflow.
+*   **[Deployment Guide](docs/DEPLOYMENT.md)**: How to deploy changes to the live VPS.
+*   **[AI Context](docs/AI_CONTEXT.md)**: Architecture overview for AI agents.
+*   **[Roadmap](docs/ROADMAP.md)**: Future plans and current status.
 
 ## Quick Start
 

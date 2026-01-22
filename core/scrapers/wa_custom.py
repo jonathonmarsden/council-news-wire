@@ -323,3 +323,112 @@ class JoondalupScraper(BaseScraper):
         except Exception as e:
             print(f"Error scraping Joondalup: {e}")
             return []
+
+class BelmontScraper(BaseScraper):
+    """
+    Scraper for City of Belmont (API based).
+    """
+    def __init__(self, council_id: str, council_name: str, news_url: str, 
+                 use_curl: bool = False, use_cloudscraper: bool = False, 
+                 mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
+                 limit: Optional[int] = None, proxy: Optional[str] = None, 
+                 impersonate: str = "chrome110"):
+        super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
+                         mobile_mode, limit, proxy, impersonate)
+
+    def scrape(self) -> List[NewsArticle]:
+        api_url = "https://www.belmont.wa.gov.au/api/search/search"
+        params = {
+            "keyword": "",
+            "sort": "DATE_DSC",
+            "pagenum": 1,
+            "path": "",
+            "defaultfilters": "",
+            "sortfieldname": "menuitemname",
+            "pagesize": 12,
+            "wrapperclass": "",
+            "trunclength": "255",
+            "searchindex": "BelmontNewsIndex",
+            "transformationname": "Belmont.Transformations.NewsSearchResults",
+            "resultprefix": "",
+            "resultsuffix": " articles",
+            "showdidyoumean": "true",
+            "userguid": "3758B9B5-045C-4B7D-B020-80F9B068D990",
+            "showresultscount": "false",
+            "replacelucenehyphens": "false",
+            "filters": ""
+        }
+        
+        try:
+            # Update headers for API request
+            headers = self.session.headers.copy()
+            headers.update({
+                "Referer": "https://www.belmont.wa.gov.au/discover/what-s-happening/latest-news",
+                "Accept": "application/json, text/javascript, */*; q=0.01",
+                "X-Requested-With": "XMLHttpRequest"
+            })
+
+            # Using self.session to maintain headers/cookies if needed, though mostly stateless API
+            response = self.session.get(api_url, params=params, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            
+            articles = []
+            if "PartialHTML" in data:
+                soup = BeautifulSoup(data["PartialHTML"], "html.parser")
+                items = soup.find_all(class_="news-item")
+                
+                for item in items:
+                    title_el = item.find(class_="title")
+                    if not title_el:
+                        continue
+                    
+                    # Check for strong tag inside title
+                    strong = title_el.find("strong")
+                    title = strong.get_text(strip=True) if strong else title_el.get_text(strip=True)
+                    
+                    # Link
+                    link = item.find("a")
+                    # Fallback if link not found immediately
+                    if not link and title_el.name == 'a':
+                        link = title_el
+                    elif not link:
+                        link = item.find(class_="read-more")
+
+                    url = link.get("href") if link else None
+                    if url:
+                        # Ensure absolute URL
+                        if not url.startswith("http"):
+                             url = "https://www.belmont.wa.gov.au" + (url if url.startswith("/") else "/" + url)
+                    else:
+                        continue
+                        
+                    # Date
+                    date_el = item.find(class_="release-date")
+                    date_val = None
+                    if date_el:
+                        date_str = date_el.get_text(strip=True)
+                        try:
+                            # 16 January 2026
+                            date_val = datetime.strptime(date_str, "%d %B %Y")
+                        except ValueError:
+                            pass
+                            
+                    excerpt_el = item.find(class_="desc")
+                    excerpt = excerpt_el.get_text(strip=True) if excerpt_el else ""
+                    
+                    article = NewsArticle(
+                        council_id=self.council_id,
+                        council_name=self.council_name,
+                        title=title,
+                        url=url,
+                        date=date_val,
+                        excerpt=excerpt
+                    )
+                    articles.append(article)
+                    
+            return articles
+            
+        except Exception as e:
+            print(f"Error scraping Belmont: {e}")
+            return []

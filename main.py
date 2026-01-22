@@ -11,6 +11,7 @@ import json
 import os
 import sys
 import time
+import random
 import concurrent.futures
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -55,6 +56,20 @@ def load_state_config(state_code: str) -> Dict:
         'councils': councils_data.get('councils', [])
     }
 
+
+def load_hashtag_map() -> Dict[str, str]:
+    """Load canonical council hashtags (generated from state configs)."""
+    map_path = Path(__file__).parent / 'docs' / 'hashtags_map.json'
+    if not map_path.exists():
+        return {}
+    try:
+        with map_path.open() as f:
+            data = json.load(f)
+            return data.get('councils', {})
+    except Exception as exc:
+        print(f"Warning: Failed to load hashtag map: {exc}")
+        return {}
+
 def get_scraper(council: Dict, proxy: Optional[str] = None) -> CardScraper:
     """Get the appropriate scraper for a council."""
     return ScraperFactory.create_scraper(council, proxy)
@@ -88,7 +103,7 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
         print(f"  {council['name']}: Found {count} articles")
         
         if db:
-            db.record_success(council['id'])
+            db.record_success(council['id'], articles_found=count)
             duration_ms = int((time.time() - start_time) * 1000)
             status = 'ok' if count > 0 else 'empty'
             db.log_scraper_run(council['id'], count, status, duration_ms)
@@ -112,6 +127,9 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
     # Filter enabled councils first
     active_councils = [c for c in councils if not enabled_only or c.get('enabled', False)]
     
+    # Shuffle councils to prevent "Starvation" of those late in the alphabet if the run times out
+    random.shuffle(active_councils)
+    
     print(f"Scraping {len(active_councils)} councils with {max_workers} workers...")
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -131,10 +149,69 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
             
     return all_articles
 
-def process_articles(articles: List[NewsArticle], db: Database, state_code: str) -> List[Dict]:
+import re
+def is_valid_article(article_obj) -> bool:
+    """
+    Check if article content looks like a real news item.
+    Accepts NewsArticle object or Dictionary.
+    """
+    # Handle access for both Object and Dict types
+    if isinstance(article_obj, dict):
+        title = article_obj.get('title')
+    else:
+        title = getattr(article_obj, 'title', None)
+        
+    if not title or not title.strip():
+        return False
+        
+    title = title.strip()
+    
+    # reject too short
+    if len(title) < 5:
+        return False
+        
+    # reject purely numeric (e.g. "2026", "6175")
+    if title.replace('-', '').replace(' ', '').isdigit():
+        return False
+        
+    # reject generic site navigation
+    generic_terms = {'home', 'sitemap', 'contact us', 'privacy policy', 'accessibility', 'search', 'news'}
+    if title.lower() in generic_terms:
+        return False
+        
+    # reject address-like titles (e.g. "Lot 112 Smith St")
+    # Simple heuristic: Starts with digit, contains "Street", "Road", "Lot"
+    if title[0].isdigit() and any(x in title.lower() for x in ['street', 'road', 'avenue', ' lot ', 'highway', ' dr ', ' drive']):
+        return False
+
+    # reject metadata titles (e.g. "Posted 04 December 2025")
+    if title.lower().startswith('posted ') and any(c.isdigit() for c in title):
+        return False
+        
+    # reject copyright footers (e.g. "© 2025 Shire of ...")
+    if title.startswith('©') or title.startswith('&copy;'):
+        return False
+
+    # reject common garbage and non-news items
+    garbage_phrases = {
+        'found cat', 
+        'found dog', 
+        'lost cat',
+        'lost dog',
+        'ato image', 
+        'no title',
+        'untitled'
+    }
+    
+    if title.lower() in garbage_phrases:
+        return False
+
+    return True
+
+def process_articles(articles: List[NewsArticle], db: Database, state_code: str, force_fresh: bool = False) -> List[Dict]:
     """
     Process scraped articles:
-    1. Filter by age
+    1. Filter by age and CONTENT QUALITY
     2. Add to database (if new)
     3. Return list of unposted articles
     """
@@ -143,10 +220,18 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
     fresh_articles = []
     archived_articles = []
     
-    for article in articles:
+    # Filter out garbage
+    valid_articles = [a for a in articles if is_valid_article(a)]
+    rejected_count = len(articles) - len(valid_articles)
+    if rejected_count > 0:
+        print(f"  Rejected {rejected_count} articles as invalid garbage content.")
+
+    for article in valid_articles:
         # Only post items with a scraped date inside the freshness window
         is_fresh = False
-        if article.date:
+        if force_fresh:
+            is_fresh = True
+        elif article.date:
             # Handle timezone awareness mismatch
             check_date = article.date
             check_cutoff = cutoff_date
@@ -181,6 +266,7 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str)
 
 def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database, 
                   council_lookup: Dict[str, Dict], hashtags: List[str],
+                  council_hashtag_map: Dict[str, str],
                   limit: int = 0, dry_run: bool = False, max_per_council: int = 5):
     """Post articles to BlueSky."""
     if not articles:
@@ -230,13 +316,26 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             except Exception:
                 pass
         
+        # VALIDATION CHECK: Prevent posting malformed/garbage articles
+        if not is_valid_article(article):
+            print(f"⚠️ Skipping invalid article (metadata/garbage): {article.get('title', 'Unknown')}")
+            # Mark as posted to prevent retry loop
+            db.mark_as_posted(article['url'], "REJECTED_VALIDATION")
+            continue
+
         council_config = council_lookup.get(c_id, {})
         council_name = council_config.get('name', c_id)
+        council_tag = council_hashtag_map.get(c_id)
         
         # Check if excerpt should be skipped
         excerpt = article['excerpt']
         if council_config.get('skip_excerpt'):
             excerpt = None
+
+        # Build hashtag list per article: base state tags + canonical council tag
+        tags_for_post = list(hashtags) if hashtags else []
+        if council_tag and council_tag not in tags_for_post:
+            tags_for_post.append(council_tag)
         
         post_uri = poster.post_article(
             council_name,
@@ -244,7 +343,8 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             article['url'],
             date=article_date,
             excerpt=excerpt,
-            hashtags=hashtags
+            hashtags=tags_for_post,
+            council_hashtag=council_tag
         )
         if post_uri:
             db.mark_as_posted(article['url'], poster.handle)
@@ -286,6 +386,7 @@ def main():
     parser.add_argument('--proxy', type=str, help='Proxy URL (e.g. http://user:pass@host:port)')
     parser.add_argument('--concurrency', type=int, default=5, help='Number of concurrent scrapers')
     parser.add_argument('--council', type=str, help='Run for a specific council ID only')
+    parser.add_argument('--force-fresh', action='store_true', help='Bypass 7-day freshness check (force post old articles)')
     
     args = parser.parse_args()
     
@@ -294,12 +395,61 @@ def main():
     
     state_code = args.state.upper()
     
-    try:
-        state_data = load_state_config(state_code)
-    except ValueError as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-        
+    # Auto-detect state if council is specified but not found in default state
+    if args.council:
+        # First try the requested/default state
+        try:
+            state_data = load_state_config(state_code)
+            found = False
+            for c in state_data['councils']:
+                if c['id'] == args.council:
+                    found = True
+                    break
+            
+            if not found:
+                raise ValueError("Not found in current state")
+                
+        except ValueError:
+            # Not found in default state, search others
+            found_state = None
+            print(f"Council '{args.council}' not found in {state_code}, searching other states...")
+            
+            states_dir = Path(__file__).parent / 'states'
+            for state_dir in states_dir.iterdir():
+                if not state_dir.is_dir() or state_dir.name.startswith('_'):
+                    continue
+                    
+                s_code = state_dir.name.upper()
+                if s_code == state_code:
+                    continue
+                    
+                try:
+                    s_data = load_state_config(s_code)
+                    for c in s_data['councils']:
+                        if c['id'] == args.council:
+                            found_state = s_code
+                            print(f"Found '{args.council}' in {found_state}")
+                            break
+                except Exception:
+                    continue
+                
+                if found_state:
+                    break
+            
+            if found_state:
+                state_code = found_state
+                state_data = load_state_config(state_code)
+            else:
+                print(f"Error: Council '{args.council}' not found in any state configuration.")
+                sys.exit(1)
+    else:
+        # Standard load
+        try:
+            state_data = load_state_config(state_code)
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+            
     print(f"=== Council News Bot: {state_data['config']['state_name']} ===")
     
     # Initialize DB
@@ -320,6 +470,7 @@ def main():
             
     council_lookup = {c['id']: c for c in state_data['councils']}
     hashtags = state_data['config'].get('hashtags', [])
+    council_hashtag_map = load_hashtag_map()
     
     # Scrape (unless post-only)
     if not args.post_only:
@@ -331,10 +482,10 @@ def main():
         
     # Post
     if not args.scrape_only:
-        post_articles(unposted, poster, db, council_lookup, hashtags, 
-                      limit=args.limit, 
-                      dry_run=args.dry_run,
-                      max_per_council=args.max_per_council)
+        post_articles(unposted, poster, db, council_lookup, hashtags, council_hashtag_map,
+                  limit=args.limit, 
+                  dry_run=args.dry_run,
+                  max_per_council=args.max_per_council)
 
 if __name__ == "__main__":
     main()

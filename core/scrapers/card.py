@@ -364,7 +364,7 @@ class CardScraper(BaseScraper):
                     date = self.parse_date(date_text)
             
             # Excerpt (optional)
-            excerpt_selector = self.selectors.get('content_selector') # Using content_selector as excerpt for now
+            excerpt_selector = self.selectors.get('content_selector') or self.selectors.get('excerpt_selector')
             if excerpt_selector:
                 excerpt_elem = item.select_one(excerpt_selector)
                 if excerpt_elem:

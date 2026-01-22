@@ -48,13 +48,14 @@ class ScraperFactory:
         # Registry of custom scrapers
         from .custom import AspNetScraper
         from .catalyst import CatalystScraper
-        from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper
+        from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper, BelmontScraper
         scraper_classes = {
             'inner_west_scraper': InnerWestScraper,
             'catalyst_scraper': CatalystScraper,
             'wanneroo_scraper': WannerooScraper,
             'perth_scraper': PerthScraper,
             'claremont_scraper': ClaremontScraper,
+            'belmont_scraper': BelmontScraper,
             'joondalup_scraper': JoondalupScraper,
             'bunbury_scraper': BunburyScraper,
             'wordpress_scraper': WordPressScraper,
@@ -75,6 +76,10 @@ class ScraperFactory:
         # Get impersonation setting (default to chrome110)
         impersonate = council.get('impersonate', 'chrome110')
         
+        # Pass all other council config as kwargs to allow custom scrapers to assume parameters
+        reserved_keys = {'id', 'name', 'news_url', 'scraper', 'selectors', 'limit', 'proxy', 'impersonate', 'use_curl', 'use_cloudscraper', 'mobile_mode'} 
+        extra_kwargs = {k: v for k, v in council.items() if k not in reserved_keys}
+        
         return scraper_class(
             council_id=council['id'],
             council_name=council['name'],
@@ -85,5 +90,6 @@ class ScraperFactory:
             selectors=selectors,
             limit=limit,
             proxy=use_proxy,
-            impersonate=impersonate
+            impersonate=impersonate,
+            **extra_kwargs
         )

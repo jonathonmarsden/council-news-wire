@@ -1,196 +1,201 @@
 {
-  "councils": [
-    {
-      "name": "Alice Springs Town Council",
-      "id": "alice_springs",
-      "news_url": "https://www.alicesprings.nt.gov.au/news",
-      "item_selector": "div.news-item, .news-listing .item, .news-list .item, article, .listing-item",
-      "enabled": true,
-      "population": 26240,
-      "region": "Central Australia"
-    },
-    {
-      "name": "Barkly Regional Council",
-      "id": "barkly",
-      "news_url": "https://www.barkly.nt.gov.au/news",
-      "item_selector": ".news-listing .item, .news-list .item, article",
-      "enabled": true,
-      "population": 7595,
-      "region": "Barkly"
-    },
-    {
-      "name": "Belyuen Community Government Council",
-      "id": "belyuen",
-      "news_url": "https://www.belyuen.nt.gov.au/rss.xml",
-      "enabled": true,
-      "population": 245,
-      "region": "Top End",
-      "scraper": "rss_scraper"
-    },
-    {
-      "name": "Central Desert Regional Council",
-      "id": "central_desert",
-      "news_url": "https://www.centraldesert.nt.gov.au/our-publications/news",
-      "item_selector": "div.item",
-      "title_selector": "h2[itemprop='headline']",
-      "date_selector": "time[itemprop='dateCreated']",
-      "link_selector": "a.link-read-more",
-      "use_curl": true,
-      "enabled": true,
-      "population": 4550,
-      "region": "Central Australia"
-    },
-    {
-      "name": "Coomalie Community Government Council",
-      "id": "coomalie",
-      "news_url": "https://coomalie.nt.gov.au/news",
-      "item_selector": ".postArticle",
-      "title_selector": ".postTitle a",
-      "date_selector": ".authorBar span",
-      "link_selector": ".postTitle a",
-      "enabled": true,
-      "population": 1525,
-      "region": "Top End"
-    },
-    {
-      "name": "City of Darwin",
-      "id": "darwin",
-      "news_url": "https://www.darwin.nt.gov.au/rss.xml",
-      "enabled": true,
-      "population": 84640,
-      "region": "Top End",
-      "scraper": "rss_scraper"
-    },
-    {
-      "name": "East Arnhem Regional Council",
-      "id": "east_arnhem",
-      "news_url": "https://eastarnhem.nt.gov.au/news-and-events",
-      "item_selector": ".postArticle",
-      "title_selector": ".postTitle a",
-      "date_selector": ".authorBar span",
-      "link_selector": ".postTitle a",
-      "enabled": true,
-      "population": 7875,
-      "region": "Arnhem"
-    },
-    {
-      "name": "Groote Archipelago Regional Council",
-      "id": "groote_archipelago",
-      "news_url": "https://groote.nt.gov.au/news-and-events",
-      "item_selector": ".postArticle",
-      "title_selector": ".postTitle a",
-      "date_selector": ".authorBar span",
-      "link_selector": ".postTitle a",
-      "enabled": true,
-      "population": 2580,
-      "region": "Arnhem"
-    },
-    {
-      "name": "Katherine Town Council",
-      "id": "katherine",
-      "news_url": "https://www.katherine.nt.gov.au/news",
-      "item_selector": ".row:has(.h4.text-primary)",
-      "title_selector": ".h4.text-primary",
-      "date_selector": ".h5",
-      "link_selector": "a.btn.btn-primary",
-      "enabled": true,
-      "population": 10460,
-      "region": "Big Rivers"
-    },
-    {
-      "name": "Litchfield Council",
-      "id": "litchfield",
-      "news_url": "https://www.litchfield.nt.gov.au/rss.xml",
-      "enabled": true,
-      "population": 27580,
-      "region": "Top End",
-      "scraper": "rss_scraper"
-    },
-    {
-      "name": "MacDonnell Regional Council",
-      "id": "macdonnell",
-      "news_url": "https://www.macdonnell.nt.gov.au/news",
-      "item_selector": ".row:has(.h4.text-primary)",
-      "title_selector": ".h4.text-primary",
-      "date_selector": ".h5",
-      "link_selector": "a.btn.btn-primary",
-      "enabled": true,
-      "population": 7200,
-      "region": "Central Australia",
-      "scraper": "opencities_scraper",
-      "use_curl": true
-    },
-    {
-      "name": "City of Palmerston",
-      "id": "palmerston",
-      "news_url": "https://palmerston.nt.gov.au/news",
-      "enabled": true,
-      "population": 41490,
-      "region": "Top End",
-      "scraper": "curl_scraper",
-      "use_curl": true
-    },
-    {
-      "name": "Roper Gulf Regional Council",
-      "id": "roper_gulf",
-      "news_url": "https://www.ropergulf.nt.gov.au/our-council/news",
-      "enabled": true,
-      "population": 6915,
-      "region": "Big Rivers",
-      "scraper": "curl_scraper",
-      "use_curl": true,
-      "item_selector": "article.node--type-news",
-      "title_selector": "h3",
-      "date_selector": ".field--name-field-news-date",
-      "link_selector": "a[href*='/news/']"
-    },
-    {
-      "name": "Tiwi Islands Regional Council",
-      "id": "tiwi_islands",
-      "news_url": "https://www.tiwiislands.nt.gov.au/news",
-      "item_selector": ".row:has(.h4.text-primary)",
-      "title_selector": ".h4.text-primary",
-      "date_selector": ".h5",
-      "link_selector": "a.btn.btn-primary",
-      "enabled": true,
-      "population": 2790,
-      "region": "Top End"
-    },
-    {
-      "name": "Victoria Daly Regional Council",
-      "id": "victoria_daly",
-      "news_url": "https://www.victoriadaly.nt.gov.au/rss",
-      "enabled": true,
-      "population": 7230,
-      "region": "Big Rivers",
-      "scraper": "rss_scraper"
-    },
-    {
-      "name": "Wagait Shire Council",
-      "id": "wagait",
-      "news_url": "https://wagait.nt.gov.au/media-releases/feed",
-      "enabled": true,
-      "population": 590,
-      "region": "Top End",
-      "scraper": "rss_scraper"
-    },
-    {
-      "name": "West Arnhem Regional Council",
-      "id": "west_arnhem",
-      "news_url": "https://www.westarnhem.nt.gov.au/news",
-      "item_selector": ".news-listing .item, article",
-      "enabled": true,
-      "population": 6825,
-      "region": "Top End"
-    },
-    {
-      "name": "West Daly Regional Council",
-      "id": "west_daly",
-      "news_url": "https://www.westdaly.nt.gov.au/rss.xml",
-      "enabled": true,
-      "population": 3600,
-      "region": "Top End",
-      "scraper": "rss_scraper"
-    }
-  ]
+    "councils": [
+        {
+            "name": "Alice Springs, Town of",
+            "id": "alice_springs",
+            "news_url": "https://www.alicesprings.nt.gov.au/news",
+            "item_selector": "div.news-item, .news-listing .item, .news-list .item, article, .listing-item",
+            "enabled": true,
+            "population": 26240,
+            "region": "Central Australia"
+        },
+        {
+            "name": "Barkly Regional Council",
+            "id": "barkly",
+            "news_url": "https://www.barkly.nt.gov.au/news",
+            "item_selector": ".news-listing .item, .news-list .item, article",
+            "enabled": true,
+            "population": 7595,
+            "region": "Barkly",
+            "use_curl": true
+        },
+        {
+            "name": "Belyuen Community Government Council",
+            "id": "belyuen",
+            "news_url": "https://www.belyuen.nt.gov.au/rss.xml",
+            "enabled": true,
+            "population": 245,
+            "region": "Top End",
+            "scraper": "rss_scraper"
+        },
+        {
+            "name": "Central Desert Regional Council",
+            "id": "central_desert",
+            "news_url": "https://www.centraldesert.nt.gov.au/our-publications/news",
+            "item_selector": "div.item",
+            "title_selector": "h2[itemprop='headline']",
+            "date_selector": "time[itemprop='dateCreated']",
+            "link_selector": "a.link-read-more",
+            "use_curl": true,
+            "enabled": true,
+            "population": 4550,
+            "region": "Central Australia"
+        },
+        {
+            "name": "Coomalie Community Government Council",
+            "id": "coomalie",
+            "news_url": "https://coomalie.nt.gov.au/news",
+            "item_selector": ".postArticle",
+            "title_selector": ".postTitle a",
+            "date_selector": ".authorBar span",
+            "link_selector": ".postTitle a",
+            "enabled": true,
+            "population": 1525,
+            "region": "Top End",
+            "use_curl": true
+        },
+        {
+            "name": "City of Darwin",
+            "id": "darwin",
+            "news_url": "https://www.darwin.nt.gov.au/rss.xml",
+            "enabled": true,
+            "population": 84640,
+            "region": "Top End",
+            "scraper": "rss_scraper"
+        },
+        {
+            "name": "East Arnhem Regional Council",
+            "id": "east_arnhem",
+            "news_url": "https://eastarnhem.nt.gov.au/news-and-events",
+            "item_selector": ".postArticle",
+            "title_selector": ".postTitle a",
+            "date_selector": ".authorBar span",
+            "link_selector": ".postTitle a",
+            "enabled": true,
+            "population": 7875,
+            "region": "Arnhem",
+            "use_curl": true
+        },
+        {
+            "name": "Groote Archipelago Regional Council",
+            "id": "groote_archipelago",
+            "news_url": "https://groote.nt.gov.au/news-and-events",
+            "item_selector": ".postArticle",
+            "title_selector": ".postTitle a",
+            "date_selector": ".authorBar span",
+            "link_selector": ".postTitle a",
+            "enabled": true,
+            "population": 2580,
+            "region": "Arnhem",
+            "use_curl": true
+        },
+        {
+            "name": "Katherine, Town of",
+            "id": "katherine",
+            "news_url": "https://www.katherine.nt.gov.au/news",
+            "item_selector": ".module-list .row",
+            "title_selector": ".h4.text-primary",
+            "date_selector": ".h5",
+            "link_selector": "a.btn.btn-primary",
+            "enabled": true,
+            "population": 10460,
+            "region": "Big Rivers"
+        },
+        {
+            "name": "Litchfield Council",
+            "id": "litchfield",
+            "news_url": "https://www.litchfield.nt.gov.au/rss.xml",
+            "enabled": true,
+            "population": 27580,
+            "region": "Top End",
+            "scraper": "rss_scraper"
+        },
+        {
+            "name": "MacDonnell Regional Council",
+            "id": "macdonnell",
+            "news_url": "https://www.macdonnell.nt.gov.au/news",
+            "item_selector": ".module-list .row",
+            "title_selector": ".h4.text-primary",
+            "date_selector": ".h5",
+            "link_selector": "a.btn.btn-primary",
+            "enabled": true,
+            "population": 7200,
+            "region": "Central Australia",
+            "scraper": "opencities_scraper",
+            "use_curl": true
+        },
+        {
+            "name": "City of Palmerston",
+            "id": "palmerston",
+            "news_url": "https://palmerston.nt.gov.au/news",
+            "enabled": true,
+            "population": 41490,
+            "region": "Top End",
+            "scraper": "curl_scraper",
+            "use_curl": true
+        },
+        {
+            "name": "Roper Gulf Regional Council",
+            "id": "roper_gulf",
+            "news_url": "https://www.ropergulf.nt.gov.au/our-council/news",
+            "enabled": true,
+            "population": 6915,
+            "region": "Big Rivers",
+            "scraper": "curl_scraper",
+            "use_curl": true,
+            "item_selector": "article.node--type-news",
+            "title_selector": "h3",
+            "date_selector": ".field--name-field-news-date",
+            "link_selector": "a[href*='/news/']"
+        },
+        {
+            "name": "Tiwi Islands Regional Council",
+            "id": "tiwi_islands",
+            "news_url": "https://www.tiwiislands.nt.gov.au/news",
+            "item_selector": ".module-list .row",
+            "title_selector": ".h4.text-primary",
+            "date_selector": ".h5",
+            "link_selector": "a.btn.btn-primary",
+            "enabled": true,
+            "population": 2790,
+            "region": "Top End"
+        },
+        {
+            "name": "Victoria Daly Regional Council",
+            "id": "victoria_daly",
+            "news_url": "https://www.victoriadaly.nt.gov.au/rss",
+            "enabled": true,
+            "population": 7230,
+            "region": "Big Rivers",
+            "scraper": "rss_scraper"
+        },
+        {
+            "name": "Wagait Shire",
+            "id": "wagait",
+            "news_url": "https://wagait.nt.gov.au/media-releases/feed",
+            "enabled": true,
+            "population": 590,
+            "region": "Top End",
+            "scraper": "rss_scraper",
+            "use_curl": true
+        },
+        {
+            "name": "West Arnhem Regional Council",
+            "id": "west_arnhem",
+            "news_url": "https://www.westarnhem.nt.gov.au/news",
+            "item_selector": ".news-listing .item, article",
+            "enabled": true,
+            "population": 6825,
+            "region": "Top End"
+        },
+        {
+            "name": "West Daly Regional Council",
+            "id": "west_daly",
+            "news_url": "https://www.westdaly.nt.gov.au/rss.xml",
+            "enabled": true,
+            "population": 3600,
+            "region": "Top End",
+            "scraper": "rss_scraper"
+        }
+    ]
 }

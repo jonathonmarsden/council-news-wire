@@ -77,9 +77,16 @@ class Database:
                     last_failure_at TIMESTAMP,
                     last_success_at TIMESTAMP,
                     is_disabled BOOLEAN DEFAULT 0,
-                    disabled_at TIMESTAMP
+                    disabled_at TIMESTAMP,
+                    consecutive_empty_runs INTEGER DEFAULT 0
                 )
             """)
+
+            # Migration: Add consecutive_empty_runs column if it doesn't exist
+            try:
+                conn.execute("ALTER TABLE council_health ADD COLUMN consecutive_empty_runs INTEGER DEFAULT 0")
+            except sqlite3.OperationalError:
+                pass
             
             # Scraper Stats table
             conn.execute("""
@@ -260,18 +267,33 @@ class Database:
                 'is_disabled': 0
             }
 
-    def record_success(self, council_id: str):
-        """Record a successful scrape."""
+    def record_success(self, council_id: str, articles_found: int = 0):
+        """
+        Record a successful scrape.
+        Also tracks consecutive empty runs for Zombie Scraper detection.
+        """
         with self._get_conn() as conn:
+            # Logic:
+            # If found > 0: Reset failures AND empty_runs
+            # If found == 0: Reset failures, Increment empty_runs
+            
+            # First get current empty runs to increment
+            cursor = conn.execute("SELECT consecutive_empty_runs FROM council_health WHERE council_id = ?", (council_id,))
+            row = cursor.fetchone()
+            current_empty = row['consecutive_empty_runs'] if row and row['consecutive_empty_runs'] else 0
+            
+            new_empty = 0 if articles_found > 0 else current_empty + 1
+            
             conn.execute("""
-                INSERT INTO council_health (council_id, consecutive_failures, last_success_at, is_disabled)
-                VALUES (?, 0, CURRENT_TIMESTAMP, 0)
+                INSERT INTO council_health (council_id, consecutive_failures, last_success_at, is_disabled, consecutive_empty_runs)
+                VALUES (?, 0, CURRENT_TIMESTAMP, 0, ?)
                 ON CONFLICT(council_id) DO UPDATE SET
                     consecutive_failures = 0,
                     last_success_at = CURRENT_TIMESTAMP,
                     is_disabled = 0,
-                    disabled_at = NULL
-            """, (council_id,))
+                    disabled_at = NULL,
+                    consecutive_empty_runs = ?
+            """, (council_id, new_empty, new_empty))
             conn.commit()
 
     def record_failure(self, council_id: str) -> bool:

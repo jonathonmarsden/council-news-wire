@@ -18,6 +18,10 @@ The most common task is adding a new council to the system.
 ### Step 2: Update Configuration
 Edit `states/{state}/councils.json` (e.g., `states/vic/councils.json`).
 
+**Important**: Ensure the configuration targets *Actual News*.
+- Avoid scraping "Lost & Found", "Road Closures", or "Events" pages unless they are part of the main news feed.
+- Bad titles (e.g., "Found Cat", "Agenda", "2026") are filtered by the global firewall, but it is better to avoid scraping them at the source.
+
 ```json
 {
     "id": "council-id-kebab-case",

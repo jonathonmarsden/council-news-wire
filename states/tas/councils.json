@@ -3,10 +3,10 @@
     {
       "id": "hobart",
       "name": "City of Hobart",
-      "news_url": "https://www.hobartcity.com.au/Council/News-and-publications/Media-releases",
+      "news_url": "https://www.hobartcity.com.au/Council/News-publications-and-announcements/Media-releases",
       "scraper": "curl_scraper",
       "enabled": true,
-      "item_selector": ".list-item-container",
+      "item_selector": ".list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
@@ -20,7 +20,7 @@
       "news_url": "https://www.launceston.tas.gov.au/News-Media",
       "scraper": "curl_scraper",
       "enabled": true,
-      "item_selector": ".list-item-container",
+      "item_selector": ".list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
@@ -30,7 +30,7 @@
     },
     {
       "id": "clarence",
-      "name": "Clarence City Council",
+      "name": "City of Clarence",
       "news_url": "https://www.ccc.tas.gov.au/latest-news/",
       "scraper": "card_scraper",
       "enabled": true,
@@ -43,7 +43,7 @@
     },
     {
       "id": "glenorchy",
-      "name": "Glenorchy City Council",
+      "name": "City of Glenorchy",
       "news_url": "https://www.gcc.tas.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": true,
@@ -56,11 +56,11 @@
     },
     {
       "id": "burnie",
-      "name": "Burnie City Council",
+      "name": "City of Burnie",
       "news_url": "https://www.burnie.tas.gov.au/Council/News",
       "scraper": "curl_scraper",
       "enabled": true,
-      "item_selector": ".list-item-container",
+      "item_selector": ".list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
@@ -70,7 +70,7 @@
     },
     {
       "id": "devonport",
-      "name": "Devonport City Council",
+      "name": "City of Devonport",
       "news_url": "https://www.devonport.tas.gov.au/feed/rss",
       "scraper": "rss_scraper",
       "enabled": true,
@@ -245,7 +245,7 @@
     },
     {
       "id": "glamorgan-spring-bay",
-      "name": "Glamorgan–Spring Bay Council",
+      "name": "Glamorgan Spring Bay Council",
       "news_url": "https://gsbc.tas.gov.au/services-facilities/media-releases/",
       "scraper": "curl_scraper",
       "enabled": true,
@@ -350,24 +350,24 @@
     },
     {
       "id": "waratah-wynyard",
-      "name": "Waratah\u2013Wynyard Council",
+      "name": "Waratah-Wynyard Council",
       "news_url": "https://www.warwyn.tas.gov.au/feed/feed/",
       "scraper": "rss_scraper",
-        "enabled": true,
-        "use_curl": true,
-        "population": 14325,
-        "region": "North West"
+      "enabled": true,
+      "use_curl": true,
+      "population": 14325,
+      "region": "North West"
     },
     {
       "id": "west-coast",
       "name": "West Coast Council",
       "news_url": "https://www.westcoast.tas.gov.au/rss",
       "scraper": "rss_scraper",
-        "enabled": true,
-        "content_selector": "div.elementor-post__excerpt",
-        "use_curl": true,
-        "population": 4205,
-        "region": "West Coast"
+      "enabled": true,
+      "content_selector": "div.elementor-post__excerpt",
+      "use_curl": true,
+      "population": 4205,
+      "region": "West Coast"
     }
   ]
 }

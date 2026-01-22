@@ -62,6 +62,11 @@ class CatalystScraper(BaseScraper):
             title = title_tag.get_text(strip=True)
             if not title:
                 continue
+
+            # Catalyst CMS sometimes puts the date in the h4 or similar class
+            # Reject titles that are just "Posted DD Month YYYY"
+            if title.lower().startswith('posted ') and any(c.isdigit() for c in title):
+                continue
                 
             # Date parsing
             date = None

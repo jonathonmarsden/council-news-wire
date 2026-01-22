@@ -4,5 +4,5 @@
   "bluesky_handle_env": "BLUESKY_HANDLE_TAS",
   "bluesky_password_env": "BLUESKY_PASSWORD_TAS",
   "timezone": "Australia/Hobart",
-  "hashtags": ["#LGNewsRoundup", "#TasCouncils", "#LocalGovTas"]
+  "hashtags": ["#LGNewsRoundup", "#LGTAS", "#TasCouncils"]
 }

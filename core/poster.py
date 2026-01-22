@@ -6,11 +6,38 @@ Handles authentication and posting news articles to BlueSky.
 
 import os
 import re
+import urllib.parse
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 
 from atproto import Client, models
 
+from core.validator import validate_post
+
+# State Tag Mappings
+STATE_PEAK_BODIES = {
+    'NSW': ['#LGNSW'],
+    'VIC': ['#VLGA', '#MAV'],
+    'QLD': ['#LGAQ'],
+    'SA': ['#LGASA'],
+    'WA': ['#WALGA'],
+    'TAS': ['#LGAT'],
+    'NT': ['#LGANT'],
+    'ACT': [],
+    'NAT': ['#ALGA']
+}
+
+STATE_COUNCILS_TAG = {
+    'NSW': '#NSWCouncils',
+    'VIC': '#VicCouncils',
+    'QLD': '#QldCouncils',
+    'SA': '#SACouncils',
+    'WA': '#WACouncils',
+    'TAS': '#TasCouncils',
+    'NT': '#NTCouncils',
+    'ACT': '',
+    'NAT': ''
+}
 
 class BlueSkyPoster:
     """Posts council news articles to BlueSky."""
@@ -30,6 +57,17 @@ class BlueSkyPoster:
         self.password = password
         self.client = None
         self._authenticated = False
+        self.state = self._detect_state(handle)
+
+    def _detect_state(self, handle: str) -> str:
+        """Derive state code from handle."""
+        if not handle: return 'NAT'
+        match = re.search(r'roundupnewsbot([a-z]+)', handle.lower())
+        if match:
+            code = match.group(1).upper()
+            if code in STATE_PEAK_BODIES:
+                return code
+        return 'NAT'
     
     def authenticate(self) -> bool:
         """
@@ -54,7 +92,7 @@ class BlueSkyPoster:
     
     def post_article(self, council_name: str, title: str, url: str, 
                      date: Optional[datetime] = None, excerpt: Optional[str] = None,
-                     hashtags: List[str] = None) -> Optional[str]:
+                     hashtags: List[str] = None, council_hashtag: Optional[str] = None) -> Optional[str]:
         """
         Post a news article to BlueSky.
         
@@ -81,7 +119,23 @@ class BlueSkyPoster:
             return None
         
         # Format the post text and get facets for clickable links
-        post_text, facets = self._format_post_with_facets(council_name, title, url, date, excerpt, hashtags)
+        post_text, facets, tags_list = self._format_post_with_facets(
+            council_name, title, url, date, excerpt, hashtags, council_hashtag
+        )
+
+        # Build simple facet spans for validation (byte offsets in text)
+        facet_spans = []
+        for facet in facets:
+            try:
+                facet_spans.append((facet.index.byte_start, facet.index.byte_end))
+            except Exception:
+                continue
+
+        # Run validator to catch malformed posts before sending
+        validation_errors = validate_post(post_text, title, excerpt or "", url, tags_list, facet_spans)
+        if validation_errors:
+            print(f"Skipping post: Validation failed for {council_name} ({'; '.join(validation_errors)})")
+            return None
         
         try:
             response = self.client.send_post(text=post_text, facets=facets)
@@ -150,7 +204,8 @@ class BlueSkyPoster:
     def _format_post_with_facets(self, council_name: str, title: str, url: str,
                                   date: Optional[datetime] = None, 
                                   excerpt: Optional[str] = None,
-                                  extra_hashtags: List[str] = None) -> tuple:
+                                  extra_hashtags: List[str] = None,
+                                  council_hashtag: Optional[str] = None) -> tuple:
         """
         Format the post text and generate facets for links/hashtags.
         
@@ -161,6 +216,13 @@ class BlueSkyPoster:
         [Council Name]
         [Hashtags]
         """
+        # 0. Enrich URL with UTM
+        # Check if URL already has query params
+        if '?' in url:
+            final_url = url + "&utm_source=council-news-bot&utm_medium=social&utm_campaign=news_roundup"
+        else:
+            final_url = url + "?utm_source=council-news-bot&utm_medium=social&utm_campaign=news_roundup"
+
         # 1. Title
         post_title = f"{title}\n"
         
@@ -173,11 +235,27 @@ class BlueSkyPoster:
             date_line = f"{date.strftime('%d %B %Y')}\n"
         
         # 4. Hashtags
-        council_tag = self._council_to_hashtag(council_name)
-        # Create a copy of the list to avoid modifying the original reference
-        tags_list = list(extra_hashtags) if extra_hashtags else ["#LocalGov"]
-        if council_tag not in tags_list:
-            tags_list.append(council_tag)
+        # Standard Set
+        tags_list = ["#LocalGov", "#LGNewsRoundup"]
+        
+        # State Peaks
+        if self.state in STATE_PEAK_BODIES:
+            tags_list.extend(STATE_PEAK_BODIES[self.state])
+            
+        # State Council Tag
+        if self.state in STATE_COUNCILS_TAG and STATE_COUNCILS_TAG[self.state]:
+            tags_list.append(STATE_COUNCILS_TAG[self.state])
+            
+        # Council Tag
+        c_tag = council_hashtag or self._council_to_hashtag(council_name)
+        if c_tag not in tags_list:
+            tags_list.append(c_tag)
+            
+        # Extra topics (deduplicated)
+        if extra_hashtags:
+            for t in extra_hashtags:
+                if t not in tags_list:
+                    tags_list.append(t)
         
         hashtags_str = " ".join(tags_list)
         
@@ -188,12 +266,14 @@ class BlueSkyPoster:
         
         # 5. Excerpt
         excerpt_text = ""
-        if excerpt and remaining > 20:
-            # Truncate excerpt if needed
-            if len(excerpt) > remaining:
-                excerpt_text = excerpt[:remaining-3] + "..."
+        # Improved logic: Prioritize excerpt inclusion
+        if excerpt and remaining > 50: # Ensure we have reasonable space
+            clean_excerpt = excerpt.strip().replace('\n', ' ')
+            # Truncate clean excerpt if needed
+            if len(clean_excerpt) > remaining:
+                excerpt_text = clean_excerpt[:remaining-4] + "..."
             else:
-                excerpt_text = excerpt
+                excerpt_text = clean_excerpt
             excerpt_text += "\n"
         
         # Construct full text
@@ -215,15 +295,12 @@ class BlueSkyPoster:
         facets = []
         
         # Link Facet for Title
-        # The title is at the start of the string
-        # We need to be careful. atproto expects byte indices relative to the full utf-8 encoded string.
-        
         # Title is at the start.
         title_text = post_title.strip()
         title_byte_len = len(title_text.encode('utf-8'))
         
         facets.append(models.AppBskyRichtextFacet.Main(
-            features=[models.AppBskyRichtextFacet.Link(uri=url)],
+            features=[models.AppBskyRichtextFacet.Link(uri=final_url)],
             index=models.AppBskyRichtextFacet.ByteSlice(byte_start=0, byte_end=title_byte_len)
         ))
         
@@ -248,5 +325,5 @@ class BlueSkyPoster:
                 index=models.AppBskyRichtextFacet.ByteSlice(byte_start=byte_start, byte_end=byte_end)
             ))
             
-        return full_text, facets
+        return full_text, facets, tags_list
 

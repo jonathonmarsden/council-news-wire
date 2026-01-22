@@ -1,81 +1,73 @@
 import json
-import os
+from pathlib import Path
 
-def load_rss_discoveries():
-    discoveries = []
-    if not os.path.exists("rss_discoveries.txt"):
-        return discoveries
-        
-    with open("rss_discoveries.txt", "r") as f:
-        for line in f:
-            parts = line.strip().split("|")
-            if len(parts) == 3:
-                discoveries.append({
-                    "state": parts[0],
-                    "id": parts[1],
-                    "rss_url": parts[2]
-                })
-    return discoveries
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-def apply_fixes(discoveries):
-    # Group by state to minimize file I/O
-    by_state = {}
-    for d in discoveries:
-        if d["state"] not in by_state:
-            by_state[d["state"]] = []
-        by_state[d["state"]].append(d)
+# Councils to update to RSS
+RSS_UPDATES = {
+    # NSW
+    "Georges River Council": {
+        "rss_url": "https://www.georgesriver.nsw.gov.au/Council/Media?rss=News",
+        "state": "nsw"
+    },
+    "Bogan Shire": {
+        "rss_url": "https://www.bogan.nsw.gov.au/news?format=feed&type=rss",
+        "state": "nsw"
+    },
+    "Inverell Shire": {
+        "rss_url": "https://inverell.nsw.gov.au/feed/",
+        "state": "nsw"
+    },
+    "Upper Lachlan Shire": {
+        "rss_url": "https://upperlachlan.nsw.gov.au/feed/",
+        "state": "nsw"
+    },
+    # QLD
+    "Bundaberg Council": {
+        "rss_url": "https://www.brcnow.bundaberg.qld.gov.au/feed/",
+        "state": "qld"
+    },
+    # WA
+    "Shire of Cocos (Keeling) Islands": {
+        "rss_url": "https://www.shire.cc/en/latest-news.feed?type=rss",
+        "state": "wa"
+    }
+}
+
+def update_councils():
+    # Group by state usually, but simple iteration is fine for small batch
+    
+    for name, update_data in RSS_UPDATES.items():
+        state = update_data['state']
+        rss_url = update_data['rss_url']
         
-    for state, items in by_state.items():
-        filepath = f"states/{state}/councils.json"
-        if not os.path.exists(filepath):
-            print(f"Warning: {filepath} not found.")
-            continue
-            
-        print(f"Updating {state} with {len(items)} RSS fixes...")
+        config_path = PROJECT_ROOT / 'states' / state / 'councils.json'
         
-        with open(filepath, "r") as f:
-            data = json.load(f)
-            
-        councils = data.get("councils", [])
-        updated_count = 0
-        
-        for item in items:
-            council_id = item["id"]
-            rss_url = item["rss_url"]
-            
-            found = False
-            for council in councils:
-                if council["id"] == council_id:
-                    print(f"  - Updating {council_id} -> {rss_url}")
-                    council["scraper"] = "rss_scraper"
-                    council["news_url"] = rss_url
-                    council["enabled"] = True
-                    # Clean up selector fields if they exist, as RSS doesn't need them
-                    keys_to_remove = ["item_selector", "title_selector", "date_selector", "link_selector", "use_curl"]
-                    for k in keys_to_remove:
-                        if k in council:
-                            del council[k]
-                    found = True
-                    updated_count += 1
-                    break
-            
-            if not found:
-                print(f"  - Warning: Council {council_id} not found in {filepath}")
+        try:
+            with open(config_path, 'r') as f:
+                data = json.load(f)
                 
-        if updated_count > 0:
-            with open(filepath, "w") as f:
-                json.dump(data, f, indent=2)
-            print(f"Saved {filepath}")
-
-def main():
-    discoveries = load_rss_discoveries()
-    if not discoveries:
-        print("No discoveries found in rss_discoveries.txt")
-        return
-        
-    print(f"Applying {len(discoveries)} RSS fixes...")
-    apply_fixes(discoveries)
-    print("Done.")
+            found = False
+            for council in data['councils']:
+                if council['name'] == name:
+                    print(f"Updating {name} to RSS...")
+                    # Set RSS URL
+                    council['rss_url'] = rss_url
+                    # Clear news_url to ensure factory picks RSS (or keep it for ref)
+                    # ScraperFactory picks RSS if rss_url exists.
+                    
+                    found = True
+                    break
+                    
+            if found:
+                with open(config_path, 'w') as f:
+                    json.dump(data, f, indent=4)
+                print(f"Saved {state}/councils.json")
+            else:
+                print(f"Could not find {name} in {state}")
+                
+        except Exception as e:
+            print(f"Error updating {name}: {e}")
 
 if __name__ == "__main__":
-    main()
+    update_councils()
