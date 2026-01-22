@@ -4,5 +4,5 @@
   "bluesky_handle_env": "BLUESKY_HANDLE_QLD",
   "bluesky_password_env": "BLUESKY_PASSWORD_QLD",
   "timezone": "Australia/Brisbane",
-  "hashtags": ["#LGNewsRoundup", "#LGAQ", "#QLDCouncils"]
+  "hashtags": []
 }
