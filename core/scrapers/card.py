@@ -28,8 +28,8 @@ class CardScraper(BaseScraper):
     DATE_SELECTOR = '.date, .published, time, .meta-date, .field--name-created, .news-date, .card__meta'
     EXCERPT_SELECTOR = '.card__description, .excerpt, .summary, .description, .field--name-body, .teaser, p'
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110"):
-        super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, mobile_mode, limit, proxy, impersonate)
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110", **kwargs):
+        super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, mobile_mode, limit, proxy, impersonate, **kwargs)
         self.selectors = selectors or {}
 
     def _get_clean_title(self, element) -> str:

@@ -15,9 +15,9 @@ class WannerooScraper(BaseScraper):
                  use_curl: bool = False, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
                  limit: Optional[int] = None, proxy: Optional[str] = None, 
-                 impersonate: str = "chrome110"):
+                 impersonate: str = "chrome110", **kwargs):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
-                         mobile_mode, limit, proxy, impersonate)
+                         mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
         html = self.fetch_page(self.news_url)
@@ -78,10 +78,10 @@ class PerthScraper(BaseScraper):
                  use_curl: bool = True, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
                  limit: Optional[int] = None, proxy: Optional[str] = None, 
-                 impersonate: str = "chrome110"):
+                 impersonate: str = "chrome110", **kwargs):
         # Force use_curl=True and impersonate
         super().__init__(council_id, council_name, news_url, use_curl=True, use_cloudscraper=False, 
-                         mobile_mode=mobile_mode, limit=limit, proxy=proxy, impersonate="chrome110")
+                         mobile_mode=mobile_mode, limit=limit, proxy=proxy, impersonate="chrome110", **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
         html = self.fetch_page(self.news_url)
@@ -147,9 +147,9 @@ class ClaremontScraper(BaseScraper):
                  use_curl: bool = True, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
                  limit: Optional[int] = None, proxy: Optional[str] = None, 
-                 impersonate: str = "chrome110"):
+                 impersonate: str = "chrome110", **kwargs):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
-                         mobile_mode, limit, proxy, impersonate)
+                         mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
         html = self.fetch_page(self.news_url)
@@ -213,9 +213,9 @@ class JoondalupScraper(BaseScraper):
                  use_curl: bool = True, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
                  limit: Optional[int] = None, proxy: Optional[str] = None, 
-                 impersonate: str = "chrome110"):
+                 impersonate: str = "chrome110", **kwargs):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
-                         mobile_mode, limit, proxy, impersonate)
+                         mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
         # API URL
@@ -332,9 +332,9 @@ class BelmontScraper(BaseScraper):
                  use_curl: bool = False, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
                  limit: Optional[int] = None, proxy: Optional[str] = None, 
-                 impersonate: str = "chrome110"):
+                 impersonate: str = "chrome110", **kwargs):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
-                         mobile_mode, limit, proxy, impersonate)
+                         mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
         api_url = "https://www.belmont.wa.gov.au/api/search/search"
