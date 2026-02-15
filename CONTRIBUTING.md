@@ -2,6 +2,13 @@
 
 We welcome contributions! This guide will help you add new councils, fix broken scrapers, and improve the core bot logic.
 
+## ⚠️ Quality Standards: No Silent Failures
+Our core mission is reliability. Scrapers must fail loud rather than fail silent.
+
+1.  **Crucial Selectors**: Ensure your `item_selector` targets exactly what you think it does. If the layout changes, we want an error, not 0 articles.
+2.  **Specific Over Generic**: Avoid generic selectors like `.col-12`, `.row`, or `.container` unless absolutely necessary.
+3.  **Local Testing**: Always verify with `python3 main.py --council <id> --dry-run` before committing.
+
 ## 1. Adding a New Council
 
 The most common task is adding a new council to the system.
@@ -20,7 +27,7 @@ Edit `states/{state}/councils.json` (e.g., `states/vic/councils.json`).
 
 **Important**: Ensure the configuration targets *Actual News*.
 - Avoid scraping "Lost & Found", "Road Closures", or "Events" pages unless they are part of the main news feed.
-- Bad titles (e.g., "Found Cat", "Agenda", "2026") are filtered by the global firewall, but it is better to avoid scraping them at the source.
+- Bad titles (e.g., "Agenda", "2026") are filtered by the global firewall, but it is better to avoid scraping them at the source.
 
 ```json
 {
@@ -75,8 +82,31 @@ If a site returns 403 Forbidden, enable `curl_cffi`:
 ```
 
 ### Custom Scrapers
-If `card_scraper` isn't enough (e.g., complex JavaScript, dates on detail pages), create a custom scraper.
+If `card_scraper` isn't enough (e.g., complex JavaScript, dates on detail pages), you have options:
 
+#### 1. JSON API Scraper (Preferred for Headless/Next.js)
+If the site uses a headless CMS (like Next.js) and calls an API to load news, check the Network tab in DevTools. If you find a JSON response with the news data:
+
+1.  Use `"scraper": "json_scraper"`.
+2.  Set `news_url` to the API endpoint URL.
+3.  Configure selectors using **dot key paths** (e.g., `fields.title`).
+
+```json
+{
+    "scraper": "json_scraper",
+    "news_url": "https://api.council.gov.au/news",
+    "item_selector": "items",           // Path to the list of articles in the JSON
+    "title_selector": "fields.title",   // Path to title within an item
+    "date_selector": "sys.createdAt",   // Path to date
+    "link_selector": "https://council.gov.au/news/{fields.slug}" // Template string supported
+}
+```
+
+#### 2. Browser Scraper (Heavy JS)
+Use `browser_scraper` if content is heavily rendered by React/Vue and no clean API exists. Note: This is slower and resource-intensive.
+
+#### 3. Custom Classes
+For bespoke logic:
 1.  Create a new file in `core/scrapers/custom.py` (or a new file in that directory).
 2.  Inherit from `CardScraper`.
 3.  Implement your logic (e.g., override `scrape()` or `_get_date()`).

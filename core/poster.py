@@ -4,6 +4,8 @@ BlueSky posting functionality for Council News Bot.
 Handles authentication and posting news articles to BlueSky.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import urllib.parse
@@ -114,12 +116,12 @@ class BlueSkyPoster:
         # SAFETY VALVE: Clean and validate title before posting
         title = self._sanitize_title(title)
         
-        if len(title) > 200:
+        if len(title) > 250:
             print(f"Skipping post: Title too long ({len(title)} chars). Check scraper for {council_name}.")
             return None
         
         # Format the post text and get facets for clickable links
-        post_text, facets, tags_list = self._format_post_with_facets(
+        post_text, facets, tags_list, used_excerpt = self._format_post_with_facets(
             council_name, title, url, date, excerpt, hashtags, council_hashtag
         )
 
@@ -132,10 +134,28 @@ class BlueSkyPoster:
                 continue
 
         # Run validator to catch malformed posts before sending
-        validation_errors = validate_post(post_text, title, excerpt or "", url, tags_list, facet_spans)
+        validation_errors = validate_post(post_text, title, used_excerpt, url, tags_list, facet_spans)
         if validation_errors:
-            print(f"Skipping post: Validation failed for {council_name} ({'; '.join(validation_errors)})")
-            return None
+            # RETRY LOGIC: If validation failed on excerpt, try dropping it
+            if any("Excerpt" in err for err in validation_errors):
+               print(f"Validation failed on excerpt for {council_name} ('{'; '.join(validation_errors)}'). Retrying without excerpt.")
+               # Regenerate without excerpt
+               post_text, facets, tags_list, used_excerpt = self._format_post_with_facets(
+                    council_name, title, url, date, None, hashtags, council_hashtag
+                )
+               # Re-calculate facets
+               facet_spans = []
+               for facet in facets:
+                    try:
+                        facet_spans.append((facet.index.byte_start, facet.index.byte_end))
+                    except Exception:
+                        continue
+               # Re-validate
+               validation_errors = validate_post(post_text, title, used_excerpt, url, tags_list, facet_spans)
+
+            if validation_errors:
+                print(f"Skipping post: Validation failed for {council_name} ({'; '.join(validation_errors)})")
+                return None
         
         try:
             response = self.client.send_post(text=post_text, facets=facets)
@@ -165,9 +185,11 @@ class BlueSkyPoster:
         # Patterns like "Fri 28 November", "03 December 2025", etc.
         import re
         date_patterns = [
-            r'^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+\d{1,2}\s+\w+\s*',  # "Fri 28 November"
-            r'^\d{1,2}\s+\w+\s+\d{4}\s*',  # "03 December 2025"
+            r'^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\s+[a-zA-Z]+\s+\d{4}\s*[-–:]*\s*',  # "Tuesday 20 January 2026" or "Tue 20 Jan 2026"
+            r'^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\s+[a-zA-Z]+\s*[-–:]*\s*',  # "Fri 28 November"
+            r'^\d{1,2}(?:st|nd|rd|th)?\s+[a-zA-Z]+\s+\d{4}\s*[-–:]*\s*',  # "03 December 2025" or "03 December 2025 - "
             r'^Published on \d{1,2} \w+ \d{4}\s*',  # "Published on 05 December 2025"
+            r'^\d{4}-\d{2}-\d{2}\s*[-–:]*\s*', # "2026-01-20 - "
         ]
         for pattern in date_patterns:
             title = re.sub(pattern, '', title, flags=re.IGNORECASE)
@@ -201,6 +223,45 @@ class BlueSkyPoster:
         hashtag = ''.join(word.capitalize() for word in words)
         return f"#{hashtag}"
     
+    def _add_tracking_params(self, url: str) -> str:
+        """
+        Add UTM tracking parameters to the URL.
+        
+        Promotes the sponsor (LG News Roundup) and identifies the specific feed.
+        """
+        if not url:
+            return url
+            
+        # Per policy: Promote sponsor and identify feed
+        params = {
+            "utm_source": "lgnewsroundup.com",
+            "utm_medium": "social",
+            "utm_campaign": "lg_news_roundup",
+            "utm_content": self.handle or "unknown-feed"
+        }
+        
+        try:
+            # Parse existing URL
+            parsed = urllib.parse.urlparse(url)
+            query = urllib.parse.parse_qs(parsed.query)
+            
+            # Merge new params (overwrite standard UTMs if present to ensure consistency)
+            for k, v in params.items():
+                query[k] = [v]
+                
+            # Rebuild
+            new_query = urllib.parse.urlencode(query, doseq=True)
+
+            # Ensure path is properly encoded (handles Unicode chars like ’ and –)
+            # Unquote first to avoid double-encoding if already encoded
+            safe_path = urllib.parse.quote(urllib.parse.unquote(parsed.path), safe='/')
+            
+            new_url = urllib.parse.urlunparse(parsed._replace(query=new_query, path=safe_path))
+            return new_url
+        except Exception as e:
+            print(f"Error adding UTM params: {e}")
+            return url
+
     def _format_post_with_facets(self, council_name: str, title: str, url: str,
                                   date: Optional[datetime] = None, 
                                   excerpt: Optional[str] = None,
@@ -217,11 +278,7 @@ class BlueSkyPoster:
         [Hashtags]
         """
         # 0. Enrich URL with UTM
-        # Check if URL already has query params
-        if '?' in url:
-            final_url = url + "&utm_source=council-news-bot&utm_medium=social&utm_campaign=news_roundup"
-        else:
-            final_url = url + "?utm_source=council-news-bot&utm_medium=social&utm_campaign=news_roundup"
+        final_url = self._add_tracking_params(url)
 
         # 1. Title
         post_title = f"{title}\n"
@@ -236,7 +293,7 @@ class BlueSkyPoster:
         
         # 4. Hashtags
         # Standard Set
-        tags_list = ["#LocalGov", "#LGNewsRoundup"]
+        tags_list = ["#LGNewsRoundup"]
         
         # State Peaks
         if self.state in STATE_PEAK_BODIES:
@@ -283,6 +340,7 @@ class BlueSkyPoster:
         # Ensure we are strictly under the limit
         if len(full_text) > self.MAX_POST_LENGTH:
              # If still too long, drop the excerpt entirely
+             excerpt_text = ""
              full_text = post_title + date_line + council_line + hashtags_str
              # If STILL too long, truncate title
              if len(full_text) > self.MAX_POST_LENGTH:
@@ -325,5 +383,5 @@ class BlueSkyPoster:
                 index=models.AppBskyRichtextFacet.ByteSlice(byte_start=byte_start, byte_end=byte_end)
             ))
             
-        return full_text, facets, tags_list
+        return full_text, facets, tags_list, excerpt_text.strip()
 

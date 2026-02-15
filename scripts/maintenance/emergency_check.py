@@ -1,19 +1,15 @@
-import sqlite3
 import os
 import sys
-import json
+from sqlalchemy import text
 
 # Add parent dir to path if needed
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-DB_PATH = '/opt/council-news-bot/data/bot.db'
-if not os.path.exists(DB_PATH):
-    # Fallback for local
-    DB_PATH = 'data/bot.db'
+from core.database import Database
 
 def check_recent_posts():
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Correct Schema: 
     # id, url, council_id, title, date, excerpt, state, first_seen_at, posted_at, posted_to_handle, status
@@ -22,15 +18,14 @@ def check_recent_posts():
     
     query = """
     SELECT id, council_id, title, date, status, posted_at, state, first_seen_at
-    FROM articles 
-    WHERE length(title) < 10 OR title GLOB '*[0-9][0-9]*'
-    ORDER BY id DESC 
+    FROM articles
+    WHERE length(title) < 10 OR title ~ '[0-9][0-9]'
+    ORDER BY id DESC
     LIMIT 50
     """
     
     try:
-        cursor.execute(query)
-        rows = cursor.fetchall()
+        rows = session.execute(text(query)).fetchall()
         
         print(f"{'ID':<8} | {'State':<5} | {'Council':<25} | {'First Seen':<16} | {'Status':<8} | Title")
         print("-" * 120)
@@ -55,7 +50,7 @@ def check_recent_posts():
     except Exception as e:
         print(f"Error: {e}")
 
-    conn.close()
+    session.close()
 
 if __name__ == "__main__":
     check_recent_posts()

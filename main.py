@@ -6,6 +6,8 @@ Scrapes news articles from Australian council websites and posts them to BlueSky
 Supports multiple states via the --state argument.
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
@@ -22,7 +24,13 @@ from dateutil import parser as date_parser
 
 # Optional Discord logging - fails silently if not configured
 try:
-    from discord_logger import log_post_success, log_error
+    from discord_logger import (
+        log_post_success, 
+        log_error, 
+        log_silent_failure, 
+        current_run,
+        reset_accumulator
+    )
     DISCORD_LOGGING = True
 except ImportError:
     DISCORD_LOGGING = False
@@ -31,6 +39,13 @@ from core.scrapers import CardScraper, NewsArticle, InnerWestScraper, RSSScraper
 from core.poster import BlueSkyPoster
 from core.database import Database
 from core.utils import setup_logging
+from core.timezone_utils import (
+    is_morning_window, 
+    get_recommended_concurrency,
+    STATE_TIMEZONES
+)
+from core.exceptions import ScrapeError, ConfigurationError
+from core.exceptions import ScrapeError, ConfigurationError
 
 # Constants
 MAX_ARTICLE_AGE_DAYS = 7
@@ -66,8 +81,8 @@ def load_hashtag_map() -> Dict[str, str]:
         with map_path.open() as f:
             data = json.load(f)
             return data.get('councils', {})
-    except Exception as exc:
-        print(f"Warning: Failed to load hashtag map: {exc}")
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"Warning: Failed to load hashtag map: {e}")
         return {}
 
 def get_scraper(council: Dict, proxy: Optional[str] = None) -> CardScraper:
@@ -109,7 +124,7 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
             db.log_scraper_run(council['id'], count, status, duration_ms)
             
         return articles
-    except Exception as e:
+    except ScrapeError as e:
         print(f"  Error scraping {council['name']}: {e}")
         if db:
             is_disabled = db.record_failure(council['id'])
@@ -144,12 +159,47 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
             try:
                 articles = future.result()
                 all_articles.extend(articles)
+
+                # Ensure accumulator counts councils processed even when no articles
+                if DISCORD_LOGGING:
+                    try:
+                        if len(articles) == 0:
+                            current_run.log_success(council.get('name', council.get('id')), 0, 0)
+                    except Exception as e:
+                        print(f"Warning: Failed to log discord accumulator: {e}")
+
+                # ALERTING: Check for Silent Failures (0 articles found)
+                if len(articles) == 0 and council.get('enabled', True):
+                    msg = f"⚠️ Silent Failure: {council['name']} returned 0 articles."
+                    print(msg)
+                    if DISCORD_LOGGING and db:
+                        try:
+                            # Check consecutive failures from DB to avoid flapping alerts
+                            health = db.get_council_health(council['id'])
+                            empty_runs = health.get('consecutive_empty_runs', 0)
+
+                            # Only alert if persistent (>= 3 runs) to reduce false positives
+                            if empty_runs >= 3:
+                                # log_error signature: log_error(council_name, error_message, context="")
+                                log_error(
+                                    council['name'],
+                                    f"Silent Failure (x{empty_runs}): Scraper returned 0 articles for {empty_runs} consecutive runs.\nCheck selectors or WAF blocking.\nURL: {council['news_url']}"
+                                )
+                        except (KeyError, AttributeError) as e:
+                            print(f"Warning: Failed to check health/log to discord: {e}")
             except Exception as e:
                 print(f"  Unhandled error scraping {council['name']}: {e}")
+                # Still count error councils in accumulator
+                if DISCORD_LOGGING:
+                    try:
+                        current_run.log_success(council.get('name', council.get('id')), 0, 0)
+                    except Exception as discord_err:
+                        print(f"Warning: Failed to log discord stats: {discord_err}")
             
     return all_articles
 
-import re
+from core.constants import GARBAGE_TITLES, GENERIC_TITLES, ADDRESS_MARKERS
+
 def is_valid_article(article_obj) -> bool:
     """
     Check if article content looks like a real news item.
@@ -175,13 +225,12 @@ def is_valid_article(article_obj) -> bool:
         return False
         
     # reject generic site navigation
-    generic_terms = {'home', 'sitemap', 'contact us', 'privacy policy', 'accessibility', 'search', 'news'}
-    if title.lower() in generic_terms:
+    if title.lower() in GENERIC_TITLES:
         return False
         
     # reject address-like titles (e.g. "Lot 112 Smith St")
     # Simple heuristic: Starts with digit, contains "Street", "Road", "Lot"
-    if title[0].isdigit() and any(x in title.lower() for x in ['street', 'road', 'avenue', ' lot ', 'highway', ' dr ', ' drive']):
+    if title[0].isdigit() and any(x in title.lower() for x in ADDRESS_MARKERS):
         return False
 
     # reject metadata titles (e.g. "Posted 04 December 2025")
@@ -193,17 +242,7 @@ def is_valid_article(article_obj) -> bool:
         return False
 
     # reject common garbage and non-news items
-    garbage_phrases = {
-        'found cat', 
-        'found dog', 
-        'lost cat',
-        'lost dog',
-        'ato image', 
-        'no title',
-        'untitled'
-    }
-    
-    if title.lower() in garbage_phrases:
+    if title.lower() in GARBAGE_TITLES:
         return False
 
     return True
@@ -254,6 +293,19 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str,
     
     total_found = len(articles)
     total_new_db = new_fresh_count + new_archived_count
+    
+    # Update logger stats with found count per council
+    if DISCORD_LOGGING:
+        tally = {}
+        for a in articles:
+            cid = a.council_id
+            if cid not in tally:
+                tally[cid] = {'name': a.council_name, 'count': 0}
+            tally[cid]['count'] += 1
+            
+        for cid, data in tally.items():
+            current_run.log_success(data['name'], data['count'], 0)
+
     duplicates = total_found - total_new_db
             
     print(f"Processing Summary: Found {total_found} total")
@@ -313,8 +365,8 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
         if article.get('date'):
             try:
                 article_date = date_parser.parse(article['date'])
-            except Exception:
-                pass
+            except (ValueError, TypeError) as e:
+                print(f"Warning: Failed to parse date '{article.get('date')}': {e}")
         
         # VALIDATION CHECK: Prevent posting malformed/garbage articles
         if not is_valid_article(article):
@@ -355,16 +407,19 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             # Log to Discord for real-time monitoring
             if DISCORD_LOGGING:
                 try:
+                    # Log to feed
                     log_post_success(
                         council_name, 
                         article['title'], 
                         article['url'], 
                         post_uri,
                         date=article_date,
-                        hashtags=hashtags
+                        hashtags=tags_for_post
                     )
-                except Exception as log_err:
-                    print(f"Discord log failed: {log_err}")
+                    # Update summary stats
+                    current_run.articles_posted += 1
+                except (AttributeError, KeyError, TypeError) as log_err:
+                    print(f"Warning: Discord log failed: {log_err}")
             
             # Rate limiting delay
             if posted_count < len(articles):
@@ -387,14 +442,44 @@ def main():
     parser.add_argument('--concurrency', type=int, default=5, help='Number of concurrent scrapers')
     parser.add_argument('--council', type=str, help='Run for a specific council ID only')
     parser.add_argument('--force-fresh', action='store_true', help='Bypass 7-day freshness check (force post old articles)')
+    parser.add_argument('--time-window', type=str, choices=['morning', 'evening'], 
+                        help='Times window for dynamic concurrency reduction (passed by cron)')
     
     args = parser.parse_args()
     
+    # Reset logger for new run
+    if DISCORD_LOGGING:
+        reset_accumulator()
+
     # Determine proxy: CLI arg > Env Var > None
     proxy_url = args.proxy or os.environ.get('COUNCIL_BOT_PROXY')
     
     state_code = args.state.upper()
     
+    # Determine if currently in morning window and apply dynamic concurrency
+    is_morning = False
+    if args.time_window == 'morning':
+        # Explicitly flagged as morning (from cron)
+        is_morning = True
+    elif args.time_window == 'evening':
+        # Explicitly flagged as evening (from cron)
+        is_morning = False
+    else:
+        # Auto-detect: check current time in state's timezone
+        if state_code in STATE_TIMEZONES:
+            tz = STATE_TIMEZONES[state_code]
+            now_local = datetime.now(tz)
+            is_morning = is_morning_window(now_local.hour, now_local.minute)
+    
+    # Apply dynamic concurrency if needed
+    if is_morning and args.concurrency == 5:  # Only override if using default concurrency
+        recommended = get_recommended_concurrency(state_code, is_morning=True)
+        args.concurrency = recommended
+        print(f"🕐 Morning window detected: Reducing concurrency from 5 to {recommended} to manage load")
+    elif is_morning:
+        print(f"🕐 Morning window detected: Using requested concurrency {args.concurrency}")
+    
+
     # Auto-detect state if council is specified but not found in default state
     if args.council:
         # First try the requested/default state
@@ -407,9 +492,9 @@ def main():
                     break
             
             if not found:
-                raise ValueError("Not found in current state")
+                raise ConfigurationError(f"Council '{args.council}' not found in {state_code}")
                 
-        except ValueError:
+        except ConfigurationError:
             # Not found in default state, search others
             found_state = None
             print(f"Council '{args.council}' not found in {state_code}, searching other states...")
@@ -430,7 +515,8 @@ def main():
                             found_state = s_code
                             print(f"Found '{args.council}' in {found_state}")
                             break
-                except Exception:
+                except (ConfigurationError, IOError) as e:
+                    print(f"Debug: Could not load {s_code}: {e}")
                     continue
                 
                 if found_state:
@@ -446,7 +532,7 @@ def main():
         # Standard load
         try:
             state_data = load_state_config(state_code)
-        except ValueError as e:
+        except ConfigurationError as e:
             print(f"Error: {e}")
             sys.exit(1)
             
@@ -486,6 +572,10 @@ def main():
                   limit=args.limit, 
                   dry_run=args.dry_run,
                   max_per_council=args.max_per_council)
+
+    # Log summary at the end of run
+    if DISCORD_LOGGING and not args.council: # Don't log summary for single council runs
+        current_run.send_summary(state_code)
 
 if __name__ == "__main__":
     main()

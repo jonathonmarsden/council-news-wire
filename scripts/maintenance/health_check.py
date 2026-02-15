@@ -10,26 +10,19 @@ Analyzes the database and configuration to identify:
 
 import json
 import os
-import sqlite3
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
+from sqlalchemy import select, func
 
 # Add project root to path
 # Go up 3 levels: scripts/maintenance/health_check.py -> scripts/maintenance -> scripts -> root
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_root)
 
-from core.config import DB_PATH, CONFIG_PATHS
-
-def get_db_connection():
-    if not DB_PATH.exists():
-        print(f"Database not found at {DB_PATH}")
-        sys.exit(1)
-        
-    conn = sqlite3.connect(str(DB_PATH))
-    conn.row_factory = sqlite3.Row
-    return conn
+from core.config import CONFIG_PATHS
+from core.database import Database
+from core.models import Article
 
 def load_all_councils():
     """Load all configured councils from JSON files."""
@@ -48,19 +41,29 @@ def load_all_councils():
     return councils
 
 def generate_report():
-    conn = get_db_connection()
+    db = Database()
+    session = db.get_session()
     configured_councils = load_all_councils()
     
     print(f"Analyzing {len(configured_councils)} configured councils...")
     
     # Get last seen date for each council
-    cursor = conn.execute("""
-        SELECT council_id, state, MAX(first_seen_at) as last_seen, COUNT(*) as article_count
-        FROM articles
-        GROUP BY council_id
-    """)
-    
-    db_stats = {row['council_id']: dict(row) for row in cursor.fetchall()}
+    stats_stmt = select(
+        Article.council_id,
+        Article.state,
+        func.max(Article.first_seen_at),
+        func.count(Article.id)
+    ).group_by(Article.council_id, Article.state)
+
+    db_stats = {
+        row[0]: {
+            "council_id": row[0],
+            "state": row[1],
+            "last_seen": row[2],
+            "article_count": row[3]
+        }
+        for row in session.execute(stats_stmt).all()
+    }
     
     # Analysis
     healthy = []
@@ -79,13 +82,10 @@ def generate_report():
             dead.append(config)
             continue
             
-        last_seen_str = stats['last_seen']
-        # Handle potential different date formats in DB
-        try:
-            last_seen = datetime.fromisoformat(last_seen_str)
-        except ValueError:
-            # Fallback for simple string dates if any
-            last_seen = datetime.strptime(last_seen_str.split('.')[0], "%Y-%m-%d %H:%M:%S")
+        last_seen = stats['last_seen']
+        if not last_seen:
+            dead.append(config)
+            continue
             
         days_since = (now - last_seen).days
         
@@ -93,7 +93,7 @@ def generate_report():
             'name': config['name'],
             'state': config['state'],
             'days_since': days_since,
-            'last_seen': last_seen_str,
+            'last_seen': last_seen.isoformat(),
             'count': stats['article_count']
         }
         
@@ -129,6 +129,8 @@ def generate_report():
             
     print(f"Report generated at {report_file}")
     print(f"Summary: {len(healthy)} Healthy, {len(stale)} Stale, {len(dead)} Dead")
+
+    session.close()
 
 if __name__ == "__main__":
     generate_report()

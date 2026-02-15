@@ -2,7 +2,6 @@ import json
 import os
 import re
 import glob
-import sqlite3
 from datetime import datetime, timedelta
 import sys
 

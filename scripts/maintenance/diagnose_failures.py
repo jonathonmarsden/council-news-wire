@@ -1,17 +1,18 @@
 import json
 import os
 import sys
-import sqlite3
 import glob
 import concurrent.futures
 import subprocess
 import time
 from datetime import datetime
+from sqlalchemy import select
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from core.database import Database
+from core.models import Article
 from core.scrapers import ScraperFactory
 
 def get_never_seen_councils(target_ids=None):
@@ -50,10 +51,9 @@ def get_never_seen_councils(target_ids=None):
     # I will try to run a quick check on a subset.
     
     # Let's filter for councils that have 0 articles in the DB.
-    with sqlite3.connect("bot.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT DISTINCT council_id FROM articles")
-        seen_ids = {row[0] for row in cursor.fetchall()}
+    with db.get_session() as session:
+        rows = session.execute(select(Article.council_id).distinct()).all()
+        seen_ids = {row[0] for row in rows}
         
     never_seen = [c for c in councils if c['id'] not in seen_ids]
     return never_seen

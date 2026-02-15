@@ -1,16 +1,15 @@
-
 import os
 import sys
-import sqlite3
 import re
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from atproto import Client
+from sqlalchemy import select, update
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from core.database import Database
+from core.models import Article
 
 def delete_malformed_warren_posts():
     # Load environment variables
@@ -27,14 +26,8 @@ def delete_malformed_warren_posts():
     client = Client()
     client.login(handle, password)
     
-    # Connect to DB
-    db_path = "bot.db"
-    if not os.path.exists(db_path):
-        print(f"Database not found at {db_path}")
-        return
-        
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     print("Fetching recent posts...")
     # Get author feed
@@ -85,10 +78,10 @@ def delete_malformed_warren_posts():
                 
         if url and not is_malformed:
             # Check if DB has a cleaner title
-            cursor.execute("SELECT title FROM articles WHERE url = ?", (url,))
-            row = cursor.fetchone()
-            if row:
-                clean_title = row[0]
+            clean_title = session.execute(
+                select(Article.title).where(Article.url == url)
+            ).scalar_one_or_none()
+            if clean_title:
                 # If the post text starts with the clean title but has extra chars immediately after
                 if text.startswith(clean_title):
                     remainder = text[len(clean_title):]
@@ -121,12 +114,12 @@ def delete_malformed_warren_posts():
     # Reset posted_at in DB
     if repost_queue:
         print(f"Resetting {len(repost_queue)} articles in database for reposting...")
-        placeholders = ','.join(['?'] * len(repost_queue))
-        cursor.execute(f"UPDATE articles SET posted_at = NULL WHERE url IN ({placeholders})", repost_queue)
-        conn.commit()
+        update_stmt = update(Article).where(Article.url.in_(repost_queue)).values(posted_at=None)
+        session.execute(update_stmt)
+        session.commit()
         print("Database updated.")
-    
-    conn.close()
+
+    session.close()
 
 if __name__ == "__main__":
     delete_malformed_warren_posts()

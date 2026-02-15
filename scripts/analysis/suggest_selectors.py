@@ -9,6 +9,7 @@ import json
 import os
 import sys
 import requests
+from sqlalchemy import text
 import concurrent.futures
 from bs4 import BeautifulSoup
 from pathlib import Path
@@ -44,9 +45,9 @@ def get_dead_councils():
     councils = load_all_councils()
     dead_councils = []
     
-    with db._get_conn() as conn:
-        cursor = conn.execute("SELECT DISTINCT council_id FROM articles")
-        active_ids = {row[0] for row in cursor.fetchall()}
+    with db.get_session() as session:
+        result = session.execute(text("SELECT DISTINCT council_id FROM articles"))
+        active_ids = {row[0] for row in result.fetchall()}
         
     for c_id, config in councils.items():
         if not config.get('enabled', True):

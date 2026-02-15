@@ -1,19 +1,23 @@
-import sqlite3
 from datetime import datetime, timedelta
 import sys
 import os
+from sqlalchemy import select, text
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from core.database import Database
+from core.models import Article
+
 def analyze_backlog_freshness():
-    conn = sqlite3.connect('bot.db')
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Get all unposted articles
-    cursor.execute("SELECT id, title, date, council_id, state FROM articles WHERE posted_at IS NULL")
-    rows = cursor.fetchall()
+    rows = session.execute(
+        select(Article.id, Article.title, Article.date, Article.council_id, Article.state)
+        .where(Article.posted_at.is_(None))
+    ).all()
     
     now = datetime.now()
     cutoff_7_days = now - timedelta(days=7)
@@ -30,7 +34,7 @@ def analyze_backlog_freshness():
     print("-" * 60)
     
     for row in rows:
-        date_str = row['date']
+        date_str = row[2]
         if not date_str:
             no_date_count += 1
             continue
@@ -70,17 +74,23 @@ def analyze_backlog_freshness():
     
     if old_count > 0:
         print("\nTop 'Old' Councils:")
-        cursor.execute("""
-            SELECT council_id, COUNT(*) as c 
-            FROM articles 
-            WHERE posted_at IS NULL 
-            AND date < date('now', '-30 days')
-            GROUP BY council_id 
-            ORDER BY c DESC 
-            LIMIT 5
-        """)
-        for row in cursor.fetchall():
-            print(f"- {row['council_id']}: {row['c']}")
+        rows = session.execute(
+            text(
+                """
+                SELECT council_id, COUNT(*) as c
+                FROM articles
+                WHERE posted_at IS NULL
+                AND date < (current_date - interval '30 days')::text
+                GROUP BY council_id
+                ORDER BY c DESC
+                LIMIT 5
+                """
+            )
+        ).fetchall()
+        for row in rows:
+            print(f"- {row[0]}: {row[1]}")
+
+    session.close()
 
 if __name__ == "__main__":
     analyze_backlog_freshness()

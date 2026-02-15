@@ -8,20 +8,22 @@ Automated scraper and BlueSky poster for Australian local government news and me
 [![Coverage](https://img.shields.io/badge/councils-540%2F541-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.9+-blue)]()
 
+> **Latest Update (Feb 2026):** Transitioned to twice-daily scraping schedule (06:00 & 18:00 local per state) with dynamic concurrency reduction during morning peak. Reduced load by 75% while maintaining coverage. See [SCHEDULING_GUIDE.md](SCHEDULING_GUIDE.md) for details.
+
 ## Overview
 
 Council News Bot monitors news pages from local councils across **all 8 Australian States & Territories**:
 *   **Victoria (VIC)** - 79 councils
 *   **New South Wales (NSW)** - 128 councils
-*   **Queensland (QLD)** - 78 councils
+*   **Queensland (QLD)** - 77 councils
 *   **Western Australia (WA)** - 138 councils
 *   **Tasmania (TAS)** - 29 councils
-*   **South Australia (SA)** - 69 councils
+*   **South Australia (SA)** - 68 councils
 *   **Northern Territory (NT)** - 18 councils
 *   **Australian Capital Territory (ACT)** - 1 entity
 
-**100% configured** (540/540 available councils in codebase).
-*   **Healthy Status (Jan 22, 2026):** 87.2% (471 councils) actively returning news.
+**100% configured** (538/538 available councils in codebase).
+*   **Healthy Status (Jan 22, 2026):** 87.2% (469 councils) actively returning news.
 *   **State Health:** TAS (100%), ACT (100%), VIC (97.5%), SA (89.9%), QLD (89.7%), NSW (87.5%), NT (83.3%), WA (76.1%).
 *   **Scraper Strategy:** Uses a mix of `curl` (VIC, QLD, NSW) and custom CMS scrapers (WA Catalyst, OpenCities) to maximize reliability.
 
@@ -40,6 +42,7 @@ It is designed to be resilient, scalable, and polite:
 - **"Record Everything"**: Tracks all articles (even old ones) to monitor scraper health.
 - **Automated Posting**: Runs 24/7 on VPS via Docker.
 - **BlueSky Integration**: Posts with clickable titles, excerpts, and hashtags.
+- **Link Attribution**: Automatically appends UTM parameters (`utm_source=lgnewsroundup.com`, `utm_content=[feed_handle]`) to promote the service and identify traffic sources for councils.
 - **Post Validator**: Enforces title/excerpt length, hashtag count/order, URL hygiene, and facet spans before posting.
 - **Canonical Hashtags**: State peaks plus per-council tags are generated from configs (`docs/hashtags_map.json`).
 - **Deduplication**: Tracks posted articles to avoid duplicates.
@@ -91,7 +94,7 @@ council-news-bot/
 ├── states/                 # Configuration by State (JSON files)
 ├── scripts/                # Utility scripts (maintenance, deployment, analysis)
 ├── main.py                 # CLI Entry Point
-└── scheduler.py            # Main Service Loop
+└── scheduler.py            # (Legacy) Internal Scheduler - See DEPLOYMENT.md
 ```
 
 ## Commands
@@ -116,7 +119,22 @@ python main.py --post-only
 ## Deployment
 
 The bot is deployed on a DigitalOcean VPS running Ubuntu.
-See `docs/DEPLOY_TO_DIGITALOCEAN.md` for deployment instructions.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for deployment instructions.
+
+## Scheduling (Twice-Daily)
+
+As of February 2026, the bot runs on a **twice-daily schedule** per state:
+- **Morning:** 06:00 local time (with reduced concurrency during 06:00–08:30 to manage load)
+- **Evening:** 18:00 local time (with standard concurrency)
+
+Each state's times are automatically adjusted for daylight savings and local timezone offset.
+
+For comprehensive scheduling details, timezone handling, and DST management, see [SCHEDULING_GUIDE.md](SCHEDULING_GUIDE.md).
+
+To generate the production crontab:
+```bash
+python3 scripts/deployment/generate_crontab.py --static
+```
 
 ## Council Status
 

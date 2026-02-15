@@ -8,34 +8,37 @@ This fixes the issue where initial scrapes might have grabbed years of history.
 
 import sys
 import os
-import sqlite3
 from datetime import datetime, timedelta
+from sqlalchemy import text
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from core.config import DB_PATH
+from core.database import Database
 
 def archive_old_articles(days=30):
     """Archive articles older than `days`."""
     cutoff_date = (datetime.now() - timedelta(days=days)).strftime('%Y-%m-%d')
     print(f"Archiving unposted articles older than {cutoff_date}...")
-    
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+
+    db = Database()
+    session = db.get_session()
     
     # Check count first
-    cursor.execute("""
-        SELECT count(*), council_id 
-        FROM articles 
-        WHERE posted_at IS NULL 
-        AND status != 'archived' 
-        AND date < ?
-        GROUP BY council_id
-        ORDER BY count(*) DESC
-    """, (cutoff_date,))
-    
-    results = cursor.fetchall()
+    results = session.execute(
+        text(
+            """
+            SELECT count(*), council_id
+            FROM articles
+            WHERE posted_at IS NULL
+            AND status != 'archived'
+            AND date < :cutoff
+            GROUP BY council_id
+            ORDER BY count(*) DESC
+            """
+        ),
+        {"cutoff": cutoff_date}
+    ).fetchall()
     
     if not results:
         print("No old articles found to archive.")
@@ -52,17 +55,21 @@ def archive_old_articles(days=30):
         return
 
     # Execute update
-    cursor.execute("""
-        UPDATE articles 
-        SET status = 'archived' 
-        WHERE posted_at IS NULL 
-        AND status != 'archived' 
-        AND date < ?
-    """, (cutoff_date,))
-    
-    conn.commit()
-    print(f"\nSuccessfully archived {cursor.rowcount} articles.")
-    conn.close()
+    result = session.execute(
+        text(
+            """
+            UPDATE articles
+            SET status = 'archived'
+            WHERE posted_at IS NULL
+            AND status != 'archived'
+            AND date < :cutoff
+            """
+        ),
+        {"cutoff": cutoff_date}
+    )
+    session.commit()
+    print(f"\nSuccessfully archived {result.rowcount} articles.")
+    session.close()
 
 if __name__ == "__main__":
     # Default to 30 days to be safe, but for the backlog issue we saw (2018), this is perfect.

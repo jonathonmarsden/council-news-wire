@@ -1,14 +1,17 @@
-import sqlite3
 import sys
 import os
+from datetime import datetime, timedelta, timezone
+from sqlalchemy import select, update, func
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from core.database import Database
+from core.models import Article
+
 def reset_posted_status():
-    db_path = "bot.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # The councils we saw in the cleanup output that had malformed posts
     # Note: The hashtags were accumulating, so the councils *generating* the posts were the ones 
@@ -30,15 +33,17 @@ def reset_posted_status():
     print("Checking for articles posted in the last 3 hours...")
     
     # Get count of articles posted recently
-    cursor.execute("""
-        SELECT count(*), council_id 
-        FROM articles 
-        WHERE posted_at > datetime('now', '-3 hours') 
-        AND state = 'NSW'
-        GROUP BY council_id
-    """)
-    
-    rows = cursor.fetchall()
+    cutoff_time = datetime.now(timezone.utc) - timedelta(hours=3)
+
+    recent_stmt = select(
+        func.count(Article.id),
+        Article.council_id
+    ).where(
+        Article.posted_at > cutoff_time,
+        Article.state == 'NSW'
+    ).group_by(Article.council_id)
+
+    rows = session.execute(recent_stmt).all()
     print("\nRecently posted articles by council:")
     for count, council_id in rows:
         print(f"  {council_id}: {count}")
@@ -46,17 +51,16 @@ def reset_posted_status():
     # Ask for confirmation (simulated here by just doing it since I'm an agent)
     print("\nResetting posted status for these articles...")
     
-    cursor.execute("""
-        UPDATE articles 
-        SET posted_at = NULL, posted_to_handle = NULL
-        WHERE posted_at > datetime('now', '-3 hours') 
-        AND state = 'NSW'
-    """)
-    
-    print(f"Reset {cursor.rowcount} articles.")
-    
-    conn.commit()
-    conn.close()
+    update_stmt = update(Article).where(
+        Article.posted_at > cutoff_time,
+        Article.state == 'NSW'
+    ).values(posted_at=None, posted_to_handle=None)
+
+    result = session.execute(update_stmt)
+    print(f"Reset {result.rowcount} articles.")
+
+    session.commit()
+    session.close()
 
 if __name__ == "__main__":
     reset_posted_status()

@@ -3,8 +3,11 @@ import os
 import glob
 from collections import Counter, defaultdict
 from pathlib import Path
-import sqlite3
 import datetime
+from sqlalchemy import select, func
+
+from core.database import Database
+from core.models import Article
 
 def analyze_states():
     root_dir = Path("states")
@@ -23,25 +26,19 @@ def analyze_states():
     print(f"Analyzing {len(states)} states: {', '.join(states)}\n")
     
     # Try connecting to DB for last success data
-    db_path = "bot.db"
     db_data = {}
     try:
-        if os.path.exists(db_path):
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            # Get success counts/dates if table exists
-            try:
-                # Check for last_posted or similar stats if available, 
-                # but usually we might just check scraped_articles count per council if available.
-                # The schema isn't fully known, so I'll be conservative. 
-                # I'll check 'articles' table.
-                cursor.execute("SELECT council_id, COUNT(*), MAX(found_date) FROM articles GROUP BY council_id")
-                rows = cursor.fetchall()
-                for r in rows:
-                    db_data[r[0]] = {'count': r[1], 'last_seen': r[2]}
-            except Exception as e:
-                print(f"DB Error (articles table): {e}")
-            conn.close()
+        db = Database()
+        with db.get_session() as session:
+            rows = session.execute(
+                select(
+                    Article.council_id,
+                    func.count(Article.id),
+                    func.max(Article.first_seen_at)
+                ).group_by(Article.council_id)
+            ).all()
+            for r in rows:
+                db_data[r[0]] = {'count': r[1], 'last_seen': r[2]}
     except Exception as e:
         print(f"DB connection failed: {e}")
 

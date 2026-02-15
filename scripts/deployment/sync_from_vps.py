@@ -3,8 +3,8 @@
 Sync database and/or code changes FROM the VPS back to local.
 
 Usage:
-    python scripts/deployment/sync_from_vps.py          # Sync database only (safe default)
-    python scripts/deployment/sync_from_vps.py --code   # Also pull any code changes from VPS
+    python scripts/deployment/sync_from_vps.py           # Sync database (pg_dump)
+    python scripts/deployment/sync_from_vps.py --code    # Also pull any code changes from VPS
     python scripts/deployment/sync_from_vps.py --dry-run # Show what would be synced
 """
 
@@ -13,7 +13,6 @@ import os
 import sys
 import time
 import argparse
-import shutil
 from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -62,18 +61,11 @@ def run_with_password(command: str) -> bool:
     return True
 
 
-def backup_local_db():
-    """Create a backup of the local database before overwriting."""
-    local_db = os.path.join(LOCAL_DIR, "bot.db")
-    if os.path.exists(local_db):
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_dir = os.path.join(LOCAL_DIR, "backups")
-        os.makedirs(backup_dir, exist_ok=True)
-        backup_path = os.path.join(backup_dir, f"bot_local_{timestamp}.db")
-        shutil.copy2(local_db, backup_path)
-        print(f"✓ Backed up local database to: backups/bot_local_{timestamp}.db")
-        return backup_path
-    return None
+def ensure_dump_dir() -> str:
+    """Ensure a local directory exists for DB dumps."""
+    dump_dir = os.path.join(LOCAL_DIR, "db_dumps")
+    os.makedirs(dump_dir, exist_ok=True)
+    return dump_dir
 
 
 def sync_database(dry_run: bool = False):
@@ -83,25 +75,24 @@ def sync_database(dry_run: bool = False):
     ssh_opts = "-o PreferredAuthentications=password -o PubkeyAuthentication=no -o StrictHostKeyChecking=no"
     
     if dry_run:
-        # Just show remote DB info
-        cmd = f'ssh {ssh_opts} {USER}@{HOST} "ls -lh {TARGET_DIR}/bot.db* 2>/dev/null || echo No database found"'
-        print(f"Would sync: {TARGET_DIR}/bot.db → {LOCAL_DIR}/bot.db")
+        cmd = f'ssh {ssh_opts} {USER}@{HOST} "cd {TARGET_DIR} && docker compose exec -T db psql -U councilbot -d council_news -c \\\"select count(*) as total_articles from articles;\\\""'
+        print("Would sync: Postgres pg_dump → local db_dumps/")
         run_with_password(cmd)
         return
-    
-    # Backup local first
-    backup_local_db()
-    
-    # Copy database files (including WAL if present)
-    for db_file in ["bot.db", "bot.db-shm", "bot.db-wal"]:
-        remote_path = f"{TARGET_DIR}/{db_file}"
-        local_path = os.path.join(LOCAL_DIR, db_file)
-        
-        cmd = f'scp {ssh_opts} {USER}@{HOST}:{remote_path} {local_path}'
-        print(f"Pulling {db_file}...")
-        run_with_password(cmd)
-    
-    print("✓ Database synced from VPS")
+
+    dump_dir = ensure_dump_dir()
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    local_dump = os.path.join(dump_dir, f"council_news_{timestamp}.sql")
+
+    cmd = (
+        f'ssh {ssh_opts} {USER}@{HOST} "cd {TARGET_DIR} && '
+        f'docker compose exec -T db pg_dump -U councilbot council_news" '
+        f'> {local_dump}'
+    )
+    print(f"Dumping Postgres to {local_dump}...")
+    run_with_password(cmd)
+
+    print("✓ Database dump synced from VPS")
 
 
 def sync_code(dry_run: bool = False):
@@ -113,7 +104,7 @@ def sync_code(dry_run: bool = False):
     
     if dry_run:
         # Show what's different
-        cmd = f'ssh {ssh_opts} {USER}@{HOST} "cd {TARGET_DIR} && find . -name \"*.py\" -newer bot.db -type f 2>/dev/null | head -20"'
+        cmd = f'ssh {ssh_opts} {USER}@{HOST} "cd {TARGET_DIR} && find . -name \"*.py\" -mtime -1 -type f 2>/dev/null | head -20"'
         print("Recently modified Python files on VPS:")
         run_with_password(cmd)
         return
@@ -142,16 +133,16 @@ def show_vps_status():
     """Show current VPS database stats."""
     print("\n=== VPS Database Status ===")
     ssh_opts = "-o PreferredAuthentications=password -o PubkeyAuthentication=no -o StrictHostKeyChecking=no"
-    
+
     cmd = f'''ssh {ssh_opts} {USER}@{HOST} "cd {TARGET_DIR} && \\
         echo '--- Database size ---' && \\
-        ls -lh bot.db 2>/dev/null && \\
+        docker compose exec -T db psql -U councilbot -d council_news -c \\\"select pg_size_pretty(pg_database_size('council_news'));\\\" && \\
         echo '' && \\
         echo '--- Article counts ---' && \\
-        sqlite3 bot.db 'SELECT state, COUNT(*) as count FROM articles GROUP BY state ORDER BY count DESC;' 2>/dev/null && \\
+        docker compose exec -T db psql -U councilbot -d council_news -c \\\"select state, count(*) as count from articles group by state order by count desc;\\\" && \\
         echo '' && \\
         echo '--- Recent articles ---' && \\
-        sqlite3 bot.db 'SELECT datetime(scraped_at) as scraped, council, substr(title,1,50) FROM articles ORDER BY scraped_at DESC LIMIT 5;' 2>/dev/null"'''
+        docker compose exec -T db psql -U councilbot -d council_news -c \\\"select first_seen_at, council_id, left(title,50) from articles order by first_seen_at desc limit 5;\\\""'''
     
     run_with_password(cmd)
 

@@ -35,6 +35,9 @@ build/
 bot.db
 bot.db-shm
 bot.db-wal
+news.db
+news.db-shm
+news.db-wal
 *.log
 data/posted_articles.json
 scraped_documents.json
@@ -47,6 +50,13 @@ scripts/deploy_secrets.py
 council_news.db
 council_news.db-shm
 council_news.db-wal
+
+# Development & Temporary
+dev/
+reports/
+.DS_Store
+*.tmp
+*.temp
 
 # Debug files
 debug_*.html

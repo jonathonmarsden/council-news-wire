@@ -1,63 +1,54 @@
 import sys
 import os
-import sqlite3
+from sqlalchemy import text
 
 # Add project root to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
-try:
-    from core.config import DB_PATH
-except ImportError:
-    # Fallback if config can't be imported easily without proper context
-    DB_PATH = 'data/bot.db'
+from core.constants import GARBAGE_TITLES
+from core.database import Database
 
 def cleanup_malformed_posts():
-    print(f"Connecting to {DB_PATH} ...")
+    db = Database()
+    print("Connecting to Database (PostgreSQL)...")
     
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        # 1. Delete articles from the future (Year > 2027)
-        print("Scanning for future dates...")
-        cursor.execute("DELETE FROM articles WHERE date > '2027-01-01'")
-        if cursor.rowcount > 0:
-            print(f"Deleted {cursor.rowcount} future rows.")
+    with db.get_session() as session:
+        # 1. Archive articles from the future (Year > 2027)
+        # We must NOT delete them, otherwise the scraper will re-discover them and repost them (Infinite Loop).
+        print("Scanning for future dates (Archiving)...")
+        result = session.execute(text("UPDATE articles SET status = 'archived', posted_at = NOW() WHERE date > '2027-01-01' AND status != 'archived'"))
+        if result.rowcount > 0:
+            print(f"Archived {result.rowcount} future rows.")
 
         # 2. Deletes titles that are just "Posted ..."
         print("Scanning for 'Posted ...' titles...")
-        cursor.execute("SELECT id, council_id, title FROM articles WHERE title LIKE 'Posted %'")
-        posted_rows = cursor.fetchall()
+        # Get candidates first to check for digits
+        rows = session.execute(text("SELECT id, council_id, title FROM articles WHERE title ILIKE 'Posted %'")).fetchall()
+        
         count = 0
-        for row in posted_rows:
-            if any(char.isdigit() for char in row[2]):
-                print(f"  - Deleting: {row}")
-                cursor.execute("DELETE FROM articles WHERE id = ?", (row[0],))
+        for row in rows:
+            if any(char.isdigit() for char in row.title):
+                print(f"  - Deleting: {row.title}")
+                session.execute(text("DELETE FROM articles WHERE id = :id"), {"id": row.id})
                 count += 1
         print(f"Deleted {count} 'Posted ...' rows.")
 
         # 3. Delete copyright titles
         print("Scanning for copyright titles...")
-        cursor.execute("DELETE FROM articles WHERE title LIKE '©%' OR title LIKE '&copy;%'")
-        if cursor.rowcount > 0:
-            print(f"Deleted {cursor.rowcount} copyright rows.")
+        session.execute(text("DELETE FROM articles WHERE title ILIKE '©%' OR title ILIKE '&copy;%'"))
 
-        # 4. Delete 'Found Cat' / 'ATO image'
+        # 4. Delete Garbage Phrases (from centralized constants)
         print("Scanning for garbage phrases...")
-        garbage = ['Found Cat', 'Found Dog', 'ATO image', 'Array', 'No Title']
-        for g in garbage:
-            cursor.execute("DELETE FROM articles WHERE title = ?", (g,))
-            if cursor.rowcount > 0:
-                print(f"Deleted {cursor.rowcount} rows with title '{g}'")
+        for g in GARBAGE_TITLES:
+             # Case insensitive match
+            stmt = text("DELETE FROM articles WHERE lower(title) = lower(:title)")
+            result = session.execute(stmt, {"title": g})
+            if result.rowcount > 0:
+                print(f"Deleted {result.rowcount} garbage rows: '{g}'")
 
-        conn.commit()
-        print("Cleanup complete.")
+        session.commit()
         
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        if conn:
-            conn.close()
+    print("Cleanup complete on PostgreSQL.")
 
 if __name__ == "__main__":
     cleanup_malformed_posts()

@@ -1,0 +1,148 @@
+name: Test & Lint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: council_news_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov flake8 pylint mypy
+    
+    - name: Check syntax with flake8
+      run: |
+        # Stop build on syntax errors
+        flake8 core/ main.py --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Warn on style issues (don't fail)
+        flake8 core/ main.py --count --exit-zero --statistics | head -20
+    
+    - name: Type check with mypy
+      run: |
+        mypy core/ main.py --ignore-missing-imports --no-error-summary 2>/dev/null || true
+      continue-on-error: true
+    
+    - name: Run unit tests
+      run: |
+        pytest tests/ -v --cov=core --cov-report=xml --tb=short
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/council_news_test
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install linters
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint black isort
+    
+    - name: Check code formatting with black
+      run: |
+        black --check core/ main.py --quiet
+      continue-on-error: true
+    
+    - name: Check import sorting with isort
+      run: |
+        isort --check-only core/ main.py
+      continue-on-error: true
+    
+    - name: Lint with pylint
+      run: |
+        pylint core/ main.py --disable=all --enable=E,F --exit-zero
+      continue-on-error: true
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install bandit
+      run: |
+        pip install bandit
+    
+    - name: Security scan with bandit
+      run: |
+        bandit -r core/ main.py --exit-code 0 -f txt | head -30
+      continue-on-error: true
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Build Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false
+        tags: council-news-bot:test
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check documentation exists
+      run: |
+        [ -f docs/operations/RUNBOOK.md ] && echo "✅ RUNBOOK.md" || (echo "❌ Missing RUNBOOK.md" && exit 1)
+        [ -f docs/operations/MONITORING.md ] && echo "✅ MONITORING.md" || (echo "❌ Missing MONITORING.md" && exit 1)
+        [ -f docs/architecture/SYSTEM_DESIGN.md ] && echo "✅ SYSTEM_DESIGN.md" || (echo "❌ Missing SYSTEM_DESIGN.md" && exit 1)
+    
+    - name: Validate markdown format
+      run: |
+        # Check for common markdown issues
+        grep -r "TODO\|FIXME\|XXX" docs/ && echo "⚠️  Found TODO comments" || echo "✅ No TODO comments"

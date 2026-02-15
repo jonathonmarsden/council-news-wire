@@ -8,41 +8,29 @@ Generates a summary of:
 - List of councils that triggered the Circuit Breaker (DISABLED).
 """
 
-import sqlite3
-import os
-import sys
 from datetime import datetime, timedelta
+from sqlalchemy import select, func
 
-def get_db_path():
-    # Default to bot.db in the parent directory
-    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'bot.db')
+from core.database import Database
+from core.models import Article, CouncilHealth
 
 def generate_report():
-    db_path = os.environ.get('DB_PATH', get_db_path())
-    if not os.path.exists(db_path):
-        print(f"Database not found at {db_path}")
-        return
-
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
+    db = Database()
+    session = db.get_session()
     
     print(f"=== Daily Report: {datetime.now().strftime('%Y-%m-%d')} ===\n")
     
     # 1. Articles Scraped Today
     today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    cursor = conn.execute(
-        "SELECT COUNT(*) as c FROM articles WHERE first_seen_at >= ?", 
-        (today_start,)
-    )
-    articles_today = cursor.fetchone()['c']
+    articles_stmt = select(func.count(Article.id)).where(Article.first_seen_at >= today_start)
+    articles_today = session.execute(articles_stmt).scalar() or 0
     print(f"📰 Articles Scraped Today: {articles_today}")
     
     # 2. Council Health Stats
-    cursor = conn.execute("SELECT COUNT(*) as c FROM council_health")
-    total_tracked = cursor.fetchone()['c']
-    
-    cursor = conn.execute("SELECT COUNT(*) as c FROM council_health WHERE is_disabled = 1")
-    disabled_count = cursor.fetchone()['c']
+    total_tracked = session.execute(select(func.count(CouncilHealth.council_id))).scalar() or 0
+    disabled_count = session.execute(
+        select(func.count(CouncilHealth.council_id)).where(CouncilHealth.is_disabled.is_(True))
+    ).scalar() or 0
     
     print(f"🏢 Councils Tracked: {total_tracked}")
     print(f"✅ Healthy Councils: {total_tracked - disabled_count}")
@@ -51,19 +39,22 @@ def generate_report():
     # 3. List Disabled Councils
     if disabled_count > 0:
         print("\n⚠️  DISABLED COUNCILS (Action Required):")
-        cursor = conn.execute(
-            "SELECT council_id, consecutive_failures, last_failure_at, disabled_at FROM council_health WHERE is_disabled = 1"
-        )
-        for row in cursor:
-            print(f"  - {row['council_id']}")
-            print(f"    Failures: {row['consecutive_failures']}")
-            print(f"    Last Failure: {row['last_failure_at']}")
-            print(f"    Disabled At: {row['disabled_at']}")
+        disabled_stmt = select(
+            CouncilHealth.council_id,
+            CouncilHealth.consecutive_failures,
+            CouncilHealth.last_failure_at,
+            CouncilHealth.disabled_at
+        ).where(CouncilHealth.is_disabled.is_(True))
+        for row in session.execute(disabled_stmt).all():
+            print(f"  - {row[0]}")
+            print(f"    Failures: {row[1]}")
+            print(f"    Last Failure: {row[2]}")
+            print(f"    Disabled At: {row[3]}")
             print("")
     else:
         print("\n✨ No councils are currently disabled.")
 
-    conn.close()
+    session.close()
 
 if __name__ == "__main__":
     generate_report()

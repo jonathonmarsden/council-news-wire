@@ -1,15 +1,16 @@
 
 import json
-import sqlite3
 import os
 import sys
 from pathlib import Path
+from sqlalchemy import select, func
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
-from core.config import DB_PATH
+from core.database import Database
+from core.models import Article
 
 def audit_zero_yield():
     print("Starting Zero-Yield Audit...")
@@ -43,23 +44,19 @@ def audit_zero_yield():
     print(f"Found {len(enabled_councils)} enabled councils.")
 
     # 2. Check database
-    if not DB_PATH.exists():
-        print(f"Database not found at {DB_PATH}")
-        return
-
-    conn = sqlite3.connect(str(DB_PATH))
-    c = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     zero_yield_councils = []
     
     for council in enabled_councils:
-        c.execute("SELECT COUNT(*) FROM articles WHERE council_id = ?", (council['id'],))
-        count = c.fetchone()[0]
+        count_stmt = select(func.count(Article.id)).where(Article.council_id == council['id'])
+        count = session.execute(count_stmt).scalar() or 0
         
         if count == 0:
             zero_yield_councils.append(council)
 
-    conn.close()
+    session.close()
 
     # 3. Report
     print(f"\nFound {len(zero_yield_councils)} enabled councils with 0 articles in DB:")

@@ -4,5 +4,5 @@
   "bluesky_handle_env": "BLUESKY_HANDLE_SA",
   "bluesky_password_env": "BLUESKY_PASSWORD_SA",
   "timezone": "Australia/Adelaide",
-  "hashtags": ["#LGNewsRoundup", "#LGA_SA", "#SACouncils"]
+  "hashtags": ["#LGNewsRoundup", "#SACouncils"]
 }

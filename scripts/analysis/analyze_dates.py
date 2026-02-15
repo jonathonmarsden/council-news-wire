@@ -1,47 +1,42 @@
-import sqlite3
-import os
+from sqlalchemy import select, func, inspect
 
-DB_PATH = 'bot.db'
+from core.database import Database
+from core.models import Article
 
 def analyze_dates():
-    if not os.path.exists(DB_PATH):
-        print("Database not found.")
-        return
-
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
 
     # Check schema
-    cursor.execute("PRAGMA table_info(articles)")
-    columns = [info[1] for info in cursor.fetchall()]
+    inspector = inspect(db.engine)
+    columns = [col["name"] for col in inspector.get_columns("articles")]
     print(f"Columns: {columns}")
 
     # Count total articles
-    cursor.execute("SELECT COUNT(*) FROM articles")
-    total = cursor.fetchone()[0]
+    total = session.execute(select(func.count(Article.id))).scalar() or 0
 
     # Count articles with no date
-    cursor.execute("SELECT COUNT(*) FROM articles WHERE date IS NULL OR date = ''")
-    no_date = cursor.fetchone()[0]
+    no_date = session.execute(
+        select(func.count(Article.id)).where(
+            (Article.date.is_(None)) | (Article.date == '')
+        )
+    ).scalar() or 0
 
     print(f"Total Articles: {total}")
     print(f"Articles with No Date: {no_date}")
 
     # Group by council_id for no date
-    cursor.execute("""
-        SELECT council_id, COUNT(*) as count 
-        FROM articles 
-        WHERE date IS NULL OR date = '' 
-        GROUP BY council_id 
-        ORDER BY count DESC
-        LIMIT 20
-    """)
-    
+    rows = session.execute(
+        select(Article.council_id, func.count(Article.id)).where(
+            (Article.date.is_(None)) | (Article.date == '')
+        ).group_by(Article.council_id).order_by(func.count(Article.id).desc()).limit(20)
+    ).all()
+
     print("\nTop Councils with Missing Dates:")
-    for row in cursor.fetchall():
+    for row in rows:
         print(f"{row[0]}: {row[1]}")
 
-    conn.close()
+    session.close()
 
 if __name__ == "__main__":
     analyze_dates()

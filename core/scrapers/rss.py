@@ -3,6 +3,7 @@ RSS feed scraper implementation.
 """
 
 from typing import List, Optional, Dict
+from urllib.parse import unquote
 from bs4 import BeautifulSoup
 from dateutil import parser as date_parser
 
@@ -31,14 +32,25 @@ class RSSScraper(BaseScraper):
         for item in items:
             title_elem = item.find('title')
             link_elem = item.find('link')
+            url_elem = item.find('url')  # Fallback for some feeds like Georges River
             desc_elem = item.find('description')
             date_elem = item.find('pubDate')
             
-            if not title_elem or not link_elem:
+            link = None
+            if link_elem:
+                link = link_elem.get_text(strip=True)
+            elif url_elem:
+                raw_url = url_elem.get_text(strip=True)
+                # Check if URL is encoded (e.g. https%3a%2f%2f)
+                if '%' in raw_url:
+                    link = unquote(raw_url)
+                else:
+                    link = raw_url
+            
+            if not title_elem or not link:
                 continue
                 
             title = title_elem.get_text(strip=True)
-            link = link_elem.get_text(strip=True)
             
             date = None
             if date_elem:
@@ -51,6 +63,8 @@ class RSSScraper(BaseScraper):
             
             # Try content:encoded first (often has full content)
             content_encoded = item.find('content:encoded')
+            bodytext = item.find('bodytext') # Fallback for Georges River
+            
             if content_encoded:
                 content_text = content_encoded.get_text(strip=True)
                 if content_text:
@@ -64,7 +78,16 @@ class RSSScraper(BaseScraper):
                             if len(text) > 280:
                                 excerpt += "..."
                             break
-            
+            # Try bodytext (Georges River style)
+            elif bodytext:
+                body_text = bodytext.get_text(strip=True)
+                # Cleanup "andnbsp;" and HTML entities often found in this field
+                clean_body = body_text.replace('andnbsp;', ' ')
+                if len(clean_body) > 30:
+                     excerpt = clean_body[:280]
+                     if len(clean_body) > 280:
+                         excerpt += "..."
+
             # Fallback to description if no good excerpt found
             if not excerpt and desc_elem:
                 desc_text = desc_elem.get_text(strip=True)

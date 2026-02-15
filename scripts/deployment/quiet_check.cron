@@ -1,0 +1,1 @@
+30 19 * * 0 root cd /opt/council-news-bot && /usr/bin/docker compose exec -T bot python3 scripts/monitoring/check_quiet_councils.py >> /var/log/council_quiet_check.log 2>&1

@@ -1,44 +1,44 @@
-import sqlite3
 import os
 import sys
+from sqlalchemy import select, func
 
 # Add project root to path
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_root)
 
-from core.config import DB_PATH
+from core.database import Database
+from core.models import Article
 
 def check_status():
-    if not DB_PATH.exists():
-        print(f"Database not found at {DB_PATH}")
-        sys.exit(1)
-        
-    conn = sqlite3.connect(str(DB_PATH))
-    c = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Count total articles
-    c.execute("SELECT COUNT(*) FROM articles")
-    total = c.fetchone()[0]
+    total = session.execute(select(func.count(Article.id))).scalar() or 0
     
     # Count unposted articles (excluding archived)
-    c.execute("SELECT COUNT(*) FROM articles WHERE posted_at IS NULL AND status != 'archived'")
-    unposted = c.fetchone()[0]
+    unposted = session.execute(
+        select(func.count(Article.id)).where(
+            Article.posted_at.is_(None),
+            Article.status != 'archived'
+        )
+    ).scalar() or 0
     
     # Get breakdown by council for unposted
-    c.execute("""
-        SELECT council_id, COUNT(*) 
-        FROM articles 
-        WHERE posted_at IS NULL AND status != 'archived'
-        GROUP BY council_id 
-        ORDER BY COUNT(*) DESC
-    """)
-    breakdown = c.fetchall()
+    breakdown = session.execute(
+        select(Article.council_id, func.count(Article.id)).where(
+            Article.posted_at.is_(None),
+            Article.status != 'archived'
+        ).group_by(Article.council_id).order_by(func.count(Article.id).desc())
+    ).all()
     
     print(f"Total Articles: {total}")
     print(f"Unposted (Backlog): {unposted}")
     print("\nBacklog by Council:")
     for council, count in breakdown:
         print(f"  {council}: {count}")
+
+    session.close()
 
 if __name__ == "__main__":
     check_status()

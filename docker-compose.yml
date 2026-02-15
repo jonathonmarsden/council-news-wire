@@ -13,18 +13,47 @@ services:
     # Set timezone to match target audience
     environment:
       - TZ=Australia/Sydney
-      - DB_PATH=/app/data/bot.db
+      # To enable Postgres, uncomment in .env:
+      # DATABASE_URL=postgresql://councilbot:securepassword@db:5432/council_news
     # Resource limits (Prevent OOM freezes on 4GB VPS)
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: 1024M
+          cpus: '1.5'
+          memory: 3072M
         reservations:
-          memory: 128M
+          memory: 256M
     # Log Rotation (Prevent Disk Full)
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
+    depends_on:
+      - db
+    # Run migrations, then idle. External cron jobs handle execution.
+    command: sh -c "python -m alembic upgrade head && tail -f /dev/null"
+
+  db:
+    image: postgres:15-alpine
+    container_name: council_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: councilbot
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: council_news
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1024M
+
+volumes:
+  postgres_data:

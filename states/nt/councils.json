@@ -1,7 +1,7 @@
 {
     "councils": [
         {
-            "name": "Alice Springs, Town of",
+            "name": "Alice Springs Town Council",
             "id": "alice_springs",
             "news_url": "https://www.alicesprings.nt.gov.au/news",
             "item_selector": "div.news-item, .news-listing .item, .news-list .item, article, .listing-item",
@@ -57,11 +57,15 @@
         {
             "name": "City of Darwin",
             "id": "darwin",
-            "news_url": "https://www.darwin.nt.gov.au/rss.xml",
+            "news_url": "https://www.darwin.nt.gov.au/news",
             "enabled": true,
             "population": 84640,
             "region": "Top End",
-            "scraper": "rss_scraper"
+            "scraper": "curl_scraper",
+            "item_selector": "div.news-grid-item",
+            "title_selector": ".field--name-node-title h3 a",
+            "date_selector": "div.news-grid-item",
+            "link_selector": ".field--name-node-title h3 a"
         },
         {
             "name": "East Arnhem Regional Council",
@@ -74,7 +78,8 @@
             "enabled": true,
             "population": 7875,
             "region": "Arnhem",
-            "use_curl": true
+            "use_curl": true,
+            "impersonate": "chrome124"
         },
         {
             "name": "Groote Archipelago Regional Council",
@@ -90,7 +95,7 @@
             "use_curl": true
         },
         {
-            "name": "Katherine, Town of",
+            "name": "Katherine Town Council",
             "id": "katherine",
             "news_url": "https://www.katherine.nt.gov.au/news",
             "item_selector": ".module-list .row",
@@ -104,11 +109,15 @@
         {
             "name": "Litchfield Council",
             "id": "litchfield",
-            "news_url": "https://www.litchfield.nt.gov.au/rss.xml",
+            "news_url": "https://www.litchfield.nt.gov.au/news",
             "enabled": true,
             "population": 27580,
             "region": "Top End",
-            "scraper": "rss_scraper"
+            "scraper": "curl_scraper",
+            "item_selector": "div.news-article-item",
+            "title_selector": "h3 a",
+            "date_selector": "time",
+            "link_selector": "h3 a"
         },
         {
             "name": "MacDonnell Regional Council",
@@ -121,7 +130,6 @@
             "enabled": true,
             "population": 7200,
             "region": "Central Australia",
-            "scraper": "opencities_scraper",
             "use_curl": true
         },
         {
@@ -132,7 +140,11 @@
             "population": 41490,
             "region": "Top End",
             "scraper": "curl_scraper",
-            "use_curl": true
+            "use_curl": true,
+            "item_selector": "article.teaser-card",
+            "title_selector": "h3.teaser-card__title a",
+            "date_selector": "time.teaser-card__time",
+            "link_selector": "h3.teaser-card__title a"
         },
         {
             "name": "Roper Gulf Regional Council",
@@ -163,16 +175,16 @@
         {
             "name": "Victoria Daly Regional Council",
             "id": "victoria_daly",
-            "news_url": "https://www.victoriadaly.nt.gov.au/rss",
+            "news_url": "https://www.victoriadaly.nt.gov.au/feed/",
             "enabled": true,
             "population": 7230,
             "region": "Big Rivers",
             "scraper": "rss_scraper"
         },
         {
-            "name": "Wagait Shire",
+            "name": "Wagait Shire Council",
             "id": "wagait",
-            "news_url": "https://wagait.nt.gov.au/media-releases/feed",
+            "news_url": "https://wagait.nt.gov.au/feed/",
             "enabled": true,
             "population": 590,
             "region": "Top End",
@@ -192,7 +204,7 @@
             "name": "West Daly Regional Council",
             "id": "west_daly",
             "news_url": "https://www.westdaly.nt.gov.au/rss.xml",
-            "enabled": true,
+            "enabled": false,
             "population": 3600,
             "region": "Top End",
             "scraper": "rss_scraper"

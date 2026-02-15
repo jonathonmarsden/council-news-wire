@@ -4,11 +4,8 @@
             "id": "adelaide",
             "name": "City of Adelaide",
             "news_url": "https://www.cityofadelaide.com.au/news",
+            "scraper": "browser_scraper",
             "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "use_rotating_proxy": true,
-            "impersonate": "chrome124",
             "selectors": {
                 "container": "div.card--newsroom-default",
                 "title": "h4.newsroom-title",
@@ -88,7 +85,7 @@
         },
         {
             "id": "barunga-west",
-            "name": "District Council of Barunga West",
+            "name": "Barunga West Council",
             "news_url": "https://www.barungawest.sa.gov.au/community-information/latest-news",
             "enabled": true,
             "scraper": "card_scraper",
@@ -138,7 +135,7 @@
         },
         {
             "id": "campbelltown-city",
-            "name": "City of Campbelltown",
+            "name": "Campbelltown City Council",
             "news_url": "https://www.campbelltown.sa.gov.au/council/news-and-media/latest-news",
             "enabled": true,
             "parser": "html",
@@ -188,7 +185,7 @@
         },
         {
             "id": "clare-and-gilbert-valleys",
-            "name": "District Council of Clare and Gilbert Valleys",
+            "name": "Clare and Gilbert Valleys Council",
             "news_url": "https://www.claregilbertvalleys.sa.gov.au/community-information/latest-news",
             "enabled": true,
             "scraper": "card_scraper",
@@ -334,7 +331,7 @@
         },
         {
             "id": "goyder",
-            "name": "Goyder (Regional Council of)",
+            "name": "Regional Council of Goyder",
             "news_url": "https://www.goyder.sa.gov.au/community/latest-news",
             "enabled": true,
             "parser": "html",
@@ -372,10 +369,10 @@
             "parser": "html",
             "use_curl": true,
             "selectors": {
-                "container": "div.news-listing__item, div.list-item-container, div.news-list, div.post-list, div.listing, article",
-                "title": "h2, h3, h4",
+                "container": "a.group:has(h3.heading-3)",
+                "title": "h3",
                 "date": "span.date, time, div.list-item-date, span.news-listing__item-date",
-                "link": "a"
+                "link": "self"
             },
             "population": 39605,
             "region": "Adelaide Metro"
@@ -462,7 +459,7 @@
         },
         {
             "id": "lower-eyre",
-            "name": "District Council of Lower Eyre Peninsula",
+            "name": "Lower Eyre Council",
             "news_url": "https://www.lowereyrepeninsula.sa.gov.au/community-information/latest-news",
             "enabled": true,
             "parser": "html",
@@ -542,7 +539,7 @@
         },
         {
             "id": "mount-barker-district",
-            "name": "District Council of Mount Barker",
+            "name": "Mount Barker District Council",
             "news_url": "https://www.mountbarker.sa.gov.au/council/news/newsletter",
             "enabled": true,
             "parser": "html",
@@ -610,18 +607,16 @@
             "news_url": "https://www.naracoortelucindale.sa.gov.au/newsroom",
             "enabled": true,
             "scraper": "card_scraper",
-            "parser": "html",
-            "use_cloudscraper": true,
+            "use_curl": true,
+            "impersonate": "safari15_3",
             "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
+                "container": ".card-listing__item",
+                "title": ".card-listing__title",
+                "date": ".card-listing__date",
+                "link": "a.card-listing__link"
             },
             "population": 9015,
-            "region": "Limestone Coast",
-            "impersonate": "chrome124",
-            "use_curl": true
+            "region": "Limestone Coast"
         },
         {
             "id": "northern-areas",
@@ -664,8 +659,9 @@
             "enabled": true,
             "parser": "html",
             "use_curl": true,
+            "impersonate": "chrome124",
             "selectors": {
-                "container": "div.list-item-container",
+                "container": ".list-item-container article",
                 "title": ".list-item-title",
                 "date": "span.date, time, div.list-item-date, span.news-listing__item-date, p.published-on",
                 "link": "a"
@@ -725,12 +721,12 @@
         },
         {
             "id": "port-augusta-city",
-            "name": "City of Port Augusta",
-            "news_url": "https://www.portaugusta.sa.gov.au/news-and-events",
+            "name": "Port Augusta City Council",
+            "news_url": "https://www.portaugusta.sa.gov.au/news-and-events/latest-news",
             "enabled": true,
             "scraper": "card_scraper",
-            "parser": "html",
             "use_curl": true,
+            "impersonate": "safari15_3",
             "selectors": {
                 "container": ".news-listing__item",
                 "title": ".news-listing__item-title",
@@ -738,8 +734,7 @@
                 "link": ".news-listing__item-link"
             },
             "population": 14185,
-            "region": "Upper Spencer Gulf",
-            "impersonate": "chrome124"
+            "region": "Upper Spencer Gulf"
         },
         {
             "id": "port-lincoln",
@@ -798,11 +793,9 @@
         {
             "id": "renmark-paringa",
             "name": "Renmark Paringa Council",
-            "news_url": "https://www.renmarkparinga.sa.gov.au/noticeboard/latest-news/2025",
+            "news_url": "https://www.renmarkparinga.sa.gov.au/noticeboard/latest-news",
             "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
+            "scraper": "browser_scraper",
             "selectors": {
                 "container": ".news-listing__item",
                 "title": ".news-listing__item-title",
@@ -810,8 +803,7 @@
                 "link": ".news-listing__item-link"
             },
             "population": 9815,
-            "region": "Riverland",
-            "impersonate": "chrome124"
+            "region": "Riverland"
         },
         {
             "id": "robe",
@@ -833,7 +825,7 @@
         },
         {
             "id": "roxby-downs",
-            "name": "Roxby Downs (Municipal Council of)",
+            "name": "Municipal Council of Roxby Downs",
             "news_url": "https://www.roxbydowns.sa.gov.au/council/latest-news",
             "enabled": true,
             "scraper": "card_scraper",
@@ -852,20 +844,19 @@
         {
             "id": "salisbury",
             "name": "City of Salisbury",
-            "news_url": "https://www.salisbury.sa.gov.au/council/news-media-and-publications",
+            "news_url": "https://www.salisbury.sa.gov.au/council/news-media-and-publications/latest-news",
             "enabled": true,
             "scraper": "card_scraper",
-            "parser": "html",
             "use_curl": true,
+            "impersonate": "chrome124",
             "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
+                "container": "article.card",
+                "title": "h3.card__heading",
+                "date": "span.tag",
+                "link": "a.card__link"
             },
             "population": 149710,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124"
+            "region": "Adelaide Metro"
         },
         {
             "id": "southern-mallee-district",
@@ -962,17 +953,16 @@
             "name": "City of Unley",
             "news_url": "https://www.unley.sa.gov.au/News-articles",
             "enabled": true,
-            "parser": "html",
+            "scraper": "card_scraper",
             "use_curl": true,
             "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
+                "container": "article",
+                "title": "h2.list-item-title",
+                "date": "p.published-on",
+                "link": "a"
             },
             "population": 40430,
             "region": "Adelaide Metro",
-            "scraper": "card_scraper",
             "impersonate": "chrome124"
         },
         {
@@ -1052,18 +1042,17 @@
             "name": "City of West Torrens",
             "news_url": "https://www.westtorrens.sa.gov.au/news",
             "enabled": true,
-            "parser": "html",
+            "scraper": "card_scraper",
             "use_curl": true,
             "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
+                "container": "article",
+                "title": "h2.list-item-title",
+                "date": "p.published-on",
+                "link": "a"
             },
             "population": 65150,
             "region": "Adelaide Metro",
-            "impersonate": "chrome124",
-            "scraper": "card_scraper"
+            "impersonate": "safari15_3"
         },
         {
             "id": "whyalla",
@@ -1152,17 +1141,6 @@
             "population": 133230,
             "region": "Adelaide Metro",
             "impersonate": "chrome124"
-        },
-        {
-            "id": "apy",
-            "name": "Anangu Pitjantjatjara Yankunytjatjara",
-            "news_url": "https://anangu.com.au/apy-media-release",
-            "enabled": true,
-            "scraper": "apy_scraper",
-            "use_curl": true,
-            "population": 2500,
-            "region": "Outback",
-            "notes": "Aboriginal land council covering 103,000 km\u00b2 in remote SA. Emerged from administration in December 2025 with new General Manager."
         }
     ]
 }

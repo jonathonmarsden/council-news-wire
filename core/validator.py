@@ -1,7 +1,7 @@
 import re
 from typing import Dict, List, Tuple
 
-MAX_TITLE_LEN = 150
+MAX_TITLE_LEN = 250
 IDEAL_TITLE_LEN = 120
 IDEAL_EXCERPT_LEN = 250
 MAX_HASHTAGS = 15

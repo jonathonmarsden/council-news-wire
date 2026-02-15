@@ -1,24 +1,28 @@
 
-import sqlite3
 import re
 import sys
 import os
+from sqlalchemy import select
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from core.database import Database
+from core.models import Article
+
 def check_tangled_titles():
-    conn = sqlite3.connect('bot.db')
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Get all articles for NSW councils
     # We don't have a 'state' column in articles, but we can filter by council_id if we knew them,
     # or just check all and filter by known NSW council names if needed.
     # For now, let's check all and see what the patterns look like.
     
-    cursor.execute("SELECT id, council_id, title, url, posted_date FROM articles WHERE posted = 1")
-    articles = cursor.fetchall()
+    articles = session.execute(
+        select(Article.id, Article.council_id, Article.title, Article.url, Article.posted_at)
+        .where(Article.posted_at.is_not(None))
+    ).all()
     
     # Pattern for "TitleDD Mon" or "TitleD Mon" (e.g. "Meeting Minutes12 Nov")
     # Looking for: non-space, digit(s), space, Month
@@ -41,7 +45,7 @@ def check_tangled_titles():
     print(f"Checking {len(articles)} posted articles for tangled dates...")
     
     for article in articles:
-        title = article['title']
+        title = article[2]
         if regex.match(title):
             # Double check it's not just a date in the title like "Minutes 12 Nov" (valid)
             # We want "Minutes12 Nov" (invalid)
@@ -50,11 +54,12 @@ def check_tangled_titles():
             # Find the digit start
             match = re.search(r'([^\s])(\d{1,2})\s(?:' + month_pattern + r')', title, re.IGNORECASE)
             if match:
-                print(f"Found tangled: [{article['council_id']}] {title}")
+                print(f"Found tangled: [{article[1]}] {title}")
                 tangled_count += 1
-                tangled_ids.append(article['id'])
+                tangled_ids.append(article[0])
                 
     print(f"\nFound {tangled_count} potentially tangled titles.")
+    session.close()
     return tangled_ids
 
 if __name__ == "__main__":

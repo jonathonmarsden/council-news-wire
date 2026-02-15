@@ -432,3 +432,64 @@ class BelmontScraper(BaseScraper):
         except Exception as e:
             print(f"Error scraping Belmont: {e}")
             return []
+
+class DumbleyungScraper(BaseScraper):
+    """
+    Custom scraper for Shire of Dumbleyung.
+    They host 'News' on a Wix placeholder page, but 'Newsletters' on Mailchimp.
+    This scraper fetches the newsletters page and extracts Mailchimp links.
+    """
+    def __init__(self, council_id: str, council_name: str, news_url: str, 
+                 use_curl: bool = False, use_cloudscraper: bool = False, 
+                 mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
+                 limit: Optional[int] = None, proxy: Optional[str] = None, 
+                 impersonate: str = "chrome110", **kwargs):
+        super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
+                         mobile_mode, limit, proxy, impersonate, **kwargs)
+
+    def scrape(self) -> List[NewsArticle]:
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+            
+        soup = BeautifulSoup(html, 'html.parser')
+        articles = []
+        
+        # Look for mailchimp links in the content
+        links = soup.find_all('a', href=re.compile(r'mailchi\.mp'))
+        
+        seen_urls = set()
+        
+        for link in links:
+            url = link['href']
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            
+            text = link.get_text(strip=True)
+            if not text:
+                continue
+                
+            # Parse date from text (e.g. "January 2026")
+            date = None
+            try:
+                # Add a dummy day 1 to parse "Month Year" or similar
+                # Just basic parsing, let dateutil handle "January 2026"
+                date = date_parser.parse(text, default=datetime(2025, 1, 1))
+            except Exception:
+                pass
+                
+            article = NewsArticle(
+                council_id=self.council_id,
+                council_name=self.council_name,
+                title=f"{text} Newsletter",
+                url=url,
+                date=date,
+                excerpt="Dumbleyung Shire Newsletter (Mailchimp)"
+            )
+            articles.append(article)
+            
+        return articles
+
+
+

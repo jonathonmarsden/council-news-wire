@@ -4,6 +4,8 @@ Base scraper class for council news pages.
 Provides common functionality for scraping news articles from Victorian council websites.
 """
 
+from __future__ import annotations
+
 import re
 import subprocess
 import time
@@ -12,11 +14,15 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional, Dict, Any
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 
 import requests
 from bs4 import BeautifulSoup
 from dateutil import parser as date_parser
+
+from core.utils import get_logger
+
+logger = get_logger(__name__)
 
 try:
     from curl_cffi import requests as curl_requests
@@ -42,6 +48,20 @@ class NewsArticle:
     date: Optional[datetime] = None
     excerpt: Optional[str] = None
     
+    def __post_init__(self):
+        """Sanitize fields after initialization."""
+        # Ensure URL is ASCII-safe (fix mojibake like smart quotes or em-dashes)
+        if self.url:
+             # Safe characters include common URL symbols. 
+             # We want to encode ONLY non-ascii mostly.
+             try:
+                 self.url = quote(self.url, safe=":/?#=&%") # % mostly for already encoded things
+             except Exception as e:
+                 logger.error(f"Failed to sanitize URL '{self.url[:50]}...': {e}")
+                 # Fallback: simple ascii strip as last resort? 
+                 # Or just leave it and let the DB choke? 
+                 # Let's leave it but we've logged it.
+
     @property
     def unique_id(self) -> str:
         """Generate a unique identifier for this article."""
@@ -112,7 +132,6 @@ class BaseScraper(ABC):
     def fetch_page(self, url: str) -> Optional[str]:
         """
         Fetch a web page, handling WAF protection if needed.
-        Try direct connection first, then fallback to proxy if configured.
         
         Args:
             url: URL to fetch
@@ -120,88 +139,69 @@ class BaseScraper(ABC):
         Returns:
             HTML content as string, or None if fetch failed
         """
-        # 0. If proxy is configured, maybe skip direct?
-        # For now, let's try direct unless we know strictly otherwise.
-        # UPDATE: If we have a proxy, let's use it immediately if direct failed previously.
-        # But here valid logic is: try direct -> fail -> try proxy.
-        
-        # 1. Try Direct First (unless forced proxy)
-        content = None
-        
-        # Skip direct if we really want to use the proxy (heuristic: if we have a proxy, use it?)
-        # Actually, let's keep direct first but be strict on validation.
-        
-        # Clear proxies for direct attempt
-        self.session.proxies = {}
-        
-        if self.use_cloudscraper and self.scraper:
-            content = self._fetch_with_cloudscraper(url)
-        elif self.use_curl:
-            content = self._fetch_with_curl(url, use_proxy=False)
-        else:
-            content = self._fetch_with_requests(url)
-            
-        if content:
-            return content
-            
-        # 2. Fallback to Proxy
+        # If proxy is configured, we MUST use it to protect IP reputation.
         if self.proxy:
-            print(f"Direct fetch failed for {url}, retrying with proxy...")
+            # Configure requests session
             self.session.proxies = {
                 'http': self.proxy,
                 'https': self.proxy
             }
             
-            if self.use_cloudscraper and self.scraper:
-                # Cloudscraper handles proxies internally if configured, but here we might need to set it
-                # For now, let's assume cloudscraper doesn't use the session proxies directly unless configured
-                # But we can try to set it on the scraper object if needed.
-                # Simpler to just retry with curl or requests if cloudscraper failed?
-                # Or maybe cloudscraper failed because of IP block.
-                pass 
+            if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
+                return self._fetch_with_cloudscraper(url)
             
             if self.use_curl:
                 return self._fetch_with_curl(url, use_proxy=True)
-            else:
-                return self._fetch_with_requests(url)
-                
-        return None
+            
+            return self._fetch_with_requests(url)
+
+        # No proxy - direct connection
+        self.session.proxies = {}
+        
+        if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
+            return self._fetch_with_cloudscraper(url)
+            
+        if self.use_curl:
+            return self._fetch_with_curl(url, use_proxy=False)
+            
+        return self._fetch_with_requests(url)
     
     def _fetch_with_cloudscraper(self, url: str) -> Optional[str]:
         """Fetch a URL using cloudscraper to bypass Cloudflare."""
         if not CLOUDSCRAPER_AVAILABLE:
-            print("Cloudscraper not available")
+            logger.warning("Cloudscraper not available")
             return None
             
         try:
-            print(f"Using cloudscraper for {url}")
-            scraper = cloudscraper.create_scraper()
-            response = scraper.get(url)
+            logger.info(f"Using cloudscraper for {url}")
+            # Use self.scraper if available (created in init)
+            scraper = self.scraper if self.scraper else cloudscraper.create_scraper()
+            
+            proxies = None
+            if self.proxy:
+                 proxies = {'http': self.proxy, 'https': self.proxy}
+            
+            response = scraper.get(url, proxies=proxies)
             response.raise_for_status()
             return response.text
         except Exception as e:
-            print(f"Cloudscraper error for {url}: {e}")
+            logger.error(f"Cloudscraper error for {url}: {e}")
             return None
 
     def _fetch_with_requests(self, url: str) -> Optional[str]:
         """Fetch page using requests library."""
         try:
+            # self.session.proxies is already set in fetch_page
             response = self.session.get(url, timeout=30, allow_redirects=True)
             response.raise_for_status()
             return response.text
         except requests.RequestException as e:
-            # Only print error if we're not going to retry or if it's a proxy failure
-            if self.session.proxies:
-                print(f"Error fetching {url} (with proxy): {e}")
-            else:
-                # Don't spam logs for direct failures if we have a proxy fallback
-                if not self.proxy:
-                    print(f"Error fetching {url}: {e}")
+            logger.warning(f"Error fetching {url}: {e}")
             return None
     
     def _fetch_with_curl(self, url: str, use_proxy: bool = False) -> Optional[str]:
         """Fetch page using curl for WAF bypass."""
-        print(f"DEBUG: Fetching with curl (Proxy: {use_proxy}): {url}")
+        logger.debug(f"Fetching with curl (Proxy: {use_proxy}): {url}")
         
         if CURL_CFFI_AVAILABLE:
             try:
@@ -223,7 +223,7 @@ class BaseScraper(ABC):
                     # Check for Incapsula or Cloudflare block
                     r_text = response.text
                     if "Incapsula" in r_text or "Request unsuccessful" in r_text:
-                        print("DEBUG: curl_cffi blocked by Incapsula")
+                        logger.warning("curl_cffi blocked by Incapsula")
                         return None
                     
                     lower_text = r_text.lower()
@@ -239,15 +239,15 @@ class BaseScraper(ABC):
                     # Only flag as blocked if we see strong indicators
                     if ("error code:" in lower_text and "cloudflare" in lower_text) or \
                        any(ind in lower_text for ind in block_indicators):
-                         print(f"DEBUG: curl_cffi blocked by Cloudflare (Content detection)")
+                         logger.warning(f"curl_cffi blocked by Cloudflare (Content detection)")
                          return None
 
-                    print(f"DEBUG: curl_cffi success, length: {len(r_text)}")
+                    logger.debug(f"curl_cffi success, length: {len(r_text)}")
                     return r_text
                 else:
-                    print(f"DEBUG: curl_cffi failed with status {response.status_code}")
+                    logger.warning(f"curl_cffi failed with status {response.status_code}")
             except Exception as e:
-                print(f"DEBUG: curl_cffi exception: {e}")
+                logger.debug(f"curl_cffi exception: {e}")
                 # Fallback to subprocess curl if curl_cffi fails
         
         try:
@@ -282,20 +282,20 @@ class BaseScraper(ABC):
                 # Validate output
                 lower_stdout = result.stdout.lower()
                 if "error code:" in lower_stdout or "cloudflare" in lower_stdout or "access denied" in lower_stdout:
-                    print(f"DEBUG: Curl blocked by Cloudflare/WAF")
+                    logger.warning(f"Curl blocked by Cloudflare/WAF")
                     return None
                     
-                print(f"DEBUG: Curl success, length: {len(result.stdout)}")
+                logger.debug(f"Curl success, length: {len(result.stdout)}")
                 if len(result.stdout) < 1000:
-                    print(f"DEBUG: Short content: {result.stdout[:200]}...")
+                    logger.debug(f"Short content: {result.stdout[:200]}...")
                 return result.stdout
-            print(f"Curl error for {url}: {result.stderr}")
+            logger.warning(f"Curl error for {url}: {result.stderr}")
             return None
         except subprocess.TimeoutExpired:
-            print(f"Curl timeout for {url}")
+            logger.warning(f"Curl timeout for {url}")
             return None
         except Exception as e:
-            print(f"Curl exception for {url}: {e}")
+            logger.error(f"Curl exception for {url}: {e}")
             return None
     
     def parse_html(self, html: str) -> BeautifulSoup:

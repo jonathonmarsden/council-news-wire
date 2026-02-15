@@ -1,64 +1,56 @@
-import sqlite3
 import os
 import sys
 import argparse
+from sqlalchemy import select, or_, delete
 
 # Add project root to path
 sys.path.append(os.getcwd())
 
-from core.config import DB_PATH
+from core.database import Database
+from core.models import Article
 
 def cleanup_html_titles(dry_run=True):
-    print(f"Checking database at {DB_PATH}...")
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Look for titles OR excerpts with HTML tags or entities
     # We check for <, >, &lt;, &gt;, &nbsp;, &amp;
-    query = """
-    SELECT id, council_id, title, url, posted_at, status, excerpt
-    FROM articles 
-    WHERE (
-           title LIKE '%<%' 
-        OR title LIKE '%>%'
-        OR title LIKE '%&lt;%'
-        OR title LIKE '%&gt;%'
-        OR title LIKE '%&nbsp;%'
-        OR title LIKE '%&amp;%'
-        OR title LIKE '%&#%'
-        OR excerpt LIKE '%<%' 
-        OR excerpt LIKE '%>%'
-        OR excerpt LIKE '%&lt;%'
-        OR excerpt LIKE '%&gt;%'
-        OR excerpt LIKE '%&nbsp;%'
-        OR excerpt LIKE '%&amp;%'
-        OR excerpt LIKE '%&#%'
-    )
-    AND state = 'wa'
-    ORDER BY posted_at DESC
-    """
-    
-    cursor.execute(query)
-    rows = cursor.fetchall()
+    patterns = ["%<%", "%>%", "%&lt;%", "%&gt;%", "%&nbsp;%", "%&amp;%", "%&#%"]
+    title_checks = [Article.title.like(p) for p in patterns]
+    excerpt_checks = [Article.excerpt.like(p) for p in patterns]
+
+    stmt = select(
+        Article.id,
+        Article.council_id,
+        Article.title,
+        Article.url,
+        Article.posted_at,
+        Article.status,
+        Article.excerpt
+    ).where(
+        or_(*(title_checks + excerpt_checks)),
+        Article.state == 'wa'
+    ).order_by(Article.posted_at.desc())
+
+    rows = session.execute(stmt).all()
     
     print(f"Found {len(rows)} WA articles with potential HTML in title or excerpt:")
     
     ids_to_delete = []
     
     for row in rows:
-        print(f"ID: {row['id']}")
-        print(f"Council: {row['council_id']}")
-        print(f"Title: {row['title']}")
-        print(f"Excerpt: {row['excerpt']}")
-        print(f"URL: {row['url']}")
-        print(f"Posted At: {row['posted_at']}")
+        print(f"ID: {row[0]}")
+        print(f"Council: {row[1]}")
+        print(f"Title: {row[2]}")
+        print(f"Excerpt: {row[6]}")
+        print(f"URL: {row[3]}")
+        print(f"Posted At: {row[4]}")
         print("-" * 40)
-        ids_to_delete.append(row['id'])
+        ids_to_delete.append(row[0])
         
     if not ids_to_delete:
         print("No articles found to clean up.")
-        conn.close()
+        session.close()
         return
 
     if dry_run:
@@ -66,12 +58,11 @@ def cleanup_html_titles(dry_run=True):
         print("Run with --force to actually delete.")
     else:
         print(f"\nDeleting {len(ids_to_delete)} articles...")
-        placeholders = ','.join('?' for _ in ids_to_delete)
-        cursor.execute(f"DELETE FROM articles WHERE id IN ({placeholders})", ids_to_delete)
-        conn.commit()
+        session.execute(delete(Article).where(Article.id.in_(ids_to_delete)))
+        session.commit()
         print("Done.")
-        
-    conn.close()
+
+    session.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Cleanup articles with HTML in titles')

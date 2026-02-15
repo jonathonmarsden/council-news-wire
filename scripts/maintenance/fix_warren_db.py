@@ -1,29 +1,26 @@
-import sqlite3
 import re
-import os
+import sys
+from pathlib import Path
+from sqlalchemy import select
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+
+from core.database import Database
+from core.models import Article
 
 def fix_warren_db():
-    db_path = "bot.db"
-    if not os.path.exists(db_path):
-        # Try absolute path on VPS
-        db_path = "/opt/council-news-bot/data/bot.db"
-        
-    if not os.path.exists(db_path):
-        print(f"Database not found at {db_path}")
-        return
+    db = Database()
+    session = db.get_session()
 
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT id, title FROM articles WHERE council_id = 'warren-shire-council'")
-    rows = cursor.fetchall()
+    rows = session.execute(
+        select(Article).where(Article.council_id == 'warren-shire-council')
+    ).scalars().all()
     
     print(f"Found {len(rows)} articles for Warren Shire.")
     
     updates = 0
     for row in rows:
-        original_title = row['title']
+        original_title = row.title
         if not original_title:
             continue
             
@@ -43,12 +40,12 @@ def fix_warren_db():
         
         if new_title != original_title:
             print(f"Fixing: '{original_title}' -> '{new_title}'")
-            cursor.execute("UPDATE articles SET title = ? WHERE id = ?", (new_title, row['id']))
+            row.title = new_title
             updates += 1
-            
-    conn.commit()
+
+    session.commit()
     print(f"Updated {updates} articles.")
-    conn.close()
+    session.close()
 
 if __name__ == "__main__":
     fix_warren_db()

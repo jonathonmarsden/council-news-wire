@@ -16,12 +16,13 @@
         {
             "id": "armadale",
             "name": "City of Armadale",
-            "news_url": "https://my.armadale.wa.gov.au/service/news-and-media-releases",
-            "scraper": "curl_scraper",
-            "use_curl": true,
-            "enabled": false,
-            "disabled_reason": "React Server Components (RSC) site - media releases load via JavaScript after page render. API requires auth. No RSS feed. Needs Playwright or public API access.",
-            "notes": "Investigated 2025-12-05: Contentful CMS + Next.js RSC. Space ID: p4i5hqtl4d48. Content fetched client-side from api.my.armadale.wa.gov.au (requires auth token). Facebook: facebook.com/CityofArmadale",
+            "news_url": "https://api.my.armadale.wa.gov.au/content/mediaRelease?preview=false&skip=0&limit=100&paginate=true",
+            "scraper": "json_scraper",
+            "enabled": true,
+            "item_selector": "items",
+            "title_selector": "fields.title",
+            "date_selector": "fields.releaseDate",
+            "link_selector": "https://my.armadale.wa.gov.au/service/news-and-media-releases/{fields.slug}",
             "category": "C"
         },
         {
@@ -54,11 +55,14 @@
             "id": "bassendean",
             "name": "Town of Bassendean",
             "news_url": "https://www.bassendean.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "bayswater",
@@ -87,11 +91,14 @@
             "id": "beverley",
             "name": "Shire of Beverley",
             "news_url": "https://www.beverley.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
             "category": "C",
-            "use_curl": false
+            "use_curl": true,
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "boddington",
@@ -158,11 +165,14 @@
             "id": "bruce-rock",
             "name": "Shire of Bruce Rock",
             "news_url": "https://www.brucerock.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
             "category": "C",
-            "use_curl": false
+            "use_curl": true,
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "bunbury",
@@ -267,11 +277,10 @@
         {
             "id": "cocos-keeling-islands",
             "name": "Shire of Cocos (Keeling) Islands",
-            "news_url": "https://www.shire.cc/en/latest-news.html",
-            "scraper": "catalyst_scraper",
+            "news_url": "https://www.shire.cc/en/latest-news.feed?type=rss",
+            "scraper": "rss_scraper",
             "enabled": true,
-            "use_curl": true,
-            "rss_url": "https://www.shire.cc/en/latest-news.feed?type=rss"
+            "category": "C"
         },
         {
             "id": "collie",
@@ -308,7 +317,7 @@
         {
             "id": "cottesloe",
             "name": "Town of Cottesloe",
-            "news_url": "https://www.cottesloe.wa.gov.au/town/news",
+            "news_url": "https://www.cottesloe.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -347,11 +356,14 @@
             "id": "cunderdin",
             "name": "Shire of Cunderdin",
             "news_url": "https://www.cunderdin.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "dalwallinu",
@@ -364,7 +376,7 @@
         {
             "id": "dandaragan",
             "name": "Shire of Dandaragan",
-            "news_url": "https://www.dandaragan.wa.gov.au/services/community/newsletter.aspx",
+            "news_url": "https://www.dandaragan.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -372,7 +384,7 @@
         {
             "id": "dardanup",
             "name": "Shire of Dardanup",
-            "news_url": "https://www.dardanup.wa.gov.au/our-shire/news-publications",
+            "news_url": "https://www.dardanup.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -390,15 +402,18 @@
             "id": "derby-west-kimberley",
             "name": "Shire of Derby-West Kimberley",
             "news_url": "https://www.sdwk.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
             "category": "C",
-            "use_curl": false
+            "use_curl": true,
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "donnybrook-balingup",
-            "name": "Shire of Donnybrook Balingup",
+            "name": "Shire of Donnybrook-Balingup",
             "news_url": "https://www.donnybrook-balingup.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
@@ -416,9 +431,8 @@
             "id": "dumbleyung",
             "name": "Shire of Dumbleyung",
             "news_url": "https://www.dumbleyung.wa.gov.au/newsletters",
-            "scraper": "catalyst_scraper",
-            "enabled": true,
-            "use_curl": false
+            "scraper": "dumbleyung_scraper",
+            "enabled": true
         },
         {
             "id": "dundas",
@@ -431,7 +445,7 @@
         {
             "id": "east-fremantle",
             "name": "Town of East Fremantle",
-            "news_url": "https://www.eastfremantle.wa.gov.au/our-town/corporate-documents-and-news/corporate-plans-and-strategies/news-page.aspx",
+            "news_url": "https://www.eastfremantle.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -447,20 +461,27 @@
         {
             "id": "esperance",
             "name": "Shire of Esperance",
-            "news_url": "https://www.esperance.wa.gov.au/community/arts-culture/esperance-public-library/whats-new.aspx",
-            "scraper": "catalyst_scraper",
+            "news_url": "https://www.esperance.wa.gov.au/news/",
+            "scraper": "curl_scraper",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn",
             "enabled": true,
-            "use_curl": false
+            "use_curl": true
         },
         {
             "id": "exmouth",
             "name": "Shire of Exmouth",
             "news_url": "https://www.exmouth.wa.gov.au/news/?c=2",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "fremantle",
@@ -490,7 +511,7 @@
         {
             "id": "goomalling",
             "name": "Shire of Goomalling",
-            "news_url": "https://www.goomalling.wa.gov.au/council/public-documents-forms/newsletter.aspx",
+            "news_url": "https://www.goomalling.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -516,17 +537,28 @@
             "id": "halls-creek",
             "name": "Shire of Halls Creek",
             "news_url": "https://www.hallscreek.wa.gov.au/council/sohc-news",
-            "scraper": "catalyst_scraper",
-            "enabled": true,
-            "use_curl": false
+            "scraper": "browser_scraper",
+            "selectors": {
+                "container": "#news-listing ul li",
+                "title": "h2",
+                "date": "time",
+                "link": "a"
+            },
+            "enabled": true
         },
         {
             "id": "harvey",
             "name": "Shire of Harvey",
-            "news_url": "https://www.harvey.wa.gov.au/news-and-events",
-            "scraper": "catalyst_scraper",
+            "news_url": "https://www.harvey.wa.gov.au/news-and-events/latest-news",
+            "scraper": "browser_scraper",
             "enabled": true,
-            "use_curl": false
+            "selectors": {
+                "wait_for": ".news-item",
+                "container": ".news-item",
+                "title": "h3",
+                "date": ".date",
+                "link": "a"
+            }
         },
         {
             "id": "irwin",
@@ -574,11 +606,14 @@
             "id": "kalgoorlie-boulder",
             "name": "City of Kalgoorlie-Boulder",
             "news_url": "https://www.ckb.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "karratha",
@@ -604,11 +639,14 @@
             "id": "kellerberrin",
             "name": "Shire of Kellerberrin",
             "news_url": "https://www.kellerberrin.wa.gov.au/news",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "kent",
@@ -622,7 +660,7 @@
         {
             "id": "kojonup",
             "name": "Shire of Kojonup",
-            "news_url": "https://www.kojonup.wa.gov.au",
+            "news_url": "https://www.kojonup.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -631,11 +669,14 @@
             "id": "koorda",
             "name": "Shire of Koorda",
             "news_url": "https://www.koorda.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "kulin",
@@ -682,17 +723,28 @@
             "id": "mandurah",
             "name": "City of Mandurah",
             "news_url": "https://www.mandurah.wa.gov.au/explore/whats-on/news",
-            "scraper": "catalyst_scraper",
+            "scraper": "browser_scraper",
             "enabled": true,
-            "use_curl": false
+            "selectors": {
+                "wait_for": ".news-archive__item",
+                "container": ".news-archive__item",
+                "title": ".news-archive__title",
+                "date": ".news-archive__date",
+                "link": "a.news-archive__title"
+            }
         },
         {
             "id": "manjimup",
             "name": "Shire of Manjimup",
             "news_url": "https://www.manjimup.wa.gov.au/our-shire/news",
-            "scraper": "catalyst_scraper",
-            "enabled": true,
-            "use_curl": false
+            "scraper": "browser_scraper",
+            "selectors": {
+                "container": "#news-listing ul li",
+                "title": "h2",
+                "date": "time",
+                "link": "a"
+            },
+            "enabled": true
         },
         {
             "id": "meekatharra",
@@ -720,16 +772,19 @@
             "id": "menzies",
             "name": "Shire of Menzies",
             "news_url": "https://www.menzies.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
             "category": "C",
-            "use_curl": false
+            "use_curl": true,
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "merredin",
             "name": "Shire of Merredin",
-            "news_url": "https://www.merredin.wa.gov.au/community/news-notices",
+            "news_url": "https://www.merredin.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -751,7 +806,7 @@
         {
             "id": "moora",
             "name": "Shire of Moora",
-            "news_url": "https://www.moora.wa.gov.au/council/news-publications",
+            "news_url": "https://www.moora.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -803,25 +858,31 @@
             "name": "Shire of Mukinbudin",
             "news_url": "https://www.mukinbudin.wa.gov.au/news/?c=7",
             "scraper": "curl_scraper",
-            "enabled": false,
+            "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "mundaring",
             "name": "Shire of Mundaring",
             "news_url": "https://www.mundaring.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "nannup",
             "name": "Shire of Nannup",
-            "news_url": "https://www.nannup.wa.gov.au/about-us/news",
+            "news_url": "https://www.nannup.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -829,7 +890,7 @@
         {
             "id": "narembeen",
             "name": "Shire of Narembeen",
-            "news_url": "https://www.narembeen.wa.gov.au/discover/news-and-events",
+            "news_url": "https://www.narembeen.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -846,11 +907,14 @@
             "id": "nedlands",
             "name": "City of Nedlands",
             "news_url": "https://www.nedlands.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list .row",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn"
         },
         {
             "id": "ngaanyatjarraku",
@@ -863,7 +927,7 @@
         {
             "id": "northam",
             "name": "Shire of Northam",
-            "news_url": "https://www.northam.wa.gov.au/council/news-information",
+            "news_url": "https://www.northam.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -879,7 +943,7 @@
         {
             "id": "nungarin",
             "name": "Shire of Nungarin",
-            "news_url": "https://www.nungarin.wa.gov.au/our-community/newslink.aspx",
+            "news_url": "https://www.nungarin.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -887,12 +951,15 @@
         {
             "id": "peppermint-grove",
             "name": "Shire of Peppermint Grove",
-            "news_url": "https://www.peppermintgrove.wa.gov.au/council/about-peppermint-grove/peptalk-newsletter.aspx",
-            "scraper": "opencities_scraper",
-            "enabled": false,
+            "news_url": "https://www.peppermintgrove.wa.gov.au/news/",
+            "scraper": "card_scraper",
+            "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-            "category": "C"
+            "category": "C",
+            "item_selector": ".module-list > .row",
+            "title_selector": ".h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn-primary"
         },
         {
             "id": "perenjori",
@@ -939,10 +1006,13 @@
         {
             "id": "quairading",
             "name": "Shire of Quairading",
-            "news_url": "https://www.quairading.wa.gov.au/news/",
-            "scraper": "catalyst_scraper",
+            "news_url": "https://www.quairading.wa.gov.au/my-council/news-publications/",
+            "scraper": "curl_scraper",
+            "item_selector": "article.w-grid-item",
+            "title_selector": ".post_title",
+            "link_selector": ".news-link a",
             "enabled": true,
-            "use_curl": false
+            "category": "C"
         },
         {
             "id": "ravensthorpe",
@@ -970,13 +1040,18 @@
             "id": "sandstone",
             "name": "Shire of Sandstone",
             "news_url": "https://www.sandstone.wa.gov.au/community/news",
-            "scraper": "catalyst_scraper",
-            "enabled": true,
-            "use_curl": false
+            "scraper": "curl_scraper",
+            "use_curl": true,
+            "impersonate": "chrome124",
+            "item_selector": "#news-listing ul li",
+            "title_selector": "h2",
+            "date_selector": "time",
+            "link_selector": "a",
+            "enabled": true
         },
         {
             "id": "serpentine-jarrahdale",
-            "name": "Shire of Serpentine Jarrahdale",
+            "name": "Shire of Serpentine-Jarrahdale",
             "news_url": "https://www.sjshire.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
@@ -1018,9 +1093,18 @@
             "id": "subiaco",
             "name": "City of Subiaco",
             "news_url": "https://www.subiaco.wa.gov.au/see-do/good-to-know/news",
-            "scraper": "catalyst_scraper",
+            "scraper": "browser_scraper",
             "enabled": true,
-            "use_curl": false
+            "selectors": {
+                "wait_for": ".news-item",
+                "container": ".news-item",
+                "title": ".title",
+                "link": "a.news-link",
+                "date": ".release-date",
+                "content": ".summary"
+            },
+            "population": 17975,
+            "region": "Perth Metro"
         },
         {
             "id": "swan",
@@ -1044,7 +1128,7 @@
         {
             "id": "tammin",
             "name": "Shire of Tammin",
-            "news_url": "https://www.tammin.wa.gov.au/council/notices/newsletter.aspx",
+            "news_url": "https://www.tammin.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": false
@@ -1069,7 +1153,7 @@
         {
             "id": "trayning",
             "name": "Shire of Trayning",
-            "news_url": "https://www.trayning.wa.gov.au",
+            "news_url": "https://www.trayning.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
@@ -1106,7 +1190,12 @@
             "id": "vincent",
             "name": "City of Vincent",
             "news_url": "https://www.vincent.wa.gov.au/news",
-            "scraper": "opencities_scraper",
+            "scraper": "curl_scraper",
+            "item_selector": ".row .col-sm-7",
+            "title_selector": "span.h4",
+            "date_selector": "span.h5",
+            "link_selector": "a.btn",
+            "excerpt_selector": "p",
             "enabled": true,
             "use_curl": true,
             "impersonate": "chrome124",

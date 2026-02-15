@@ -1,27 +1,23 @@
-
-import sqlite3
 import sys
-import os
+from pathlib import Path
+from sqlalchemy import select
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
+
+from core.database import Database
+from core.models import Article
 
 def check_warren_titles():
-    db_path = "bot.db"
-    if not os.path.exists(db_path):
-        print(f"Database not found at {db_path}")
-        return
-
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
 
     print("Checking Warren Shire Council articles...")
-    cursor.execute("""
-        SELECT title, url, date 
-        FROM articles 
-        WHERE council_id = 'warren-shire-council' 
-        ORDER BY date DESC 
-        LIMIT 10
-    """)
-    
-    rows = cursor.fetchall()
+    rows = session.execute(
+        select(Article.title, Article.url, Article.date)
+        .where(Article.council_id == 'warren-shire-council')
+        .order_by(Article.date.desc())
+        .limit(10)
+    ).all()
     if not rows:
         print("No articles found for Warren Shire Council.")
     
@@ -31,8 +27,8 @@ def check_warren_titles():
         print(f"Title: {title}")
         print(f"URL: {url}")
         print("-" * 40)
-        
-    conn.close()
+
+    session.close()
 
 if __name__ == "__main__":
     check_warren_titles()

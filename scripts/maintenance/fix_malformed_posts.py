@@ -1,6 +1,6 @@
 import sys
 import os
-import sqlite3
+from sqlalchemy import text
 from atproto import Client, models
 from dotenv import load_dotenv
 
@@ -16,8 +16,6 @@ def load_state_config(state_code):
 
 def reset_article_in_db(db, title_fragment):
     """Find article by title fragment and reset posted status."""
-    conn = db._get_conn()
-    cursor = conn.cursor()
     
     # Try to find the article
     # The title in the post might be truncated or have extra formatting
@@ -36,21 +34,28 @@ def reset_article_in_db(db, title_fragment):
         
     print(f"Searching DB for title like: {clean_fragment}%")
     
-    cursor.execute("SELECT id, title, url FROM articles WHERE title LIKE ?", (f"{clean_fragment}%",))
-    results = cursor.fetchall()
-    
-    if not results:
-        print("❌ No matching article found in DB.")
-        return False
-    
-    if len(results) > 1:
-        print(f"⚠️ Found {len(results)} matches. Resetting all.")
+    with db.get_session() as session:
+        result = session.execute(
+            text("SELECT id, title, url FROM articles WHERE title LIKE :pattern"),
+            {"pattern": f"{clean_fragment}%"}
+        )
+        results = result.fetchall()
         
-    for row in results:
-        print(f"  Resetting: {row['title']} ({row['url']})")
-        cursor.execute("UPDATE articles SET posted_at = NULL, posted_to_handle = NULL WHERE id = ?", (row['id'],))
-    
-    conn.commit()
+        if not results:
+            print("❌ No matching article found in DB.")
+            return False
+        
+        if len(results) > 1:
+            print(f"⚠️ Found {len(results)} matches. Resetting all.")
+            
+        for row in results:
+            print(f"  Resetting: {row.title} ({row.url})")
+            session.execute(
+                text("UPDATE articles SET posted_at = NULL, posted_to_handle = NULL WHERE id = :id"),
+                {"id": row.id}
+            )
+        
+        session.commit()
     return True
 
 def main():

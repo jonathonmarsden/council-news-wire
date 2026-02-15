@@ -1,59 +1,54 @@
 import os
-import sys
-import sqlite3
 from datetime import datetime, timedelta, timezone
 from atproto import Client
 from dotenv import load_dotenv
+from sqlalchemy import select
+
+from core.database import Database
+from core.models import Article
 
 # Load environment variables
 load_dotenv()
 
-DB_PATH = 'bot.db'
 BSKY_HANDLE = os.getenv('BLUESKY_HANDLE_WA')
 BSKY_PASSWORD = os.getenv('BLUESKY_PASSWORD_WA')
-
-def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 def cleanup_wa_recent():
     print("--- Starting Cleanup of Recent WA Posts (Last 3 Hours) ---")
     
     # 1. Identify and Delete from Database
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Debug: Check recent posts regardless of state
     print("Debug: Checking most recent 5 posts in DB...")
-    cursor.execute("SELECT title, state, posted_at FROM articles ORDER BY posted_at DESC LIMIT 5")
-    for row in cursor.fetchall():
-        print(f"  [{row['state']}] {row['posted_at']} - {row['title']}")
+    recent_stmt = select(
+        Article.title,
+        Article.state,
+        Article.posted_at
+    ).order_by(Article.posted_at.desc()).limit(5)
+    for row in session.execute(recent_stmt).all():
+        print(f"  [{row[1]}] {row[2]} - {row[0]}")
 
     # Calculate cutoff time (3 hours ago)
-    # SQLite uses UTC usually, check if posted_at is UTC. 
-    # Assuming CURRENT_TIMESTAMP is UTC.
-    cutoff_time = (datetime.now(timezone.utc) - timedelta(hours=3)).strftime('%Y-%m-%d %H:%M:%S')
-    
+    cutoff_time = datetime.now(timezone.utc) - timedelta(hours=3)
+
     print(f"Looking for WA articles posted after {cutoff_time}...")
-    
-    cursor.execute("""
-        SELECT id, council_id, title, url, posted_at 
-        FROM articles 
-        WHERE state = 'wa' 
-        AND posted_at > datetime('now', '-3 hours')
-    """)
-    
-    articles = cursor.fetchall()
+
+    wa_stmt = select(Article).where(
+        Article.state == 'wa',
+        Article.posted_at > cutoff_time
+    )
+    articles = session.execute(wa_stmt).scalars().all()
     print(f"Found {len(articles)} articles in DB.")
     
     deleted_count = 0
     for article in articles:
-        print(f"Deleting from DB: [{article['council_id']}] {article['title']}")
-        cursor.execute("DELETE FROM articles WHERE id = ?", (article['id'],))
+        print(f"Deleting from DB: [{article.council_id}] {article.title}")
+        session.delete(article)
         deleted_count += 1
-        
-    conn.commit()
+
+    session.commit()
     print(f"Deleted {deleted_count} records from database.")
     
     # 2. Delete from BlueSky

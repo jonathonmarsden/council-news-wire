@@ -1,236 +1,189 @@
 """
 Database module for Council News Bot.
 
-Handles SQLite database operations for tracking scraped articles and posting history.
+Handles database operations via SQLAlchemy using PostgreSQL.
 """
 
-import sqlite3
-from datetime import datetime
-from pathlib import Path
-from typing import List, Optional, Dict, Set, Tuple
-from core.config import DB_PATH
+from __future__ import annotations
+
+import os
+from datetime import datetime, timedelta
+from dateutil import parser
+from typing import List, Optional, Dict, Union
+from sqlalchemy import create_engine, select, update, func, and_
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.dialects.postgresql import insert as pg_upsert
+
+from core.models import Base, Article, CouncilHealth, ScraperStats
 
 class Database:
-    """SQLite database handler."""
+    """SQLAlchemy database handler."""
     
-    def __init__(self, db_path: str = None):
+    def __init__(self, db_url: str = None):
         """
         Initialize database connection.
-        
-        Args:
-            db_path: Path to the SQLite database file. If None, uses default from config.
+        Requires DATABASE_URL env var (Postgres) unless db_url is provided.
         """
-        self.db_path = db_path if db_path else str(DB_PATH)
-        
-        # Ensure directory exists
-        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
-        
-        self._init_db()
-    
-    def _get_conn(self) -> sqlite3.Connection:
-        """Get a database connection."""
-        # Increase timeout to 60 seconds to handle concurrent access during heavy scrapes
-        conn = sqlite3.connect(self.db_path, timeout=60.0)
-        conn.row_factory = sqlite3.Row
-        return conn
-    
-    def _init_db(self):
-        """Initialize the database schema."""
-        with self._get_conn() as conn:
-            # Enable WAL mode for better concurrency
-            conn.execute("PRAGMA journal_mode=WAL;")
-            
-            # Articles table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS articles (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    url TEXT UNIQUE NOT NULL,
-                    council_id TEXT NOT NULL,
-                    title TEXT,
-                    date TEXT,
-                    excerpt TEXT,
-                    state TEXT NOT NULL,
-                    status TEXT DEFAULT 'new',
-                    first_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    posted_at TIMESTAMP,
-                    posted_to_handle TEXT
-                )
-            """)
-            
-            # Migration: Add status column if it doesn't exist
-            try:
-                conn.execute("ALTER TABLE articles ADD COLUMN status TEXT DEFAULT 'new'")
-            except sqlite3.OperationalError:
-                # Column likely already exists
-                pass
-            
-            # Create index for faster lookups
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_url ON articles(url)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_state_posted ON articles(state, posted_at)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_status ON articles(status)")
-            
-            # Council Health table (Circuit Breaker)
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS council_health (
-                    council_id TEXT PRIMARY KEY,
-                    consecutive_failures INTEGER DEFAULT 0,
-                    last_failure_at TIMESTAMP,
-                    last_success_at TIMESTAMP,
-                    is_disabled BOOLEAN DEFAULT 0,
-                    disabled_at TIMESTAMP,
-                    consecutive_empty_runs INTEGER DEFAULT 0
-                )
-            """)
+        self.db_url = db_url or os.environ.get("DATABASE_URL")
+        if not self.db_url:
+            raise RuntimeError("DATABASE_URL is required. SQLite support has been removed.")
 
-            # Migration: Add consecutive_empty_runs column if it doesn't exist
-            try:
-                conn.execute("ALTER TABLE council_health ADD COLUMN consecutive_empty_runs INTEGER DEFAULT 0")
-            except sqlite3.OperationalError:
-                pass
-            
-            # Scraper Stats table
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS scraper_stats (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    council_id TEXT NOT NULL,
-                    run_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    articles_found INTEGER DEFAULT 0,
-                    articles_saved INTEGER DEFAULT 0,
-                    status TEXT,
-                    duration_ms INTEGER
-                )
-            """)
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_stats_council_run ON scraper_stats(council_id, run_at)")
-            
-            # Fix state consistency (ensure uppercase)
-            conn.execute("UPDATE articles SET state = UPPER(state) WHERE state != UPPER(state)")
-            
-            conn.commit()
+        # Create Engine
+        self.engine = create_engine(self.db_url)
+        
+        # Create Tables (if not exist)
+        # Note: In production with Alembic, we might skip this or use alembic upgrade head
+        Base.metadata.create_all(self.engine)
+        
+        self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
     
+    def get_session(self) -> Session:
+        """Get a SQLAlchemy session."""
+        return self.SessionLocal()
+    
+    def _upsert_stmt(self, table, values, index_elements):
+        """Helper to generate Postgres upsert statement."""
+        stmt = pg_upsert(table).values(values)
+        return stmt.on_conflict_do_update(
+            index_elements=index_elements,
+            set_=values
+        )
+
     def article_exists(self, url: str) -> bool:
         """Check if an article URL has already been seen."""
-        with self._get_conn() as conn:
-            cursor = conn.execute("SELECT 1 FROM articles WHERE url = ?", (url,))
-            return cursor.fetchone() is not None
+        with self.get_session() as session:
+            stmt = select(Article.id).where(Article.url == url)
+            return session.execute(stmt).first() is not None
             
     def is_posted(self, url: str) -> bool:
         """Check if an article has been posted."""
-        with self._get_conn() as conn:
-            cursor = conn.execute(
-                "SELECT 1 FROM articles WHERE url = ? AND posted_at IS NOT NULL", 
-                (url,)
+        with self.get_session() as session:
+            stmt = select(Article.id).where(
+                and_(Article.url == url, Article.posted_at.is_not(None))
             )
-            return cursor.fetchone() is not None
+            return session.execute(stmt).first() is not None
 
     def add_article(self, article: Dict, state: str) -> int:
-        """
-        Add a new article to the database.
-        
-        Returns:
-            ID of the inserted article, or existing ID if duplicate
-        """
-        with self._get_conn() as conn:
+        """Add a new article to the database."""
+        with self.get_session() as session:
+            # Check exist first to avoid auto-increment burning on Postgres
+            existing = session.execute(select(Article).where(Article.url == article['url'])).scalar_one_or_none()
+            if existing:
+                return existing.id
+
+            new_article = Article(
+                url=article['url'],
+                council_id=article['council_id'],
+                title=article['title'],
+                date=article.get('date'),
+                excerpt=article.get('excerpt'),
+                state=state,
+                status='new'
+            )
+            session.add(new_article)
             try:
-                cursor = conn.execute(
-                    """
-                    INSERT INTO articles (url, council_id, title, date, excerpt, state)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                    """,
-                    (
-                        article['url'],
-                        article['council_id'],
-                        article['title'],
-                        article['date'],
-                        article['excerpt'],
-                        state
-                    )
-                )
-                conn.commit()
-                return cursor.lastrowid
-            except sqlite3.IntegrityError:
-                # Article already exists, return its ID
-                cursor = conn.execute("SELECT id FROM articles WHERE url = ?", (article['url'],))
-                row = cursor.fetchone()
-                return row['id'] if row else -1
+                session.commit()
+                session.refresh(new_article)
+                return new_article.id
+            except Exception:
+                session.rollback()
+                # Race condition fallback
+                existing = session.execute(select(Article).where(Article.url == article['url'])).scalar_one_or_none()
+                return existing.id if existing else -1
 
     def add_articles_bulk(self, articles: List[Dict], state: str, status: str = 'new') -> int:
-        """
-        Add multiple articles to the database in a single transaction.
-        Ignores duplicates (INSERT OR IGNORE).
-        
-        Returns:
-            Number of new articles added.
-        """
+        """Add multiple articles using bulk insert ignore logic."""
         if not articles:
             return 0
-            
-        with self._get_conn() as conn:
-            # Prepare data for executemany
-            data = [
-                (
-                    a['url'],
-                    a['council_id'],
-                    a['title'],
-                    a['date'],
-                    a['excerpt'],
-                    state,
-                    status
-                )
-                for a in articles
-            ]
-            
-            # Use INSERT OR IGNORE to handle duplicates gracefully in bulk
-            cursor = conn.executemany(
-                """
-                INSERT OR IGNORE INTO articles (url, council_id, title, date, excerpt, state, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                data
-            )
-            conn.commit()
-            return cursor.rowcount
+        
+        # Deduplicate incoming list by URL
+        unique_articles = {a['url']: a for a in articles}.values()
+        
+        count = 0
+        with self.get_session() as session:
+            for a in unique_articles:
+                # We do row-by-row check for simplicity in ORM to handle ignore logic
+                # For massive scale, Core Insert with on_conflict_do_nothing is better
+                # but this is fine for batches of ~20-50
+                stmt = select(Article.id).where(Article.url == a['url'])
+                if not session.execute(stmt).first():
+                    new_a = Article(
+                        url=a['url'],
+                        council_id=a['council_id'],
+                        title=a['title'],
+                        date=a.get('date'),
+                        excerpt=a.get('excerpt'),
+                        state=state,
+                        status=status
+                    )
+                    session.add(new_a)
+                    count += 1
+            session.commit()
+        return count
 
     def mark_as_posted(self, url: str, handle: str):
         """Mark an article as posted."""
-        with self._get_conn() as conn:
-            conn.execute(
-                """
-                UPDATE articles 
-                SET posted_at = CURRENT_TIMESTAMP, posted_to_handle = ?
-                WHERE url = ?
-                """,
-                (handle, url)
+        with self.get_session() as session:
+            stmt = update(Article).where(Article.url == url).values(
+                posted_at=func.now(),
+                posted_to_handle=handle
             )
-            conn.commit()
+            session.execute(stmt)
+            session.commit()
 
     def get_unposted_articles(self, state: str, limit: int = 50) -> List[Dict]:
-        """
-        Get unposted articles for a specific state.
-        
-        Implements variety logic to prevent consecutive posts from the same council
-        unless necessary.
-        """
-        # Fetch a larger batch to allow for reordering
+        """Get unposted articles for a specific state (Round Robin)."""
         fetch_limit = max(limit * 5, 200)
         
-        with self._get_conn() as conn:
-            cursor = conn.execute(
-                """
-                SELECT * FROM articles 
-                WHERE state = ? AND posted_at IS NULL AND status != 'archived'
-                ORDER BY first_seen_at DESC
-                LIMIT ?
-                """,
-                (state, fetch_limit)
-            )
-            raw_articles = [dict(row) for row in cursor.fetchall()]
+        with self.get_session() as session:
+            stmt = select(Article).where(
+                and_(
+                    func.upper(Article.state) == state.upper(),
+                    Article.posted_at.is_(None),
+                    Article.status != 'archived'
+                )
+            ).order_by(Article.first_seen_at.desc()).limit(fetch_limit)
             
+            objs = session.execute(stmt).scalars().all()
+            
+            # Convert to dicts
+            raw_articles = []
+            
+            # Filter for freshness (User Request: < 7 days old)
+            cutoff_date = datetime.now() - timedelta(days=7)
+            
+            for o in objs:
+                is_too_old = False
+                if o.date:
+                    try:
+                        # Parse date string. Assume dayfirst for Australia unless obvious
+                        dt = parser.parse(o.date, fuzzy=True, dayfirst=True)
+                        if dt < cutoff_date:
+                            is_too_old = True
+                    except Exception:
+                        # Keep it if we can't parse it (safer than suppressing valid items)
+                        pass
+                
+                if is_too_old:
+                    # Auto-suppress to clean the queue
+                    o.status = 'suppressed_too_old'
+                    o.posted_at = datetime.now()
+                else:
+                    raw_articles.append({
+                        'id': o.id, 'url': o.url, 'council_id': o.council_id,
+                        'title': o.title, 'date': o.date, 'excerpt': o.excerpt,
+                        'state': o.state, 'first_seen_at': o.first_seen_at
+                    })
+            
+            # Commit the suppressions
+            session.commit()
+
         if not raw_articles:
             return []
             
         # Group by council
         council_queues = {}
-        council_order = [] # To maintain priority based on recency
+        council_order = [] 
         
         for article in raw_articles:
             c_id = article['council_id']
@@ -239,10 +192,9 @@ class Database:
                 council_order.append(c_id)
             council_queues[c_id].append(article)
             
-        # Round robin selection
+        # Round robin
         varied_articles = []
         while len(varied_articles) < limit and any(council_queues.values()):
-            # Iterate through councils in order of their newest article
             for c_id in council_order:
                 if council_queues[c_id]:
                     varied_articles.append(council_queues[c_id].pop(0))
@@ -252,105 +204,85 @@ class Database:
         return varied_articles
 
     def get_council_health(self, council_id: str) -> Dict:
-        """Get health status for a council."""
-        with self._get_conn() as conn:
-            cursor = conn.execute(
-                "SELECT * FROM council_health WHERE council_id = ?", 
-                (council_id,)
-            )
-            row = cursor.fetchone()
-            if row:
-                return dict(row)
+        """Get health status."""
+        with self.get_session() as session:
+            obj = session.get(CouncilHealth, council_id)
+            if obj:
+                return {
+                    'council_id': obj.council_id,
+                    'consecutive_failures': obj.consecutive_failures,
+                    'is_disabled': obj.is_disabled,
+                    'consecutive_empty_runs': obj.consecutive_empty_runs
+                }
             return {
                 'council_id': council_id,
                 'consecutive_failures': 0,
-                'is_disabled': 0
+                'is_disabled': False,
+                'consecutive_empty_runs': 0
             }
 
     def record_success(self, council_id: str, articles_found: int = 0):
-        """
-        Record a successful scrape.
-        Also tracks consecutive empty runs for Zombie Scraper detection.
-        """
-        with self._get_conn() as conn:
-            # Logic:
-            # If found > 0: Reset failures AND empty_runs
-            # If found == 0: Reset failures, Increment empty_runs
-            
-            # First get current empty runs to increment
-            cursor = conn.execute("SELECT consecutive_empty_runs FROM council_health WHERE council_id = ?", (council_id,))
-            row = cursor.fetchone()
-            current_empty = row['consecutive_empty_runs'] if row and row['consecutive_empty_runs'] else 0
-            
+        """Record success."""
+        with self.get_session() as session:
+            # Get current empty runs
+            obj = session.get(CouncilHealth, council_id)
+            current_empty = obj.consecutive_empty_runs if obj else 0
             new_empty = 0 if articles_found > 0 else current_empty + 1
             
-            conn.execute("""
-                INSERT INTO council_health (council_id, consecutive_failures, last_success_at, is_disabled, consecutive_empty_runs)
-                VALUES (?, 0, CURRENT_TIMESTAMP, 0, ?)
-                ON CONFLICT(council_id) DO UPDATE SET
-                    consecutive_failures = 0,
-                    last_success_at = CURRENT_TIMESTAMP,
-                    is_disabled = 0,
-                    disabled_at = NULL,
-                    consecutive_empty_runs = ?
-            """, (council_id, new_empty, new_empty))
-            conn.commit()
+            # SQLAlchemy Merge is closest to Upsert, but explicit object manipulation is cleaner here
+            if not obj:
+                obj = CouncilHealth(council_id=council_id)
+                session.add(obj)
+            
+            obj.consecutive_failures = 0
+            obj.last_success_at = func.now()
+            obj.is_disabled = False
+            obj.disabled_at = None
+            obj.consecutive_empty_runs = new_empty
+            session.commit()
 
     def record_failure(self, council_id: str) -> bool:
-        """
-        Record a failed scrape.
-        Returns True if the council is now disabled.
-        """
-        with self._get_conn() as conn:
-            # Get current failures
-            cursor = conn.execute(
-                "SELECT consecutive_failures FROM council_health WHERE council_id = ?", 
-                (council_id,)
-            )
-            row = cursor.fetchone()
-            current_failures = row['consecutive_failures'] if row else 0
-            new_failures = current_failures + 1
+        """Record failure."""
+        with self.get_session() as session:
+            obj = session.get(CouncilHealth, council_id)
+            if not obj:
+                obj = CouncilHealth(council_id=council_id)
+                session.add(obj)
             
-            is_disabled = 1 if new_failures >= 5 else 0
-            disabled_at = datetime.now() if is_disabled else None
+            obj.consecutive_failures += 1
+            obj.last_failure_at = func.now()
             
-            conn.execute("""
-                INSERT INTO council_health (council_id, consecutive_failures, last_failure_at, is_disabled, disabled_at)
-                VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)
-                ON CONFLICT(council_id) DO UPDATE SET
-                    consecutive_failures = ?,
-                    last_failure_at = CURRENT_TIMESTAMP,
-                    is_disabled = ?,
-                    disabled_at = ?
-            """, (council_id, new_failures, is_disabled, disabled_at, new_failures, is_disabled, disabled_at))
-            conn.commit()
-            
-            return is_disabled == 1
+            if obj.consecutive_failures >= 5:
+                obj.is_disabled = True
+                obj.disabled_at = func.now()
+                
+            session.commit()
+            return obj.is_disabled
 
     def log_scraper_run(self, council_id: str, articles_found: int, status: str, duration_ms: int, articles_saved: int = 0):
-        """Log a scraper run execution."""
-        with self._get_conn() as conn:
-            conn.execute("""
-                INSERT INTO scraper_stats (council_id, articles_found, articles_saved, status, duration_ms)
-                VALUES (?, ?, ?, ?, ?)
-            """, (council_id, articles_found, articles_saved, status, duration_ms))
-            conn.commit()
+        """Log stats."""
+        with self.get_session() as session:
+            stat = ScraperStats(
+                council_id=council_id,
+                articles_found=articles_found,
+                articles_saved=articles_saved,
+                status=status,
+                duration_ms=duration_ms
+            )
+            session.add(stat)
+            session.commit()
             
     def get_stats(self, state: str) -> Dict:
-        """Get statistics for a state."""
-        with self._get_conn() as conn:
-            total = conn.execute(
-                "SELECT COUNT(*) as c FROM articles WHERE state = ?", 
-                (state,)
-            ).fetchone()['c']
-            
-            posted = conn.execute(
-                "SELECT COUNT(*) as c FROM articles WHERE state = ? AND posted_at IS NOT NULL", 
-                (state,)
-            ).fetchone()['c']
+        """Get basic stats."""
+        with self.get_session() as session:
+            total = session.query(func.count(Article.id)).where(func.upper(Article.state) == state.upper()).scalar()
+            posted = session.query(func.count(Article.id)).where(
+                and_(func.upper(Article.state) == state.upper(), Article.posted_at.is_not(None))
+            ).scalar()
             
             return {
                 "total_articles": total,
                 "posted_articles": posted,
                 "backlog": total - posted
             }
+

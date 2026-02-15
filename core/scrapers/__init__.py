@@ -4,3 +4,4 @@ from .rss import RSSScraper
 from .catalyst import CatalystScraper
 from .factory import ScraperFactory
 from .custom import InnerWestScraper
+from .spark_json import SparkNewsListingScraper

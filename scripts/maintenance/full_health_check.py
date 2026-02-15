@@ -1,21 +1,11 @@
 import json
 import os
-import sqlite3
 import glob
 from datetime import datetime, timedelta
+from sqlalchemy import select, func
 
-def get_db_connection():
-    # Prefer absolute path to data volume on VPS
-    db_path = "/opt/council-news-bot/data/bot.db"
-    if not os.path.exists(db_path):
-        # Fallback to local
-        db_path = "bot.db"
-    
-    if not os.path.exists(db_path):
-        return None
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    return conn
+from core.database import Database
+from core.models import Article
 
 def load_all_councils():
     councils = {}
@@ -40,24 +30,25 @@ def load_all_councils():
     return councils
 
 def main():
-    conn = get_db_connection()
-    if not conn:
-        print("Error: Database not found.")
-        return
+    db = Database()
+    session = db.get_session()
 
     councils = load_all_councils()
     print(f"Loaded {len(councils)} enabled councils configuration.")
     
-    cursor = conn.cursor()
-    
-    # Get last seen date for all councils
-    cursor.execute("""
-        SELECT council_id, MAX(first_seen_at) as last_seen, COUNT(*) as total_count
-        FROM articles 
-        GROUP BY council_id
-    """)
-    
-    db_stats = {row['council_id']: row for row in cursor.fetchall()}
+    stats_stmt = select(
+        Article.council_id,
+        func.max(Article.first_seen_at),
+        func.count(Article.id)
+    ).group_by(Article.council_id)
+
+    db_stats = {
+        row[0]: {
+            "last_seen": row[1],
+            "total_count": row[2]
+        }
+        for row in session.execute(stats_stmt).all()
+    }
     
     now = datetime.now()
     seven_days_ago = now - timedelta(days=7)
@@ -75,23 +66,16 @@ def main():
             never.append(config)
             continue
             
-        last_seen_str = stat['last_seen']
-        if not last_seen_str:
+        last_seen = stat['last_seen']
+        if not last_seen:
             never.append(config)
             continue
-            
-        try:
-            # Handle potential different date formats if necessary, but usually ISO in DB
-            last_seen = datetime.fromisoformat(last_seen_str)
-        except ValueError:
-            # Fallback for non-iso
-            last_seen = datetime.strptime(last_seen_str, "%Y-%m-%d %H:%M:%S")
 
         info = {
             'id': cid,
             'name': config['name'],
             'state': config.get('state', 'Unknown'),
-            'last_seen': last_seen_str,
+            'last_seen': last_seen.isoformat(),
             'total': stat['total_count']
         }
         
@@ -120,6 +104,8 @@ def main():
     print(f"\n=== ⚠️ Quiet Councils (7-30d) ({len(quiet)}) ===")
     for c in sorted(quiet, key=lambda x: x['last_seen']):
         print(f"[{c['state']}] {c['id']}: Last seen {c['last_seen']} (Total: {c['total']})")
+
+    session.close()
 
 if __name__ == "__main__":
     main()

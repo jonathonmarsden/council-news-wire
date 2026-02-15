@@ -58,8 +58,12 @@ class CardScraper(BaseScraper):
                     classes_str = str(classes)
                 
                 # Skip known metadata elements
-                if any(c in classes_str for c in ['date', 'published', 'time', 'meta', 'label', 'right', 'summary', 'excerpt', 'description', 'teaser', 'body']):
+                # Note: Be careful with 'label' as it catches 'field--label-hidden' which often contains the title in Drupal
+                if any(c in classes_str for c in ['date', 'published', 'time', 'meta', 'right', 'summary', 'excerpt', 'description', 'teaser', 'body']):
                     continue
+                if 'label' in classes_str and 'hidden' not in classes_str:
+                     continue
+                
                 if child.name == 'time':
                     continue
                 # Skip paragraph tags inside title containers (usually summaries)
@@ -329,9 +333,19 @@ class CardScraper(BaseScraper):
         if self.selectors:
             # Link
             link_selector = self.selectors.get('link_selector')
+            # print(f"DEBUG: link_selector={link_selector} for {self.council_id}")
             if link_selector:
                 if link_selector == 'self' or link_selector == 'this':
-                    link_elem = item if item.name == 'a' else None
+                    if item.name == 'a':
+                        link_elem = item
+                    elif item.has_attr('id'):
+                        # Special handling for tab/anchor targets
+                        # Construct URL from base news URL + ID
+                        base_url = self.news_url.split('#')[0]
+                        url = f"{base_url}#{item['id']}"
+                        link_elem = None # URL already set
+                    else:
+                        link_elem = None
                 else:
                     link_elem = item.select_one(link_selector)
                 
@@ -345,7 +359,11 @@ class CardScraper(BaseScraper):
             # Title
             title_selector = self.selectors.get('title_selector')
             if title_selector:
-                title_elem = item.select_one(title_selector)
+                if title_selector == 'self' or title_selector == 'this':
+                    title_elem = item
+                else:
+                    title_elem = item.select_one(title_selector)
+                    
                 if title_elem:
                     print(f"Found title elem: {str(title_elem)[:100]}")
                     title = self._get_clean_title(title_elem)

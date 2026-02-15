@@ -2,6 +2,8 @@
 Utility functions for Council News Bot.
 """
 
+from __future__ import annotations
+
 import logging
 import sys
 import json

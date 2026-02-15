@@ -13,6 +13,7 @@ Auto-fixes councils by switching to RSS if a feed is discovered.
 
 import json
 import os
+from sqlalchemy import text
 import sys
 import requests
 import concurrent.futures
@@ -24,7 +25,7 @@ from urllib.parse import urljoin
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(project_root)
 
-from core.config import DB_PATH, CONFIG_PATHS
+from core.config import CONFIG_PATHS
 from core.database import Database
 
 # Common headers to mimic a browser
@@ -60,10 +61,10 @@ def get_dead_councils():
     councils = load_all_councils()
     dead_councils = []
     
-    with db._get_conn() as conn:
+    with db.get_session() as session:
         # Get all council IDs that have at least one article
-        cursor = conn.execute("SELECT DISTINCT council_id FROM articles")
-        active_ids = {row[0] for row in cursor.fetchall()}
+        result = session.execute(text("SELECT DISTINCT council_id FROM articles"))
+        active_ids = {row[0] for row in result.fetchall()}
         
     for c_id, config in councils.items():
         if not config.get('enabled', True):

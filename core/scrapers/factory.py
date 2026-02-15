@@ -2,12 +2,16 @@
 Factory for creating scraper instances.
 """
 
+from __future__ import annotations
+
 from typing import Dict, Optional
 
 from .base import BaseScraper
 from .card import CardScraper
 from .rss import RSSScraper
+from .json import JsonScraper
 from .alyka import AlykaScraper
+from .browser import BrowserScraper
 from .custom import InnerWestScraper, BunburyScraper, WordPressScraper, OpenCitiesScraper, APYScraper
 
 class ScraperFactory:
@@ -41,6 +45,7 @@ class ScraperFactory:
             'date_selector': council_selectors.get('date') or council.get('date_selector'),
             'content_selector': council_selectors.get('content') or council.get('content_selector'),
             'excerpt_selector': council_selectors.get('excerpt') or council.get('excerpt_selector'),
+            'wait_selector': council_selectors.get('wait_for') or council.get('wait_selector'),
             'full_content_selector': council.get('full_content_selector'),
             'full_title_selector': council.get('full_title_selector')
         }
@@ -48,15 +53,18 @@ class ScraperFactory:
         # Registry of custom scrapers
         from .custom import AspNetScraper
         from .catalyst import CatalystScraper
-        from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper, BelmontScraper
+        from .spark_json import SparkNewsListingScraper
+        from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper, BelmontScraper, DumbleyungScraper
         scraper_classes = {
             'inner_west_scraper': InnerWestScraper,
             'catalyst_scraper': CatalystScraper,
+            'spark_news_listing_scraper': SparkNewsListingScraper,
             'wanneroo_scraper': WannerooScraper,
             'perth_scraper': PerthScraper,
             'claremont_scraper': ClaremontScraper,
             'belmont_scraper': BelmontScraper,
             'joondalup_scraper': JoondalupScraper,
+            'dumbleyung_scraper': DumbleyungScraper,
             'bunbury_scraper': BunburyScraper,
             'wordpress_scraper': WordPressScraper,
             'opencities_scraper': OpenCitiesScraper,
@@ -65,7 +73,9 @@ class ScraperFactory:
             'card_scraper': CardScraper,
             'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
             'rss_scraper': RSSScraper,
+            'json_scraper': JsonScraper,
             'alyka_scraper': AlykaScraper,
+            'browser_scraper': BrowserScraper,
         }
         
         scraper_class = scraper_classes.get(scraper_type, CardScraper)

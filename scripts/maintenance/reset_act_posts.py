@@ -1,32 +1,30 @@
-import sqlite3
 import sys
 from pathlib import Path
+from sqlalchemy import select
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from core.database import Database
+from core.models import Article
 
 def reset_act_posts():
-    # Inside container, DB is at /app/bot.db
-    # On host, it is at /opt/council-news-bot/bot.db
-    # We try to detect or just use the relative path if running from root
-    db_path = 'bot.db'
-    
-    print(f"Connecting to database at {db_path}...")
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    db = Database()
+    session = db.get_session()
     
     # Find ALL ACT articles
-    cursor.execute("""
-        SELECT id, title, url, posted_at, status, state
-        FROM articles 
-        WHERE state = 'ACT' OR state = 'act'
-        ORDER BY id DESC
-    """)
-    
-    articles = cursor.fetchall()
+    articles = session.execute(
+        select(
+            Article.id,
+            Article.title,
+            Article.url,
+            Article.posted_at,
+            Article.status,
+            Article.state
+        ).where(
+            Article.state.in_(['ACT', 'act'])
+        ).order_by(Article.id.desc())
+    ).all()
     
     if not articles:
         print("No ACT articles found in DB.")
@@ -34,12 +32,11 @@ def reset_act_posts():
 
     print(f"Found {len(articles)} ACT articles:")
     for art in articles:
-        print(f"[{art['id']}] {art['title']} (State: {art['state']}, Status: {art['status']}, Posted: {art['posted_at']})")
+        print(f"[{art[0]}] {art[1]} (State: {art[5]}, Status: {art[4]}, Posted: {art[3]})")
 
         
     # Do not reset yet, just list
-    conn.close()
-    conn.close()
+    session.close()
 
 if __name__ == "__main__":
     reset_act_posts()

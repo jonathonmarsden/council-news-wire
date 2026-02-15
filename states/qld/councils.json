@@ -2,7 +2,7 @@
     "councils": [
         {
             "id": "aurukun",
-            "name": "Shire of Aurukun",
+            "name": "Aurukun Shire Council",
             "news_url": "https://www.aurukun.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -11,17 +11,20 @@
         },
         {
             "id": "balonne",
-            "name": "Shire of Balonne",
+            "name": "Balonne Shire Council",
             "news_url": "https://www.balonne.qld.gov.au/About-Council/Publications-Media/News",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "item_selector": ".list-item-container",
+            "title_selector": ".list-item-title",
+            "link_selector": "article a",
             "population": 4450,
             "region": "South West Queensland"
         },
         {
             "id": "banana",
-            "name": "Shire of Banana",
+            "name": "Banana Shire Council",
             "news_url": "https://www.banana.qld.gov.au/About-Council/Publication-Scheme-Publications-and-Documents/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -32,17 +35,20 @@
         },
         {
             "id": "barcaldine",
-            "name": "Barcaldine Council",
+            "name": "Barcaldine Regional Council",
             "news_url": "https://www.barcaldinerc.qld.gov.au/Our-Council/Media-Releases-Public-Notices",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "item_selector": ".list-item-container",
+            "title_selector": ".list-item-title",
+            "link_selector": "article a",
             "population": 2940,
             "region": "Central West Queensland"
         },
         {
             "id": "barcoo",
-            "name": "Shire of Barcoo",
+            "name": "Barcoo Shire Council",
             "news_url": "https://www.barcoo.qld.gov.au/news-and-events/news?format=feed&type=rss",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -51,8 +57,8 @@
         },
         {
             "id": "blackall-tambo",
-            "name": "Blackall-Tambo Council",
-            "news_url": "https://www.btrc.qld.gov.au/Our-Council/News-and-Events",
+            "name": "Blackall Tambo Regional Council",
+            "news_url": "https://www.btrc.qld.gov.au/Our-Council/News-and-Events/News-Public-Notices",
             "scraper": "opencities_scraper",
             "enabled": true,
             "use_curl": true,
@@ -61,7 +67,7 @@
         },
         {
             "id": "boulia",
-            "name": "Shire of Boulia",
+            "name": "Boulia Shire Council",
             "news_url": "https://www.boulia.qld.gov.au/News-articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -71,7 +77,7 @@
         },
         {
             "id": "brisbane",
-            "name": "City of Brisbane",
+            "name": "Brisbane City Council",
             "news_url": "https://www.brisbane.qld.gov.au/about-council/your-brisbane",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -84,7 +90,7 @@
         },
         {
             "id": "bulloo",
-            "name": "Shire of Bulloo",
+            "name": "Bulloo Shire Council",
             "news_url": "https://www.bulloo.qld.gov.au/About-Council/Council-Publications/Council-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -94,22 +100,16 @@
         },
         {
             "id": "bundaberg",
-            "name": "Bundaberg Council",
-            "news_url": "https://www.bundabergnow.com/category/news/",
-            "scraper": "curl_scraper",
+            "name": "Bundaberg Regional Council",
+            "news_url": "https://www.brcnow.bundaberg.qld.gov.au/feed/",
+            "scraper": "rss_scraper",
             "enabled": true,
-            "item_selector": "div.tdb_module_loop",
-            "title_selector": "h3.entry-title a",
-            "link_selector": "h3.entry-title a",
-            "date_selector": "time.entry-date",
-            "content_selector": "div.td-excerpt",
             "population": 103715,
-            "region": "Wide Bay-Burnett",
-            "rss_url": "https://www.brcnow.bundaberg.qld.gov.au/feed/"
+            "region": "Wide Bay-Burnett"
         },
         {
             "id": "burdekin",
-            "name": "Shire of Burdekin",
+            "name": "Burdekin Shire Council",
             "news_url": "https://www.burdekin.qld.gov.au/latest-news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -119,7 +119,7 @@
         },
         {
             "id": "burke",
-            "name": "Shire of Burke",
+            "name": "Burke Shire Council",
             "news_url": "https://www.burke.qld.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -129,7 +129,7 @@
         },
         {
             "id": "cairns",
-            "name": "Cairns Council",
+            "name": "Cairns Regional Council",
             "news_url": "https://www.cairns.qld.gov.au/council/news-notices/media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -143,7 +143,7 @@
         },
         {
             "id": "carpentaria",
-            "name": "Shire of Carpentaria",
+            "name": "Carpentaria Shire Council",
             "news_url": "https://www.carpentaria.qld.gov.au/Council/Public-Notices",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -154,7 +154,7 @@
         },
         {
             "id": "cassowary-coast",
-            "name": "Cassowary Coast Council",
+            "name": "Cassowary Coast Regional Council",
             "news_url": "https://www.cassowarycoast.qld.gov.au/Our-Council/Publications/Council-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -164,13 +164,15 @@
             "region": "Far North Queensland"
         },
         {
-            "id": "central-highlands",
-            "name": "Central Highlands Council",
-            "news_url": "https://www.chrc.qld.gov.au/about-council/news/",
+            "id": "central-highlands-qld",
+            "name": "Central Highlands Regional Council",
+            "news_url": "https://chrc.qld.gov.au/council/news/",
             "scraper": "curl_scraper",
             "enabled": true,
+            "use_curl": true,
+            "impersonate": "chrome120",
             "item_selector": ".blog-post",
-            "title_selector": "h4",
+            "title_selector": ".text-container h4",
             "link_selector": "a.post-top",
             "date_selector": ".full-date",
             "content_selector": ".text-container p",
@@ -179,7 +181,7 @@
         },
         {
             "id": "charters-towers",
-            "name": "Charters Towers Council",
+            "name": "Charters Towers Regional Council",
             "news_url": "https://www.charterstowers.qld.gov.au/news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -189,11 +191,13 @@
         },
         {
             "id": "cherbourg-aboriginal-shire",
-            "name": "Cherbourg Aboriginal Shire",
+            "name": "Cherbourg Aboriginal Shire Council",
             "news_url": "https://cherbourg.qld.gov.au/news-events/",
-            "scraper": "wordpress_scraper",
+            "scraper": "browser_scraper",
             "enabled": true,
             "use_curl": true,
+            "block_resources": false,
+            "use_default_ua": true,
             "item_selector": "article.post",
             "title_selector": "h2.entry-title a",
             "link_selector": "h2.entry-title a",
@@ -202,7 +206,7 @@
         },
         {
             "id": "cloncurry",
-            "name": "Shire of Cloncurry",
+            "name": "Cloncurry Shire Council",
             "news_url": "https://www.cloncurry.qld.gov.au/News-articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -212,7 +216,7 @@
         },
         {
             "id": "cook",
-            "name": "Shire of Cook",
+            "name": "Cook Shire Council",
             "news_url": "https://www.cook.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -221,7 +225,7 @@
         },
         {
             "id": "croydon",
-            "name": "Shire of Croydon",
+            "name": "Croydon Shire Council",
             "news_url": "https://www.croydon.qld.gov.au/News-articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -231,7 +235,7 @@
         },
         {
             "id": "diamantina",
-            "name": "Shire of Diamantina",
+            "name": "Diamantina Shire Council",
             "news_url": "https://www.diamantina.qld.gov.au/News/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -241,7 +245,7 @@
         },
         {
             "id": "douglas",
-            "name": "Shire of Douglas",
+            "name": "Douglas Shire Council",
             "news_url": "https://douglas.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -250,17 +254,21 @@
         },
         {
             "id": "etheridge",
-            "name": "Shire of Etheridge",
+            "name": "Etheridge Shire Council",
             "news_url": "https://www.etheridge.qld.gov.au/Home/Tabs/News",
-            "scraper": "opencities_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "item_selector": "a.profile-list",
+            "title_selector": "h2",
+            "date_selector": "p.published-on",
+            "link_selector": "self",
             "population": 925,
             "region": "North West Queensland"
         },
         {
-            "id": "flinders",
-            "name": "Shire of Flinders",
+            "id": "flinders-qld",
+            "name": "Flinders Shire Council",
             "news_url": "https://www.flinders.qld.gov.au/Your-Council/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -270,7 +278,7 @@
         },
         {
             "id": "fraser-coast",
-            "name": "Fraser Coast Council",
+            "name": "Fraser Coast Regional Council",
             "news_url": "https://www.frasercoast.qld.gov.au/media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -280,7 +288,7 @@
         },
         {
             "id": "gladstone",
-            "name": "Gladstone Council",
+            "name": "Gladstone Regional Council",
             "news_url": "https://www.gladstone.qld.gov.au/news/category/all",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -304,7 +312,7 @@
         },
         {
             "id": "goondiwindi",
-            "name": "Goondiwindi Council",
+            "name": "Goondiwindi Regional Council",
             "news_url": "https://www.grc.qld.gov.au/News-and-Community/News/Council-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -314,7 +322,7 @@
         },
         {
             "id": "gympie",
-            "name": "Gympie Council",
+            "name": "Gympie Regional Council",
             "news_url": "https://www.gympie.qld.gov.au/Council/News-and-Notices/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -324,7 +332,7 @@
         },
         {
             "id": "livingstone",
-            "name": "Shire of Livingstone",
+            "name": "Livingstone Shire Council",
             "news_url": "https://www.livingstone.qld.gov.au/Your-Council/Publications-and-Media/Media-Releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -334,36 +342,35 @@
         },
         {
             "id": "lockhart-river",
-            "name": "Aboriginal Shire of Lockhart River",
-            "news_url": "https://lockhart.qld.gov.au/waanta-newsletters",
-            "scraper": "curl_scraper",
-            "enabled": true,
+            "name": "Lockhart River Aboriginal Shire Council",
+            "news_url": "https://lockhart.qld.gov.au",
+            "scraper": "html",
+            "enabled": false,
+            "disabled_reason": "No RSS feed, PDF-only newsletters (2026)",
             "use_curl": true,
-            "item_selector": "div.card-grid a.card-no-bs",
-            "title_selector": "h5.card-title",
-            "link_selector": "self",
-            "date_selector": "h5.card-title",
             "population": 695,
             "region": "Cape York"
         },
         {
             "id": "lockyer-valley",
-            "name": "Lockyer Valley Council",
+            "name": "Lockyer Valley Regional Council",
             "news_url": "https://www.lockyervalley.qld.gov.au/our-council/news",
-            "scraper": "curl_scraper",
+            "scraper": "card_scraper",
             "enabled": true,
-            "mobile_mode": true,
+            "item_selector": "li > a[href*='?item=id']",
+            "title_selector": "h2",
+            "date_selector": ".date",
+            "link_selector": "self",
             "population": 47115,
-            "region": "South East Queensland",
-            "use_curl": true
+            "region": "South East Queensland"
         },
         {
             "id": "logan",
-            "name": "Logan City",
+            "name": "City of Logan",
             "news_url": "https://www.logan.qld.gov.au/about-council/media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
-            "item_selector": ".list-item-container article",
+            "item_selector": ".news-list-container .list-item-container article",
             "title_selector": ".list-item-title",
             "date_selector": ".published-on",
             "link_selector": "a",
@@ -373,7 +380,7 @@
         },
         {
             "id": "longreach",
-            "name": "Longreach Council",
+            "name": "Longreach Regional Council",
             "news_url": "https://www.longreach.qld.gov.au/About-Council/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -383,7 +390,7 @@
         },
         {
             "id": "mackay",
-            "name": "Mackay Council",
+            "name": "Mackay Regional Council",
             "news_url": "https://www.mackay.qld.gov.au/about_council/news_and_media/media_releases",
             "scraper": "curl_scraper",
             "enabled": false,
@@ -397,7 +404,7 @@
         },
         {
             "id": "mapoon",
-            "name": "Aboriginal Shire of Mapoon",
+            "name": "Mapoon Aboriginal Shire Council",
             "news_url": "https://www.mapoon.qld.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -407,7 +414,7 @@
         },
         {
             "id": "maranoa",
-            "name": "Maranoa Council",
+            "name": "Maranoa Regional Council",
             "news_url": "https://www.maranoa.qld.gov.au/About-Council/Publications-and-Media/Latest-Council-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -417,7 +424,7 @@
         },
         {
             "id": "mareeba",
-            "name": "Shire of Mareeba",
+            "name": "Mareeba Shire Council",
             "news_url": "https://msc.qld.gov.au/council/news/",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -426,7 +433,7 @@
         },
         {
             "id": "mckinlay",
-            "name": "Shire of McKinlay",
+            "name": "McKinlay Shire Council",
             "news_url": "https://www.mckinlay.qld.gov.au/News/Media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -440,7 +447,7 @@
             "news_url": "https://www.moretonbay.qld.gov.au/News/Media",
             "scraper": "curl_scraper",
             "enabled": true,
-            "item_selector": ".list-item-container article",
+            "item_selector": ".news-list-container .list-item-container article",
             "title_selector": ".list-item-title",
             "date_selector": "p.small-text",
             "link_selector": "a",
@@ -450,7 +457,7 @@
         },
         {
             "id": "mornington",
-            "name": "Shire of Mornington",
+            "name": "Mornington Shire Council",
             "news_url": "https://www.mornington.qld.gov.au/news/latest-news/",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -459,7 +466,7 @@
         },
         {
             "id": "mount-isa",
-            "name": "City of Mount Isa",
+            "name": "Mount Isa City Council",
             "news_url": "https://www.mountisa.qld.gov.au/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -469,7 +476,7 @@
         },
         {
             "id": "murweh",
-            "name": "Shire of Murweh",
+            "name": "Murweh Shire Council",
             "news_url": "https://www.murweh.qld.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -479,7 +486,7 @@
         },
         {
             "id": "napranum",
-            "name": "Aboriginal Shire of Napranum",
+            "name": "Napranum Aboriginal Shire Council",
             "news_url": "https://www.napranum.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -488,7 +495,7 @@
         },
         {
             "id": "noosa",
-            "name": "Shire of Noosa",
+            "name": "Noosa Shire Council",
             "news_url": "https://www.noosa.qld.gov.au/About-Council/News-and-publications/Media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -498,7 +505,7 @@
         },
         {
             "id": "north-burnett",
-            "name": "North Burnett Council",
+            "name": "North Burnett Regional Council",
             "news_url": "https://northburnett.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -507,7 +514,7 @@
         },
         {
             "id": "northern-peninsula-area",
-            "name": "Northern Peninsula Area Council",
+            "name": "Northern Peninsula Area Regional Council",
             "news_url": "https://www.nparc.qld.gov.au/Our-council/Public-notice",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -517,7 +524,7 @@
         },
         {
             "id": "palm-island",
-            "name": "Aboriginal Shire of Palm Island",
+            "name": "Palm Island Aboriginal Shire Council",
             "news_url": "https://www.palmcouncil.qld.gov.au/News-articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -527,7 +534,7 @@
         },
         {
             "id": "paroo",
-            "name": "Shire of Paroo",
+            "name": "Paroo Shire Council",
             "news_url": "https://www.paroo.qld.gov.au/News-and-Events/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -537,7 +544,7 @@
         },
         {
             "id": "pormpuraaw",
-            "name": "Aboriginal Shire of Pormpuraaw",
+            "name": "Pormpuraaw Aboriginal Shire Council",
             "news_url": "https://www.pormpuraaw.qld.gov.au/public-news-notices",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -546,8 +553,8 @@
         },
         {
             "id": "quilpie",
-            "name": "Shire of Quilpie",
-            "news_url": "https://quilpie.qld.gov.au/news/feed/",
+            "name": "Quilpie Shire Council",
+            "news_url": "https://quilpie.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
             "population": 885,
@@ -556,7 +563,7 @@
         },
         {
             "id": "redland",
-            "name": "Redland City",
+            "name": "Redland City Council",
             "news_url": "https://www.redlandscoasttoday.com.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -565,23 +572,24 @@
         },
         {
             "id": "richmond",
-            "name": "Shire of Richmond",
+            "name": "Richmond Shire Council",
             "news_url": "https://www.richmond.qld.gov.au/monthly-newsletters",
             "scraper": "curl_scraper",
-            "enabled": true,
+            "enabled": false,
+            "disabled_reason": "Only PDF Newsletters available",
             "population": 870,
             "region": "North West Queensland",
             "use_curl": true
         },
         {
             "id": "rockhampton",
-            "name": "Rockhampton Council",
+            "name": "Rockhampton Regional Council",
             "news_url": "https://www.rockhamptonregion.qld.gov.au/AboutCouncil/News-and-announcements/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
-            "item_selector": "div.list-item-container article",
-            "title_selector": "h2.list-item-title a",
-            "link_selector": "h2.list-item-title a",
+            "item_selector": ".news-list-container .list-item-container article",
+            "title_selector": "h2.list-item-title",
+            "link_selector": "a",
             "date_selector": "div.list-item-date",
             "content_selector": "div.list-item-content",
             "use_curl": true,
@@ -590,7 +598,7 @@
         },
         {
             "id": "scenic-rim",
-            "name": "Scenic Rim Council",
+            "name": "Scenic Rim Regional Council",
             "news_url": "https://www.scenicrim.qld.gov.au/our-council/connect-with-council/news-and-announcements",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -600,7 +608,7 @@
         },
         {
             "id": "somerset",
-            "name": "Somerset Council",
+            "name": "Somerset Regional Council",
             "news_url": "https://www.somerset.qld.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -610,7 +618,7 @@
         },
         {
             "id": "south-burnett",
-            "name": "South Burnett Council",
+            "name": "South Burnett Regional Council",
             "news_url": "https://www.southburnett.qld.gov.au/News-Articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -620,7 +628,7 @@
         },
         {
             "id": "southern-downs",
-            "name": "Southern Downs Council",
+            "name": "Southern Downs Regional Council",
             "news_url": "https://www.sdrc.qld.gov.au/council/news-notices/latest-news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -634,7 +642,7 @@
         },
         {
             "id": "sunshine-coast",
-            "name": "Sunshine Coast Council",
+            "name": "Sunshine Coast Regional Council",
             "news_url": "https://www.sunshinecoast.qld.gov.au/news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -643,7 +651,7 @@
         },
         {
             "id": "tablelands",
-            "name": "Tablelands Council",
+            "name": "Tablelands Regional Council",
             "news_url": "https://www.trc.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -652,7 +660,7 @@
         },
         {
             "id": "toowoomba",
-            "name": "Toowoomba Council",
+            "name": "Toowoomba Regional Council",
             "news_url": "https://www.tr.qld.gov.au/about-council/news-publications/media-releases?format=feed&type=rss",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -661,7 +669,7 @@
         },
         {
             "id": "torres",
-            "name": "Shire of Torres",
+            "name": "Torres Shire Council",
             "news_url": "https://www.torres.qld.gov.au/Council/Media-Release",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -671,16 +679,21 @@
         },
         {
             "id": "torres-strait-island",
-            "name": "Torres Strait Island Council",
+            "name": "Torres Strait Island Regional Council",
             "news_url": "https://tsirc.qld.gov.au/news/",
             "scraper": "curl_scraper",
             "enabled": true,
+            "verify_ssl": false,
             "population": 4735,
-            "region": "Torres Strait"
+            "region": "Torres Strait",
+            "item_selector": ".post-card",
+            "title_selector": ".post-card-title",
+            "link_selector": ".post-card-title",
+            "date_selector": ".published-date time"
         },
         {
             "id": "townsville",
-            "name": "City of Townsville",
+            "name": "Townsville City Council",
             "news_url": "https://www.townsville.qld.gov.au/about-council/news-and-publications/media-releases?collection=tcc~sp-tcc-corporate-media-releases&profile=media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -693,18 +706,8 @@
             "region": "North Queensland"
         },
         {
-            "id": "weipa-town-authority",
-            "name": "Weipa Town Authority",
-            "news_url": "https://www.weipatownauthority.com.au/Your-WTA/Publications-and-Media/News",
-            "scraper": "curl_scraper",
-            "enabled": true,
-            "use_curl": true,
-            "population": 4560,
-            "region": "Cape York"
-        },
-        {
             "id": "western-downs",
-            "name": "Western Downs Council",
+            "name": "Western Downs Regional Council",
             "news_url": "https://www.wdrc.qld.gov.au/Council/News-Public-Updates/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -714,7 +717,7 @@
         },
         {
             "id": "whitsunday",
-            "name": "Whitsunday Council",
+            "name": "Whitsunday Regional Council",
             "news_url": "https://www.whitsundayrc.qld.gov.au/Our-Council/Publications-and-Media/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -723,7 +726,7 @@
         },
         {
             "id": "winton",
-            "name": "Shire of Winton",
+            "name": "Winton Shire Council",
             "news_url": "https://www.winton.qld.gov.au/News/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -733,7 +736,7 @@
         },
         {
             "id": "woorabinda",
-            "name": "Aboriginal Shire of Woorabinda",
+            "name": "Woorabinda Aboriginal Shire Council",
             "news_url": "https://www.woorabinda.qld.gov.au/News-and-Updates/Council-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -743,17 +746,18 @@
         },
         {
             "id": "wujal-wujal",
-            "name": "Aboriginal Shire of Wujal Wujal",
+            "name": "Wujal Wujal Aboriginal Shire Council",
             "news_url": "https://www.wujalwujalcouncil.qld.gov.au/council/newsandnotices/",
             "scraper": "curl_scraper",
-            "enabled": true,
+            "enabled": false,
+            "disabled_reason": "Single page unstructured content",
             "population": 325,
             "region": "Far North Queensland",
             "use_curl": true
         },
         {
             "id": "yarrabah",
-            "name": "Aboriginal Shire of Yarrabah",
+            "name": "Yarrabah Aboriginal Shire Council",
             "news_url": "https://www.yarrabah.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -762,7 +766,7 @@
         },
         {
             "id": "doomadgee",
-            "name": "Aboriginal Shire of Doomadgee",
+            "name": "Doomadgee Aboriginal Shire Council",
             "news_url": "https://www.doomadgee.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -771,7 +775,7 @@
         },
         {
             "id": "hinchinbrook",
-            "name": "Shire of Hinchinbrook",
+            "name": "Hinchinbrook Shire Council",
             "news_url": "https://www.hinchinbrook.qld.gov.au/our-council/news-and-announcements/latest-news/",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -786,7 +790,7 @@
         },
         {
             "id": "hope-vale",
-            "name": "Aboriginal Shire of Hope Vale",
+            "name": "Hope Vale Aboriginal Shire Council",
             "news_url": "https://www.hopevale.qld.gov.au/Council/News-and-Notices/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -796,7 +800,7 @@
         },
         {
             "id": "ipswich",
-            "name": "City of Ipswich",
+            "name": "Ipswich City Council",
             "news_url": "https://www.ipswich.qld.gov.au/About-Council/Media-and-Publications/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -806,7 +810,7 @@
         },
         {
             "id": "isaac",
-            "name": "Isaac Council",
+            "name": "Isaac Regional Council",
             "news_url": "https://www.isaac.qld.gov.au/news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -816,7 +820,7 @@
         },
         {
             "id": "kowanyama",
-            "name": "Aboriginal Shire of Kowanyama",
+            "name": "Kowanyama Aboriginal Shire Council",
             "news_url": "https://www.kowanyama.qld.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,

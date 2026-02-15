@@ -25,7 +25,7 @@
         },
         {
             "id": "blue-mountains-city-council",
-            "name": "Blue Mountains, City of",
+            "name": "Blue Mountains City Council",
             "news_url": "https://www.bmcc.nsw.gov.au/media-centre",
             "scraper": "card_scraper",
             "enabled": true,
@@ -38,12 +38,18 @@
         },
         {
             "id": "burwood-council",
-            "name": "Burwood, Municipality of",
+            "name": "Burwood Council",
             "news_url": "https://www.burwood.nsw.gov.au/Our-Council/News-and-Media/News-Stories",
-            "scraper": "curl_scraper",
+            "scraper": "card_scraper",
             "enabled": true,
             "use_curl": true,
-            "impersonate": "chrome124",
+            "impersonate": "chrome120",
+            "selectors": {
+                "container": ".list-item-container",
+                "title": ".list-item-title",
+                "date": ".published-on",
+                "link": "a"
+            },
             "population": 44075,
             "region": "Greater Sydney"
         },
@@ -59,17 +65,24 @@
         },
         {
             "id": "campbelltown-city-council",
-            "name": "Campbelltown, City of",
+            "name": "Campbelltown City Council",
             "news_url": "https://www.campbelltown.nsw.gov.au/News",
-            "scraper": "curl_scraper",
+            "scraper": "card_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome120",
+            "selectors": {
+                "container": ".list-item-container",
+                "title": ".list-item-title",
+                "date": ".published-on",
+                "link": "a"
+            },
             "population": 53810,
             "region": "Adelaide Metro"
         },
         {
             "id": "city-of-canada-bay",
-            "name": "City of Canada Bay",
+            "name": "City of Canada Bay Council",
             "news_url": "https://www.canadabay.nsw.gov.au/news",
             "scraper": "card_scraper",
             "enabled": true,
@@ -83,7 +96,7 @@
         },
         {
             "id": "city-of-canterbury-bankstown",
-            "name": "City of Canterbury-Bankstown",
+            "name": "City of Canterbury Bankstown",
             "news_url": "https://www.cbcity.nsw.gov.au/your-council/media-centre",
             "scraper": "card_scraper",
             "enabled": true,
@@ -110,21 +123,35 @@
         },
         {
             "id": "cessnock-city-council",
-            "name": "Cessnock, City of",
-            "news_url": "https://www.cessnock.nsw.gov.au/News",
-            "scraper": "curl_scraper",
+            "name": "Cessnock City Council",
+            "news_url": "https://www.cessnock.nsw.gov.au/News/News",
+            "scraper": "card_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome120",
+            "selectors": {
+                "container": ".list-item-container",
+                "title": ".list-item-title",
+                "date": ".published-on",
+                "link": "a"
+            },
             "population": 61755,
             "region": "Hunter"
         },
         {
             "id": "coffs-harbour-city-council",
-            "name": "Coffs Harbour, City of",
-            "news_url": "https://www.coffsharbour.nsw.gov.au/Your-Council/Newsroom",
-            "scraper": "curl_scraper",
+            "name": "Coffs Harbour City Council",
+            "news_url": "https://www.coffsharbour.nsw.gov.au/Your-Council/Newsroom/Media-Releases",
+            "scraper": "card_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome120",
+            "selectors": {
+                "container": ".list-item-container",
+                "title": ".list-item-title",
+                "date": ".published-on",
+                "link": "a"
+            },
             "population": 80435,
             "region": "North Coast"
         },
@@ -170,7 +197,7 @@
             "id": "georges-river-council",
             "name": "Georges River Council",
             "news_url": "https://www.georgesriver.nsw.gov.au/Council/Media?rss=News",
-            "scraper": "card_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 162190,
             "region": "Greater Sydney",
@@ -178,17 +205,22 @@
         },
         {
             "id": "hawkesbury-city-council",
-            "name": "Hawkesbury, City of",
+            "name": "Hawkesbury City Council",
             "news_url": "https://www.hawkesbury.nsw.gov.au/your-council/council-news/media-releases",
-            "scraper": "curl_scraper",
+            "scraper": "browser_scraper",
             "enabled": true,
-            "use_curl": true,
+            "item_selector": ".listing__item",
+            "wait_selector": ".listing__item",
+            "title_selector": ".listing__title",
+            "date_selector": ".listing__date",
+            "content_selector": ".listing__description",
+            "link_selector": "a.listing__link",
             "population": 70780,
             "region": "Greater Sydney"
         },
         {
             "id": "hornsby-shire-council",
-            "name": "Hornsby Shire",
+            "name": "Hornsby Shire Council",
             "news_url": "https://www.hornsby.nsw.gov.au/Council/Noticeboard/Latest-news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -198,7 +230,7 @@
         },
         {
             "id": "hunters-hill-council",
-            "name": "Hunter's Hill, Municipality of",
+            "name": "Hunter's Hill Council",
             "news_url": "https://www.huntershill.nsw.gov.au/news/",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -229,11 +261,12 @@
         },
         {
             "id": "lake-macquarie-city-council",
-            "name": "Lake Macquarie, City of",
-            "news_url": "https://www.lakemac.com.au/For-residents/History-and-heritage/News",
+            "name": "Lake Macquarie City Council",
+            "news_url": "https://www.lakemac.com.au/News-articles",
             "scraper": "opencities_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome110",
             "population": 216785,
             "region": "Hunter"
         },
@@ -249,7 +282,7 @@
         },
         {
             "id": "lismore-city-council",
-            "name": "Lismore, City of",
+            "name": "Lismore City Council",
             "news_url": "https://www.lismore.nsw.gov.au/Council/News-projects/Latest-news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -259,7 +292,7 @@
         },
         {
             "id": "liverpool-city-council",
-            "name": "Liverpool, City of",
+            "name": "Liverpool City Council",
             "news_url": "https://www.liverpool.nsw.gov.au/council/Media",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -274,11 +307,11 @@
         },
         {
             "id": "maitland-city-council",
-            "name": "Maitland, City of",
+            "name": "Maitland City Council",
             "news_url": "https://www.maitland.nsw.gov.au/news",
             "scraper": "curl_scraper",
             "enabled": true,
-            "item_selector": ".civictheme-card-container__card",
+            "item_selector": ".civictheme-promo-card",
             "population": 95100,
             "region": "Hunter"
         },
@@ -289,6 +322,7 @@
             "scraper": "card_scraper",
             "enabled": true,
             "use_curl": true,
+            "verify_ssl": false,
             "item_selector": ".list-item-container article",
             "title_selector": ".list-item-title",
             "link_selector": "a",
@@ -298,7 +332,7 @@
         },
         {
             "id": "mosman-council",
-            "name": "Mosman Council",
+            "name": "Mosman Municipal Council",
             "news_url": "https://mosman.nsw.gov.au/news",
             "scraper": "card_scraper",
             "enabled": true,
@@ -330,15 +364,19 @@
             "id": "northern-beaches-council",
             "name": "Northern Beaches Council",
             "news_url": "https://www.northernbeaches.nsw.gov.au/council/news/latest-news",
-            "scraper": "curl_scraper",
+            "scraper": "browser_scraper",
             "enabled": true,
             "population": 273070,
             "region": "Greater Sydney",
-            "use_curl": true
+            "use_curl": true,
+            "item_selector": "article.node-cnews",
+            "title_selector": "h2.node__title",
+            "link_selector": "h2.node__title a",
+            "date_selector": "time"
         },
         {
             "id": "city-of-parramatta",
-            "name": "City of Parramatta",
+            "name": "City of Parramatta Council",
             "news_url": "https://www.cityofparramatta.nsw.gov.au/about-parramatta/news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -351,7 +389,7 @@
         },
         {
             "id": "penrith-city-council",
-            "name": "Penrith, City of",
+            "name": "Penrith City Council",
             "news_url": "https://www.penrithcity.nsw.gov.au/news",
             "scraper": "card_scraper",
             "enabled": true,
@@ -389,7 +427,7 @@
         },
         {
             "id": "randwick-city-council",
-            "name": "Randwick, City of",
+            "name": "Randwick City Council",
             "news_url": "https://www.randwick.nsw.gov.au/about-council/news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -409,7 +447,7 @@
         },
         {
             "id": "shoalhaven-city-council",
-            "name": "Shoalhaven, City of",
+            "name": "Shoalhaven City Council",
             "news_url": "https://www.shoalhaven.nsw.gov.au/Council/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -419,7 +457,7 @@
         },
         {
             "id": "strathfield-council",
-            "name": "Strathfield, Municipality of",
+            "name": "Strathfield Council",
             "news_url": "https://www.strathfield.nsw.gov.au/Council/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -429,7 +467,7 @@
         },
         {
             "id": "sutherland-shire-council",
-            "name": "Sutherland Shire",
+            "name": "Sutherland Shire Council",
             "news_url": "https://www.sutherlandshire.nsw.gov.au/your-council/news-and-publications",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -465,7 +503,7 @@
         },
         {
             "id": "the-hills-shire-council",
-            "name": "The Hills Shire",
+            "name": "The Hills Shire Council",
             "news_url": "https://www.thehills.nsw.gov.au/Community/Hills-Shire-News-Community-Magazine",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -475,7 +513,7 @@
         },
         {
             "id": "tweed-shire-council",
-            "name": "Tweed Shire",
+            "name": "Tweed Shire Council",
             "news_url": "https://www.tweed.nsw.gov.au/news",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -485,7 +523,7 @@
         },
         {
             "id": "wagga-wagga-city-council",
-            "name": "Wagga Wagga, City of",
+            "name": "Wagga Wagga City Council",
             "news_url": "https://news.wagga.nsw.gov.au/news-articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -513,7 +551,7 @@
         },
         {
             "id": "city-of-willoughby",
-            "name": "City of Willoughby",
+            "name": "Willoughby City Council",
             "news_url": "https://www.willoughby.nsw.gov.au/Council/News-and-media",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -523,7 +561,7 @@
         },
         {
             "id": "wollongong-city-council",
-            "name": "Wollongong, City of",
+            "name": "Wollongong City Council",
             "news_url": "https://www.wollongong.nsw.gov.au/council/news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -537,7 +575,7 @@
         },
         {
             "id": "woollahra-municipal-council",
-            "name": "Woollahra, Municipality of",
+            "name": "Woollahra Municipal Council",
             "news_url": "https://www.woollahra.nsw.gov.au/News/Latest-news",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -569,7 +607,7 @@
         },
         {
             "id": "bega-valley-shire-council",
-            "name": "Bega Valley Shire",
+            "name": "Bega Valley Shire Council",
             "news_url": "https://www.begavalley.nsw.gov.au/News-and-Events/News",
             "scraper": "card_scraper",
             "enabled": true,
@@ -579,7 +617,7 @@
         },
         {
             "id": "eurobodalla-shire-council",
-            "name": "Eurobodalla Shire",
+            "name": "Eurobodalla Shire Council",
             "news_url": "https://www.esc.nsw.gov.au/news-and-events/latest-news",
             "scraper": "card_scraper",
             "enabled": true,
@@ -588,7 +626,7 @@
         },
         {
             "id": "orange-city-council",
-            "name": "Orange, City of",
+            "name": "Orange City Council",
             "news_url": "https://www.orange.nsw.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -597,7 +635,7 @@
         },
         {
             "id": "queanbeyan-palerang-regional-council",
-            "name": "Queanbeyan\u2013Palerang Regional Council",
+            "name": "Queanbeyan-Palerang Regional Council",
             "news_url": "https://www.qprc.nsw.gov.au/News-Media",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -617,17 +655,20 @@
         },
         {
             "id": "albury-city-council",
-            "name": "Albury, City of",
+            "name": "Albury City Council",
             "news_url": "https://www.alburycity.nsw.gov.au/news",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "item_selector": "div.card.hover-effect",
+            "title_selector": "div.card-body h5",
+            "link_selector": "div.card-body > a:nth-of-type(2)",
             "population": 56020,
             "region": "Riverina"
         },
         {
             "id": "ballina-shire-council",
-            "name": "Ballina Shire",
+            "name": "Ballina Shire Council",
             "news_url": "https://www.ballina.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -637,14 +678,14 @@
         },
         {
             "id": "balranald-shire-council",
-            "name": "Balranald Shire",
+            "name": "Balranald Shire Council",
             "news_url": "https://balranald.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
             "id": "bellingen-shire-council",
-            "name": "Bellingen Shire",
+            "name": "Bellingen Shire Council",
             "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Communications-Engagement-and-Media",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -654,7 +695,7 @@
         },
         {
             "id": "berrigan-shire-council",
-            "name": "Berrigan Shire",
+            "name": "Berrigan Shire Council",
             "news_url": "https://www.berriganshire.nsw.gov.au/News-and-Media",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -664,7 +705,7 @@
         },
         {
             "id": "bland-shire-council",
-            "name": "Bland Shire",
+            "name": "Bland Shire Council",
             "news_url": "https://www.blandshire.nsw.gov.au/Council/Latest-News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -674,7 +715,7 @@
         },
         {
             "id": "blayney-shire-council",
-            "name": "Blayney Shire",
+            "name": "Blayney Shire Council",
             "news_url": "https://www.blayney.nsw.gov.au/News",
             "scraper": "card_scraper",
             "enabled": true,
@@ -683,17 +724,16 @@
         },
         {
             "id": "bogan-shire-council",
-            "name": "Bogan Shire",
-            "news_url": "https://www.bogan.nsw.gov.au/news?format=feed&type=rss",
+            "name": "Bogan Shire Council",
+            "news_url": "https://www.bogan.nsw.gov.au/public-notices?format=feed&type=rss",
             "scraper": "rss_scraper",
             "enabled": true,
             "population": 2835,
-            "region": "Central West",
-            "rss_url": "https://www.bogan.nsw.gov.au/news?format=feed&type=rss"
+            "region": "Central West"
         },
         {
             "id": "bourke-shire-council",
-            "name": "Bourke Shire",
+            "name": "Bourke Shire Council",
             "news_url": "https://bourke.nsw.gov.au/council/media-release/",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -702,16 +742,16 @@
         },
         {
             "id": "brewarrina-shire-council",
-            "name": "Brewarrina Shire",
+            "name": "Brewarrina Shire Council",
             "news_url": "https://brewarrina.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 1610,
             "region": "Far West"
         },
         {
             "id": "broken-hill-city-council",
-            "name": "Broken Hill, City of",
+            "name": "Broken Hill City Council",
             "news_url": "https://www.brokenhill.nsw.gov.au/Community/News-articles",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -721,7 +761,7 @@
         },
         {
             "id": "byron-shire-council",
-            "name": "Byron Shire",
+            "name": "Byron Shire Council",
             "news_url": "https://www.byron.nsw.gov.au/Council/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -731,7 +771,7 @@
         },
         {
             "id": "cabonne-council",
-            "name": "Cabonne Shire",
+            "name": "Cabonne Council",
             "news_url": "https://www.cabonne.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -741,7 +781,7 @@
         },
         {
             "id": "carrathool-shire-council",
-            "name": "Carrathool Shire",
+            "name": "Carrathool Shire Council",
             "news_url": "https://www.carrathool.nsw.gov.au/Council/News",
             "scraper": "wordpress_scraper",
             "enabled": true,
@@ -750,7 +790,7 @@
         },
         {
             "id": "central-darling-shire-council",
-            "name": "Central Darling Shire",
+            "name": "Central Darling Shire Council",
             "news_url": "https://www.centraldarling.nsw.gov.au/News-articles",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -770,16 +810,16 @@
         },
         {
             "id": "cobar-shire-council",
-            "name": "Cobar Shire",
+            "name": "Cobar Shire Council",
             "news_url": "https://www.cobar.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 4470,
             "region": "Far West"
         },
         {
             "id": "coolamon-shire-council",
-            "name": "Coolamon Shire",
+            "name": "Coolamon Shire Council",
             "news_url": "https://coolamon.nsw.gov.au/news?format=rss",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -788,7 +828,7 @@
         },
         {
             "id": "coonamble-shire-council",
-            "name": "Coonamble Shire",
+            "name": "Coonamble Shire Council",
             "news_url": "https://www.coonambleshire.nsw.gov.au/council/news",
             "scraper": "card_scraper",
             "enabled": true,
@@ -803,7 +843,7 @@
         },
         {
             "id": "cootamundra-gundagai-regional-council",
-            "name": "Cootamundra-Gundagai Regional Council",
+            "name": "Cootamundra-Gundagai Council",
             "news_url": "https://www.cgrc.nsw.gov.au/feed/",
             "scraper": "rss_scraper",
             "enabled": true,
@@ -812,7 +852,7 @@
         },
         {
             "id": "cowra-council",
-            "name": "Cowra Shire",
+            "name": "Cowra Council",
             "news_url": "https://www.cowracouncil.com.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -822,7 +862,7 @@
         },
         {
             "id": "dungog-shire-council",
-            "name": "Dungog Shire",
+            "name": "Dungog Shire Council",
             "news_url": "https://www.dungog.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -852,7 +892,7 @@
         },
         {
             "id": "forbes-shire-council",
-            "name": "Forbes Shire",
+            "name": "Forbes Shire Council",
             "news_url": "https://www.forbes.nsw.gov.au/News",
             "scraper": "card_scraper",
             "enabled": true,
@@ -861,7 +901,7 @@
         },
         {
             "id": "gilgandra-shire-council",
-            "name": "Gilgandra Shire",
+            "name": "Gilgandra Shire Council",
             "news_url": "https://www.gilgandra.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -891,7 +931,7 @@
         },
         {
             "id": "greater-hume-council",
-            "name": "Greater Hume Shire",
+            "name": "Greater Hume Shire Council",
             "news_url": "https://www.greaterhume.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -901,7 +941,7 @@
         },
         {
             "id": "griffith-city-council",
-            "name": "Griffith, City of",
+            "name": "Griffith City Council",
             "news_url": "https://www.griffith.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -911,22 +951,20 @@
         },
         {
             "id": "gunnedah-shire-council",
-            "name": "Gunnedah Shire",
+            "name": "Gunnedah Shire Council",
             "news_url": "https://www.gunnedah.nsw.gov.au/index.php/council/keep-in-touch/latest-news-media",
             "scraper": "card_scraper",
             "enabled": true,
             "population": 13315,
             "region": "North West",
-            "selectors": {
-                "container": ".catItemTitle",
-                "title": "a",
-                "link": "a",
-                "date": ".catItemDateCreated, .date"
-            }
+            "item_selector": ".catItemView",
+            "title_selector": ".catItemTitle a",
+            "link_selector": ".catItemTitle a",
+            "date_selector": ".catItemDateCreated"
         },
         {
             "id": "gwydir-shire-council",
-            "name": "Gwydir Shire",
+            "name": "Gwydir Shire Council",
             "news_url": "https://www.gwydir.nsw.gov.au/Council/Shire-News",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -936,17 +974,18 @@
         },
         {
             "id": "hay-shire-council",
-            "name": "Hay Shire",
+            "name": "Hay Shire Council",
             "news_url": "https://www.hay.nsw.gov.au/Inside-Hay-Shire-Council/News-Council-Updates",
             "scraper": "card_scraper",
-            "enabled": true,
+            "enabled": false,
+            "disabled_reason": "No active news page - PDF newsletters only (Jan 2026)",
             "population": 2865,
             "region": "Western Riverina",
             "selectors": {
-                "container": "article, .item, .list-item",
-                "title": "h2, h3, h4",
-                "link": "a",
-                "date": ".date, time"
+                "container": ".news-inner",
+                "title": "h4 a",
+                "link": "h4 a",
+                "date": "span"
             },
             "use_curl": true
         },
@@ -954,16 +993,16 @@
             "id": "hilltops-council",
             "name": "Hilltops Council",
             "news_url": "https://www.hilltops.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 19685,
             "region": "Riverina"
         },
         {
             "id": "inverell-shire-council",
-            "name": "Inverell Shire",
-            "news_url": "https://inverell.nsw.gov.au/news",
-            "scraper": "curl_scraper",
+            "name": "Inverell Shire Council",
+            "news_url": "https://inverell.nsw.gov.au/feed/",
+            "scraper": "rss_scraper",
             "enabled": false,
             "disabled_reason": "WPBakery AJAX grid, RSS feed is empty. Needs Playwright or Reverse Engineering.",
             "use_curl": true,
@@ -973,16 +1012,16 @@
         },
         {
             "id": "junee-shire-council",
-            "name": "Junee Shire",
+            "name": "Junee Shire Council",
             "news_url": "https://www.junee.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 6935,
             "region": "Riverina"
         },
         {
             "id": "kempsey-shire-council",
-            "name": "Kempsey Shire",
+            "name": "Kempsey Shire Council",
             "news_url": "https://www.kempsey.nsw.gov.au/Your-Council/Council-news-public-notices/Council-news-updates",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -992,7 +1031,7 @@
         },
         {
             "id": "kiama-municipal-council",
-            "name": "Kiama, Municipality of",
+            "name": "Kiama Municipal Council",
             "news_url": "https://www.kiama.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1004,14 +1043,14 @@
             "id": "kyogle-council",
             "name": "Kyogle Council",
             "news_url": "https://www.kyogle.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 9635,
             "region": "North Coast"
         },
         {
             "id": "lachlan-shire-council",
-            "name": "Lachlan Shire",
+            "name": "Lachlan Shire Council",
             "news_url": "https://www.lachlan.nsw.gov.au/News-articles",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1021,7 +1060,7 @@
         },
         {
             "id": "leeton-shire-council",
-            "name": "Leeton Shire",
+            "name": "Leeton Shire Council",
             "news_url": "https://www.leeton.nsw.gov.au/Your-Council/Council-News/Media-Releases",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1031,9 +1070,9 @@
         },
         {
             "id": "lithgow-city-council",
-            "name": "Lithgow, City of",
-            "news_url": "http://www.council.lithgow.com.au/news/",
-            "scraper": "curl_scraper",
+            "name": "Lithgow City Council",
+            "news_url": "https://council.lithgow.com/news/",
+            "scraper": "wordpress_scraper",
             "enabled": true,
             "population": 22005,
             "region": "Central West",
@@ -1041,7 +1080,7 @@
         },
         {
             "id": "liverpool-plains-shire-council",
-            "name": "Liverpool Plains Shire",
+            "name": "Liverpool Plains Shire Council",
             "news_url": "https://www.liverpoolplains.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1051,12 +1090,18 @@
         },
         {
             "id": "lockhart-shire-council",
-            "name": "Lockhart Shire",
-            "news_url": "https://lockhart.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "name": "Lockhart Shire Council",
+            "news_url": "https://lockhart.nsw.gov.au/council/lockhart-shire-newsletters/",
+            "scraper": "card_scraper",
             "enabled": true,
             "population": 3110,
-            "region": "Riverina"
+            "region": "Riverina",
+            "use_curl": true,
+            "selectors": {
+                "container": "a[href*='.pdf']",
+                "title": "self",
+                "link": "self"
+            }
         },
         {
             "id": "mid-western-regional-council",
@@ -1070,10 +1115,10 @@
         },
         {
             "id": "moree-plains-shire-council",
-            "name": "Moree Plains Shire",
+            "name": "Moree Plains Shire Council",
             "news_url": "https://www.mpsc.nsw.gov.au/hot-topics/media-releases",
             "scraper": "curl_scraper",
-            "enabled": true,
+            "enabled": false,
             "population": 13585,
             "region": "North West",
             "use_curl": true
@@ -1081,7 +1126,7 @@
         {
             "id": "murray-river-council",
             "name": "Murray River Council",
-            "news_url": "https://www.murrayriver.nsw.gov.au/Council/News",
+            "news_url": "https://www.murrayriver.nsw.gov.au/Council/News/Media-releases",
             "scraper": "opencities_scraper",
             "enabled": true,
             "use_curl": true,
@@ -1091,7 +1136,7 @@
         {
             "id": "murrumbidgee-council",
             "name": "Murrumbidgee Council",
-            "news_url": "https://www.murrumbidgee.nsw.gov.au/News-notices",
+            "news_url": "https://www.murrumbidgee.nsw.gov.au/News-notices/News-articles-Mayoral-Messages",
             "scraper": "opencities_scraper",
             "enabled": true,
             "use_curl": true,
@@ -1100,7 +1145,7 @@
         },
         {
             "id": "muswellbrook-shire-council",
-            "name": "Muswellbrook Shire",
+            "name": "Muswellbrook Shire Council",
             "news_url": "https://www.muswellbrook.nsw.gov.au/latest-news/",
             "scraper": "wordpress_scraper",
             "enabled": true,
@@ -1114,7 +1159,7 @@
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
-            "item_selector": "div.list-item-container",
+            "item_selector": ".list-item-container article",
             "title_selector": "h2.list-item-title",
             "link_selector": "a",
             "population": 21155,
@@ -1122,7 +1167,7 @@
         },
         {
             "id": "narrabri-shire-council",
-            "name": "Narrabri Shire",
+            "name": "Narrabri Shire Council",
             "news_url": "https://www.narrabri.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1132,8 +1177,8 @@
         },
         {
             "id": "narrandera-shire-council",
-            "name": "Narrandera Shire",
-            "news_url": "https://www.narrandera.nsw.gov.au/Council/News-and-Media",
+            "name": "Narrandera Shire Council",
+            "news_url": "https://www.narrandera.nsw.gov.au/Council/News-and-media/Media-releases",
             "scraper": "opencities_scraper",
             "enabled": true,
             "population": 6110,
@@ -1142,7 +1187,7 @@
         },
         {
             "id": "narromine-shire-council",
-            "name": "Narromine Shire",
+            "name": "Narromine Shire Council",
             "news_url": "https://www.narromine.nsw.gov.au/council/media-releases",
             "scraper": "curl_scraper",
             "enabled": false,
@@ -1151,7 +1196,7 @@
         },
         {
             "id": "oberon-council",
-            "name": "Oberon Shire",
+            "name": "Oberon Council",
             "news_url": "https://www.oberon.nsw.gov.au/News-articles",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1161,7 +1206,7 @@
         },
         {
             "id": "parkes-shire-council",
-            "name": "Parkes Shire",
+            "name": "Parkes Shire Council",
             "news_url": "https://www.parkes.nsw.gov.au/Council/News-media-and-projects/Community-News",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1180,8 +1225,8 @@
         },
         {
             "id": "shellharbour-city-council",
-            "name": "Shellharbour, City of",
-            "news_url": "https://www.shellharbour.nsw.gov.au/News",
+            "name": "Shellharbour City Council",
+            "news_url": "https://www.shellharbour.nsw.gov.au/council/news-and-publications/media-releases",
             "scraper": "card_scraper",
             "enabled": true,
             "population": 78445,
@@ -1201,16 +1246,17 @@
         {
             "id": "snowy-valleys-council",
             "name": "Snowy Valleys Council",
-            "news_url": "https://www.snowyvalleys.nsw.gov.au/News",
+            "news_url": "https://www.snowyvalleys.nsw.gov.au/News-Media",
             "scraper": "opencities_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome110",
             "population": 15055,
             "region": "Riverina"
         },
         {
             "id": "temora-shire-council",
-            "name": "Temora Shire",
+            "name": "Temora Shire Council",
             "news_url": "https://www.temora.nsw.gov.au/Home/Tabs/News",
             "scraper": "card_scraper",
             "enabled": true,
@@ -1223,7 +1269,7 @@
         },
         {
             "id": "tenterfield-shire-council",
-            "name": "Tenterfield Shire",
+            "name": "Tenterfield Shire Council",
             "news_url": "https://www.tenterfield.nsw.gov.au/news-events/media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1232,7 +1278,7 @@
         },
         {
             "id": "upper-hunter-shire-council",
-            "name": "Upper Hunter Shire",
+            "name": "Upper Hunter Shire Council",
             "news_url": "https://www.upperhunter.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1242,18 +1288,17 @@
         },
         {
             "id": "upper-lachlan-shire-council",
-            "name": "Upper Lachlan Shire",
-            "news_url": "https://www.upperlachlan.nsw.gov.au/News",
-            "scraper": "opencities_scraper",
+            "name": "Upper Lachlan Shire Council",
+            "news_url": "https://upperlachlan.nsw.gov.au/latest-news/",
+            "scraper": "wordpress_scraper",
             "enabled": true,
             "population": 8555,
             "region": "Riverina",
-            "use_curl": true,
-            "rss_url": "https://upperlachlan.nsw.gov.au/feed/"
+            "use_curl": true
         },
         {
             "id": "uralla-shire-council",
-            "name": "Uralla Shire",
+            "name": "Uralla Shire Council",
             "news_url": "https://www.uralla.nsw.gov.au/Council/Council-News-and-Media",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1263,16 +1308,16 @@
         },
         {
             "id": "walcha-council",
-            "name": "Walcha Shire",
+            "name": "Walcha Council",
             "news_url": "https://walcha.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true,
             "population": 3160,
             "region": "New England"
         },
         {
             "id": "walgett-shire-council",
-            "name": "Walgett Shire",
+            "name": "Walgett Shire Council",
             "news_url": "https://www.walgett.nsw.gov.au/News-Media",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1282,7 +1327,7 @@
         },
         {
             "id": "warren-shire-council",
-            "name": "Warren Shire",
+            "name": "Warren Shire Council",
             "news_url": "https://www.warren.nsw.gov.au/council/media-releases",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1292,7 +1337,7 @@
         },
         {
             "id": "warrumbungle-shire-council",
-            "name": "Warrumbungle Shire",
+            "name": "Warrumbungle Shire Council",
             "news_url": "https://www.warrumbungle.nsw.gov.au/News-articles",
             "scraper": "opencities_scraper",
             "enabled": true,
@@ -1302,7 +1347,7 @@
         },
         {
             "id": "weddin-shire-council",
-            "name": "Weddin Shire",
+            "name": "Weddin Shire Council",
             "news_url": "https://www.weddin.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1312,14 +1357,14 @@
         },
         {
             "id": "wentworth-shire-council",
-            "name": "Wentworth Shire",
+            "name": "Wentworth Shire Council",
             "news_url": "https://www.wentworth.nsw.gov.au/feed/",
-            "scraper": "wordpress_scraper",
+            "scraper": "rss_scraper",
             "enabled": true
         },
         {
             "id": "wingecarribee-shire-council",
-            "name": "Wingecarribee Shire",
+            "name": "Wingecarribee Shire Council",
             "news_url": "https://www.wsc.nsw.gov.au/News",
             "scraper": "curl_scraper",
             "enabled": true,
@@ -1329,13 +1374,19 @@
         },
         {
             "id": "wollondilly-shire-council",
-            "name": "Wollondilly Shire",
-            "news_url": "https://www.wollondilly.nsw.gov.au/News",
+            "name": "Wollondilly Shire Council",
+            "news_url": "https://www.wollondilly.nsw.gov.au/home/latest-news",
             "scraper": "card_scraper",
             "enabled": true,
             "population": 57300,
             "region": "Greater Sydney",
-            "use_curl": true
+            "use_curl": true,
+            "selectors": {
+                "container": "h3",
+                "title": "a",
+                "link": "a",
+                "time": "p:contains('Posted')"
+            }
         },
         {
             "id": "yass-valley-council",

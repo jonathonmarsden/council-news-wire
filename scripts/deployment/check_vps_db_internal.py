@@ -1,30 +1,39 @@
 
-import sqlite3
-import os
+import subprocess
+import re
 
-DB_PATH = '/opt/council-news-bot/data/bot.db'
+def run_psql_command(query):
+    """Run a PSQL command inside the council_db container."""
+    cmd = [
+        "docker", "exec", "council_db", 
+        "psql", "-U", "councilbot", "-d", "council_news", 
+        "-c", query
+    ]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        return result.stdout.strip()
+    except Exception as e:
+        return f"Error: {e}"
 
 def check_db():
-    if not os.path.exists(DB_PATH):
-        print(f"Database not found at {DB_PATH}")
-        return
-
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-
+    print("=== Checking Production DB (Postgres) ===")
+    
     # Check counts by state
-    print("--- Articles by State ---")
-    cursor.execute("SELECT state, COUNT(*) FROM articles GROUP BY state")
-    for row in cursor.fetchall():
-        print(f"State: {row[0]}, Count: {row[1]}")
+    print("\n--- Articles by State ---")
+    query_states = "SELECT state, COUNT(*) FROM articles GROUP BY state ORDER BY count(*) DESC;"
+    print(run_psql_command(query_states))
 
     # Check unposted by state
     print("\n--- Unposted Articles by State ---")
-    cursor.execute("SELECT state, COUNT(*) FROM articles WHERE posted_at IS NULL AND status != 'archived' GROUP BY state")
-    for row in cursor.fetchall():
-        print(f"State: {row[0]}, Count: {row[1]}")
+    query_unposted = "SELECT state, COUNT(*) FROM articles WHERE posted_at IS NULL AND status != 'archived' GROUP BY state ORDER BY count(*) DESC;"
+    print(run_psql_command(query_unposted))
 
-    conn.close()
+    # Check for potential errors/zombies
+    print("\n--- Potential Zombies (Last 24h) ---")
+    # Note: casting date to ensure correctly handled if possible, otherwise rely on first_seen_at
+    query_zombies = "SELECT count(*) FROM articles WHERE first_seen_at > NOW() - INTERVAL '24 hours' AND title IS NULL;"
+    print("Null Titles (Last 24h):")
+    print(run_psql_command(query_zombies))
 
 if __name__ == "__main__":
     check_db()
