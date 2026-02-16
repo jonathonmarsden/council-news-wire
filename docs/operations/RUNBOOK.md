@@ -81,10 +81,21 @@ Bot runs **twice daily** per state (06:00 AM and 6:00 PM local time):
 
 **Note**: Times are UTC. Cron adjusts for each state's local timezone automatically via `--time-window` flag.
 
+Monitoring jobs:
+
+```
+# Hourly activity summary
+0 * * * * cd /opt/council-news-bot && docker compose exec -T bot python3 scripts/monitoring/hourly_briefing.py
+
+# Daily briefing (21:00 UTC)
+0 21 * * * cd /opt/council-news-bot && docker compose exec -T bot python3 scripts/monitoring/daily_briefing.py
+```
+
 ### Morning Tasks
 
 **Before 06:00 UTC:**
-1. Check health report: `scripts/monitoring/daily_briefing.py`
+1. Check hourly summary in Discord logs
+2. Check health report: `scripts/monitoring/daily_briefing.py`
 2. Review overnight errors in Discord #alerts channel
 3. Validate proxy is working: `curl -x http://REDACTED-rotate:... https://httpbin.org/ip`
 

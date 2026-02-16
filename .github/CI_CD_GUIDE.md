@@ -25,8 +25,9 @@ This repository has automated CI/CD workflows for safe, reliable deployments.
 1. Waits for Test & Lint to pass
 2. Syncs code to VPS via rsync
 3. Rebuilds Docker containers
-4. Runs post-deploy health check
-5. Sends Discord notification (success or failure)
+4. Runs database migrations
+5. Runs post-deploy health check
+6. Sends Discord notification (success or failure)
 
 **Location:** `.github/workflows/deploy.yml`
 

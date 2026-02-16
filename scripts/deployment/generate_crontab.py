@@ -163,6 +163,9 @@ def get_queue_processor_line() -> str:
 */10 * * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/cron/process_global_queue.py >> /var/log/council_bot_cron.log 2>&1
 
 # === MONITORING & MAINTENANCE ===
+# Hourly activity summary (posts, warnings, errors)
+0 * * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/hourly_briefing.py >> /var/log/council_bot_cron.log 2>&1
+
 # Daily Briefing (21:00 UTC = 8:00 AM AEDT)
 0 21 * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/daily_briefing.py >> /var/log/council_bot_cron.log 2>&1
 
