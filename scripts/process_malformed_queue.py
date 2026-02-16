@@ -25,14 +25,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from dotenv import load_dotenv
 from atproto import Client
 
-# Optional Discord logging
-try:
-    from discord_logger import log_post_success, log_error
-    DISCORD_LOGGING = True
-except ImportError:
-    DISCORD_LOGGING = False
-
-
 # Bot credentials mapping
 BOT_CREDENTIALS = {
     'roundupnewsbotsa.bsky.social': {

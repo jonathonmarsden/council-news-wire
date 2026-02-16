@@ -7,21 +7,19 @@ Should be run via cron once per day (e.g., at 9:00 AM).
 """
 
 import sys
-import os
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import func, select, desc
-import requests
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from core.database import Database
-from core.models import ScraperStats, Article, CouncilHealth
-from discord_logger import DISCORD_WEBHOOK_URL_DEFAULT
+from core.models import ScraperStats, Article, CouncilHealth, LogEvent
+from discord_logger import DISCORD_WEBHOOK_LOGS, send_discord_embed
 
 # Config
-WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_LOGS", DISCORD_WEBHOOK_URL_DEFAULT)
+WEBHOOK_URL = DISCORD_WEBHOOK_LOGS
 
 def generate_briefing():
     db = Database()
@@ -41,12 +39,34 @@ def generate_briefing():
     
     stats_result = session.execute(stats_query).first()
     
-    # 2. Error Counts (status != 'success')
+    # 2. Error Counts (status == 'error')
     error_query = select(func.count(ScraperStats.id)).where(
         ScraperStats.run_at >= start_time,
-        ScraperStats.status != 'success'
+        ScraperStats.status == 'error'
     )
     error_count = session.execute(error_query).scalar() or 0
+
+    # 2b. Posts by Council
+    post_query = select(
+        Article.council_id,
+        func.count(Article.id).label("posted")
+    ).where(Article.posted_at >= start_time)\
+     .group_by(Article.council_id)\
+     .order_by(desc("posted"))\
+     .limit(5)
+
+    top_posted = session.execute(post_query).all()
+
+    # 2c. Warning/Error Events
+    event_counts = session.execute(
+        select(LogEvent.severity, func.count(LogEvent.id))
+        .where(LogEvent.created_at >= start_time)
+        .group_by(LogEvent.severity)
+    ).all()
+
+    event_map = {row[0]: row[1] for row in event_counts}
+    warnings_count = event_map.get("warning", 0)
+    errors_count = event_map.get("error", 0)
     
     # 3. Top Councils by Articles Found
     top_councils_query = select(
@@ -95,6 +115,7 @@ def generate_briefing():
         f"**Total Scraper Runs**: {runs}\n"
         f"**Articles Scanned**: {found}\n"
         f"**Avg Scraper Duration**: {avg_dur}\n"
+        f"**Warnings / Errors**: {warnings_count} / {errors_count}\n"
     )
     
     fields = []
@@ -105,6 +126,14 @@ def generate_briefing():
         fields.append({
             "name": "📈 Most Active Councils",
             "value": top_text,
+            "inline": False
+        })
+
+    if top_posted:
+        posted_text = "\n".join([f"• {c.council_id}: {c.posted}" for c in top_posted])
+        fields.append({
+            "name": "📰 Most Posts Published",
+            "value": posted_text,
             "inline": False
         })
         
@@ -135,24 +164,8 @@ def generate_briefing():
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
     
-    _send_webhook(embed)
+    send_discord_embed(WEBHOOK_URL, embed, username="Roundup Supervisor")
     session.close()
-
-def _send_webhook(embed_dict):
-    if not WEBHOOK_URL:
-        print("No webhook configured.")
-        return
-        
-    data = {
-        "embeds": [embed_dict],
-        "username": "Roundup Supervisor"
-    }
-    
-    try:
-        requests.post(WEBHOOK_URL, json=data)
-        print("Briefing sent to Discord.")
-    except Exception as e:
-        print(f"Failed to log to Discord: {e}")
 
 if __name__ == "__main__":
     generate_briefing()

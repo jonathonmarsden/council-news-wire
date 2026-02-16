@@ -25,11 +25,11 @@ from dateutil import parser as date_parser
 # Optional Discord logging - fails silently if not configured
 try:
     from discord_logger import (
-        log_post_success, 
-        log_error, 
-        log_silent_failure, 
         current_run,
-        reset_accumulator
+        start_run,
+        finish_run,
+        log_error,
+        log_warning,
     )
     DISCORD_LOGGING = True
 except ImportError:
@@ -132,6 +132,16 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
             
             if is_disabled:
                 print(f"  ⚠️ CRITICAL: {council['name']} has been DISABLED after 5 consecutive failures!")
+        if DISCORD_LOGGING:
+            try:
+                log_error(
+                    council['id'],
+                    f"Scraper error: {e}",
+                    event_type="scrape_error",
+                    metadata={"news_url": council.get('news_url')},
+                )
+            except Exception as log_err:
+                print(f"Warning: Failed to log scrape error: {log_err}")
         return []
 
 def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = True, proxy: Optional[str] = None, max_workers: int = 5) -> List[NewsArticle]:
@@ -159,13 +169,15 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
                 articles = future.result()
                 all_articles.extend(articles)
 
-                # Ensure accumulator counts councils processed even when no articles
+                # Track per-council results for run summary
                 if DISCORD_LOGGING:
                     try:
-                        if len(articles) == 0:
-                            current_run.log_success(council.get('name', council.get('id')), 0, 0)
+                        current_run.log_council_result(
+                            council.get('name', council.get('id')),
+                            len(articles)
+                        )
                     except Exception as e:
-                        print(f"Warning: Failed to log discord accumulator: {e}")
+                        print(f"Warning: Failed to log run metrics: {e}")
 
                 # ALERTING: Check for Silent Failures (0 articles found)
                 if len(articles) == 0 and council.get('enabled', True):
@@ -179,10 +191,11 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
 
                             # Only alert if persistent (>= 3 runs) to reduce false positives
                             if empty_runs >= 3:
-                                # log_error signature: log_error(council_name, error_message, context="")
-                                log_error(
-                                    council['name'],
-                                    f"Silent Failure (x{empty_runs}): Scraper returned 0 articles for {empty_runs} consecutive runs.\nCheck selectors or WAF blocking.\nURL: {council['news_url']}"
+                                log_warning(
+                                    council['id'],
+                                    f"Silent Failure (x{empty_runs}): Scraper returned 0 articles for {empty_runs} consecutive runs.",
+                                    event_type="silent_failure",
+                                    metadata={"news_url": council.get('news_url')},
                                 )
                         except (KeyError, AttributeError) as e:
                             print(f"Warning: Failed to check health/log to discord: {e}")
@@ -191,7 +204,7 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
                 # Still count error councils in accumulator
                 if DISCORD_LOGGING:
                     try:
-                        current_run.log_success(council.get('name', council.get('id')), 0, 0)
+                        current_run.log_council_result(council.get('name', council.get('id')), 0)
                     except Exception as discord_err:
                         print(f"Warning: Failed to log discord stats: {discord_err}")
             
@@ -293,18 +306,6 @@ def process_articles(articles: List[NewsArticle], db: Database, state_code: str,
     total_found = len(articles)
     total_new_db = new_fresh_count + new_archived_count
     
-    # Update logger stats with found count per council
-    if DISCORD_LOGGING:
-        tally = {}
-        for a in articles:
-            cid = a.council_id
-            if cid not in tally:
-                tally[cid] = {'name': a.council_name, 'count': 0}
-            tally[cid]['count'] += 1
-            
-        for cid, data in tally.items():
-            current_run.log_success(data['name'], data['count'], 0)
-
     duplicates = total_found - total_new_db
             
     print(f"Processing Summary: Found {total_found} total")
@@ -403,22 +404,12 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             council_counts[c_id] = council_counts.get(c_id, 0) + 1
             print(f"✅ Posted: {article['title'][:50]}...")
             
-            # Log to Discord for real-time monitoring
+            # Update run summary stats (Discord summaries are periodic)
             if DISCORD_LOGGING:
                 try:
-                    # Log to feed
-                    log_post_success(
-                        council_name, 
-                        article['title'], 
-                        article['url'], 
-                        post_uri,
-                        date=article_date,
-                        hashtags=tags_for_post
-                    )
-                    # Update summary stats
-                    current_run.articles_posted += 1
+                    current_run.log_posted(1)
                 except (AttributeError, KeyError, TypeError) as log_err:
-                    print(f"Warning: Discord log failed: {log_err}")
+                    print(f"Warning: Failed to log run post stats: {log_err}")
             
             # Rate limiting delay
             if posted_count < len(articles):
@@ -446,10 +437,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Reset logger for new run
-    if DISCORD_LOGGING:
-        reset_accumulator()
-
     # Determine proxy: CLI arg > Env Var > None
     proxy_url = args.proxy or os.environ.get('COUNCIL_BOT_PROXY')
     
@@ -537,6 +524,10 @@ def main():
             
     print(f"=== Council News Bot: {state_data['config']['state_name']} ===")
     
+    # Start a new run tracker after state is finalized
+    if DISCORD_LOGGING:
+        start_run(state_code)
+
     # Initialize DB
     db = Database()
     
@@ -572,9 +563,9 @@ def main():
                   dry_run=args.dry_run,
                   max_per_council=args.max_per_council)
 
-    # Log summary at the end of run
+    # Persist run summary at the end of run
     if DISCORD_LOGGING and not args.council: # Don't log summary for single council runs
-        current_run.send_summary(state_code)
+        finish_run()
 
 if __name__ == "__main__":
     main()

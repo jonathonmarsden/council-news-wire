@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, select, update, func, and_
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.dialects.postgresql import insert as pg_upsert
 
-from core.models import Base, Article, CouncilHealth, ScraperStats
+from core.models import Base, Article, CouncilHealth, ScraperStats, LogEvent, RunSummary
 
 class Database:
     """SQLAlchemy database handler."""
@@ -48,6 +48,53 @@ class Database:
             index_elements=index_elements,
             set_=values
         )
+
+    def add_log_event(
+        self,
+        event_type: str,
+        severity: str,
+        message: str,
+        run_id: Optional[str] = None,
+        state: Optional[str] = None,
+        council_id: Optional[str] = None,
+        metadata: Optional[Dict] = None,
+    ) -> None:
+        """Persist a structured log event."""
+        with self.get_session() as session:
+            event = LogEvent(
+                run_id=run_id,
+                state=state,
+                council_id=council_id,
+                event_type=event_type,
+                severity=severity,
+                message=message,
+                metadata=metadata,
+            )
+            session.add(event)
+            session.commit()
+
+    def upsert_run_summary(self, summary: Dict) -> None:
+        """Create or update a run summary by run_id."""
+        if not summary.get("run_id"):
+            raise ValueError("run_id is required for run summaries")
+
+        values = {
+            "run_id": summary["run_id"],
+            "state": summary["state"],
+            "started_at": summary["started_at"],
+            "ended_at": summary["ended_at"],
+            "duration_ms": summary["duration_ms"],
+            "councils_scraped": summary.get("councils_scraped", 0),
+            "articles_found": summary.get("articles_found", 0),
+            "articles_posted": summary.get("articles_posted", 0),
+            "errors_count": summary.get("errors_count", 0),
+            "warnings_count": summary.get("warnings_count", 0),
+        }
+
+        with self.get_session() as session:
+            stmt = self._upsert_stmt(RunSummary.__table__, values, ["run_id"])
+            session.execute(stmt)
+            session.commit()
 
     def article_exists(self, url: str) -> bool:
         """Check if an article URL has already been seen."""

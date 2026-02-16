@@ -17,7 +17,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from core.database import Database
 from core.models import Article
-from discord_logger import log_generic_report, DISCORD_WEBHOOK_URL
+from discord_logger import log_generic_report, DISCORD_WEBHOOK_LOGS
 
 def load_councils(root_path: str) -> Dict[str, Dict]:
     """Load all enabled councils."""
@@ -112,7 +112,7 @@ def check_quiet_councils():
             
         description = "\n".join(report_lines)
         
-        if DISCORD_WEBHOOK_URL:
+        if DISCORD_WEBHOOK_LOGS:
             log_generic_report(
                 f"🤫 Quiet Council Report ({len(quiet_councils)} > 7 days)",
                 f"The following councils have added no new news in > 7 days. This might mean no news, or a broken scraper.\n\n{description}",

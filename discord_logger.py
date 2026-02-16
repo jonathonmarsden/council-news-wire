@@ -1,194 +1,181 @@
-import requests
-import json
 import os
-from datetime import datetime, timezone
-from typing import List, Dict, Optional
+import threading
+import uuid
+from datetime import datetime
+from typing import Dict, Optional
 
-# Load hooks from Env, fallback to default if not set (for backward compatibility)
-DISCORD_WEBHOOK_URL_DEFAULT = "***REMOVED***"
+import requests
 
-# Configurable hooks for different channels
-WEBHOOK_ALERTS = os.environ.get("DISCORD_WEBHOOK_ALERTS", DISCORD_WEBHOOK_URL_DEFAULT)
-WEBHOOK_LOGS = os.environ.get("DISCORD_WEBHOOK_LOGS", DISCORD_WEBHOOK_URL_DEFAULT)
-WEBHOOK_FEED = os.environ.get("DISCORD_WEBHOOK_FEED", DISCORD_WEBHOOK_URL_DEFAULT)
+from core.database import Database
 
-class RunAccumulator:
-    """Accumulates stats during a scraper run to avoid chatty logs."""
-    def __init__(self):
-        self.councils_scraped = 0
-        self.articles_found = 0
-        self.articles_posted = 0
-        self.errors: List[Dict] = []
-        self.start_time = datetime.now(timezone.utc)
-        self.silent_failures: List[str] = []
+DISCORD_WEBHOOK_LOGS = os.environ.get("DISCORD_WEBHOOK_LOGS")
+DISCORD_WEBHOOK_ALERTS = os.environ.get("DISCORD_WEBHOOK_ALERTS")
 
-    def log_success(self, council_name, found, posted):
-        self.councils_scraped += 1
-        self.articles_found += found
-        self.articles_posted += posted
 
-    def log_error(self, council_name, error_msg):
-        self.errors.append({
-            "council": council_name,
-            "error": str(error_msg)
-        })
+class RunTracker:
+    """Tracks a single bot run and stores structured telemetry in Postgres."""
 
-    def log_silent_failure(self, council_id):
-        self.silent_failures.append(council_id)
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._db = None
+        self.reset()
 
-    def send_summary(self, state_code: str):
-        """Sends a summarized report of the run."""
-        duration = datetime.now(timezone.utc) - self.start_time
-        duration_str = str(duration).split('.')[0] # Remove microseconds
+    def reset(self) -> None:
+        with self._lock:
+            self.run_id = None
+            self.state = None
+            self.started_at = None
+            self.councils_scraped = 0
+            self.articles_found = 0
+            self.articles_posted = 0
+            self.errors_count = 0
+            self.warnings_count = 0
 
-        # Determine color (Green if clean, Red if errors)
-        color = 3066993 if not self.errors else 15158332
-        
-        status_emoji = "🟢"
-        if self.errors:
-            status_emoji = "🟠" 
-        if len(self.errors) > 5:
-            status_emoji = "🔴"
+    def start(self, state_code: str) -> str:
+        if self._db is None:
+            self._db = Database()
+        with self._lock:
+            self.run_id = uuid.uuid4().hex
+            self.state = state_code.upper()
+            self.started_at = datetime.utcnow()
+            self.councils_scraped = 0
+            self.articles_found = 0
+            self.articles_posted = 0
+            self.errors_count = 0
+            self.warnings_count = 0
+            return self.run_id
 
-        description = (
-            f"**State**: {state_code.upper()}\n"
-            f"**Time**: {duration_str}\n"
-            f"**Councils**: {self.councils_scraped}\n"
-            f"**Articles Found**: {self.articles_found}\n"
-            f"**New Posted**: {self.articles_posted}"
+    def log_council_result(self, council_name: str, found: int) -> None:
+        with self._lock:
+            self.councils_scraped += 1
+            self.articles_found += found
+
+    def log_posted(self, count: int = 1) -> None:
+        with self._lock:
+            self.articles_posted += count
+
+    def log_warning(
+        self,
+        council_id: Optional[str],
+        message: str,
+        event_type: str = "warning",
+        metadata: Optional[Dict] = None,
+    ) -> None:
+        with self._lock:
+            self.warnings_count += 1
+            run_id = self.run_id
+            state = self.state
+
+        if not self._db:
+            return
+        self._db.add_log_event(
+            event_type=event_type,
+            severity="warning",
+            message=message,
+            run_id=run_id,
+            state=state,
+            council_id=council_id,
+            metadata=metadata,
         )
 
-        fields = []
-        
-        # Add Silent Failures if any (Limit to 10)
-        if self.silent_failures:
-            failures_list = ", ".join(self.silent_failures[:15])
-            if len(self.silent_failures) > 15:
-                failures_list += f" (+{len(self.silent_failures)-15} more)"
-            
-            fields.append({
-                "name": f"⚠️ Silent Failures ({len(self.silent_failures)})",
-                "value": f"`{failures_list}`",
-                "inline": False
-            })
+    def log_error(
+        self,
+        council_id: Optional[str],
+        message: str,
+        event_type: str = "error",
+        metadata: Optional[Dict] = None,
+    ) -> None:
+        with self._lock:
+            self.errors_count += 1
+            run_id = self.run_id
+            state = self.state
 
-        # Add Errors if any (Limit to 5 detailed)
-        if self.errors:
-            error_details = []
-            for err in self.errors[:5]:
-                error_details.append(f"**{err['council']}**: {err['error'][:100]}")
-            
-            if len(self.errors) > 5:
-                error_details.append(f"...and {len(self.errors)-5} more errors.")
-                
-            fields.append({
-                "name": f"❌ Scraper Errors ({len(self.errors)})",
-                "value": "\n".join(error_details),
-                "inline": False
-            })
+        if not self._db:
+            return
+        self._db.add_log_event(
+            event_type=event_type,
+            severity="error",
+            message=message,
+            run_id=run_id,
+            state=state,
+            council_id=council_id,
+            metadata=metadata,
+        )
 
-        embed = {
-            "title": f"{status_emoji} Scraper Run Summary: {state_code.upper()}",
-            "description": description,
-            "color": color,
-            "fields": fields,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
+    def finish(self) -> None:
+        with self._lock:
+            if not self.run_id or not self.state or not self.started_at:
+                return
 
-        # Send to Logs channel
-        _send_webhook(WEBHOOK_LOGS, embed)
-
-        # If there are critical errors, ALSO send to Alerts channel
-        if len(self.errors) > 2 or any("Timeout" in e['error'] for e in self.errors):
-             _send_webhook(WEBHOOK_ALERTS, embed)
-
-# Global accumulator instance
-current_run = RunAccumulator()
-
-def reset_accumulator():
-    global current_run
-    current_run = RunAccumulator()
-
-def log_post_success(council_name, title, url, post_uri, date=None, hashtags=None):
-    """Logs a successful post to Discord (The public feed)."""
-    
-    # Recreate the Bluesky post content
-    post_lines = [title]
-    if date:
-        post_lines.append(date.strftime('%d %B %Y') if hasattr(date, 'strftime') else str(date))
-    post_lines.append(council_name)
-    if hashtags:
-        post_lines.append(' '.join(hashtags))
-    
-    post_replica = '\n'.join(post_lines)
-    
-    # Build Bluesky URL
-    bsky_url = f"https://bsky.app/profile/{post_uri.split('/')[2]}/post/{post_uri.split('/')[-1]}"
-    
-    # Create an 'Embed' for prettier formatting
-    embed = {
-        "title": f"✅ New Post: {council_name}",
-        "color": 3066993, # Green
-        "fields": [
-            {
-                "name": "Post Content",
-                "value": f"```\n{post_replica}\n```",
-                "inline": False
-            },
-            {
-                "name": "Original Article",
-                "value": url,
-                "inline": False
-            },
-            {
-                "name": "Bluesky Post",
-                "value": bsky_url,
-                "inline": False
+            ended_at = datetime.utcnow()
+            duration_ms = int((ended_at - self.started_at).total_seconds() * 1000)
+            summary = {
+                "run_id": self.run_id,
+                "state": self.state,
+                "started_at": self.started_at,
+                "ended_at": ended_at,
+                "duration_ms": duration_ms,
+                "councils_scraped": self.councils_scraped,
+                "articles_found": self.articles_found,
+                "articles_posted": self.articles_posted,
+                "errors_count": self.errors_count,
+                "warnings_count": self.warnings_count,
             }
-        ],
-        "timestamp": datetime.now(timezone.utc).isoformat()
-    }
-    
-    _send_webhook(WEBHOOK_FEED, embed)
 
-def log_error(council_name, error_message, context=""):
-    """
-    Logs an error.
-    - Adds to accumulator for summary.
-    - If critical, sends immediate alert.
-    """
-    # Simply add to accumulator, summary will handle reporting
-    current_run.log_error(council_name, error_message)
-    
-    # OPTIONAL: Keep urgent immediate logging for fatal system things?
-    # For now, we trust the summary at the end of the run.
+        if not self._db:
+            return
+        self._db.upsert_run_summary(summary)
 
-def log_silent_failure(council_id):
-    current_run.log_silent_failure(council_id)
 
-def log_generic_report(title, description, color=3447003):
-    """Logs a generic report/message to Discord (e.g. Quiet Councils)."""
+current_run = RunTracker()
+
+
+def start_run(state_code: str) -> str:
+    """Initialize a new run tracker for the current process."""
+    return current_run.start(state_code)
+
+
+def finish_run() -> None:
+    """Finalize and persist the current run summary."""
+    current_run.finish()
+
+
+def log_warning(council_id: Optional[str], message: str, event_type: str = "warning", metadata: Optional[Dict] = None) -> None:
+    current_run.log_warning(council_id, message, event_type=event_type, metadata=metadata)
+
+
+def log_error(council_id: Optional[str], message: str, event_type: str = "error", metadata: Optional[Dict] = None) -> None:
+    current_run.log_error(council_id, message, event_type=event_type, metadata=metadata)
+
+
+def log_generic_report(title: str, description: str, color: int = 3447003) -> None:
+    """Send a one-off report embed to the logs channel."""
     embed = {
         "title": title,
         "description": description[:4000],
         "color": color,
-        "timestamp": datetime.now(timezone.utc).isoformat()
+        "timestamp": datetime.utcnow().isoformat(),
     }
-    _send_webhook(WEBHOOK_LOGS, embed)
+    send_discord_embed(DISCORD_WEBHOOK_LOGS, embed)
 
-def _send_webhook(url, embed_dict):
-    if not url:
+
+def send_discord_embed(webhook_url: Optional[str], embed_dict: Dict, username: str = "Roundup News Bot") -> None:
+    if not webhook_url:
         print("Discord webhook URL not configured; skipping log")
         return
 
     data = {
         "embeds": [embed_dict],
-        "username": "Roundup News Bot Logger"
+        "username": username,
     }
 
-    # Attempt with retries to handle transient network / rate-limit issues
+    _send_webhook(webhook_url, data)
+
+
+def _send_webhook(url: str, data: Dict) -> None:
     max_attempts = 3
     backoff = 1
+
     for attempt in range(1, max_attempts + 1):
         try:
             resp = requests.post(url, json=data, timeout=10)
@@ -197,26 +184,17 @@ def _send_webhook(url, embed_dict):
             resp = None
 
         if resp is None:
-            # network error, retry
             if attempt < max_attempts:
-                time_sleep = backoff
+                _sleep(backoff)
                 backoff *= 2
-                try:
-                    from time import sleep
-                    sleep(time_sleep)
-                except Exception:
-                    pass
                 continue
-            else:
-                print("Discord webhook failed after retries (network error)")
-                return
-
-        # Check HTTP response
-        if resp.status_code in (200, 204):
-            # success
+            print("Discord webhook failed after retries (network error)")
             return
-        elif resp.status_code == 429:
-            # Rate limited — try again after delay if available
+
+        if resp.status_code in (200, 204):
+            return
+
+        if resp.status_code == 429:
             retry_after = resp.headers.get("Retry-After")
             print(f"Attempt {attempt}: Discord webhook rate limited, Retry-After={retry_after}")
             if attempt < max_attempts:
@@ -225,17 +203,20 @@ def _send_webhook(url, embed_dict):
                 except Exception:
                     wait = backoff
                 backoff *= 2
-                try:
-                    from time import sleep
-                    sleep(wait)
-                except Exception:
-                    pass
+                _sleep(wait)
                 continue
-            else:
-                print("Discord webhook failed after retries (rate limited)")
-                print("Response:", resp.status_code, resp.text[:1000])
-                return
-        else:
-            # Non-retryable HTTP error
-            print(f"Discord webhook returned HTTP {resp.status_code}: {resp.text[:1000]}")
+            print("Discord webhook failed after retries (rate limited)")
+            print("Response:", resp.status_code, resp.text[:1000])
             return
+
+        print(f"Discord webhook returned HTTP {resp.status_code}: {resp.text[:1000]}")
+        return
+
+
+def _sleep(seconds: int) -> None:
+    try:
+        from time import sleep
+
+        sleep(seconds)
+    except Exception:
+        pass
