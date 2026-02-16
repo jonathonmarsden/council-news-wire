@@ -2,17 +2,19 @@
 
 ## Quick Start
 
-### Deploy to Production VPS
+### Deploy to Production VPS (GitHub Actions Primary)
+
+Use GitHub Actions for normal production deploys. Local SSH deploys are for emergencies only.
 
 ```bash
-# Full deployment with all checks
-./scripts/deployment/deploy.sh
+# Emergency only (requires explicit flag)
+./scripts/deployment/deploy.sh --force-local
 
 # Dry run (see what would be deployed)
-./scripts/deployment/deploy.sh --dry-run
+./scripts/deployment/deploy.sh --force-local --dry-run
 
 # Skip pre-flight checks (not recommended)
-./scripts/deployment/deploy.sh --skip-checks
+./scripts/deployment/deploy.sh --force-local --skip-checks
 ```
 
 ## Pre-Deployment Checklist
@@ -35,13 +37,12 @@ The deployment script automatically checks:
 - Configuration files (`states/*/councils.json`, `states/*/config.json`)
 - Dependencies list (`requirements.txt`)
 - Docker configuration (`Dockerfile`, `docker-compose.yml`)
-- Scheduler (`scheduler.py`)
 
 ### Excluded (not synced):
 - `.git/` - Git repository
 - `__pycache__/`, `*.pyc` - Python bytecode
 - `.env` - Local environment (VPS has its own)
-- `council_news.db*` - Local database (VPS maintains its own)
+- `data/` - Local data volume (VPS maintains its own)
 - `*.log` - Log files
 - `venv/` - Virtual environment
 - `.vscode/`, `.idea/` - IDE configs
@@ -91,11 +92,8 @@ ssh root@vps.example.com "cd /opt/council-news-bot && docker compose up -d"
 ```bash
 ssh root@vps.example.com
 cd /opt/council-news-bot
-docker compose exec council-bot python3 -c "
-from core.database import Database
-db = Database()
-print(f'Total articles: {len(db.get_all_articles())}')
-"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select count(*) as total_articles from articles;"
 ```
 
 ### Manual Health Check
@@ -114,7 +112,8 @@ If deployment fails:
    ssh root@vps.example.com
    cd /opt/council-news-bot/backups
    ls -lt  # Find the backup you want
-   cp council_news_backup_YYYYMMDD_HHMMSS.db ../council_news.db
+   # Restore from pg_dump (SQL format)
+   cat council_news_YYYYMMDD.sql | docker compose exec -T db psql -U councilbot -d council_news
    ```
 
 2. **Revert code (if needed):**
@@ -122,7 +121,7 @@ If deployment fails:
    # On local machine
    git log --oneline -10  # Find the commit to revert to
    git checkout <commit-hash>
-   ./scripts/deployment/deploy.sh
+   ./scripts/deployment/deploy.sh --force-local
    ```
 
 3. **Restart services:**
@@ -181,23 +180,23 @@ docker compose up -d --build
 
 **Check database size:**
 ```bash
-ssh root@vps.example.com "ls -lh /opt/council-news-bot/council_news.db*"
+ssh root@vps.example.com "cd /opt/council-news-bot && docker compose exec -T db psql -U councilbot -d council_news -c \"select pg_size_pretty(pg_database_size('council_news'));\""
 ```
 
 **Reset database (⚠️ DANGER - loses all data):**
 ```bash
 ssh root@vps.example.com
 cd /opt/council-news-bot
-docker compose down
-mv council_news.db council_news.db.old
-docker compose up -d
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "drop schema public cascade; create schema public;"
+docker compose exec -T bot alembic upgrade head
 ```
 
 ## Post-Deployment Monitoring
 
 ### First 5 Minutes
 - ✅ Watch logs for errors: `docker compose logs -f`
-- ✅ Check scheduler starts: Look for "Starting scrape for..." messages
+- ✅ Check cron log updates: `tail -50 /var/log/council_bot_cron.log`
 - ✅ Verify posting begins: Look for "Posted:" messages
 
 ### First Hour
@@ -208,7 +207,7 @@ docker compose up -d
 ### First 24 Hours
 - ✅ Run health check: `python3 scripts/audit_lga_coverage.py`
 - ✅ Check for disabled councils (circuit breaker triggered)
-- ✅ Review posting frequency (should be ~every 5 min during 5am-10pm)
+- ✅ Review posting frequency (should be ~every 10 min)
 
 ## Environment Variables on VPS
 
@@ -227,12 +226,12 @@ COUNCIL_BOT_ROTATING_PROXY=<rotating-proxy-url>
 
 **Never commit this file to git!**
 
-## Scheduler Behavior
+## Cron Behavior
 
-- **Scrape Job:** Every 3 hours, all states
-- **Post Job:** Every 5 minutes (5am-10pm AEST only)
-- **Concurrency:** 2 workers (to prevent VPS overload)
-- **Timeout:** 1 hour per scrape job
+- **Scrape Job:** Twice daily per state (morning/evening windows)
+- **Post Job:** Every 10 minutes (all day)
+- **Concurrency:** Morning reduced, evening higher (see `SCHEDULING_GUIDE.md`)
+- **Timeout:** Per-state timeout via `process_global_queue.py`
 
 ## Success Metrics
 

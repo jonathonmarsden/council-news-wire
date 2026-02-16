@@ -28,7 +28,7 @@
         │       └─ Webshare Rotating Proxy (reliable, IP rotation)
         │
         ├─ PROCESSING LAYER (Data Transformation)
-        │   ├─ Database (SQLAlchemy + SQLite/PostgreSQL)
+        │   ├─ Database (SQLAlchemy + PostgreSQL)
         │   │   ├─ Article deduplication (by URL)
         │   │   ├─ State history (7 years)
         │   │   ├─ Scraper run logs (performance monitoring)
@@ -128,10 +128,10 @@ Responsible for **data collection** from council websites.
 ### 2. Data Processing (`core/`)
 
 **Database** (`core/database.py`):
-- SQLAlchemy ORM with SQLite (dev) / PostgreSQL (prod)
+- SQLAlchemy ORM with PostgreSQL (all environments)
 - Tables:
   - `articles` — Scraped news (URL as unique key)
-  - `scraper_runs` — Execution history + metrics
+  - `scraper_stats` — Execution history + metrics
   - `council_health` — Failure tracking (circuit breaker)
 
 - Key Methods:
@@ -266,17 +266,13 @@ Start → Get Unposted Articles → For Each Article:
 **Benefit**: Shared database connection, lower memory overhead  
 **Concurrency limit**: 4-8 workers (not 100+) to respect target websites
 
-### Why SQLite (Dev) / PostgreSQL (Prod)?
+### Why PostgreSQL Everywhere?
 
-**SQLite (Local Development)**:
-- Zero setup, file-based
-- Sufficient for testing
-- Limitations: Single-writer, slow under concurrency
-
-**PostgreSQL (Production VPS)**:
+**PostgreSQL (All Environments)**:
+- Consistent behavior across dev and prod
 - Multiple concurrent writers
 - Better performance at scale (125K+ articles)
-- Can be backed up/restored
+- Standard backup/restore workflows
 
 ### Why Twice Daily (Not Continuous)?
 
@@ -316,11 +312,11 @@ Start → Get Unposted Articles → For Each Article:
 **Recovery**: Backoff for 15 minutes, retry  
 **Prevention**: Adjust `--max-per-council` or `--limit`
 
-### Database Locked
+### Database Connection Failure
 
-**Cause**: Multiple writers concurrent access  
-**Recovery**: Automatic retry with exponential backoff  
-**Prevention**: Use PostgreSQL in production (not SQLite)
+**Cause**: DB container down, invalid `DATABASE_URL`, or network issue  
+**Recovery**: Restart `db` service, verify env vars  
+**Prevention**: Host cron uses `docker compose exec -T` and DB runs as a service
 
 ### WAF Blocking (403, Cloudflare)
 

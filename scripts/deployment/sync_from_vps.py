@@ -119,7 +119,6 @@ def sync_code(dry_run: bool = False):
         --exclude 'data' \
         --exclude '*.db' \
         --exclude '*.db-*' \
-        --exclude 'scheduler.log' \
         --exclude '.env' \
         --exclude 'backups' \
         {USER}@{HOST}:{TARGET_DIR}/ {LOCAL_DIR}/'''

@@ -16,7 +16,6 @@ def main():
         return
 
     # 1. Identify "Active" scrapers that have found 0 articles in last 5 runs
-    # Note: SQLite version
     query = text("""
     WITH RecentRuns AS (
         SELECT 
@@ -25,7 +24,7 @@ def main():
             articles_found,
             ROW_NUMBER() OVER (PARTITION BY council_id ORDER BY run_at DESC) as rn
         FROM scraper_stats
-        WHERE run_at > datetime('now', '-7 days')
+        WHERE run_at > now() - interval '7 days'
     )
     SELECT council_id
     FROM RecentRuns
@@ -46,8 +45,7 @@ def main():
             print("No Zombie scrapers found.")
             
     except Exception as e:
-        # Fallback for SQLite syntax if needed (datetime modifier differs)
-        print(f"Query failed (likely DB syntax difference): {e}")
+        print(f"Query failed: {e}")
 
     # 2. Identify "Silent Errors" (status='error' but no disable)
     # Simplified for now

@@ -13,7 +13,7 @@ services:
     # Set timezone to match target audience
     environment:
       - TZ=Australia/Sydney
-      # To enable Postgres, uncomment in .env:
+      # DATABASE_URL is required (see .env example):
       # DATABASE_URL=postgresql://councilbot:securepassword@db:5432/council_news
     # Resource limits (Prevent OOM freezes on 4GB VPS)
     deploy:

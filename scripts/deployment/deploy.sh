@@ -6,7 +6,7 @@
 # It ensures the codebase is ready, configs are valid, and the VPS is accessible.
 #
 # Usage:
-#   ./scripts/deployment/deploy.sh [--skip-checks] [--dry-run]
+#   ./scripts/deployment/deploy.sh [--skip-checks] [--dry-run] [--force-local]
 #
 
 set -e  # Exit on any error
@@ -24,6 +24,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 REMOTE_PATH="/opt/council-news-bot"
 SKIP_CHECKS=false
 DRY_RUN=false
+FORCE_LOCAL=false
 
 # Parse arguments
 for arg in "$@"; do
@@ -34,17 +35,29 @@ for arg in "$@"; do
         --dry-run)
             DRY_RUN=true
             ;;
+        --force-local)
+            FORCE_LOCAL=true
+            ;;
         --help)
-            echo "Usage: $0 [--skip-checks] [--dry-run]"
+            echo "Usage: $0 [--skip-checks] [--dry-run] [--force-local]"
             echo ""
             echo "Options:"
             echo "  --skip-checks    Skip pre-flight validation checks"
             echo "  --dry-run        Show what would be deployed without making changes"
+            echo "  --force-local    Allow emergency local deploy (prefer GitHub Actions)"
             echo "  --help           Show this help message"
             exit 0
             ;;
     esac
 done
+
+# Enforce emergency-only local deploys
+if [ "$FORCE_LOCAL" = false ]; then
+    echo -e "${YELLOW}Local SSH deploy is for emergency use only.${NC}"
+    echo -e "${YELLOW}Use GitHub Actions for normal production deploys.${NC}"
+    echo -e "${YELLOW}Re-run with --force-local to proceed.${NC}"
+    exit 1
+fi
 
 # Load VPS credentials
 if [ -f "$SCRIPT_DIR/deploy_secrets.py" ]; then

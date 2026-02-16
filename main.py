@@ -45,7 +45,6 @@ from core.timezone_utils import (
     STATE_TIMEZONES
 )
 from core.exceptions import ScrapeError, ConfigurationError
-from core.exceptions import ScrapeError, ConfigurationError
 
 # Constants
 MAX_ARTICLE_AGE_DAYS = 7

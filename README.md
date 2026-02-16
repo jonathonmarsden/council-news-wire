@@ -94,7 +94,7 @@ council-news-bot/
 ├── states/                 # Configuration by State (JSON files)
 ├── scripts/                # Utility scripts (maintenance, deployment, analysis)
 ├── main.py                 # CLI Entry Point
-└── scheduler.py            # (Legacy) Internal Scheduler - See DEPLOYMENT.md
+└── docker-compose.yml      # Orchestration; cron triggers runs
 ```
 
 ## Commands
@@ -119,6 +119,7 @@ python main.py --post-only
 ## Deployment
 
 The bot is deployed on a DigitalOcean VPS running Ubuntu.
+Production deploys run via GitHub Actions. Local SSH deploys are break-glass only.
 See [DEPLOYMENT.md](DEPLOYMENT.md) for deployment instructions.
 
 ## Scheduling (Twice-Daily)

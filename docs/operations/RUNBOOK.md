@@ -4,6 +4,8 @@
 **Version**: 2.0 (Post-Proxy Fix)  
 **Audience**: Operations, deployment, maintenance  
 
+**Database**: PostgreSQL only.
+
 ---
 
 ## Table of Contents
@@ -198,20 +200,22 @@ docker compose exec -T bot python main.py --state vic --post-only --dry-run
 
 ### Problem: High Database Disk Usage
 
-**Symptoms**: `bot.db` growing rapidly (>500MB)
+**Symptoms**: PostgreSQL data growing rapidly (>500MB)
 
 **Diagnosis**:
 ```bash
 # Check database size
-sqlite3 /opt/council-news-bot/bot.db "SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size();"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select pg_size_pretty(pg_database_size('council_news'));"
 
 # Count articles
-sqlite3 /opt/council-news-bot/bot.db "SELECT COUNT(*) FROM articles;"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select count(*) from articles;"
 ```
 
 **Common Causes**:
 1. **Too many articles retained**: Database keeps 7+ years of articles
-   - Check: `SELECT COUNT(*) FROM articles WHERE date < datetime('now', '-30 days');`
+   - Check: `select count(*) from articles where date < now() - interval '30 days';`
    - Fix**: Run cleanup: `python scripts/maintenance/cleanup_old_articles.py --keep-days 90`
 
 2. **Duplicate articles**: Same URL inserted many times
@@ -219,7 +223,7 @@ sqlite3 /opt/council-news-bot/bot.db "SELECT COUNT(*) FROM articles;"
 
 **Prevention**:
 - Run `scripts/maintenance/cleanup_old_articles.py --keep-days 30` weekly
-- Monitor with: `watch -n 3600 "du -sh /opt/council-news-bot/bot.db"`
+- Monitor with: `watch -n 3600 "docker compose exec -T db psql -U councilbot -d council_news -c \"select pg_size_pretty(pg_database_size('council_news'));\""`
 
 ---
 
@@ -298,13 +302,14 @@ python scripts/maintenance/audit_selectors.py --states wa vic nsw
 
 ```bash
 # Backup database
-cp /opt/council-news-bot/bot.db /opt/council-news-bot/backups/bot.db.$(date +%Y%m%d)
+docker compose exec -T db pg_dump -U councilbot council_news \
+   > /opt/council-news-bot/backups/council_news_$(date +%Y%m%d).sql
 
 # Clean old articles (>30 days)
 python scripts/maintenance/cleanup_old_articles.py --keep-days 30
 
 # Optimize database
-sqlite3 /opt/council-news-bot/bot.db "VACUUM;"
+docker compose exec -T db psql -U councilbot -d council_news -c "VACUUM (ANALYZE);"
 ```
 
 ### Quarterly: Dependency Updates
@@ -404,7 +409,7 @@ python main.py --state vic --time-window morning --dry-run
 
 - **Docker container logs**: `docker logs council_news_bot --tail=200`
 - **VPS system logs**: `/var/log/council_bot_scraper.log`
-- **Database**: `/opt/council-news-bot/bot.db` (SQLite)
+- **Database**: PostgreSQL (`db` service, volume `postgres_data`)
 
 ### Key Files for Debugging
 

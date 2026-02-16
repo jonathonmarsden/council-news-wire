@@ -9,7 +9,7 @@ Usage:
     python3 scripts/cron/process_global_queue.py
 
 Cron Entry:
-    */10 * * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/cron/process_global_queue.py
+    */10 * * * * cd /opt/council-news-bot && docker compose exec -T bot python3 scripts/cron/process_global_queue.py
 """
 
 import sys

@@ -29,5 +29,5 @@ COPY . .
 RUN useradd -m botuser && chown -R botuser:botuser /app
 USER botuser
 
-# Run the scheduler
-CMD ["python", "scheduler.py"]
+# Idle container; cron on the host triggers runs via docker compose exec.
+CMD ["tail", "-f", "/dev/null"]

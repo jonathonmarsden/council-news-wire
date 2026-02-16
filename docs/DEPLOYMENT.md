@@ -2,9 +2,14 @@
 
 This document outlines the deployment process for the Council News Bot to the DigitalOcean VPS.
 
-## 🚀 Deployment Strategy: Push-to-Deploy
+## 🚀 Deployment Strategy: GitHub Actions (Primary)
 
-This project uses a **Push-to-Deploy** workflow. We do **not** pull code from GitHub on the server. Instead, we use `rsync` to push the local working directory (excluding ignored files) directly to the VPS.
+Production deploys are **CI/CD-driven**. The GitHub Actions pipeline is the primary path to production.
+
+**Why**:
+1. **Auditable**: Deploys are tied to a commit SHA.
+2. **Reproducible**: CI runs the same checks every time.
+3. **Safer**: Avoids shipping uncommitted local state.
 
 This ensures that:
 1.  **Secrets Management**: Your local `.env` and `deploy_secrets.py` (which are git-ignored) remain secure and are transferred directly.
@@ -26,27 +31,29 @@ To deploy, you need:
 
 ## 🛠 How to Deploy
 
-### Option 1: Automated Deployment (Recommended)
+### Option 1: GitHub Actions (Primary)
 
-This method automates the password entry if you haven't set up SSH keys.
+1. Push to `master`.
+2. Ensure **Test & Lint** passes.
+3. The **Deploy to VPS** workflow runs automatically.
 
-1.  Open a terminal in the project root.
-2.  Run the Python wrapper script:
-    ```bash
-    python3 scripts/deployment/deploy_with_password.py
-    ```
+To trigger manually:
+- GitHub → Actions → **Deploy to VPS** → Run workflow.
 
-**What this does:**
-*   Syncs all project files to `/opt/council-news-bot` on the VPS.
-*   Installs system dependencies (Docker, etc.) if missing.
-*   Rebuilds and restarts the Docker containers.
+### Option 2: Emergency Local Deploy (Break Glass)
 
-### Option 2: Manual Shell Script (SSH Keys required)
+Only use this if GitHub Actions is unavailable. It requires explicit flags.
+
+```bash
+python3 scripts/deployment/deploy_with_password.py --force-local
+```
+
+### Option 3: Manual Shell Script (SSH Keys required)
 
 If you have SSH keys set up for `root@vps.example.com`:
 1.  Run the shell script directly:
     ```bash
-    ./scripts/deployment/deploy_to_vps.sh
+    ./scripts/deployment/deploy_to_vps.sh --force-local
     ```
 
 ## � Monitoring
@@ -61,7 +68,7 @@ The VPS has the DigitalOcean Monitoring Agent (`do-agent`) installed and running
 4.  Click on the **Graphs** tab.
 
 **Key Metrics to Watch:**
-*   **CPU Usage:** Should typically stay below 80%. Spikes during scheduled scrapes (every 3 hours) are normal.
+*   **CPU Usage:** Should typically stay below 80%. Spikes during scheduled scrapes (twice daily) are normal.
 *   **Memory Usage:** We have a strict 1GB limit on the Docker container, but the host has 4GB. Watch for lines flatlining at 100% which indicates swapping.
 *   **Disk Usage:** Ensure `/` doesn't fill up (logs/database backups).
 

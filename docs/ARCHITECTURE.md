@@ -12,10 +12,10 @@ graph TD
     end
 
     subgraph "Core Logic"
-        Scheduler[Scheduler (scheduler.py)]
+        Cron[Host Cron]
         Factory[Scraper Factory]
         Scraper[Scraper Engine]
-        DB[(SQLite Database)]
+        DB[(PostgreSQL Database)]
         Poster[BlueSky Poster]
     end
 
@@ -28,7 +28,7 @@ graph TD
     end
 
     Config --> Factory
-    Scheduler --> Factory
+    Cron --> Factory
     Factory --> Scraper
     Scraper --> Card
     Scraper --> RSS
@@ -48,14 +48,13 @@ graph TD
 ```text
 council-news-bot/
 ├── main.py                 # CLI Entry Point
-├── scheduler.py            # Main Service Loop
 ├── core/                   # Core Application Logic
 │   ├── scrapers/           # Modular Scraper Package
 │   │   ├── base.py         # Base class & Data models
 │   │   ├── card.py         # Standard HTML Card Scraper
 │   │   ├── rss.py          # RSS Feed Scraper
 │   │   └── factory.py      # Scraper Instantiation Logic
-│   ├── database.py         # SQLite Handler
+│   ├── database.py         # PostgreSQL Handler
 │   ├── poster.py           # BlueSky API Client
 │   └── utils.py            # Logging & Helpers
 ├── states/                 # Configuration by State
@@ -72,8 +71,8 @@ The system is designed to run on a low-cost VPS (DigitalOcean Basic Droplet) wit
 
 | Resource | Constraint | Implementation |
 | :--- | :--- | :--- |
-| **Memory** | **1024 MB** | Enforced via Docker Compose `deploy.resources.limits.memory`. Prevents OOM kills affecting the host. |
-| **Concurrency** | **2 Workers** | `scheduler.py` limits `main.py` execution to 2 parallel processes to keep CPU load < 80%. |
+| **Memory** | **3072 MB** | Enforced via Docker Compose `deploy.resources.limits.memory`. Prevents OOM kills affecting the host. |
+| **Concurrency** | **Time-window based** | Host cron triggers `main.py` with dynamic concurrency (morning reduced, evening higher). |
 | **Disk Storage** | **25 GB** | Docker logs are rotated (`max-size: 10m`, `max-file: 3`) to prevent disk exhaustion. |
 | **Network** | **IP Reputation** | Heavy reliance on `curl_cffi` and rotating proxies to mitigate WAF blocks on the datacenter IP. |
 
@@ -102,14 +101,13 @@ We use a **"Record Everything"** strategy to eliminate ambiguity between "broken
         *   `consecutive_failures`: Connection errors (trips at 5).
         *   `consecutive_empty_runs`: "Zombie" detection (Active but finding nothing).
 
-### 3. Posting Engine & Scheduler
+### 3. Posting Engine & Cron
 The system is orchestrated to balance throughput with safety.
 
-*   **Scheduler (`scheduler.py`)**:
-    *   **Scrape Loop**: Runs every 3 hours (Concurrency: 2).
-    *   **Post Loop**: Runs every 5 minutes (5am - 10pm).
-    *   **Health Check Loop**: Runs daily. Audits for "Zombie" scrapers and sends alerts.
-    *   **Limits**: Posts max **10 articles** per state per run (increased Jan 2026).
+*   **Host Cron (VPS)**:
+    *   **Scrape Jobs**: Twice-daily per state (morning/evening, local time windows).
+    *   **Post Jobs**: Every 10 minutes via `scripts/cron/process_global_queue.py`.
+    *   **Limits**: Posts max **3 articles** per state per run (18/hr per state).
 *   **Poster (`core/poster.py`)**:
     *   **Freshness Filter**: Hard filter rejecting articles >7 days old.
     *   **Variety Logic**: Round-Robin selection ensures no single council dominates the feed.
@@ -141,7 +139,7 @@ The bot is containerized using Docker for consistent execution across environmen
     *   `scripts/deployment/deploy_to_vps.sh` connects via SSH.
     *   Updates the code on the VPS.
     *   Rebuilds and restarts the Docker container.
-    *   Database (`bot.db`) is persisted in a Docker volume.
+    *   PostgreSQL data is persisted in the `postgres_data` volume.
 
 ## Scalability Features
 

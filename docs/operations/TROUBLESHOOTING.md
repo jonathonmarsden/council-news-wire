@@ -3,6 +3,8 @@
 **Last Updated**: 15 February 2026  
 **Quick Reference**: For common issues and self-service resolution  
 
+**Database**: PostgreSQL only.
+
 ---
 
 ## Problem Index
@@ -161,11 +163,12 @@ time curl -s -x http://REDACTED-rotate:... https://httpbin.org/ip
 **Check**:
 ```bash
 # Verify database has articles
-sqlite3 /opt/council-news-bot/bot.db "SELECT COUNT(*) FROM articles;"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select count(*) from articles;"
 
 # Check for unposted articles
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT COUNT(*) FROM articles WHERE posted_to IS NULL LIMIT 10;"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select count(*) from articles where posted_at is null;"
 ```
 
 **Likely Cause**: Articles are too old (>7 days)
@@ -301,68 +304,74 @@ EOF
 
 ## Database Issues
 
-### Issue: "database is locked"
+### Issue: Database connection failed
 
 **Symptoms**:
 ```
-sqlite3.OperationalError: database is locked
+psql: error: could not translate host name "db" to address
+psql: error: connection refused
 ```
 
-**Cause**: SQLite doesn't handle concurrent writes well
+**Cause**: Database container down, wrong `DATABASE_URL`, or cron using `docker compose run` instead of `exec`.
 
 **Fix**:
 ```bash
-# 1. Check if multiple processes accessing DB
-lsof /opt/council-news-bot/bot.db
+# 1. Check DB container
+docker compose ps db
 
-# 2. Kill stuck processes
-pkill -f "python main.py"
+# 2. Validate DB connectivity
+docker compose exec -T db psql -U councilbot -d council_news -c "select 1;"
 
-# 3. If using SQLite, migrate to PostgreSQL (better for production)
+# 3. Confirm cron uses exec (not run)
+crontab -l | grep process_global_queue
 ```
 
 ### Issue: Database Growing Too Large (>500MB)
 
 **Diagnosis**:
 ```bash
-du -sh /opt/council-news-bot/bot.db
+# Check database size
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select pg_size_pretty(pg_database_size('council_news'));"
 
 # Count articles
-sqlite3 /opt/council-news-bot/bot.db "SELECT COUNT(*) FROM articles;"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select count(*) from articles;"
 ```
 
 **Fix**:
 ```bash
 # Backup first
-cp /opt/council-news-bot/bot.db /opt/council-news-bot/bot.db.backup
+docker compose exec -T db pg_dump -U councilbot council_news \
+   > /opt/council-news-bot/backups/council_news_$(date +%Y%m%d).sql
 
 # Delete articles older than 90 days
-sqlite3 /opt/council-news-bot/bot.db \
-  "DELETE FROM articles WHERE date < datetime('now', '-90 days');"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "delete from articles where date < now() - interval '90 days';"
 
 # Optimize database
-sqlite3 /opt/council-news-bot/bot.db "VACUUM;"
+docker compose exec -T db psql -U councilbot -d council_news -c "vacuum (analyze);"
 
 # Check new size
-du -sh /opt/council-news-bot/bot.db
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select pg_size_pretty(pg_database_size('council_news'));"
 ```
 
 ### Issue: Missing Tables
 
 **Symptoms**:
 ```
-sqlite3.OperationalError: no such table: articles
+relation "articles" does not exist
 ```
 
 **Fix**:
 ```bash
 # Run migrations
 cd /opt/council-news-bot
-alembic upgrade head
+docker compose exec -T bot alembic upgrade head
 
-# Or reset database (loses history)
-rm bot.db
-python -c "from core.database import Database; Database().init_db()"
+# If migrations fail, restore from latest pg_dump backup
+ls -lt /opt/council-news-bot/backups/*.sql | head -5
 ```
 
 ---
@@ -380,18 +389,18 @@ time curl -s -x http://REDACTED-rotate:... https://httpbin.org/ip
 docker stats council_news_bot
 
 # Check database query times
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT council_id, CAST(AVG(duration_ms) AS INT) as avg_ms FROM scraper_runs 
-   WHERE timestamp > datetime('now', '-7 days') 
-   GROUP BY council_id 
-   ORDER BY avg_ms DESC LIMIT 10;"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select council_id, avg(duration_ms)::int as avg_ms from scraper_stats 
+    where run_at > now() - interval '7 days' 
+    group by council_id 
+    order by avg_ms desc limit 10;"
 ```
 
 **Fix** (in order):
 1. Reduce concurrency: `--concurrency 3`
 2. Check proxy (see [Proxy Issues](#proxy-issues-407))
 3. Disable non-essential features (e.g., detailed logging)
-4. Use PostgreSQL instead of SQLite
+4. Scale up DB resources or prune old rows
 5. Add more workers: `--concurrency 12`
 
 ### Issue: Posts Not Posting (Backlog Growing)
@@ -399,8 +408,8 @@ sqlite3 /opt/council-news-bot/bot.db \
 **Check**:
 ```bash
 # Count unposted articles
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT COUNT(*) FROM articles WHERE posted_to IS NULL;"
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select count(*) from articles where posted_at is null;"
 
 # Check for posting errors
 docker logs council_news_bot | tail -100 | grep -i "post\|bluesky"
@@ -414,8 +423,8 @@ docker-compose exec bot python main.py --state vic --post-only --limit 20
 # If rate limited (429), wait 1 hour then retry
 # If auth error (401), update BlueSky credentials in .env
 # If validation error, skip article:
-#   sqlite3 /opt/council-news-bot/bot.db \
-#   "UPDATE articles SET posted_to='REJECTED' WHERE id=XXX;"
+#   docker compose exec -T db psql -U councilbot -d council_news \
+#     -c "update articles set status='invalid' where id=XXX;"
 ```
 
 ---
@@ -463,10 +472,10 @@ systemctl start docker
 **Test**:
 ```bash
 # From inside container
-docker-compose exec bot psql -h db -U postgres -c "SELECT 1;"
+docker compose exec -T db psql -U councilbot -d council_news -c "select 1;"
 
 # From host
-psql -h vps.example.com -U postgres council_news
+psql -h vps.example.com -U councilbot -d council_news
 ```
 
 **Fix**:
@@ -498,8 +507,8 @@ docker-compose version >> /tmp/docker_ps.txt
 grep -v PASSWORD /opt/council-news-bot/.env > /tmp/env_config.txt
 
 # 4. Recent scraper runs
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT * FROM scraper_runs ORDER BY timestamp DESC LIMIT 10;" > /tmp/scraper_runs.txt
+docker compose exec -T db psql -U councilbot -d council_news \
+   -c "select * from scraper_stats order by run_at desc limit 10;" > /tmp/scraper_runs.txt
 ```
 
 Share `/tmp/bot_logs.txt` and system info in issue.

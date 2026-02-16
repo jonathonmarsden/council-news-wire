@@ -10,7 +10,7 @@ The project has been reorganized for better maintainability:
 council-news-bot/
 ├── core/                   # Core Application Logic
 │   ├── config.py           # Central configuration (Paths, Env Vars)
-│   ├── database.py         # SQLite database handler
+│   ├── database.py         # PostgreSQL database handler
 │   ├── scraper.py          # Scraper implementations
 │   ├── poster.py           # BlueSky API client
 │   └── utils.py            # Logging and utilities
@@ -28,7 +28,7 @@ council-news-bot/
 │   └── manual/             # Archived manual test scripts
 ├── _archived_old_code/     # Deprecated files
 ├── main.py                 # CLI Entry Point
-└── scheduler.py            # Main Service Loop (runs on VPS)
+└── docker-compose.yml      # Orchestration; cron triggers runs
 ```
 
 ## ⚙️ Configuration
@@ -39,7 +39,7 @@ The project uses a central configuration module `core/config.py`.
 ### Environment Variables (`.env`)
 ```bash
 # Database
-DB_PATH=data/bot.db  # Use absolute path or relative to project root
+DATABASE_URL=postgresql://councilbot:securepassword@db:5432/council_news
 
 # BlueSky Credentials
 BLUESKY_HANDLE_VIC=...
@@ -118,4 +118,4 @@ docker compose restart
 
 - **Max Posts Per Council**: `main.py` defaults to `--max-per-council 5` to prevent flooding the feed if a backlog clears suddenly.
 - **Rate Limiting**: The poster sleeps 2 seconds between posts.
-- **Duplicate Prevention**: URLs are tracked in `bot.db` and never reposted.
+- **Duplicate Prevention**: URLs are tracked in PostgreSQL and never reposted.

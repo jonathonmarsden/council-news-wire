@@ -4,6 +4,8 @@
 **Purpose**: Health monitoring, alerting setup, metrics collection  
 **Audience**: Ops, DevOps, on-call engineers  
 
+**Database**: PostgreSQL only.
+
 ---
 
 ## Overview
@@ -189,27 +191,27 @@ Proxy latency = Time to proxy.httpbin.org/ip
 
 ```bash
 # Articles found in last 24 hours
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT COUNT(*) FROM articles WHERE date > datetime('now', '-1 day');"
+docker compose exec -T db psql -U councilbot -d council_news \
+  -c "select count(*) from articles where date > now() - interval '1 day';"
 
 # Success rate (councils with articles in last week)
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT 
-    COUNT(DISTINCT council_id) as total_councils,
-    COUNT(DISTINCT CASE WHEN date > datetime('now', '-7 days') THEN council_id END) as success_councils
-   FROM articles;"
+docker compose exec -T db psql -U councilbot -d council_news \
+  -c "select 
+    count(distinct council_id) as total_councils,
+    count(distinct case when date > now() - interval '7 days' then council_id end) as success_councils
+   from articles;"
 
 # Scrape performance
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT 
+docker compose exec -T db psql -U councilbot -d council_news \
+  -c "select 
     council_id,
-    COUNT(*) as run_count,
-    CAST(AVG(duration_ms) AS INT) as avg_duration_ms,
-    COUNT(CASE WHEN status='error' THEN 1 END) as error_count
-   FROM scraper_runs
-   WHERE timestamp > datetime('now', '-7 days')
-   GROUP BY council_id
-   ORDER BY error_count DESC;"
+    count(*) as run_count,
+    avg(duration_ms)::int as avg_duration_ms,
+    count(*) filter (where status='error') as error_count
+   from scraper_stats
+   where run_at > now() - interval '7 days'
+   group by council_id
+   order by error_count desc;"
 ```
 
 ---
@@ -364,10 +366,10 @@ docker logs council_news_bot | grep -i "proxy\|407\|timeout"
 
 ```bash
 # Recent errors from DB
-sqlite3 /opt/council-news-bot/bot.db \
-  "SELECT timestamp, council_id, status, error_msg FROM scraper_runs 
-   WHERE status='error' 
-   ORDER BY timestamp DESC LIMIT 20;"
+docker compose exec -T db psql -U councilbot -d council_news \
+  -c "select run_at, council_id, status, duration_ms from scraper_stats 
+   where status='error' 
+   order by run_at desc limit 20;"
 ```
 
 ### Enable Debug Logging
