@@ -40,6 +40,16 @@ To deploy, you need:
 To trigger manually:
 - GitHub → Actions → **Deploy to VPS** → Run workflow.
 
+### Deploy Verification (On-Box)
+After deploy, the workflow writes markers on the VPS:
+- `/opt/council-news-bot/.deploy_commit`
+- `/opt/council-news-bot/.deploy_timestamp`
+
+Check with:
+```bash
+ssh root@vps.example.com 'cd /opt/council-news-bot && cat .deploy_commit && cat .deploy_timestamp'
+```
+
 ### Option 2: Emergency Local Deploy (Break Glass)
 
 Only use this if GitHub Actions is unavailable. It requires explicit flags.
