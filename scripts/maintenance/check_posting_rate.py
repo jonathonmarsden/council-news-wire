@@ -17,11 +17,13 @@ from datetime import datetime, timedelta
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(PROJECT_ROOT))
 
-from core.database import get_session, Article
+from core.database import Database
+from core.models import Article
 from sqlalchemy import func
 
 def main():
-    session = get_session()
+    db = Database()
+    session = db.get_session()
     
     # Last 7 days posting rate
     seven_days_ago = datetime.now() - timedelta(days=7)
