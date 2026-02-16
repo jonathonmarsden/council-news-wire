@@ -629,6 +629,7 @@
             "name": "Orange City Council",
             "news_url": "https://www.orange.nsw.gov.au/feed/",
             "scraper": "rss_scraper",
+            "bypass_proxy": true,
             "enabled": true,
             "population": 44535,
             "region": "Central West"

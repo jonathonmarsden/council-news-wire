@@ -80,8 +80,14 @@ class ScraperFactory:
         
         scraper_class = scraper_classes.get(scraper_type, CardScraper)
         
-        # Use CLI proxy if provided, otherwise check council config
-        use_proxy = proxy or council.get('proxy')
+        # Check if proxy should be bypassed for this council
+        bypass_proxy = council.get('bypass_proxy', False)
+        
+        if bypass_proxy:
+            use_proxy = None
+        else:
+            # Use CLI proxy if provided, otherwise check council config
+            use_proxy = proxy or council.get('proxy')
         
         # Get impersonation setting (default to chrome110)
         impersonate = council.get('impersonate', 'chrome110')
