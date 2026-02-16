@@ -28,21 +28,21 @@ def main():
     # Last 7 days posting rate
     seven_days_ago = datetime.now() - timedelta(days=7)
     week_count = session.query(func.count(Article.id)).filter(
-        Article.posted == True,
+        Article.posted_at != None,
         Article.posted_at >= seven_days_ago
     ).scalar()
     
     # Last 24 hours
     day_ago = datetime.now() - timedelta(days=1)
     day_count = session.query(func.count(Article.id)).filter(
-        Article.posted == True,
+        Article.posted_at != None,
         Article.posted_at >= day_ago
     ).scalar()
     
     # Current backlog
     backlog = session.query(func.count(Article.id)).filter(
-        Article.posted == False,
-        Article.is_valid == True
+        Article.posted_at == None,
+        Article.status != 'invalid'
     ).scalar()
     
     print('=' * 60)
@@ -74,14 +74,14 @@ def main():
     
     for state in states:
         count = session.query(func.count(Article.id)).filter(
-            Article.posted == True,
+            Article.posted_at != None,
             Article.posted_at >= seven_days_ago,
             Article.state == state
         ).scalar()
         
         state_backlog = session.query(func.count(Article.id)).filter(
-            Article.posted == False,
-            Article.is_valid == True,
+            Article.posted_at == None,
+            Article.status != 'invalid',
             Article.state == state
         ).scalar()
         
