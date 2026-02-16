@@ -661,6 +661,7 @@
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome124",
             "item_selector": "div.card.hover-effect",
             "title_selector": "div.card-body h5",
             "link_selector": "div.card-body > a:nth-of-type(2)",
