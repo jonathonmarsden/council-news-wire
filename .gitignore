@@ -75,3 +75,7 @@ wa_selector_report.json
 *.tmp
 *.bak
 
+# Quarto render artifacts (can be regenerated from .md)
+*.html
+*_files/
+
