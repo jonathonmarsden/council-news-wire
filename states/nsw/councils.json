@@ -528,6 +528,8 @@
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome124", 
+            "bypass_proxy": true,
             "item_selector": "section.latestListing > div > div",
             "title_selector": ".latestListing__name a",
             "date_selector": ".latestListing__date",
