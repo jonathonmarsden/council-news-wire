@@ -57,7 +57,7 @@ class Database:
         run_id: Optional[str] = None,
         state: Optional[str] = None,
         council_id: Optional[str] = None,
-        metadata: Optional[Dict] = None,
+        event_metadata: Optional[Dict] = None,
     ) -> None:
         """Persist a structured log event."""
         with self.get_session() as session:
@@ -68,7 +68,7 @@ class Database:
                 event_type=event_type,
                 severity=severity,
                 message=message,
-                metadata=metadata,
+                event_metadata=event_metadata,
             )
             session.add(event)
             session.commit()

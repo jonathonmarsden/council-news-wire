@@ -138,7 +138,7 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
                     council['id'],
                     f"Scraper error: {e}",
                     event_type="scrape_error",
-                    metadata={"news_url": council.get('news_url')},
+                    event_metadata={"news_url": council.get('news_url')},
                 )
             except Exception as log_err:
                 print(f"Warning: Failed to log scrape error: {log_err}")
@@ -195,7 +195,7 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
                                     council['id'],
                                     f"Silent Failure (x{empty_runs}): Scraper returned 0 articles for {empty_runs} consecutive runs.",
                                     event_type="silent_failure",
-                                    metadata={"news_url": council.get('news_url')},
+                                    event_metadata={"news_url": council.get('news_url')},
                                 )
                         except (KeyError, AttributeError) as e:
                             print(f"Warning: Failed to check health/log to discord: {e}")

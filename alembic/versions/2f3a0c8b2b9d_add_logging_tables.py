@@ -29,7 +29,7 @@ def upgrade() -> None:
         sa.Column('event_type', sa.String(), nullable=False),
         sa.Column('severity', sa.String(), nullable=False),
         sa.Column('message', sa.Text(), nullable=False),
-        sa.Column('metadata', sa.JSON(), nullable=True),
+        sa.Column('event_metadata', sa.JSON(), nullable=True),
         sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
         sa.PrimaryKeyConstraint('id')
     )

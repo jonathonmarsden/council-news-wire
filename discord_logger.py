@@ -59,7 +59,7 @@ class RunTracker:
         council_id: Optional[str],
         message: str,
         event_type: str = "warning",
-        metadata: Optional[Dict] = None,
+        event_metadata: Optional[Dict] = None,
     ) -> None:
         with self._lock:
             self.warnings_count += 1
@@ -75,7 +75,7 @@ class RunTracker:
             run_id=run_id,
             state=state,
             council_id=council_id,
-            metadata=metadata,
+            event_metadata=event_metadata,
         )
 
     def log_error(
@@ -83,7 +83,7 @@ class RunTracker:
         council_id: Optional[str],
         message: str,
         event_type: str = "error",
-        metadata: Optional[Dict] = None,
+        event_metadata: Optional[Dict] = None,
     ) -> None:
         with self._lock:
             self.errors_count += 1
@@ -99,7 +99,7 @@ class RunTracker:
             run_id=run_id,
             state=state,
             council_id=council_id,
-            metadata=metadata,
+            event_metadata=event_metadata,
         )
 
     def finish(self) -> None:
@@ -140,12 +140,12 @@ def finish_run() -> None:
     current_run.finish()
 
 
-def log_warning(council_id: Optional[str], message: str, event_type: str = "warning", metadata: Optional[Dict] = None) -> None:
-    current_run.log_warning(council_id, message, event_type=event_type, metadata=metadata)
+def log_warning(council_id: Optional[str], message: str, event_type: str = "warning", event_metadata: Optional[Dict] = None) -> None:
+    current_run.log_warning(council_id, message, event_type=event_type, event_metadata=event_metadata)
 
 
-def log_error(council_id: Optional[str], message: str, event_type: str = "error", metadata: Optional[Dict] = None) -> None:
-    current_run.log_error(council_id, message, event_type=event_type, metadata=metadata)
+def log_error(council_id: Optional[str], message: str, event_type: str = "error", event_metadata: Optional[Dict] = None) -> None:
+    current_run.log_error(council_id, message, event_type=event_type, event_metadata=event_metadata)
 
 
 def log_generic_report(title: str, description: str, color: int = 3447003) -> None:
