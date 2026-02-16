@@ -41,14 +41,15 @@ def process_state(state):
     print(f"--- Processing Queue: {state} ---")
     try:
         # Run main.py in post-only mode
-        # Limits: Post max 2 items per cron run to avoid flooding Bluesky
-        # This runs every 5 mins, so 2 * 12 = 24 posts per hour per state max.
+        # Limits: Post max 3 items per cron run (75% of BlueSky 24/hr limit)
+        # This runs every 10 mins, so 3 * 6 = 18 posts per hour per state max.
+        # System capacity: 18/hr × 8 states = 144 posts/hr (vs previous 96/hr)
         cmd = [
             sys.executable, 
             str(PROJECT_ROOT / 'main.py'),
             '--state', state,
             '--post-only',
-            '--limit', '2',  
+            '--limit', '3',  
             '--max-per-council', '1' 
         ]
         
