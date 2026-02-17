@@ -414,6 +414,11 @@ def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database,
             # Rate limiting delay
             if posted_count < len(articles):
                 time.sleep(2)
+        else:
+            # Validation failure in poster (e.g. bad URL, too long).
+            # Mark as rejected to prevent endless retries.
+            print(f"⚠️ Rejected: {article['title'][:30]}... (permanently skipping)")
+            db.mark_as_posted(article['url'], "REJECTED_POSTER_VALIDATION")
                 
     print(f"\n✅ Posted {posted_count} articles")
 
