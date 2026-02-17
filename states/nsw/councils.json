@@ -430,10 +430,16 @@
         {
             "id": "randwick-city-council",
             "name": "Randwick City Council",
-            "news_url": "https://www.randwick.nsw.gov.au/about-council/news",
+            "news_url": "https://www.randwick.nsw.gov.au/about-us/news/latest-news",
             "scraper": "curl_scraper",
             "enabled": true,
             "use_curl": true,
+            "impersonate": "chrome124", 
+            "bypass_proxy": true,
+            "item_selector": "a.listing__link",
+            "title_selector": ".listing__h",
+            "date_selector": "dd",
+            "link_selector": "self",
             "population": 156630,
             "region": "Greater Sydney"
         },
