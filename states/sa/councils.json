@@ -752,6 +752,7 @@
             "population": 15995,
             "region": "Eyre Peninsula",
             "impersonate": "chrome124",
+            "bypass_proxy": true,
             "scraper": "card_scraper"
         },
         {
