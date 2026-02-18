@@ -626,6 +626,7 @@
             "scraper": "card_scraper",
             "parser": "html",
             "use_cloudscraper": true,
+            "use_curl": true,
             "selectors": {
                 "container": ".news-listing__item",
                 "title": ".news-listing__item-title",
@@ -634,7 +635,8 @@
             },
             "population": 4930,
             "region": "Mid North",
-            "impersonate": "chrome124"
+            "impersonate": "chrome124",
+            "bypass_proxy": true
         },
         {
             "id": "norwood-payneham-&-st-peters",
@@ -677,6 +679,7 @@
             "scraper": "card_scraper",
             "parser": "html",
             "use_cloudscraper": true,
+            "use_curl": true,
             "selectors": {
                 "container": ".news-listing__item",
                 "title": ".news-listing__item-title",
@@ -685,7 +688,8 @@
             },
             "population": 920,
             "region": "Mid North",
-            "impersonate": "chrome124"
+            "impersonate": "chrome124",
+            "bypass_proxy": true
         },
         {
             "id": "peterborough",
@@ -695,6 +699,7 @@
             "scraper": "card_scraper",
             "parser": "html",
             "use_cloudscraper": true,
+            "use_curl": true,
             "selectors": {
                 "container": ".news-listing__item",
                 "title": ".news-listing__item-title",
@@ -703,7 +708,8 @@
             },
             "population": 1835,
             "region": "Mid North",
-            "impersonate": "chrome124"
+            "impersonate": "chrome124",
+            "bypass_proxy": true
         },
         {
             "id": "playford",
@@ -771,7 +777,8 @@
             },
             "population": 17405,
             "region": "Upper Spencer Gulf",
-            "impersonate": "chrome124"
+            "impersonate": "chrome124",
+            "bypass_proxy": true
         },
         {
             "id": "prospect",
@@ -1141,7 +1148,8 @@
             },
             "population": 133230,
             "region": "Adelaide Metro",
-            "impersonate": "chrome124"
+            "impersonate": "chrome124",
+            "bypass_proxy": true
         }
     ]
 }
