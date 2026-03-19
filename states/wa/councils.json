@@ -737,7 +737,9 @@
             "id": "manjimup",
             "name": "Shire of Manjimup",
             "news_url": "https://www.manjimup.wa.gov.au/our-shire/news",
-            "scraper": "browser_scraper",
+            "scraper": "curl_scraper",
+            "use_curl": true,
+            "impersonate": "chrome124",
             "selectors": {
                 "container": "#news-listing ul li",
                 "title": "h2",
@@ -749,7 +751,7 @@
         {
             "id": "meekatharra",
             "name": "Shire of Meekatharra",
-            "news_url": "https://www.meekatharra.wa.gov.au/news/",
+            "news_url": "https://www.meekashire.wa.gov.au/news/",
             "scraper": "catalyst_scraper",
             "enabled": true,
             "use_curl": true,
@@ -835,9 +837,13 @@
             "id": "mount-magnet",
             "name": "Shire of Mount Magnet",
             "news_url": "https://www.mtmagnet.wa.gov.au/newsletters",
-            "scraper": "catalyst_scraper",
+            "scraper": "curl_scraper",
             "enabled": true,
-            "use_curl": true
+            "use_curl": true,
+            "item_selector": "a[href*='sharepoint.com'][href$='.pdf']",
+            "title_selector": "self",
+            "link_selector": "self",
+            "category": "C"
         },
         {
             "id": "mount-marshall",
