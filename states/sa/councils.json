@@ -1,1155 +1,1135 @@
 {
-    "councils": [
-        {
-            "id": "adelaide",
-            "name": "City of Adelaide",
-            "news_url": "https://www.cityofadelaide.com.au/news",
-            "scraper": "browser_scraper",
-            "enabled": true,
-            "selectors": {
-                "container": "div.card--newsroom-default",
-                "title": "h4.newsroom-title",
-                "date": "p.newsroom-date",
-                "link": "a.read-button"
-            },
-            "population": 26955,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "adelaide-hills",
-            "name": "Adelaide Hills Council",
-            "news_url": "https://www.ahc.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 42105,
-            "region": "Adelaide Hills",
-            "impersonate": "chrome124",
-            "scraper": "card_scraper"
-        },
-        {
-            "id": "adelaide-plains",
-            "name": "Adelaide Plains Council",
-            "news_url": "https://www.apc.sa.gov.au/home/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 10395,
-            "region": "Barossa"
-        },
-        {
-            "id": "alexandrina",
-            "name": "Alexandrina Council",
-            "news_url": "https://www.alexandrina.sa.gov.au/discover/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 30825,
-            "region": "Fleurieu",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "barossa",
-            "name": "The Barossa Council",
-            "news_url": "https://www.barossa.sa.gov.au/community-and-wellbeing/news-and-media/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "div.mb-20",
-                "title": "h3",
-                "date": "span.type-small",
-                "link": "a"
-            },
-            "population": 28060,
-            "region": "Barossa"
-        },
-        {
-            "id": "barunga-west",
-            "name": "Barunga West Council",
-            "news_url": "https://www.barungawest.sa.gov.au/community-information/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "berri-barmera",
-            "name": "Berri Barmera Council",
-            "news_url": "https://www.berribarmera.sa.gov.au/your-council/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 11185,
-            "region": "Riverland"
-        },
-        {
-            "id": "burnside",
-            "name": "City of Burnside",
-            "news_url": "https://www.burnside.sa.gov.au/Latest-News",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 47145,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124",
-            "scraper": "card_scraper"
-        },
-        {
-            "id": "campbelltown-city",
-            "name": "Campbelltown City Council",
-            "news_url": "https://www.campbelltown.sa.gov.au/council/news-and-media/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 53810,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "ceduna",
-            "name": "District Council of Ceduna",
-            "news_url": "https://www.ceduna.sa.gov.au/notice-board/community-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 3680,
-            "region": "Eyre Peninsula",
-            "impersonate": "chrome124",
-            "scraper": "card_scraper"
-        },
-        {
-            "id": "charles-sturt",
-            "name": "City of Charles Sturt",
-            "news_url": "https://www.charlessturt.sa.gov.au/council/news-and-media/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 122605,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "clare-and-gilbert-valleys",
-            "name": "Clare and Gilbert Valleys Council",
-            "news_url": "https://www.claregilbertvalleys.sa.gov.au/community-information/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 10135,
-            "region": "Mid North",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "cleve",
-            "name": "District Council of Cleve",
-            "news_url": "https://www.cleve.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1890,
-            "region": "Eyre Peninsula"
-        },
-        {
-            "id": "coober-pedy",
-            "name": "District Council of Coober Pedy",
-            "news_url": "https://www.cooberpedy.sa.gov.au/latest-news-events/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1780,
-            "region": "Outback"
-        },
-        {
-            "id": "coorong-district",
-            "name": "Coorong District Council",
-            "news_url": "https://www.coorong.sa.gov.au/stay-informed/news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 5660,
-            "region": "Murray Mallee",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "copper-coast",
-            "name": "Copper Coast Council",
-            "news_url": "https://www.coppercoast.sa.gov.au/noticeboard/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            }
-        },
-        {
-            "id": "elliston",
-            "name": "District Council of Elliston",
-            "news_url": "https://www.elliston.sa.gov.au/community-information/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1145,
-            "region": "Eyre Peninsula"
-        },
-        {
-            "id": "flinders-ranges",
-            "name": "The Flinders Ranges Council",
-            "news_url": "https://www.frc.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1675,
-            "region": "Flinders Ranges"
-        },
-        {
-            "id": "franklin-harbour",
-            "name": "District Council of Franklin Harbour",
-            "news_url": "https://www.franklinharbour.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1385,
-            "region": "Eyre Peninsula"
-        },
-        {
-            "id": "gawler",
-            "name": "Town of Gawler",
-            "news_url": "https://www.gawler.sa.gov.au/about-gawler/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 26260,
-            "region": "Barossa"
-        },
-        {
-            "id": "goyder",
-            "name": "Regional Council of Goyder",
-            "news_url": "https://www.goyder.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 4375,
-            "region": "Mid North"
-        },
-        {
-            "id": "grant",
-            "name": "District Council of Grant",
-            "news_url": "https://www.dcgrant.sa.gov.au/council/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 9000,
-            "region": "Limestone Coast"
-        },
-        {
-            "id": "holdfast-bay",
-            "name": "City of Holdfast Bay",
-            "news_url": "https://www.holdfast.sa.gov.au/news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "a.group:has(h3.heading-3)",
-                "title": "h3",
-                "date": "span.date, time, div.list-item-date, span.news-listing__item-date",
-                "link": "self"
-            },
-            "population": 39605,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "kangaroo-island",
-            "name": "Kangaroo Island Council",
-            "news_url": "https://www.kangarooisland.sa.gov.au/notice-board/news-and-notices/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 5150,
-            "region": "Kangaroo Island"
-        },
-        {
-            "id": "karoonda-east-murray",
-            "name": "District Council of Karoonda East Murray",
-            "news_url": "https://www.dckem.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1075,
-            "region": "Murray Mallee"
-        },
-        {
-            "id": "kimba",
-            "name": "District Council of Kimba",
-            "news_url": "https://www.kimba.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 1070,
-            "region": "Eyre Peninsula"
-        },
-        {
-            "id": "kingston-district",
-            "name": "Kingston District Council",
-            "news_url": "https://www.kingstondc.sa.gov.au/our-council/public-consultation/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 2595,
-            "region": "Limestone Coast"
-        },
-        {
-            "id": "light-regional",
-            "name": "Light Regional Council",
-            "news_url": "https://www.light.sa.gov.au/yourcouncil/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 16855,
-            "region": "Barossa"
-        },
-        {
-            "id": "lower-eyre",
-            "name": "Lower Eyre Council",
-            "news_url": "https://www.lowereyrepeninsula.sa.gov.au/community-information/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 5590,
-            "region": "Eyre Peninsula"
-        },
-        {
-            "id": "loxton-waikerie",
-            "name": "District Council of Loxton Waikerie",
-            "news_url": "https://www.lwdc.sa.gov.au/notice-board/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 11880,
-            "region": "Riverland"
-        },
-        {
-            "id": "marion",
-            "name": "City of Marion",
-            "news_url": "https://www.marion.sa.gov.au/about-council/news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "div.listing__item",
-                "title": "h3.listing__heading",
-                "date": "div.listing__date, span.date, time",
-                "link": "h3.listing__heading a"
-            },
-            "population": 96915,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "mid-murray",
-            "name": "Mid Murray Council",
-            "news_url": "https://www.mid-murray.sa.gov.au/council/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 9225,
-            "region": "Murray Mallee"
-        },
-        {
-            "id": "mitcham",
-            "name": "City of Mitcham",
-            "news_url": "https://www.mitchamcouncil.sa.gov.au/connect-with-us/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 68745,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "mount-barker-district",
-            "name": "Mount Barker District Council",
-            "news_url": "https://www.mountbarker.sa.gov.au/council/news/newsletter",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "a.newsletters__item",
-                "title": "div.newsletters__title",
-                "date": "div.newsletters__date",
-                "link": "self"
-            },
-            "population": 44365,
-            "region": "Adelaide Hills"
-        },
-        {
-            "id": "mount-gambier",
-            "name": "City of Mount Gambier",
-            "news_url": "https://www.mountgambier.sa.gov.au/news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "a.news",
-                "title": "h2.news__title",
-                "date": "span.news__date",
-                "link": "self"
-            },
-            "population": 28955,
-            "region": "Limestone Coast"
-        },
-        {
-            "id": "mount-remarkable",
-            "name": "District Council of Mount Remarkable",
-            "news_url": "https://www.mtr.sa.gov.au/noticeboard/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 3035,
-            "region": "Flinders Ranges"
-        },
-        {
-            "id": "murray-bridge",
-            "name": "Rural City of Murray Bridge",
-            "news_url": "https://www.murraybridge.sa.gov.au/council/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": "li.news-listing__item",
-                "title": "h2.news-listing__item-title",
-                "date": "div.news-listing__item-date",
-                "link": "a.news-listing__item-link"
-            },
-            "population": 24275,
-            "region": "Murray Mallee"
-        },
-        {
-            "id": "naracoorte-lucindale",
-            "name": "Naracoorte Lucindale Council",
-            "news_url": "https://www.naracoortelucindale.sa.gov.au/newsroom",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "use_curl": true,
-            "impersonate": "safari15_3",
-            "selectors": {
-                "container": ".card-listing__item",
-                "title": ".card-listing__title",
-                "date": ".card-listing__date",
-                "link": "a.card-listing__link"
-            },
-            "population": 9015,
-            "region": "Limestone Coast"
-        },
-        {
-            "id": "northern-areas",
-            "name": "Northern Areas Council",
-            "news_url": "https://www.nacouncil.sa.gov.au/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_cloudscraper": true,
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 4930,
-            "region": "Mid North",
-            "impersonate": "chrome124",
-            "bypass_proxy": true
-        },
-        {
-            "id": "norwood-payneham-&-st-peters",
-            "name": "City of Norwood Payneham & St Peters",
-            "news_url": "https://lookeast.npsp.sa.gov.au/council-updates",
-            "enabled": true,
-            "parser": "html",
-            "use_cloudscraper": true,
-            "selectors": {
-                "container": "a.posts-gallery__item",
-                "title": ".posts-gallery__title",
-                "date": "span.date, time, div.list-item-date, span.news-listing__item-date",
-                "link": "self"
-            },
-            "population": 38885,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "onkaparinga",
-            "name": "City of Onkaparinga",
-            "news_url": "https://www.onkaparingacity.com/Council/News-articles",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "impersonate": "chrome124",
-            "selectors": {
-                "container": ".list-item-container article",
-                "title": ".list-item-title",
-                "date": "span.date, time, div.list-item-date, span.news-listing__item-date, p.published-on",
-                "link": "a"
-            },
-            "population": 179555,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "orroroo-carrieton",
-            "name": "District Council of Orroroo Carrieton",
-            "news_url": "https://www.orroroo.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_cloudscraper": true,
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 920,
-            "region": "Mid North",
-            "impersonate": "chrome124",
-            "bypass_proxy": true
-        },
-        {
-            "id": "peterborough",
-            "name": "District Council of Peterborough",
-            "news_url": "https://www.peterborough.sa.gov.au/district-info/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_cloudscraper": true,
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 1835,
-            "region": "Mid North",
-            "impersonate": "chrome124",
-            "bypass_proxy": true
-        },
-        {
-            "id": "playford",
-            "name": "City of Playford",
-            "news_url": "https://www.playford.sa.gov.au/explore/playford-news",
-            "enabled": true,
-            "scraper": "curl_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "item_selector": "li.card-list__item",
-            "title_selector": "a",
-            "link_selector": "a",
-            "population": 102595,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "port-augusta-city",
-            "name": "Port Augusta City Council",
-            "news_url": "https://www.portaugusta.sa.gov.au/news-and-events/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "use_curl": true,
-            "impersonate": "safari15_3",
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 14185,
-            "region": "Upper Spencer Gulf"
-        },
-        {
-            "id": "port-lincoln",
-            "name": "City of Port Lincoln",
-            "news_url": "https://www.portlincoln.sa.gov.au/notice-board/latest-news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 15995,
-            "region": "Eyre Peninsula",
-            "impersonate": "chrome124",
-            "bypass_proxy": true,
-            "scraper": "card_scraper"
-        },
-        {
-            "id": "port-pirie-regional",
-            "name": "Port Pirie Regional Council",
-            "news_url": "https://www.pirie.sa.gov.au/noticeboard/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 17405,
-            "region": "Upper Spencer Gulf",
-            "impersonate": "chrome124",
-            "bypass_proxy": true
-        },
-        {
-            "id": "prospect",
-            "name": "City of Prospect",
-            "news_url": "https://www.prospect.sa.gov.au/council/news-and-media",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 22515,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "renmark-paringa",
-            "name": "Renmark Paringa Council",
-            "news_url": "https://www.renmarkparinga.sa.gov.au/noticeboard/latest-news",
-            "enabled": true,
-            "scraper": "browser_scraper",
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 9815,
-            "region": "Riverland"
-        },
-        {
-            "id": "robe",
-            "name": "District Council of Robe",
-            "news_url": "https://www.robe.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 1670,
-            "region": "Limestone Coast",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "roxby-downs",
-            "name": "Municipal Council of Roxby Downs",
-            "news_url": "https://www.roxbydowns.sa.gov.au/council/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 4585,
-            "region": "Outback",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "salisbury",
-            "name": "City of Salisbury",
-            "news_url": "https://www.salisbury.sa.gov.au/council/news-media-and-publications/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "use_curl": true,
-            "impersonate": "chrome124",
-            "selectors": {
-                "container": "article.card",
-                "title": "h3.card__heading",
-                "date": "span.tag",
-                "link": "a.card__link"
-            },
-            "population": 149710,
-            "region": "Adelaide Metro"
-        },
-        {
-            "id": "southern-mallee-district",
-            "name": "Southern Mallee District Council",
-            "news_url": "https://www.southernmallee.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 2030,
-            "region": "Murray Mallee",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "streaky-bay",
-            "name": "District Council of Streaky Bay",
-            "news_url": "https://www.streakybay.sa.gov.au/your-council/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 2375,
-            "region": "Eyre Peninsula",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "tatiara-district",
-            "name": "Tatiara District Council",
-            "news_url": "https://www.tatiara.sa.gov.au/community-information/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 6920,
-            "region": "Limestone Coast",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "tea-tree-gully",
-            "name": "City of Tea Tree Gully",
-            "news_url": "https://www.teatreegully.sa.gov.au/news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 103245,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124",
-            "scraper": "card_scraper"
-        },
-        {
-            "id": "tumby-bay",
-            "name": "District Council of Tumby Bay",
-            "news_url": "https://www.tumbybay.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 2790,
-            "region": "Eyre Peninsula",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "unley",
-            "name": "City of Unley",
-            "news_url": "https://www.unley.sa.gov.au/News-articles",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "use_curl": true,
-            "selectors": {
-                "container": "article",
-                "title": "h2.list-item-title",
-                "date": "p.published-on",
-                "link": "a"
-            },
-            "population": 40430,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "victor-harbor",
-            "name": "City of Victor Harbor",
-            "news_url": "https://www.victor.sa.gov.au/notice-board/the-latest/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 17735,
-            "region": "Fleurieu",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "wakefield-regional",
-            "name": "Wakefield Regional Council",
-            "news_url": "https://www.wrc.sa.gov.au/our-community/latest-news/latest-updates",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 7115,
-            "region": "Mid North",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "walkerville",
-            "name": "Town of Walkerville",
-            "news_url": "https://www.walkerville.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 8195,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "wattle-range",
-            "name": "Wattle Range Council",
-            "news_url": "https://www.wattlerange.sa.gov.au/our-council/news-and-media/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 12260,
-            "region": "Limestone Coast",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "west-torrens",
-            "name": "City of West Torrens",
-            "news_url": "https://www.westtorrens.sa.gov.au/news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "use_curl": true,
-            "selectors": {
-                "container": "article",
-                "title": "h2.list-item-title",
-                "date": "p.published-on",
-                "link": "a"
-            },
-            "population": 65150,
-            "region": "Adelaide Metro",
-            "impersonate": "safari15_3"
-        },
-        {
-            "id": "whyalla",
-            "name": "City of Whyalla",
-            "news_url": "https://www.whyalla.sa.gov.au/our-city/news-and-events/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 22225,
-            "region": "Eyre Peninsula",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "wudinna-district",
-            "name": "Wudinna District Council",
-            "news_url": "https://www.wudinna.sa.gov.au/community/latest-news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 1245,
-            "region": "Eyre Peninsula",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "yankalilla",
-            "name": "District Council of Yankalilla",
-            "news_url": "https://www.yankalilla.sa.gov.au/news-and-events",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 6720,
-            "region": "Fleurieu",
-            "impersonate": "chrome124"
-        },
-        {
-            "id": "yorke-peninsula",
-            "name": "Yorke Peninsula Council",
-            "news_url": "https://yorke.sa.gov.au/news",
-            "enabled": true,
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "impersonate": "chrome124",
-            "scraper": "card_scraper"
-        },
-        {
-            "id": "port-adelaide-enfield",
-            "name": "City of Port Adelaide Enfield",
-            "news_url": "https://www.cityofpae.sa.gov.au/connect/news",
-            "enabled": true,
-            "scraper": "card_scraper",
-            "parser": "html",
-            "use_curl": true,
-            "selectors": {
-                "container": ".news-listing__item",
-                "title": ".news-listing__item-title",
-                "date": ".news-listing__item-date",
-                "link": ".news-listing__item-link"
-            },
-            "population": 133230,
-            "region": "Adelaide Metro",
-            "impersonate": "chrome124",
-            "bypass_proxy": true
-        }
-    ]
+  "councils": [
+    {
+      "id": "adelaide",
+      "name": "City of Adelaide",
+      "news_url": "https://www.cityofadelaide.com.au/news",
+      "scraper": "browser_scraper",
+      "enabled": true,
+      "selectors": {
+        "container": "div.card--newsroom-default",
+        "title": "h4.newsroom-title",
+        "date": "p.newsroom-date",
+        "link": "a.read-button"
+      },
+      "population": 26955,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "adelaide-hills",
+      "name": "Adelaide Hills Council",
+      "news_url": "https://www.ahc.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 42105,
+      "region": "Adelaide Hills",
+      "impersonate": "chrome124",
+      "scraper": "card_scraper"
+    },
+    {
+      "id": "adelaide-plains",
+      "name": "Adelaide Plains Council",
+      "news_url": "https://www.apc.sa.gov.au/home/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 10395,
+      "region": "Barossa",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "alexandrina",
+      "name": "Alexandrina Council",
+      "news_url": "https://www.alexandrina.sa.gov.au/discover/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 30825,
+      "region": "Fleurieu",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "barossa",
+      "name": "The Barossa Council",
+      "news_url": "https://www.barossa.sa.gov.au/community-and-wellbeing/news-and-media/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": "div.mb-20",
+        "title": "h3",
+        "date": "span.type-small",
+        "link": "a"
+      },
+      "population": 28060,
+      "region": "Barossa"
+    },
+    {
+      "id": "barunga-west",
+      "name": "Barunga West Council",
+      "news_url": "https://www.barungawest.sa.gov.au/community-information/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "berri-barmera",
+      "name": "Berri Barmera Council",
+      "news_url": "https://www.berribarmera.sa.gov.au/your-council/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 11185,
+      "region": "Riverland",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "burnside",
+      "name": "City of Burnside",
+      "news_url": "https://www.burnside.sa.gov.au/Latest-News",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 47145,
+      "region": "Adelaide Metro",
+      "impersonate": "chrome124",
+      "scraper": "card_scraper"
+    },
+    {
+      "id": "campbelltown-city",
+      "name": "Campbelltown City Council",
+      "news_url": "https://www.campbelltown.sa.gov.au/council/news-and-media/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 53810,
+      "region": "Adelaide Metro",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "ceduna",
+      "name": "District Council of Ceduna",
+      "news_url": "https://www.ceduna.sa.gov.au/notice-board/community-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 3680,
+      "region": "Eyre Peninsula",
+      "impersonate": "chrome124",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "charles-sturt",
+      "name": "City of Charles Sturt",
+      "news_url": "https://www.charlessturt.sa.gov.au/council/news-and-media/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 122605,
+      "region": "Adelaide Metro",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "clare-and-gilbert-valleys",
+      "name": "Clare and Gilbert Valleys Council",
+      "news_url": "https://www.claregilbertvalleys.sa.gov.au/community-information/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 10135,
+      "region": "Mid North",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "cleve",
+      "name": "District Council of Cleve",
+      "news_url": "https://www.cleve.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1890,
+      "region": "Eyre Peninsula",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "coober-pedy",
+      "name": "District Council of Coober Pedy",
+      "news_url": "https://www.cooberpedy.sa.gov.au/latest-news-events/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1780,
+      "region": "Outback",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "coorong-district",
+      "name": "Coorong District Council",
+      "news_url": "https://www.coorong.sa.gov.au/stay-informed/news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 5660,
+      "region": "Murray Mallee",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "copper-coast",
+      "name": "Copper Coast Council",
+      "news_url": "https://www.coppercoast.sa.gov.au/noticeboard/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "elliston",
+      "name": "District Council of Elliston",
+      "news_url": "https://www.elliston.sa.gov.au/community-information/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1145,
+      "region": "Eyre Peninsula",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "flinders-ranges",
+      "name": "The Flinders Ranges Council",
+      "news_url": "https://www.frc.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1675,
+      "region": "Flinders Ranges",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "franklin-harbour",
+      "name": "District Council of Franklin Harbour",
+      "news_url": "https://www.franklinharbour.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1385,
+      "region": "Eyre Peninsula",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "gawler",
+      "name": "Town of Gawler",
+      "news_url": "https://www.gawler.sa.gov.au/about-gawler/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 26260,
+      "region": "Barossa",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "goyder",
+      "name": "Regional Council of Goyder",
+      "news_url": "https://www.goyder.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 4375,
+      "region": "Mid North",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "grant",
+      "name": "District Council of Grant",
+      "news_url": "https://www.dcgrant.sa.gov.au/council/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 9000,
+      "region": "Limestone Coast",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "holdfast-bay",
+      "name": "City of Holdfast Bay",
+      "news_url": "https://www.holdfast.sa.gov.au/news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": "a.group:has(h3.heading-3)",
+        "title": "h3",
+        "date": "span.date, time, div.list-item-date, span.news-listing__item-date",
+        "link": "self"
+      },
+      "population": 39605,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "kangaroo-island",
+      "name": "Kangaroo Island Council",
+      "news_url": "https://www.kangarooisland.sa.gov.au/notice-board/news-and-notices/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 5150,
+      "region": "Kangaroo Island",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "karoonda-east-murray",
+      "name": "District Council of Karoonda East Murray",
+      "news_url": "https://www.dckem.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1075,
+      "region": "Murray Mallee",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "kimba",
+      "name": "District Council of Kimba",
+      "news_url": "https://www.kimba.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 1070,
+      "region": "Eyre Peninsula",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "kingston-district",
+      "name": "Kingston District Council",
+      "news_url": "https://www.kingstondc.sa.gov.au/our-council/public-consultation/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 2595,
+      "region": "Limestone Coast",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "light-regional",
+      "name": "Light Regional Council",
+      "news_url": "https://www.light.sa.gov.au/yourcouncil/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 16855,
+      "region": "Barossa",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "lower-eyre",
+      "name": "Lower Eyre Council",
+      "news_url": "https://www.lowereyrepeninsula.sa.gov.au/community-information/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 5590,
+      "region": "Eyre Peninsula",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "loxton-waikerie",
+      "name": "District Council of Loxton Waikerie",
+      "news_url": "https://www.lwdc.sa.gov.au/notice-board/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 11880,
+      "region": "Riverland",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "marion",
+      "name": "City of Marion",
+      "news_url": "https://www.marion.sa.gov.au/about-council/news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": "div.listing__item",
+        "title": "h3.listing__heading",
+        "date": "div.listing__date, span.date, time",
+        "link": "h3.listing__heading a"
+      },
+      "population": 96915,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "mid-murray",
+      "name": "Mid Murray Council",
+      "news_url": "https://www.mid-murray.sa.gov.au/council/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 9225,
+      "region": "Murray Mallee",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "mitcham",
+      "name": "City of Mitcham",
+      "news_url": "https://www.mitchamcouncil.sa.gov.au/connect-with-us/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 68745,
+      "region": "Adelaide Metro",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "mount-barker-district",
+      "name": "Mount Barker District Council",
+      "news_url": "https://www.mountbarker.sa.gov.au/council/news/newsletter",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "a.newsletters__item",
+        "title": "div.newsletters__title",
+        "date": "div.newsletters__date",
+        "link": "self"
+      },
+      "population": 44365,
+      "region": "Adelaide Hills",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "mount-gambier",
+      "name": "City of Mount Gambier",
+      "news_url": "https://www.mountgambier.sa.gov.au/news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": "a.news",
+        "title": "h2.news__title",
+        "date": "span.news__date",
+        "link": "self"
+      },
+      "population": 28955,
+      "region": "Limestone Coast"
+    },
+    {
+      "id": "mount-remarkable",
+      "name": "District Council of Mount Remarkable",
+      "news_url": "https://www.mtr.sa.gov.au/noticeboard/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 3035,
+      "region": "Flinders Ranges",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "murray-bridge",
+      "name": "Rural City of Murray Bridge",
+      "news_url": "https://www.murraybridge.sa.gov.au/council/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": "li.news-listing__item",
+        "title": "h2.news-listing__item-title",
+        "date": "div.news-listing__item-date",
+        "link": "a.news-listing__item-link"
+      },
+      "population": 24275,
+      "region": "Murray Mallee",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "naracoorte-lucindale",
+      "name": "Naracoorte Lucindale Council",
+      "news_url": "https://www.naracoortelucindale.sa.gov.au/newsroom",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "use_curl": true,
+      "impersonate": "safari15_3",
+      "selectors": {
+        "container": ".card-listing__item",
+        "title": ".card-listing__title",
+        "date": ".card-listing__date",
+        "link": "a.card-listing__link"
+      },
+      "population": 9015,
+      "region": "Limestone Coast"
+    },
+    {
+      "id": "northern-areas",
+      "name": "Northern Areas Council",
+      "news_url": "https://www.nacouncil.sa.gov.au/latest-news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "parser": "html",
+      "use_cloudscraper": true,
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 4930,
+      "region": "Mid North",
+      "impersonate": "chrome124",
+      "bypass_proxy": true
+    },
+    {
+      "id": "norwood-payneham-&-st-peters",
+      "name": "City of Norwood Payneham & St Peters",
+      "news_url": "https://lookeast.npsp.sa.gov.au/council-updates",
+      "enabled": true,
+      "parser": "html",
+      "use_cloudscraper": true,
+      "selectors": {
+        "container": "a.posts-gallery__item",
+        "title": ".posts-gallery__title",
+        "date": "span.date, time, div.list-item-date, span.news-listing__item-date",
+        "link": "self"
+      },
+      "population": 38885,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "onkaparinga",
+      "name": "City of Onkaparinga",
+      "news_url": "https://www.onkaparingacity.com/Council/News-articles",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "selectors": {
+        "container": ".list-item-container article",
+        "title": ".list-item-title",
+        "date": "span.date, time, div.list-item-date, span.news-listing__item-date, p.published-on",
+        "link": "a"
+      },
+      "population": 179555,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "orroroo-carrieton",
+      "name": "District Council of Orroroo Carrieton",
+      "news_url": "https://www.orroroo.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "parser": "html",
+      "use_cloudscraper": true,
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 920,
+      "region": "Mid North",
+      "impersonate": "chrome124",
+      "bypass_proxy": true
+    },
+    {
+      "id": "peterborough",
+      "name": "District Council of Peterborough",
+      "news_url": "https://www.peterborough.sa.gov.au/district-info/latest-news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "parser": "html",
+      "use_cloudscraper": true,
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 1835,
+      "region": "Mid North",
+      "impersonate": "chrome124",
+      "bypass_proxy": true
+    },
+    {
+      "id": "playford",
+      "name": "City of Playford",
+      "news_url": "https://www.playford.sa.gov.au/explore/playford-news",
+      "enabled": true,
+      "scraper": "curl_scraper",
+      "parser": "html",
+      "use_curl": true,
+      "item_selector": "li.card-list__item",
+      "title_selector": "a",
+      "link_selector": "a",
+      "population": 102595,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "port-augusta-city",
+      "name": "Port Augusta City Council",
+      "news_url": "https://www.portaugusta.sa.gov.au/news-and-events/latest-news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "use_curl": true,
+      "impersonate": "safari15_3",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 14185,
+      "region": "Upper Spencer Gulf"
+    },
+    {
+      "id": "port-lincoln",
+      "name": "City of Port Lincoln",
+      "news_url": "https://www.portlincoln.sa.gov.au/notice-board/latest-news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 15995,
+      "region": "Eyre Peninsula",
+      "impersonate": "chrome124",
+      "bypass_proxy": true,
+      "scraper": "card_scraper"
+    },
+    {
+      "id": "port-pirie-regional",
+      "name": "Port Pirie Regional Council",
+      "news_url": "https://www.pirie.sa.gov.au/noticeboard/latest-news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 17405,
+      "region": "Upper Spencer Gulf",
+      "impersonate": "chrome124",
+      "bypass_proxy": true
+    },
+    {
+      "id": "prospect",
+      "name": "City of Prospect",
+      "news_url": "https://www.prospect.sa.gov.au/council/news-and-media",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 22515,
+      "region": "Adelaide Metro",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "renmark-paringa",
+      "name": "Renmark Paringa Council",
+      "news_url": "https://www.renmarkparinga.sa.gov.au/noticeboard/latest-news",
+      "enabled": true,
+      "scraper": "browser_scraper",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 9815,
+      "region": "Riverland"
+    },
+    {
+      "id": "robe",
+      "name": "District Council of Robe",
+      "news_url": "https://www.robe.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 1670,
+      "region": "Limestone Coast",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "roxby-downs",
+      "name": "Municipal Council of Roxby Downs",
+      "news_url": "https://www.roxbydowns.sa.gov.au/council/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 4585,
+      "region": "Outback",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "salisbury",
+      "name": "City of Salisbury",
+      "news_url": "https://www.salisbury.sa.gov.au/council/news-media-and-publications/latest-news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "selectors": {
+        "container": "article.card",
+        "title": "h3.card__heading",
+        "date": "span.tag",
+        "link": "a.card__link"
+      },
+      "population": 149710,
+      "region": "Adelaide Metro"
+    },
+    {
+      "id": "southern-mallee-district",
+      "name": "Southern Mallee District Council",
+      "news_url": "https://www.southernmallee.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 2030,
+      "region": "Murray Mallee",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "streaky-bay",
+      "name": "District Council of Streaky Bay",
+      "news_url": "https://www.streakybay.sa.gov.au/your-council/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 2375,
+      "region": "Eyre Peninsula",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "tatiara-district",
+      "name": "Tatiara District Council",
+      "news_url": "https://www.tatiara.sa.gov.au/community-information/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 6920,
+      "region": "Limestone Coast",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "tea-tree-gully",
+      "name": "City of Tea Tree Gully",
+      "news_url": "https://www.teatreegully.sa.gov.au/news",
+      "enabled": true,
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 103245,
+      "region": "Adelaide Metro",
+      "impersonate": "chrome124",
+      "scraper": "lgasa_scraper"
+    },
+    {
+      "id": "tumby-bay",
+      "name": "District Council of Tumby Bay",
+      "news_url": "https://www.tumbybay.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 2790,
+      "region": "Eyre Peninsula",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "unley",
+      "name": "City of Unley",
+      "news_url": "https://www.unley.sa.gov.au/News-articles",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "use_curl": true,
+      "selectors": {
+        "container": "article",
+        "title": "h2.list-item-title",
+        "date": "p.published-on",
+        "link": "a"
+      },
+      "population": 40430,
+      "region": "Adelaide Metro",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "victor-harbor",
+      "name": "City of Victor Harbor",
+      "news_url": "https://www.victor.sa.gov.au/notice-board/the-latest/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 17735,
+      "region": "Fleurieu",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "wakefield-regional",
+      "name": "Wakefield Regional Council",
+      "news_url": "https://www.wrc.sa.gov.au/our-community/latest-news/latest-updates",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 7115,
+      "region": "Mid North",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "walkerville",
+      "name": "Town of Walkerville",
+      "news_url": "https://www.walkerville.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 8195,
+      "region": "Adelaide Metro",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "wattle-range",
+      "name": "Wattle Range Council",
+      "news_url": "https://www.wattlerange.sa.gov.au/our-council/news-and-media/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 12260,
+      "region": "Limestone Coast",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "west-torrens",
+      "name": "City of West Torrens",
+      "news_url": "https://www.westtorrens.sa.gov.au/news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "use_curl": true,
+      "selectors": {
+        "container": "article",
+        "title": "h2.list-item-title",
+        "date": "p.published-on",
+        "link": "a"
+      },
+      "population": 65150,
+      "region": "Adelaide Metro",
+      "impersonate": "safari15_3"
+    },
+    {
+      "id": "whyalla",
+      "name": "City of Whyalla",
+      "news_url": "https://www.whyalla.sa.gov.au/our-city/news-and-events/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 22225,
+      "region": "Eyre Peninsula",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "wudinna-district",
+      "name": "Wudinna District Council",
+      "news_url": "https://www.wudinna.sa.gov.au/community/latest-news",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 1245,
+      "region": "Eyre Peninsula",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "yankalilla",
+      "name": "District Council of Yankalilla",
+      "news_url": "https://www.yankalilla.sa.gov.au/news-and-events",
+      "enabled": true,
+      "scraper": "lgasa_scraper",
+      "parser": "html",
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 6720,
+      "region": "Fleurieu",
+      "impersonate": "chrome124"
+    },
+    {
+      "id": "yorke-peninsula",
+      "name": "Yorke Peninsula Council",
+      "news_url": "https://yorke.sa.gov.au/news",
+      "enabled": true,
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "impersonate": "chrome124",
+      "scraper": "card_scraper"
+    },
+    {
+      "id": "port-adelaide-enfield",
+      "name": "City of Port Adelaide Enfield",
+      "news_url": "https://www.cityofpae.sa.gov.au/connect/news",
+      "enabled": true,
+      "scraper": "card_scraper",
+      "parser": "html",
+      "use_curl": true,
+      "selectors": {
+        "container": ".news-listing__item",
+        "title": ".news-listing__item-title",
+        "date": ".news-listing__item-date",
+        "link": ".news-listing__item-link"
+      },
+      "population": 133230,
+      "region": "Adelaide Metro",
+      "impersonate": "chrome124",
+      "bypass_proxy": true
+    }
+  ]
 }

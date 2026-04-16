@@ -7,6 +7,7 @@ import time
 from typing import List, Optional, Dict
 from datetime import datetime
 from dateutil import parser as date_parser
+from urllib.parse import urlparse, parse_qs
 
 from .base import NewsArticle, BaseScraper
 from .card import CardScraper
@@ -426,4 +427,90 @@ class AspNetScraper(CardScraper):
             except Exception as e:
                 print(f"Error scraping section {section_url}: {e}")
                 continue
+        return articles
+
+
+class LGASAScraper(BaseScraper):
+    """
+    Scraper for SA councils using the LGA SA Funnelback/Squiz search platform.
+
+    These councils share a common CMS (lgasa-web.squiz.cloud) with Cloudflare
+    protection. Articles are listed as li.news-listing__item elements. The href
+    is a Funnelback redirect URL — we resolve it to the canonical council URL
+    by following the redirect (curl_cffi handles the Cloudflare challenge).
+
+    Applies to ~40 SA councils that migrated to this platform around Jan 2026.
+    """
+
+    ITEM_SELECTOR = 'li.news-listing__item'
+    TITLE_SELECTOR = 'h2.news-listing__item-title'
+    DATE_SELECTOR = '.news-listing__item-date'
+    EXCERPT_SELECTOR = '.news-listing__item-teaser'
+    LINK_SELECTOR = 'a.news-listing__item-link'
+
+    def __init__(self, council_id: str, council_name: str, news_url: str, **kwargs):
+        # Always use curl_cffi — these sites are behind Cloudflare
+        kwargs['use_curl'] = True
+        super().__init__(council_id, council_name, news_url, **kwargs)
+
+    def _resolve_canonical_url(self, redirect_href: str) -> str:
+        """
+        Extract the canonical article URL from a Funnelback redirect href.
+        The redirect URL contains an index_url param pointing to lgasa-web.squiz.cloud.
+        Following the full redirect chain resolves to the council's own domain URL.
+        We follow the redirect using curl_cffi so Cloudflare is handled.
+        """
+        try:
+            from curl_cffi.requests import Session
+            impersonate = getattr(self, 'impersonate', 'chrome124') or 'chrome124'
+            with Session(impersonate=impersonate) as session:
+                r = session.get(redirect_href, timeout=15, allow_redirects=True)
+                if r.url and r.url != redirect_href:
+                    return r.url
+        except Exception:
+            pass
+        # Fallback: extract index_url param (Squiz asset URL — not ideal but usable as dedup key)
+        qs = parse_qs(urlparse(redirect_href).query)
+        index_url = qs.get('index_url', [''])[0]
+        return index_url or redirect_href
+
+    def scrape(self) -> List[NewsArticle]:
+        content = self.fetch_page(self.news_url)
+        if not content:
+            return []
+
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(content, 'html.parser')
+        items = soup.select(self.ITEM_SELECTOR)
+        articles = []
+
+        for item in items:
+            title_el = item.select_one(self.TITLE_SELECTOR)
+            date_el = item.select_one(self.DATE_SELECTOR)
+            excerpt_el = item.select_one(self.EXCERPT_SELECTOR)
+            link_el = item.select_one(self.LINK_SELECTOR)
+
+            if not title_el or not link_el:
+                continue
+
+            title = title_el.get_text(strip=True)
+            redirect_href = link_el.get('href', '')
+            if not redirect_href:
+                continue
+
+            url = self._resolve_canonical_url(redirect_href)
+            if not url or not url.startswith('http'):
+                continue
+
+            date_obj = None
+            if date_el:
+                try:
+                    date_obj = date_parser.parse(date_el.get_text(strip=True), dayfirst=True)
+                except Exception:
+                    pass
+
+            excerpt = excerpt_el.get_text(strip=True)[:280] if excerpt_el else None
+
+            articles.append(self.create_article(title, url, date_obj, excerpt))
+
         return articles

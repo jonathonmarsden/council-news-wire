@@ -55,7 +55,7 @@ _VALID_SCRAPER_TYPES = {
     'spark_news_listing_scraper', 'wordpress_scraper', 'opencities_scraper',
     'aspnet_scraper', 'apy_scraper', 'inner_west_scraper', 'bunbury_scraper',
     'wanneroo_scraper', 'perth_scraper', 'claremont_scraper', 'joondalup_scraper',
-    'belmont_scraper', 'dumbleyung_scraper',
+    'belmont_scraper', 'dumbleyung_scraper', 'lgasa_scraper',
 }
 
 # Derive valid impersonate values from curl_cffi at runtime so this stays in sync.
