@@ -173,11 +173,14 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
         print(f"  {council['name']}: Found {count} articles")
         
         if db:
-            db.record_success(council['id'], articles_found=count)
+            is_disabled = db.record_success(council['id'], articles_found=count)
             duration_ms = int((time.time() - start_time) * 1000)
             status = 'ok' if count > 0 else 'empty'
             db.log_scraper_run(council['id'], count, status, duration_ms)
-            
+
+            if is_disabled and count == 0:
+                print(f"  ⚠️ CIRCUIT BREAKER: {council['name']} DISABLED after {db.EMPTY_RUN_DISABLE_THRESHOLD} consecutive empty runs. Fix the scraper config to re-enable.")
+
         return articles
     except ScrapeError as e:
         print(f"  Error scraping {council['name']}: {e}")

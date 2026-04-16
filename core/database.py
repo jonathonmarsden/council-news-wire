@@ -271,25 +271,39 @@ class Database:
                 'consecutive_empty_runs': 0
             }
 
-    def record_success(self, council_id: str, articles_found: int = 0):
-        """Record success."""
+    # Disable a council after this many consecutive empty scrape runs.
+    # Empty runs are silent failures (scraper returns 0 articles with no error).
+    EMPTY_RUN_DISABLE_THRESHOLD = 20
+
+    def record_success(self, council_id: str, articles_found: int = 0) -> bool:
+        """
+        Record a scrape run result. Returns True if the council was disabled
+        due to too many consecutive empty runs (articles_found == 0).
+        """
         with self.get_session() as session:
-            # Get current empty runs
             obj = session.get(CouncilHealth, council_id)
             current_empty = obj.consecutive_empty_runs if obj else 0
             new_empty = 0 if articles_found > 0 else current_empty + 1
-            
-            # SQLAlchemy Merge is closest to Upsert, but explicit object manipulation is cleaner here
+
             if not obj:
                 obj = CouncilHealth(council_id=council_id)
                 session.add(obj)
-            
+
             obj.consecutive_failures = 0
             obj.last_success_at = func.now()
-            obj.is_disabled = False
-            obj.disabled_at = None
             obj.consecutive_empty_runs = new_empty
+
+            # Empty-run circuit breaker: disable after threshold consecutive empty runs
+            if new_empty >= self.EMPTY_RUN_DISABLE_THRESHOLD and not obj.is_disabled:
+                obj.is_disabled = True
+                obj.disabled_at = func.now()
+            elif articles_found > 0:
+                # Re-enable on successful article fetch
+                obj.is_disabled = False
+                obj.disabled_at = None
+
             session.commit()
+            return obj.is_disabled
 
     def record_failure(self, council_id: str) -> bool:
         """Record failure."""
