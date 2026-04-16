@@ -118,8 +118,10 @@ class BaseScraper(ABC):
         self.limit = limit
         self.proxy = proxy
         self.impersonate = impersonate
+        self.verify_ssl = kwargs.pop('verify_ssl', True)
         self.session = requests.Session()
         self.session.headers.update(self.HEADERS)
+        self.session.verify = self.verify_ssl
         
         if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
             self.scraper = cloudscraper.create_scraper()

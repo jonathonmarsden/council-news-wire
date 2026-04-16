@@ -94,9 +94,11 @@ class ScraperFactory:
         impersonate = council.get('impersonate', 'chrome110')
         
         # Pass all other council config as kwargs to allow custom scrapers to assume parameters
-        reserved_keys = {'id', 'name', 'news_url', 'scraper', 'selectors', 'limit', 'proxy', 'impersonate', 'use_curl', 'use_cloudscraper', 'mobile_mode'} 
+        reserved_keys = {'id', 'name', 'news_url', 'scraper', 'selectors', 'limit', 'proxy', 'impersonate', 'use_curl', 'use_cloudscraper', 'mobile_mode', 'verify_ssl'}
         extra_kwargs = {k: v for k, v in council.items() if k not in reserved_keys}
         
+        verify_ssl = council.get('verify_ssl', True)
+
         return scraper_class(
             council_id=council['id'],
             council_name=council['name'],
@@ -108,5 +110,6 @@ class ScraperFactory:
             limit=limit,
             proxy=use_proxy,
             impersonate=impersonate,
+            verify_ssl=verify_ssl,
             **extra_kwargs
         )

@@ -459,7 +459,7 @@
       "id": "mornington",
       "name": "Mornington Shire Council",
       "news_url": "https://www.mornington.qld.gov.au/news/latest-news/",
-      "scraper": "curl_scraper",
+      "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 1250,
       "region": "Gulf"
@@ -506,8 +506,8 @@
     {
       "id": "north-burnett",
       "name": "North Burnett Regional Council",
-      "news_url": "https://northburnett.qld.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://northburnett.qld.gov.au/",
+      "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 10895,
       "region": "Wide Bay-Burnett"

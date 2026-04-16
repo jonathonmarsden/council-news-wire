@@ -41,15 +41,17 @@
       "use_curl": true,
       "category": "A",
       "population": 185985,
-      "region": "Melbourne South"
+      "region": "Melbourne South",
+      "item_selector": ".listing-item",
+      "title_selector": "h3 a, h2 a, a",
+      "link_selector": "a"
     },
     {
       "id": "benalla",
       "name": "Benalla Rural City Council",
       "news_url": "https://www.benalla.vic.gov.au/latest-news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
       "category": "A",
       "item_selector": "div.nn-post-archive-item",
       "title_selector": "h3",
@@ -57,7 +59,8 @@
       "date_selector": "div.text-secondary-lake",
       "content_selector": "div.site-content",
       "population": 14826,
-      "region": "Ovens Murray"
+      "region": "Ovens Murray",
+      "verify_ssl": false
     },
     {
       "id": "buloke",
@@ -365,7 +368,7 @@
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
-      "impersonate": "chrome124", 
+      "impersonate": "chrome124",
       "bypass_proxy": true,
       "category": "B",
       "item_selector": ".card-default a.card",
