@@ -13,7 +13,7 @@ import html
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Callable
 from urllib.parse import urljoin, quote
 
 import requests
@@ -128,7 +128,27 @@ class BaseScraper(ABC):
         
         # Don't set proxies immediately - we'll try direct first in fetch_page
         # unless we decide otherwise later.
-    
+
+    def _retry(self, fn: Callable[[], Optional[str]], max_attempts: int = 3, base_delay: float = 2.0) -> Optional[str]:
+        """
+        Call fn() up to max_attempts times, with exponential backoff on None/exception.
+
+        Delays: 2s, 4s (base_delay * 2^attempt). Returns the first non-None result,
+        or None if all attempts fail.
+        """
+        for attempt in range(max_attempts):
+            try:
+                result = fn()
+                if result is not None:
+                    return result
+            except Exception as e:
+                logger.warning(f"Attempt {attempt + 1}/{max_attempts} raised {type(e).__name__}: {e}")
+            if attempt < max_attempts - 1:
+                delay = base_delay * (2 ** attempt)
+                logger.debug(f"Retrying in {delay:.0f}s (attempt {attempt + 1}/{max_attempts})")
+                time.sleep(delay)
+        return None
+
     def fetch_page(self, url: str) -> Optional[str]:
         """
         Fetch a web page, handling WAF protection if needed.
@@ -146,25 +166,25 @@ class BaseScraper(ABC):
                 'http': self.proxy,
                 'https': self.proxy
             }
-            
+
             if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
-                return self._fetch_with_cloudscraper(url)
-            
+                return self._retry(lambda: self._fetch_with_cloudscraper(url))
+
             if self.use_curl:
                 return self._fetch_with_curl(url, use_proxy=True)
-            
-            return self._fetch_with_requests(url)
+
+            return self._retry(lambda: self._fetch_with_requests(url))
 
         # No proxy - direct connection
         self.session.proxies = {}
-        
+
         if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
-            return self._fetch_with_cloudscraper(url)
-            
+            return self._retry(lambda: self._fetch_with_cloudscraper(url))
+
         if self.use_curl:
             return self._fetch_with_curl(url, use_proxy=False)
-            
-        return self._fetch_with_requests(url)
+
+        return self._retry(lambda: self._fetch_with_requests(url))
     
     def _fetch_with_cloudscraper(self, url: str) -> Optional[str]:
         """Fetch a URL using cloudscraper to bypass Cloudflare."""
@@ -181,7 +201,7 @@ class BaseScraper(ABC):
             if self.proxy:
                  proxies = {'http': self.proxy, 'https': self.proxy}
             
-            response = scraper.get(url, proxies=proxies)
+            response = scraper.get(url, proxies=proxies, timeout=30)
             response.raise_for_status()
             return response.text
         except Exception as e:

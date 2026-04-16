@@ -1,5 +1,7 @@
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
+
+from core.constants import GARBAGE_TITLES, GENERIC_TITLES, ADDRESS_MARKERS
 
 MAX_TITLE_LEN = 250
 IDEAL_TITLE_LEN = 120
@@ -13,6 +15,51 @@ HASHTAG_ORDER = [
 
 URL_FORBIDDEN_PREFIXES = ("mailto:", "tel:")
 URL_BAD_SUBSTRINGS = ["/login", "/signin", "?share=", "utm_source=facebook"]
+
+
+def is_valid_article(article_obj: Union[dict, object]) -> bool:
+    """
+    Check if article content looks like a real news item.
+
+    Accepts a NewsArticle object or a plain dict (as stored in the database).
+    Returns False for garbage, navigation, address-like, or metadata titles.
+    """
+    if isinstance(article_obj, dict):
+        title = article_obj.get('title')
+    else:
+        title = getattr(article_obj, 'title', None)
+
+    if not title or not title.strip():
+        return False
+
+    title = title.strip()
+
+    if len(title) < 5:
+        return False
+
+    # Reject purely numeric values (e.g. "2026", "6175")
+    if title.replace('-', '').replace(' ', '').isdigit():
+        return False
+
+    if title.lower() in GENERIC_TITLES:
+        return False
+
+    # Reject address-like titles (e.g. "Lot 112 Smith St")
+    if title[0].isdigit() and any(x in title.lower() for x in ADDRESS_MARKERS):
+        return False
+
+    # Reject metadata titles (e.g. "Posted 04 December 2025")
+    if title.lower().startswith('posted ') and any(c.isdigit() for c in title):
+        return False
+
+    # Reject copyright footers (e.g. "© 2025 Shire of ...")
+    if title.startswith('©') or title.startswith('&copy;'):
+        return False
+
+    if title.lower() in GARBAGE_TITLES:
+        return False
+
+    return True
 
 
 def validate_post(text: str, title: str, excerpt: str, url: str, hashtags: List[str], facets: List[Tuple[int, int]]) -> List[str]:

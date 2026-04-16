@@ -15,12 +15,11 @@ import sys
 import time
 import random
 import concurrent.futures
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Set, Optional
+from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
-from dateutil import parser as date_parser
 
 # Optional Discord logging - fails silently if not configured
 try:
@@ -35,39 +34,92 @@ try:
 except ImportError:
     DISCORD_LOGGING = False
 
-from core.scrapers import CardScraper, NewsArticle, InnerWestScraper, RSSScraper, ScraperFactory
+from core.scrapers import NewsArticle, ScraperFactory
 from core.poster import BlueSkyPoster
 from core.database import Database
 from core.utils import setup_logging
 from core.timezone_utils import (
-    is_morning_window, 
+    is_morning_window,
     get_recommended_concurrency,
     STATE_TIMEZONES
 )
 from core.exceptions import ScrapeError, ConfigurationError
+from core.processing import process_articles, post_articles
 
-# Constants
-MAX_ARTICLE_AGE_DAYS = 7
 DEFAULT_STATE = 'vic'
 
+_VALID_SCRAPER_TYPES = {
+    'card_scraper', 'curl_scraper', 'rss_scraper', 'json_scraper',
+    'browser_scraper', 'alyka_scraper', 'catalyst_scraper',
+    'spark_news_listing_scraper', 'wordpress_scraper', 'opencities_scraper',
+    'aspnet_scraper', 'apy_scraper', 'inner_west_scraper', 'bunbury_scraper',
+    'wanneroo_scraper', 'perth_scraper', 'claremont_scraper', 'joondalup_scraper',
+    'belmont_scraper', 'dumbleyung_scraper',
+}
+
+# Derive valid impersonate values from curl_cffi at runtime so this stays in sync.
+try:
+    from curl_cffi.requests import BrowserType as _BrowserType
+    _VALID_IMPERSONATE: set = {b.value for b in _BrowserType}
+except ImportError:
+    _VALID_IMPERSONATE = {'chrome110', 'chrome120', 'chrome124', 'safari15_5'}
+
+
+def _validate_councils(councils: List[Dict], state_code: str) -> None:
+    """Validate council config entries, raising ValueError on the first bad entry."""
+    seen_ids: set = set()
+    for i, council in enumerate(councils):
+        loc = f"{state_code} councils[{i}]"
+
+        if not isinstance(council.get('id'), str) or not council['id'].strip():
+            raise ValueError(f"{loc}: missing or empty 'id'")
+        if not isinstance(council.get('name'), str) or not council['name'].strip():
+            raise ValueError(f"{loc} ({council.get('id')}): missing or empty 'name'")
+        if not isinstance(council.get('news_url'), str) or not council['news_url'].startswith('http'):
+            raise ValueError(f"{loc} ({council['id']}): 'news_url' must be a valid http(s) URL")
+        if 'enabled' in council and not isinstance(council['enabled'], bool):
+            raise ValueError(f"{loc} ({council['id']}): 'enabled' must be a boolean")
+
+        scraper = council.get('scraper', 'card_scraper')
+        if scraper not in _VALID_SCRAPER_TYPES:
+            raise ValueError(
+                f"{loc} ({council['id']}): unknown scraper type '{scraper}'. "
+                f"Valid types: {sorted(_VALID_SCRAPER_TYPES)}"
+            )
+
+        impersonate = council.get('impersonate')
+        if impersonate is not None and impersonate not in _VALID_IMPERSONATE:
+            raise ValueError(
+                f"{loc} ({council['id']}): unknown impersonate value '{impersonate}'. "
+                f"Valid values: {sorted(_VALID_IMPERSONATE)}"
+            )
+
+        if council['id'] in seen_ids:
+            raise ValueError(f"{loc}: duplicate council id '{council['id']}'")
+        seen_ids.add(council['id'])
+
+
 def load_state_config(state_code: str) -> Dict:
-    """Load configuration for a specific state."""
+    """Load and validate configuration for a specific state."""
     base_path = Path(__file__).parent / 'states' / state_code.lower()
     config_file = base_path / 'config.json'
     councils_file = base_path / 'councils.json'
-    
+
     if not config_file.exists():
         raise ValueError(f"State configuration not found: {state_code}")
-        
+
     with open(config_file, 'r') as f:
         config = json.load(f)
-        
+
     with open(councils_file, 'r') as f:
         councils_data = json.load(f)
-        
+
+    councils = councils_data.get('councils', [])
+    _validate_councils(councils, state_code)
+
     return {
         'config': config,
-        'councils': councils_data.get('councils', [])
+        'councils': councils,
     }
 
 
@@ -210,217 +262,6 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
             
     return all_articles
 
-from core.constants import GARBAGE_TITLES, GENERIC_TITLES, ADDRESS_MARKERS
-
-def is_valid_article(article_obj) -> bool:
-    """
-    Check if article content looks like a real news item.
-    Accepts NewsArticle object or Dictionary.
-    """
-    # Handle access for both Object and Dict types
-    if isinstance(article_obj, dict):
-        title = article_obj.get('title')
-    else:
-        title = getattr(article_obj, 'title', None)
-        
-    if not title or not title.strip():
-        return False
-        
-    title = title.strip()
-    
-    # reject too short
-    if len(title) < 5:
-        return False
-        
-    # reject purely numeric (e.g. "2026", "6175")
-    if title.replace('-', '').replace(' ', '').isdigit():
-        return False
-        
-    # reject generic site navigation
-    if title.lower() in GENERIC_TITLES:
-        return False
-        
-    # reject address-like titles (e.g. "Lot 112 Smith St")
-    # Simple heuristic: Starts with digit, contains "Street", "Road", "Lot"
-    if title[0].isdigit() and any(x in title.lower() for x in ADDRESS_MARKERS):
-        return False
-
-    # reject metadata titles (e.g. "Posted 04 December 2025")
-    if title.lower().startswith('posted ') and any(c.isdigit() for c in title):
-        return False
-        
-    # reject copyright footers (e.g. "© 2025 Shire of ...")
-    if title.startswith('©') or title.startswith('&copy;'):
-        return False
-
-    # reject common garbage and non-news items
-    if title.lower() in GARBAGE_TITLES:
-        return False
-
-    return True
-
-def process_articles(articles: List[NewsArticle], db: Database, state_code: str, force_fresh: bool = False) -> List[Dict]:
-    """
-    Process scraped articles:
-    1. Filter by age and CONTENT QUALITY
-    2. Add to database (if new)
-    3. Return list of unposted articles
-    """
-    now = datetime.now()
-    cutoff_date = now - timedelta(days=MAX_ARTICLE_AGE_DAYS)
-    fresh_articles = []
-    archived_articles = []
-    
-    # Filter out garbage
-    valid_articles = [a for a in articles if is_valid_article(a)]
-    rejected_count = len(articles) - len(valid_articles)
-    if rejected_count > 0:
-        print(f"  Rejected {rejected_count} articles as invalid garbage content.")
-
-    for article in valid_articles:
-        # Only post items with a scraped date inside the freshness window
-        is_fresh = False
-        if force_fresh:
-            is_fresh = True
-        elif article.date:
-            # Handle timezone awareness mismatch
-            check_date = article.date
-            check_cutoff = cutoff_date
-            if check_date.tzinfo is not None and check_date.tzinfo.utcoffset(check_date) is not None:
-                check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=MAX_ARTICLE_AGE_DAYS)
-            is_fresh = check_date >= check_cutoff
-        
-        if is_fresh:
-            fresh_articles.append(article)
-        else:
-            archived_articles.append(article)
-            
-    # Bulk insert fresh articles
-    fresh_data = [a.to_dict() for a in fresh_articles]
-    new_fresh_count = db.add_articles_bulk(fresh_data, state_code, status='new')
-    
-    # Bulk insert archived articles
-    archived_data = [a.to_dict() for a in archived_articles]
-    new_archived_count = db.add_articles_bulk(archived_data, state_code, status='archived')
-    
-    total_found = len(articles)
-    total_new_db = new_fresh_count + new_archived_count
-    
-    duplicates = total_found - total_new_db
-            
-    print(f"Processing Summary: Found {total_found} total")
-    print(f"  - {new_fresh_count} new fresh articles (queued)")
-    print(f"  - {new_archived_count} new archived articles (too old)")
-    print(f"  - {duplicates} duplicates (already known)")
-    
-    # Return unposted articles from DB
-    return db.get_unposted_articles(state_code)
-
-def post_articles(articles: List[Dict], poster: BlueSkyPoster, db: Database, 
-                  council_lookup: Dict[str, Dict], hashtags: List[str],
-                  council_hashtag_map: Dict[str, str],
-                  limit: int = 0, dry_run: bool = False, max_per_council: int = 5):
-    """Post articles to BlueSky."""
-    if not articles:
-        print("No articles to post")
-        return
-
-    print(f"Found {len(articles)} unposted articles")
-    
-    if limit > 0:
-        articles = articles[:limit]
-        print(f"Limiting to {limit} posts total")
-        
-    if dry_run:
-        print("\nDry run - would post:")
-        council_counts = {}
-        for article in articles:
-            c_id = article['council_id']
-            if council_counts.get(c_id, 0) >= max_per_council:
-                continue
-            council_counts[c_id] = council_counts.get(c_id, 0) + 1
-            
-            council_config = council_lookup.get(c_id, {})
-            council_name = council_config.get('name', c_id)
-            print(f"  📰 {council_name}: {article['title']}")
-        return
-
-    # Authenticate
-    if not poster.authenticate():
-        print("Failed to authenticate with BlueSky")
-        return
-
-    posted_count = 0
-    council_counts = {}
-    
-    for article in articles:
-        # Check per-council limit
-        c_id = article['council_id']
-        if council_counts.get(c_id, 0) >= max_per_council:
-            print(f"  ⚠️ Skipping {article['title'][:30]}... (Max {max_per_council} posts reached for {c_id})")
-            continue
-
-        # Parse date string back to datetime if needed
-        article_date = None
-        if article.get('date'):
-            try:
-                article_date = date_parser.parse(article['date'])
-            except (ValueError, TypeError) as e:
-                print(f"Warning: Failed to parse date '{article.get('date')}': {e}")
-        
-        # VALIDATION CHECK: Prevent posting malformed/garbage articles
-        if not is_valid_article(article):
-            print(f"⚠️ Skipping invalid article (metadata/garbage): {article.get('title', 'Unknown')}")
-            # Mark as posted to prevent retry loop
-            db.mark_as_posted(article['url'], "REJECTED_VALIDATION")
-            continue
-
-        council_config = council_lookup.get(c_id, {})
-        council_name = council_config.get('name', c_id)
-        council_tag = council_hashtag_map.get(c_id)
-        
-        # Check if excerpt should be skipped
-        excerpt = article['excerpt']
-        if council_config.get('skip_excerpt'):
-            excerpt = None
-
-        # Build hashtag list per article: base state tags + canonical council tag
-        tags_for_post = list(hashtags) if hashtags else []
-        if council_tag and council_tag not in tags_for_post:
-            tags_for_post.append(council_tag)
-        
-        post_uri = poster.post_article(
-            council_name,
-            article['title'],
-            article['url'],
-            date=article_date,
-            excerpt=excerpt,
-            hashtags=tags_for_post,
-            council_hashtag=council_tag
-        )
-        if post_uri:
-            db.mark_as_posted(article['url'], poster.handle)
-            posted_count += 1
-            council_counts[c_id] = council_counts.get(c_id, 0) + 1
-            print(f"✅ Posted: {article['title'][:50]}...")
-            
-            # Update run summary stats (Discord summaries are periodic)
-            if DISCORD_LOGGING:
-                try:
-                    current_run.log_posted(1)
-                except (AttributeError, KeyError, TypeError) as log_err:
-                    print(f"Warning: Failed to log run post stats: {log_err}")
-            
-            # Rate limiting delay
-            if posted_count < len(articles):
-                time.sleep(2)
-        else:
-            # Validation failure in poster (e.g. bad URL, too long).
-            # Mark as rejected to prevent endless retries.
-            print(f"⚠️ Rejected: {article['title'][:30]}... (permanently skipping)")
-            db.mark_as_posted(article['url'], "REJECTED_POSTER_VALIDATION")
-                
-    print(f"\n✅ Posted {posted_count} articles")
 
 def main():
     # Load environment variables

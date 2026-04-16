@@ -68,8 +68,40 @@ Check the output:
 | `title_selector` | string | CSS selector for the title (relative to item). |
 | `link_selector` | string | CSS selector for the link (relative to item). Defaults to `self` if item is `<a>`. |
 | `date_selector` | string | CSS selector for the date. |
-| `use_curl` | bool | Set `true` to use `curl_cffi` (WAF bypass). |
-| `impersonate` | string | Browser profile for `curl_cffi` (e.g., `"chrome110"`, `"chrome120"`). |
+| `use_curl` | bool | Set `true` to use `curl_cffi` (WAF bypass). Equivalent to `"scraper": "curl_scraper"`. |
+| `use_cloudscraper` | bool | Set `true` to use `cloudscraper` (Cloudflare-specific bypass). |
+| `mobile_mode` | bool | Set `true` to send an iPhone User-Agent. |
+| `impersonate` | string | Browser profile for `curl_cffi`. Allowed values: `"chrome110"`, `"chrome120"`, `"chrome124"`, `"safari15_5"`. Default: `"chrome110"`. |
+| `use_rotating_proxy` | bool | Use `COUNCIL_BOT_ROTATING_PROXY` env var instead of the default proxy. |
+| `bypass_proxy` | bool | Skip proxy entirely for this council (connect direct). |
+| `skip_excerpt` | bool | Omit excerpt from the BlueSky post. |
+| `limit` | int | Maximum articles to return per scrape run. |
+
+### Selector config styles
+
+Two equivalent styles are supported — use whichever is cleaner for the council:
+
+**Flat style** (most common):
+
+```json
+"item_selector": "div.news-listing-item",
+"title_selector": "h2.title",
+"date_selector": "span.date",
+"link_selector": "a.read-more"
+```
+
+**Nested style** (use `selectors` dict with renamed keys):
+
+```json
+"selectors": {
+    "container": "div.news-listing-item",
+    "title": "h2.title",
+    "date": "span.date",
+    "link": "a.read-more"
+}
+```
+
+The factory merges both, with the nested style taking precedence. Use `"link_selector": "self"` (or `"link": "self"` in nested style) when the item container itself is the `<a>` element.
 
 ## 3. Advanced Scraping
 

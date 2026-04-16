@@ -16,7 +16,7 @@ class Article(Base):
     url: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
     council_id: Mapped[str] = mapped_column(String, nullable=False)
     title: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    date: Mapped[Optional[str]] = mapped_column(String, nullable=True) # Stored as string in legacy DB
+    date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     excerpt: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     state: Mapped[str] = mapped_column(String, nullable=False, index=True)
     status: Mapped[str] = mapped_column(String, default="new", index=True)
