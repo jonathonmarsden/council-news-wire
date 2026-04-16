@@ -35,6 +35,7 @@ except ImportError:
     DISCORD_LOGGING = False
 
 from core.scrapers import NewsArticle, ScraperFactory
+from core.scrapers.base import BaseScraper
 from core.poster import BlueSkyPoster
 from core.database import Database
 from core.utils import setup_logging
@@ -136,7 +137,7 @@ def load_hashtag_map() -> Dict[str, str]:
         print(f"Warning: Failed to load hashtag map: {e}")
         return {}
 
-def get_scraper(council: Dict, proxy: Optional[str] = None) -> CardScraper:
+def get_scraper(council: Dict, proxy: Optional[str] = None) -> BaseScraper:
     """Get the appropriate scraper for a council."""
     return ScraperFactory.create_scraper(council, proxy)
 
