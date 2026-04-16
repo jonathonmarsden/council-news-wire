@@ -8,7 +8,7 @@ Automated scraper and BlueSky poster for Australian local government news and me
 [![Coverage](https://img.shields.io/badge/councils-540%2F541-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.9+-blue)]()
 
-> **Latest Update (Feb 2026):** Transitioned to twice-daily scraping schedule (06:00 & 18:00 local per state) with dynamic concurrency reduction during morning peak. Reduced load by 75% while maintaining coverage. See [SCHEDULING_GUIDE.md](SCHEDULING_GUIDE.md) for details.
+> **Latest Update (Apr 2026):** Codebase audit — added `assistant`, retry logic with exponential backoff, startup config validation, `core/processing.py` module split, centralised content filtering, fixture-based test suite (32 tests), and `Article.date` migrated to DateTime.
 
 ## Overview
 
@@ -49,10 +49,11 @@ It is designed to be resilient, scalable, and polite:
 
 ## Documentation
 
-*   **[Developer Guide](docs/DEVELOPER_GUIDE.md)**: Setup, testing, and contribution workflow.
-*   **[Deployment Guide](docs/DEPLOYMENT.md)**: How to deploy changes to the live VPS.
-*   **[AI Context](docs/AI_CONTEXT.md)**: Architecture overview for AI agents.
-*   **[Roadmap](docs/ROADMAP.md)**: Future plans and current status.
+*   **[assistant](assistant)**: Quick-reference guide for AI agents and new developers — project layout, config schema, scraper types, common commands.
+*   **[CONTRIBUTING.md](CONTRIBUTING.md)**: How to add councils, fix scrapers, and contribute code.
+*   **[Developer Guide](docs/DEVELOPER_GUIDE.md)**: Detailed setup, testing, and contribution workflow.
+*   **[Deployment Guide](DEPLOYMENT.md)**: How to deploy changes to the live VPS.
+*   **[Scheduling Guide](SCHEDULING_GUIDE.md)**: Twice-daily schedule, DST handling, crontab generation.
 
 ## Quick Start
 
