@@ -151,6 +151,9 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
         if health.get('is_disabled'):
             print(f"Skipping {council['name']} (DISABLED due to {health.get('consecutive_failures')} failures)")
             return []
+        empty_runs = health.get('consecutive_empty_runs', 0)
+        if empty_runs >= 10:
+            print(f"  ⚠️ PERSISTENT EMPTY: {council['name']} has returned 0 articles for {empty_runs} consecutive runs. Check scraper config.")
             
     print(f"Scraping {council['name']}...")
     

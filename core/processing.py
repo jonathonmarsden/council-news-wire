@@ -162,10 +162,14 @@ def post_articles(
 
         article_date = None
         if article.get('date'):
-            try:
-                article_date = date_parser.parse(article['date'])
-            except (ValueError, TypeError) as e:
-                print(f"Warning: Failed to parse date '{article.get('date')}': {e}")
+            d = article['date']
+            if isinstance(d, datetime):
+                article_date = d
+            else:
+                try:
+                    article_date = date_parser.parse(str(d))
+                except (ValueError, TypeError) as e:
+                    print(f"Warning: Failed to parse date '{d}': {e}")
 
         if not is_valid_article(article):
             print(f"⚠️ Skipping invalid article (metadata/garbage): {article.get('title', 'Unknown')}")

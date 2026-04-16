@@ -203,12 +203,15 @@ class Database:
                 is_too_old = False
                 if o.date:
                     try:
-                        # Parse date string. Assume dayfirst for Australia unless obvious
-                        dt = parser.parse(o.date, fuzzy=True, dayfirst=True)
+                        # o.date is a datetime object (post DateTime migration)
+                        dt = o.date
+                        # Strip timezone for naive comparison if needed
+                        if dt.tzinfo is not None:
+                            dt = dt.replace(tzinfo=None)
                         if dt < cutoff_date:
                             is_too_old = True
                     except Exception:
-                        # Keep it if we can't parse it (safer than suppressing valid items)
+                        # Keep it if we can't compare (safer than suppressing valid items)
                         pass
                 
                 if is_too_old:
