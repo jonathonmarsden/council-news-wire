@@ -661,9 +661,11 @@
     {
       "id": "toowoomba",
       "name": "Toowoomba Regional Council",
-      "news_url": "https://www.tr.qld.gov.au/about-council/news-publications/media-releases?format=feed&type=rss",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.tr.qld.gov.au/Council/News-and-public-notices/Media-releases",
+      "scraper": "opencities_scraper",
       "enabled": true,
+      "use_curl": true,
+      "impersonate": "chrome124",
       "population": 178530,
       "region": "Darling Downs"
     },

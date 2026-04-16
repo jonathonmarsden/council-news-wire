@@ -151,9 +151,12 @@
       "enabled": true,
       "use_curl": true,
       "category": "A",
-      "date_selector": ".date",
+      "item_selector": "a.cont-item-news",
+      "title_selector": ".cont-item-title",
+      "link_selector": "self",
       "population": 277102,
-      "region": "Barwon"
+      "region": "Barwon",
+      "impersonate": "chrome110"
     },
     {
       "id": "greater-shepparton",
@@ -381,14 +384,14 @@
     {
       "id": "manningham",
       "name": "Manningham City Council",
-      "news_url": "https://www.manningham.vic.gov.au/news-centre",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.manningham.vic.gov.au/media-releases",
+      "scraper": "drupal_scraper",
       "enabled": true,
       "use_curl": true,
       "category": "B",
-      "item_selector": "article",
       "population": 130703,
-      "region": "Melbourne East"
+      "region": "Melbourne East",
+      "impersonate": "chrome110"
     },
     {
       "id": "melbourne",
@@ -468,7 +471,8 @@
       "link_selector": "a",
       "date_selector": ".published-on",
       "population": 38905,
-      "region": "Loddon Mallee"
+      "region": "Loddon Mallee",
+      "impersonate": "safari15_5"
     },
     {
       "id": "central-goldfields",

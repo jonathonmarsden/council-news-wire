@@ -514,3 +514,58 @@ class LGASAScraper(BaseScraper):
             articles.append(self.create_article(title, url, date_obj, excerpt))
 
         return articles
+
+
+class DrupalScraper(BaseScraper):
+    """
+    Scraper for Drupal-based council websites.
+
+    Drupal teasers often lack anchor links on the title, but embed the node ID
+    in a ``data-history-node-id`` attribute.  This scraper extracts the node ID
+    and constructs the article URL as ``{base_url}/node/{id}``, which Drupal
+    then redirects to the clean alias URL.
+    """
+
+    def __init__(self, council_id: str, council_name: str, news_url: str, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+
+    def scrape(self) -> List[NewsArticle]:
+        from bs4 import BeautifulSoup
+        from urllib.parse import urlparse
+
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+
+        soup = BeautifulSoup(html, 'html.parser')
+        base = "{0.scheme}://{0.netloc}".format(urlparse(self.news_url))
+        nodes = soup.select('[data-history-node-id]')
+        articles = []
+
+        for node in nodes:
+            node_id = node.get('data-history-node-id')
+            if not node_id:
+                continue
+
+            title_el = node.select_one('.teaser__title, .field--name-title, h2, h3, h4')
+            if not title_el:
+                continue
+            title = title_el.get_text(strip=True)
+            if not title:
+                continue
+
+            date_el = node.select_one(
+                'time, .field--name-node-post-date, [class*=date-icon], [class*=teaser__date]'
+            )
+            date_obj = None
+            if date_el:
+                date_text = date_el.get('datetime') or date_el.get_text(strip=True)
+                try:
+                    date_obj = date_parser.parse(date_text, dayfirst=True)
+                except Exception:
+                    pass
+
+            url = f"{base}/node/{node_id}"
+            articles.append(self.create_article(title, url, date_obj))
+
+        return articles

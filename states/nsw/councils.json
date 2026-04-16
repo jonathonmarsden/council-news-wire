@@ -268,7 +268,7 @@
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
-      "impersonate": "chrome110",
+      "impersonate": "safari15_5",
       "population": 216785,
       "region": "Hunter"
     },
@@ -1351,10 +1351,14 @@
     {
       "id": "walgett-shire-council",
       "name": "Walgett Shire Council",
-      "news_url": "https://www.walgett.nsw.gov.au/News-Media",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.walgett.nsw.gov.au/published/snapshot.json",
+      "scraper": "json_scraper",
       "enabled": true,
-      "use_curl": true,
+      "item_selector": "news",
+      "title_selector": "title",
+      "date_selector": "date",
+      "link_selector": "https://www.walgett.nsw.gov.au/News-Media/{slug}",
+      "description_selector": "excerpt",
       "population": 6175,
       "region": "North West"
     },
