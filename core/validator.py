@@ -32,7 +32,12 @@ def is_valid_article(article_obj: Union[dict, object]) -> bool:
     if not title or not title.strip():
         return False
 
-    title = title.strip()
+    # Strip private-use-area characters (icon-font glyphs, e.g.  used
+    # for "read more" arrows) before evaluating — they carry no text meaning.
+    title = re.sub(r'[-]', '', title).strip()
+
+    if not title:
+        return False
 
     if len(title) < 5:
         return False

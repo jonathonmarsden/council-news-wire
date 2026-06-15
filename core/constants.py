@@ -13,15 +13,20 @@ GARBAGE_TITLES: Set[str] = {
 
 # Generic navigation titles to ignore
 GENERIC_TITLES: Set[str] = {
-    'home', 
-    'sitemap', 
-    'contact us', 
-    'privacy policy', 
-    'accessibility', 
-    'search', 
+    'home',
+    'sitemap',
+    'contact us',
+    'privacy policy',
+    'accessibility',
+    'search',
     'news',
     'shire administration office',
-    'quick links'
+    'quick links',
+    # "Read more" link text — emitted when a card's real title element is
+    # empty and the scraper falls back to the read-more anchor.
+    'read more',
+    'read moreabout',
+    'read more about',
 }
 
 # Substrings detection for address-like titles
