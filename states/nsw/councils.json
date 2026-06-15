@@ -1222,8 +1222,10 @@
       "id": "narromine-shire-council",
       "name": "Narromine Shire Council",
       "news_url": "https://www.narromine.nsw.gov.au/council/media-releases",
-      "scraper": "curl_scraper",
-      "enabled": false,
+      "scraper": "narromine_scraper",
+      "enabled": true,
+      "use_curl": true,
+      "limit": 20,
       "population": 6480,
       "region": "Central West"
     },

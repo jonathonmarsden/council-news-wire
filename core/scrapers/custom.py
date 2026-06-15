@@ -516,6 +516,67 @@ class LGASAScraper(BaseScraper):
         return articles
 
 
+class NarromineScraper(BaseScraper):
+    """
+    Scraper for Narromine Shire Council media releases.
+
+    Narromine lists media releases in a plain HTML table where each row is a
+    single ``a.literature`` anchor. The anchor text concatenates a leading
+    file icon, the title, and a trailing date span:
+
+        <a class="literature" href="/council/media-releases/...">
+            <i class="fa fa-file-text-o"></i>
+            What Do You Think? Council Seeks Your Feedback
+            <span class="radius right label">01 June 2026</span>
+        </a>
+
+    Generic CardScraper selectors can't separate the glued title and date, so
+    the default scraper produced garbage dates (e.g. year 7551). Here we read
+    the date from the trailing span and take the title as the anchor text with
+    that span removed.
+    """
+
+    ITEM_SELECTOR = 'div.page-content a.literature'
+    DATE_SELECTOR = 'span.label'
+
+    def __init__(self, council_id: str, council_name: str, news_url: str, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+
+    def scrape(self) -> List[NewsArticle]:
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+
+        soup = self.parse_html(html)
+        articles = []
+
+        # The table is ordered newest-first, so honouring self.limit keeps the
+        # most recent releases without fetching the full multi-year archive.
+        for link in soup.select(self.ITEM_SELECTOR):
+            if self.limit and len(articles) >= self.limit:
+                break
+
+            href = link.get('href')
+            if not href or '/media-releases/' not in href:
+                continue
+
+            # Pull the date out of the trailing label span, then remove it so
+            # the remaining anchor text is the clean title.
+            date_obj = None
+            date_el = link.select_one(self.DATE_SELECTOR)
+            if date_el:
+                date_obj = self.parse_date(date_el.get_text(strip=True))
+                date_el.extract()
+
+            title = link.get_text(strip=True)
+            if not title:
+                continue
+
+            articles.append(self.create_article(title, href, date_obj))
+
+        return articles
+
+
 class DrupalScraper(BaseScraper):
     """
     Scraper for Drupal-based council websites.

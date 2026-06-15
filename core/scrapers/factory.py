@@ -12,7 +12,7 @@ from .rss import RSSScraper
 from .json import JsonScraper
 from .alyka import AlykaScraper
 from .browser import BrowserScraper
-from .custom import InnerWestScraper, BunburyScraper, WordPressScraper, OpenCitiesScraper, APYScraper, LGASAScraper, DrupalScraper
+from .custom import InnerWestScraper, BunburyScraper, WordPressScraper, OpenCitiesScraper, APYScraper, LGASAScraper, DrupalScraper, NarromineScraper
 
 class ScraperFactory:
     """Factory for creating scraper instances."""
@@ -72,6 +72,7 @@ class ScraperFactory:
             'apy_scraper': APYScraper,
             'lgasa_scraper': LGASAScraper,
             'drupal_scraper': DrupalScraper,
+            'narromine_scraper': NarromineScraper,
             'card_scraper': CardScraper,
             'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
             'rss_scraper': RSSScraper,
