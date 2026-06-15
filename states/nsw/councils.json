@@ -57,11 +57,15 @@
       "id": "camden-council",
       "name": "Camden Council",
       "news_url": "https://www.camden.nsw.gov.au/media-centre/latest-news/",
-      "scraper": "card_scraper",
+      "scraper": "curl_scraper",
       "enabled": true,
       "item_selector": ".blog-post-item",
       "population": 123515,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "use_curl": true,
+      "title_selector": "h2",
+      "link_selector": "a",
+      "date_selector": ".post-date"
     },
     {
       "id": "campbelltown-city-council",
