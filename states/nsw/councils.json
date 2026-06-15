@@ -469,22 +469,28 @@
     {
       "id": "shoalhaven-city-council",
       "name": "Shoalhaven City Council",
-      "news_url": "https://www.shoalhaven.nsw.gov.au/Council/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.shoalhaven.nsw.gov.au/News-and-feedback/News",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 110250,
-      "region": "South East"
+      "region": "South East",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".date"
     },
     {
       "id": "strathfield-council",
       "name": "Strathfield Council",
-      "news_url": "https://www.strathfield.nsw.gov.au/Council/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.strathfield.nsw.gov.au/Council/News/Media-Releases",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 46500,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "sutherland-shire-council",
@@ -1361,12 +1367,15 @@
     {
       "id": "uralla-shire-council",
       "name": "Uralla Shire Council",
-      "news_url": "https://www.uralla.nsw.gov.au/Council/Council-News-and-Media",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.uralla.nsw.gov.au/Your-Council/Read-the-latest-Council-information/Media-Releases",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 6530,
-      "region": "New England"
+      "region": "New England",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "walcha-council",
