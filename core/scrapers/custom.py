@@ -577,6 +577,86 @@ class NarromineScraper(BaseScraper):
         return articles
 
 
+class MoreePlainsScraper(BaseScraper):
+    """
+    Scraper for Moree Plains Shire Council media releases (Joomla blog layout).
+
+    Each media release renders as a full-body ``<article>`` on the listing page,
+    so the title is a bare ``<h2>`` (no anchor) and the only reliable link is the
+    print/email icon href, which carries a ``?tmpl=component&print=1`` query we
+    strip to recover the canonical URL. Publish dates are not reliably present in
+    the article body (it mixes in submission deadlines and meeting dates), but
+    each detail page exposes a Joomla publish date via
+    ``time[itemprop=datePublished]``. We follow each article (newest-first,
+    capped) to read that date — the same approach as InnerWestScraper.
+    """
+
+    ITEM_SELECTOR = 'article'
+    MAX_DETAIL_FETCHES = 10
+
+    def __init__(self, council_id: str, council_name: str, news_url: str, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+
+    def scrape(self) -> List[NewsArticle]:
+        html = self.fetch_page(self.news_url)
+        if not html:
+            return []
+
+        soup = self.parse_html(html)
+        articles = []
+
+        for art in soup.select(self.ITEM_SELECTOR):
+            heading = art.find(['h1', 'h2', 'h3'])
+            if not heading:
+                continue
+            title = heading.get_text(' ', strip=True)
+            if not title:
+                continue
+
+            link = None
+            for a in art.select('ul.actions a[href]'):
+                if '/media-releases/' in a['href']:
+                    link = a['href']
+                    break
+            if not link:
+                continue
+            link = re.sub(r'\?.*$', '', link)  # drop Joomla print template query
+
+            articles.append(self.create_article(title, link, None))
+
+        # Limit before the (expensive) per-article date fetches.
+        cap = self.limit or self.MAX_DETAIL_FETCHES
+        articles = articles[:cap]
+
+        for article in articles:
+            self._fetch_article_date(article)
+            time.sleep(1)  # be polite
+
+        return articles
+
+    def _fetch_article_date(self, article: NewsArticle):
+        """Read the Joomla publish date from the article detail page."""
+        try:
+            html = self.fetch_page(article.url)
+            if not html:
+                return
+            soup = self.parse_html(html)
+            date_el = soup.select_one('time[itemprop=datePublished], time[datetime]')
+            if date_el:
+                iso = date_el.get('datetime')
+                if iso:
+                    # ISO-8601 is unambiguous — do NOT apply dayfirst.
+                    try:
+                        article.date = date_parser.parse(iso)
+                    except (ValueError, TypeError):
+                        pass
+                else:
+                    # Free text like "Published: 07 June 2026" — dayfirst helps.
+                    article.date = self.parse_date(date_el.get_text(strip=True))
+        except Exception as e:
+            print(f"Error fetching Moree date for {article.url}: {e}")
+
+
 class DrupalScraper(BaseScraper):
     """
     Scraper for Drupal-based council websites.

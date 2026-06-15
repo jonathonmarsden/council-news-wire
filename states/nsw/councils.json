@@ -1150,8 +1150,9 @@
       "id": "moree-plains-shire-council",
       "name": "Moree Plains Shire Council",
       "news_url": "https://www.mpsc.nsw.gov.au/hot-topics/media-releases",
-      "scraper": "curl_scraper",
-      "enabled": false,
+      "scraper": "moree_plains_scraper",
+      "enabled": true,
+      "limit": 8,
       "population": 13585,
       "region": "North West",
       "use_curl": true
