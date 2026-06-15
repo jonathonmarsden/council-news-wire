@@ -203,8 +203,8 @@
         {
             "name": "West Daly Regional Council",
             "id": "west_daly",
-            "news_url": "https://www.westdaly.nt.gov.au/rss.xml",
-            "enabled": false,
+            "news_url": "https://www.westdaly.nt.gov.au/feed/rss2",
+            "enabled": true,
             "population": 3600,
             "region": "Top End",
             "scraper": "rss_scraper"
