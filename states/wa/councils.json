@@ -796,13 +796,12 @@
             "name": "Shire of Mingenew",
             "news_url": "https://mingenew.wa.gov.au/latest-news/",
             "scraper": "curl_scraper",
-            "enabled": false,
+            "enabled": true,
             "item_selector": ".card",
             "title_selector": ".card-title",
             "link_selector": ".stretched-link",
             "date_selector": "meta[property='article:published_time']",
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
             "category": "C"
         },
         {
