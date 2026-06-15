@@ -698,7 +698,7 @@
             "news_url": "https://www.kwinana.wa.gov.au/council/news",
             "scraper": "catalyst_scraper",
             "enabled": false,
-            "disabled_reason": "API blocked/Malformed dates (Year 6175). Pending fix.",
+            "disabled_reason": "News list is JS-rendered (Catalyst api/advancesearch POST); static HTML has 0 articles. Needs browser_scraper or reverse-engineered API. Pending fix.",
             "use_curl": false
         },
         {
@@ -855,13 +855,13 @@
             "name": "Shire of Mount Marshall",
             "news_url": "https://mtmarshall.wa.gov.au/council-the-shire/shire-news/",
             "scraper": "curl_scraper",
-            "enabled": false,
+            "enabled": true,
             "use_curl": true,
             "item_selector": "article",
             "title_selector": ".elementor-post__title a",
             "link_selector": ".elementor-post__title a",
-            "date_selector": ".elementor-post__meta-data span",
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+            "date_selector": ".elementor-post-info__item--type-date",
+            "limit": 8,
             "category": "C"
         },
         {
