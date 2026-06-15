@@ -257,12 +257,15 @@
     {
       "id": "ku-ring-gai-council",
       "name": "Ku-ring-gai Council",
-      "news_url": "https://www.krg.nsw.gov.au/Council/News-and-media",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.krg.nsw.gov.au/Council/News-and-media/Latest-news",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 131095,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "lake-macquarie-city-council",
@@ -540,12 +543,15 @@
     {
       "id": "tweed-shire-council",
       "name": "Tweed Shire Council",
-      "news_url": "https://www.tweed.nsw.gov.au/news",
-      "scraper": "opencities_scraper",
+      "news_url": "https://www.tweed.nsw.gov.au/council/news-updates/latest-news",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 103810,
-      "region": "North Coast"
+      "region": "North Coast",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "wagga-wagga-city-council",
@@ -680,12 +686,15 @@
     {
       "id": "snowy-monaro-regional-council",
       "name": "Snowy Monaro Regional Council",
-      "news_url": "https://www.snowymonaro.nsw.gov.au/News-and-Media",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.snowymonaro.nsw.gov.au/News-and-Media/News-articles",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 21745,
-      "region": "South East"
+      "region": "South East",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "albury-city-council",
@@ -885,12 +894,15 @@
     {
       "id": "cowra-council",
       "name": "Cowra Council",
-      "news_url": "https://www.cowracouncil.com.au/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.cowracouncil.com.au/News/Latest-News-and-Media-Releases",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 12720,
-      "region": "Central West"
+      "region": "Central West",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "dungog-shire-council",
@@ -905,12 +917,15 @@
     {
       "id": "edward-river-council",
       "name": "Edward River Council",
-      "news_url": "https://www.edwardriver.nsw.gov.au/Council/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.edwardriver.nsw.gov.au/Council/News/Media-Releases",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 8785,
-      "region": "Riverina"
+      "region": "Riverina",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "federation-council",
@@ -934,12 +949,15 @@
     {
       "id": "gilgandra-shire-council",
       "name": "Gilgandra Shire Council",
-      "news_url": "https://www.gilgandra.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.gilgandra.nsw.gov.au/Stay-Connected/News/Media-Releases",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 4260,
-      "region": "Central West"
+      "region": "Central West",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "glen-innes-severn-council",
@@ -980,12 +998,15 @@
     {
       "id": "griffith-city-council",
       "name": "Griffith City Council",
-      "news_url": "https://www.griffith.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.griffith.nsw.gov.au/News/News",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 27505,
-      "region": "Western Riverina"
+      "region": "Western Riverina",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "gunnedah-shire-council",
@@ -1416,12 +1437,15 @@
     {
       "id": "wingecarribee-shire-council",
       "name": "Wingecarribee Shire Council",
-      "news_url": "https://www.wsc.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.wsc.nsw.gov.au/News/News-Articles",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "population": 53780,
-      "region": "Southern Highlands"
+      "region": "Southern Highlands",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "wollondilly-shire-council",
