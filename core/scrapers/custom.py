@@ -577,6 +577,78 @@ class NarromineScraper(BaseScraper):
         return articles
 
 
+class CatalystBrowserScraper(BaseScraper):
+    """
+    Scraper for the newer JS-rendered variant of the Catalyst CMS used by
+    several larger WA councils (Melville, Rockingham, Kwinana, Murray,
+    Laverton).
+
+    Unlike the classic CatalystScraper (static ``.module-list .row``), these
+    sites load their news list client-side into ``.pageTypeListing-results``
+    via an AJAX search call, so the static HTML is empty. We render the page
+    with Playwright, then read each result anchor. The anchor text is
+    "DD Month YYYY Title" (date glued to the title), which we split with a
+    leading-date regex.
+    """
+
+    RESULTS_SELECTOR = '.pageTypeListing-results'
+    DATE_RE = re.compile(r'^(\d{1,2}\s+[A-Za-z]+\s+20\d\d)\s+(.+)$', re.S)
+
+    def __init__(self, council_id: str, council_name: str, news_url: str, **kwargs):
+        super().__init__(council_id, council_name, news_url, **kwargs)
+
+    def scrape(self) -> List[NewsArticle]:
+        from playwright.sync_api import sync_playwright
+
+        ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+              "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+        html = None
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_context(user_agent=ua).new_page()
+                page.goto(self.news_url, timeout=60000, wait_until='networkidle')
+                # Wait for the AJAX-populated results to appear.
+                try:
+                    page.wait_for_selector(f'{self.RESULTS_SELECTOR} a[href]', timeout=15000)
+                except Exception:
+                    pass
+                time.sleep(2)
+                html = page.content()
+                browser.close()
+        except Exception as e:
+            print(f"Catalyst browser scrape failed for {self.council_name}: {e}")
+            return []
+
+        if not html:
+            return []
+
+        soup = self.parse_html(html)
+        results = soup.select_one(self.RESULTS_SELECTOR)
+        if not results:
+            return []
+
+        articles = []
+        seen = set()
+        for a in results.select('a[href]'):
+            href = a.get('href', '')
+            if '/news' not in href.lower() and '/latest-news' not in href.lower():
+                continue
+            text = a.get_text(' ', strip=True)
+            m = self.DATE_RE.match(text)
+            if not m:
+                continue
+            date_obj = self.parse_date(m.group(1))
+            title = m.group(2).strip()
+            url = self.make_absolute_url(href)
+            if not title or url in seen:
+                continue
+            seen.add(url)
+            articles.append(self.create_article(title, url, date_obj))
+
+        return articles
+
+
 class MoreePlainsScraper(BaseScraper):
     """
     Scraper for Moree Plains Shire Council media releases (Joomla blog layout).

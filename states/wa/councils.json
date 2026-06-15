@@ -697,10 +697,8 @@
       "id": "kwinana",
       "name": "City of Kwinana",
       "news_url": "https://www.kwinana.wa.gov.au/council/news",
-      "scraper": "catalyst_scraper",
-      "enabled": false,
-      "disabled_reason": "News list is JS-rendered (Catalyst api/advancesearch POST); static HTML has 0 articles. Needs browser_scraper or reverse-engineered API. Pending fix.",
-      "use_curl": false
+      "scraper": "catalyst_browser_scraper",
+      "enabled": true
     },
     {
       "id": "lake-grace",
@@ -716,7 +714,8 @@
       "news_url": "https://www.laverton.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "disabled_reason": "Catalyst, but news does not render on /news/ (no .pageTypeListing/.module-list after JS). Likely wrong URL or empty. Pending."
     },
     {
       "id": "leonora",
@@ -769,12 +768,8 @@
       "id": "melville",
       "name": "City of Melville",
       "news_url": "https://www.melvillecity.com.au/our-city/news/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "catalyst_browser_scraper",
       "enabled": true,
-      "use_curl": true,
-      "item_selector": ".feed-item",
-      "title_selector": "h3",
-      "link_selector": "a",
       "category": "C"
     },
     {
@@ -1038,13 +1033,8 @@
       "id": "rockingham",
       "name": "City of Rockingham",
       "news_url": "https://www.rockingham.wa.gov.au/your-city/news",
-      "scraper": "curl_scraper",
-      "impersonate": "chrome124",
+      "scraper": "catalyst_browser_scraper",
       "check_content": false,
-      "item_selector": "article.feed-item",
-      "title_selector": "h2",
-      "date_selector": ".newsfeed-date span",
-      "link_selector": "a",
       "enabled": true,
       "category": "A"
     },
@@ -1387,7 +1377,8 @@
       "news_url": "https://www.murray.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "disabled_reason": "Catalyst but classic .module-list/.module-item-wrapper (not .pageTypeListing); also loads slowly/times out. Needs the classic-layout browser variant. Pending."
     }
   ]
 }
