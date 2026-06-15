@@ -347,7 +347,16 @@ class BaseScraper(ABC):
         # Clean up common prefixes
         date_str = re.sub(r'^(Published|Updated|Posted|Last updated|News|Media Release)( on)?[:\s/|-]*', '', date_str, flags=re.IGNORECASE)
         date_str = date_str.strip()
-        
+
+        # ISO-8601 (e.g. "2026-06-12T08:13:03+00:00" or "2026-06-12") is
+        # unambiguous — parsing it with dayfirst=True swaps day/month for days
+        # 1-12. Detect a leading YYYY-MM-DD and parse without dayfirst.
+        if re.match(r'^\d{4}-\d{2}-\d{2}', date_str):
+            try:
+                return date_parser.parse(date_str)
+            except (ValueError, TypeError):
+                pass
+
         try:
             return date_parser.parse(date_str, dayfirst=True)
         except (ValueError, TypeError):

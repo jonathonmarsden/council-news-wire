@@ -643,16 +643,11 @@ class MoreePlainsScraper(BaseScraper):
             soup = self.parse_html(html)
             date_el = soup.select_one('time[itemprop=datePublished], time[datetime]')
             if date_el:
-                iso = date_el.get('datetime')
-                if iso:
-                    # ISO-8601 is unambiguous — do NOT apply dayfirst.
-                    try:
-                        article.date = date_parser.parse(iso)
-                    except (ValueError, TypeError):
-                        pass
-                else:
-                    # Free text like "Published: 07 June 2026" — dayfirst helps.
-                    article.date = self.parse_date(date_el.get_text(strip=True))
+                # Prefer the ISO datetime attribute; fall back to text like
+                # "Published: 07 June 2026". parse_date handles both safely
+                # (ISO is parsed without dayfirst to avoid day/month swaps).
+                raw = date_el.get('datetime') or date_el.get_text(strip=True)
+                article.date = self.parse_date(raw)
         except Exception as e:
             print(f"Error fetching Moree date for {article.url}: {e}")
 

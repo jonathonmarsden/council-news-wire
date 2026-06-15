@@ -155,10 +155,13 @@
             "id": "broomehill-tambellup",
             "name": "Shire of Broomehill-Tambellup",
             "news_url": "https://www.shirebt.wa.gov.au/news/",
-            "scraper": "opencities_scraper",
-            "enabled": false,
+            "scraper": "curl_scraper",
+            "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+            "item_selector": "article.notices-feed-item",
+            "title_selector": ".item-title",
+            "date_selector": ".item-date",
+            "link_selector": "a",
             "category": "C"
         },
         {
@@ -564,9 +567,13 @@
             "name": "Shire of Irwin",
             "news_url": "https://irwin.wa.gov.au/news/",
             "scraper": "curl_scraper",
-            "enabled": false,
+            "enabled": true,
             "use_curl": true,
-            "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
+            "item_selector": ".eael-grid-post",
+            "title_selector": ".eael-entry-title",
+            "link_selector": ".eael-entry-title a",
+            "date_selector": "meta[property='article:published_time']",
+            "limit": 8,
             "category": "C"
         },
         {
