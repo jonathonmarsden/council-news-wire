@@ -1,57 +1,31 @@
 {
-  "NSW": {
-    "bellingen-shire-council": "OpenCities, but real article-list URL not found (sublinks lead to mailing-list page). Try browser_scraper once URL located.",
-    "blayney-shire-council": "Squiz CMS (cm-article). Article container not yet isolated.",
-    "bourke-shire-council": "JS-rendered (nav-only static HTML). Needs browser_scraper.",
-    "clarence-valley-council": "Configured news_url is a business-newsletter page; real council news location not found.",
-    "coonamble-shire-council": ".news-item has clean titles+links but NO date on listing or detail. Needs a date source.",
-    "forbes-shire-council": "Squiz cm-article layout; container grabs nav. Date exists (.subItemDate{Day,Month,Year}).",
-    "lockhart-shire-council": "JS-rendered (Elementor/nav-only static). Needs browser_scraper.",
-    "midcoast-council": "SELECTORS READY (.list-item-container/.list-item-title/.published-on, 10 items via raw curl_cffi verify=False). BaseScraper.fetch_page returns None \u2014 fetch-layer SSL/proxy bug, NOT selectors. Fix the fetch stack.",
-    "mosman-council": "Drupal node--type-article, JS-rendered (only nav in static HTML). Needs browser_scraper.",
-    "nambucca-valley-council": "OpenCities hub IS the article list, but NO machine-readable date anywhere + hasnt posted since 2024.",
-    "shellharbour-city-council": "Drupal .views-row JS-rendered / wrong container (only 2 empty rows in static).",
-    "temora-shire-council": "OpenCities (content-template-oc-homepage-news-listing), JS-rendered. Try browser_scraper + find article URL.",
-    "tenterfield-shire-council": "Fetch intermittent; .media-releases grabs nav. Needs investigation.",
-    "wollondilly-shire-council": ".post-summary has EMPTY titles + relative dates (Posted 4 days ago) that dont parse."
-  },
-  "NT": {
-    "alice_springs": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "barkly": "Not yet individually diagnosed. JUNK/DEAD on VPS audit."
-  },
-  "QLD": {
-    "balonne": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "barcaldine": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "brisbane": "JUNK on VPS. Major council - investigate first. Likely WAF or CMS change.",
-    "charters-towers": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "cherbourg-aboriginal-shire": "browser_scraper already; needs selector/URL check.",
-    "pormpuraaw": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "yarrabah": "rss_scraper; feed likely dead or moved (like ACT/West Daly)."
-  },
-  "SA": {
-    "copper-coast": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "kimba": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "mid-murray": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "yankalilla": "Not yet individually diagnosed. JUNK/DEAD on VPS audit."
-  },
-  "TAS": {
-    "flinders-tas": "Not yet individually diagnosed. JUNK/DEAD on VPS audit."
-  },
-  "VIC": {
-    "bayside": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "buloke": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "greater-geelong": "Not yet individually diagnosed. JUNK/DEAD on VPS audit.",
-    "wodonga": "Not yet individually diagnosed. JUNK/DEAD on VPS audit."
-  },
-  "WA": {
-    "denmark": "RSS feed exists (1036 items) but carries NO date field (only link/title/description) -> cant pass staleness filter.",
-    "harvey": "JS-rendered (nav-only static). Needs browser_scraper.",
-    "laverton": "Catalyst, but renders no news list on /news/ after JS. Wrong URL or empty.",
-    "mandurah": "browser_scraper but page navigation times out. Needs retry/longer timeout + selector work.",
-    "mosman-park": "JS-rendered (nav-only static). Needs browser_scraper.",
-    "mount-magnet": "JS-rendered (accordion/nav). Newsletters page. Needs browser_scraper.",
-    "murray": "Catalyst CLASSIC .module-list/.module-item-wrapper (not .pageTypeListing); loads slowly/times out. Needs classic-layout browser variant.",
-    "quairading": "JS-rendered (mega-menu/nav). Needs browser_scraper.",
-    "subiaco": "JS-rendered (footer/nav only). Needs browser_scraper."
-  }
+  "NSW": [
+    "bellingen-shire-council",
+    "blayney-shire-council",
+    "bourke-shire-council",
+    "clarence-valley-council",
+    "coonamble-shire-council",
+    "cowra-council",
+    "dubbo-regional-council",
+    "edward-river-council",
+    "forbes-shire-council",
+    "gilgandra-shire-council",
+    "griffith-city-council",
+    "ku-ring-gai-council",
+    "lockhart-shire-council",
+    "midcoast-council",
+    "mosman-council",
+    "nambucca-valley-council",
+    "orange-city-council",
+    "shellharbour-city-council",
+    "shoalhaven-city-council",
+    "snowy-monaro-regional-council",
+    "strathfield-council",
+    "temora-shire-council",
+    "tenterfield-shire-council",
+    "tweed-shire-council",
+    "uralla-shire-council",
+    "wingecarribee-shire-council",
+    "wollondilly-shire-council"
+  ]
 }
