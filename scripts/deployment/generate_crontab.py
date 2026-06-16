@@ -169,6 +169,11 @@ def get_queue_processor_line() -> str:
 # Daily Briefing (21:00 UTC = 8:00 AM AEDT)
 0 21 * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/daily_briefing.py >> /var/log/council_bot_cron.log 2>&1
 
+# Feed watchdog (every 4 hours) — output-side health check. Alerts to
+# DISCORD_WEBHOOK_ALERTS when a state feed goes stale (>24h) or council
+# coverage drops. This is the guard that watches what's ACTUALLY published.
+0 */4 * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/feed_watchdog.py >> /var/log/council_bot_cron.log 2>&1
+
 # Monthly cleanup (1st day at midnight UTC)
 0 0 1 * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/maintenance/cleanup_remote_db.py >> /var/log/council_bot_cron.log 2>&1
 
