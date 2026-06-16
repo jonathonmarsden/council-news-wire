@@ -14,9 +14,51 @@ from .alyka import AlykaScraper
 from .browser import BrowserScraper
 from .custom import InnerWestScraper, BunburyScraper, WordPressScraper, OpenCitiesScraper, APYScraper, LGASAScraper, DrupalScraper, NarromineScraper, MoreePlainsScraper, CatalystBrowserScraper
 
+def get_scraper_registry() -> Dict[str, type]:
+    """
+    Single source of truth mapping scraper-type string -> scraper class.
+
+    Both ScraperFactory.create_scraper (to instantiate) and main.py's config
+    validation (to validate `scraper` values) read from here, so the set of
+    known types can never drift between them. Add a new scraper type ONCE,
+    here.
+    """
+    from .custom import AspNetScraper
+    from .catalyst import CatalystScraper
+    from .spark_json import SparkNewsListingScraper
+    from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper, BelmontScraper, DumbleyungScraper
+    return {
+        'inner_west_scraper': InnerWestScraper,
+        'catalyst_scraper': CatalystScraper,
+        'spark_news_listing_scraper': SparkNewsListingScraper,
+        'wanneroo_scraper': WannerooScraper,
+        'perth_scraper': PerthScraper,
+        'claremont_scraper': ClaremontScraper,
+        'belmont_scraper': BelmontScraper,
+        'joondalup_scraper': JoondalupScraper,
+        'dumbleyung_scraper': DumbleyungScraper,
+        'bunbury_scraper': BunburyScraper,
+        'wordpress_scraper': WordPressScraper,
+        'opencities_scraper': OpenCitiesScraper,
+        'aspnet_scraper': AspNetScraper,
+        'apy_scraper': APYScraper,
+        'lgasa_scraper': LGASAScraper,
+        'drupal_scraper': DrupalScraper,
+        'narromine_scraper': NarromineScraper,
+        'moree_plains_scraper': MoreePlainsScraper,
+        'catalyst_browser_scraper': CatalystBrowserScraper,
+        'card_scraper': CardScraper,
+        'curl_scraper': CardScraper,  # curl_scraper is just CardScraper with use_curl=True
+        'rss_scraper': RSSScraper,
+        'json_scraper': JsonScraper,
+        'alyka_scraper': AlykaScraper,
+        'browser_scraper': BrowserScraper,
+    }
+
+
 class ScraperFactory:
     """Factory for creating scraper instances."""
-    
+
     @staticmethod
     def create_scraper(council: Dict, proxy: Optional[str] = None) -> BaseScraper:
         """
@@ -50,39 +92,10 @@ class ScraperFactory:
             'full_title_selector': council.get('full_title_selector')
         }
         
-        # Registry of custom scrapers
-        from .custom import AspNetScraper
-        from .catalyst import CatalystScraper
-        from .spark_json import SparkNewsListingScraper
-        from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper, BelmontScraper, DumbleyungScraper
-        scraper_classes = {
-            'inner_west_scraper': InnerWestScraper,
-            'catalyst_scraper': CatalystScraper,
-            'spark_news_listing_scraper': SparkNewsListingScraper,
-            'wanneroo_scraper': WannerooScraper,
-            'perth_scraper': PerthScraper,
-            'claremont_scraper': ClaremontScraper,
-            'belmont_scraper': BelmontScraper,
-            'joondalup_scraper': JoondalupScraper,
-            'dumbleyung_scraper': DumbleyungScraper,
-            'bunbury_scraper': BunburyScraper,
-            'wordpress_scraper': WordPressScraper,
-            'opencities_scraper': OpenCitiesScraper,
-            'aspnet_scraper': AspNetScraper,
-            'apy_scraper': APYScraper,
-            'lgasa_scraper': LGASAScraper,
-            'drupal_scraper': DrupalScraper,
-            'narromine_scraper': NarromineScraper,
-            'moree_plains_scraper': MoreePlainsScraper,
-            'catalyst_browser_scraper': CatalystBrowserScraper,
-            'card_scraper': CardScraper,
-            'curl_scraper': CardScraper, # curl_scraper is just CardScraper with use_curl=True
-            'rss_scraper': RSSScraper,
-            'json_scraper': JsonScraper,
-            'alyka_scraper': AlykaScraper,
-            'browser_scraper': BrowserScraper,
-        }
-        
+        # Registry of scraper types — single source of truth (see module-level
+        # get_scraper_registry; main.py validates against the same set).
+        scraper_classes = get_scraper_registry()
+
         scraper_class = scraper_classes.get(scraper_type, CardScraper)
         
         # Check if proxy should be bypassed for this council

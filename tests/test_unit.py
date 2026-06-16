@@ -266,3 +266,31 @@ class TestCardScraperFetch:
             result = scraper.fetch_page("https://example.com/news")
         mock_curl.assert_called_once()
         assert result == "<html/>"
+
+
+# ---------------------------------------------------------------------------
+# Scraper-type registry invariant
+#
+# Regression guard for the 2026-06-16 outage: main.py used to keep its own
+# hardcoded list of valid scraper types, separate from the factory registry.
+# Adding a scraper to the factory but not that list crashed config validation
+# at load time -> full posting outage. Both now derive from
+# get_scraper_registry(); this test fails if they ever drift again.
+# ---------------------------------------------------------------------------
+
+class TestScraperRegistryInvariant:
+    def test_validator_matches_factory_registry(self):
+        from core.scrapers.factory import get_scraper_registry
+        import main
+        assert main._VALID_SCRAPER_TYPES == set(get_scraper_registry()), (
+            "main._VALID_SCRAPER_TYPES must equal the factory registry — "
+            "add new scraper types only in get_scraper_registry()."
+        )
+
+    def test_every_registered_type_is_instantiable(self):
+        from core.scrapers.factory import get_scraper_registry, ScraperFactory
+        for scraper_type in get_scraper_registry():
+            cfg = {"id": "t", "name": "T", "news_url": "https://example.com",
+                   "scraper": scraper_type}
+            # Should construct without raising (no network call here).
+            assert ScraperFactory.create_scraper(cfg) is not None
