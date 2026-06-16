@@ -56,7 +56,13 @@ _VALID_SCRAPER_TYPES = {
     'aspnet_scraper', 'apy_scraper', 'inner_west_scraper', 'bunbury_scraper',
     'wanneroo_scraper', 'perth_scraper', 'claremont_scraper', 'joondalup_scraper',
     'belmont_scraper', 'dumbleyung_scraper', 'lgasa_scraper', 'drupal_scraper',
+    'narromine_scraper', 'moree_plains_scraper', 'catalyst_browser_scraper',
 }
+# NOTE: this list must stay in sync with the scraper_classes registry in
+# core/scrapers/factory.py. A type registered there but missing here makes
+# _validate_councils raise at load time, which crashes EVERY state run and the
+# global queue processor (it loads all states) — i.e. a full posting outage,
+# not just that one council. Add new scraper types to BOTH places.
 
 # Derive valid impersonate values from curl_cffi at runtime so this stays in sync.
 try:
