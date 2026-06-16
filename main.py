@@ -284,9 +284,13 @@ def main():
     parser.add_argument('--concurrency', type=int, default=5, help='Number of concurrent scrapers')
     parser.add_argument('--council', type=str, help='Run for a specific council ID only')
     parser.add_argument('--force-fresh', action='store_true', help='Bypass 7-day freshness check (force post old articles)')
-    parser.add_argument('--time-window', type=str, choices=['morning', 'evening'], 
+    parser.add_argument('--time-window', type=str, choices=['morning', 'evening'],
                         help='Times window for dynamic concurrency reduction (passed by cron)')
-    
+    parser.add_argument('--slots', type=int, default=0,
+                        help='Total number of daily slots to spread this state\'s councils across (staggered scraping). 0 = scrape all at once (legacy).')
+    parser.add_argument('--slot', type=int, default=0,
+                        help='Which slot (0..slots-1) to scrape this run. Used with --slots.')
+
     args = parser.parse_args()
     
     # Determine proxy: CLI arg > Env Var > None
@@ -396,6 +400,22 @@ def main():
             print(f"Error: Council '{args.council}' not found in {state_code} configuration.")
             sys.exit(1)
             
+    # Staggered scraping: scrape only the councils in slot N of M, selected
+    # deterministically by a stable hash of the council id. This spreads a
+    # state's councils across the day (one slot per cron job) instead of
+    # bursting them all at once — removing rate-limit pressure and making
+    # failures independent. Assignment is stable across runs (md5, not the
+    # salted built-in hash()).
+    if args.slots and args.slots > 1 and not args.council:
+        import hashlib
+        n = args.slot % args.slots
+        before = len(councils_to_scrape)
+        councils_to_scrape = [
+            c for c in councils_to_scrape
+            if int(hashlib.md5(c['id'].encode()).hexdigest(), 16) % args.slots == n
+        ]
+        print(f"Slot {n}/{args.slots}: scraping {len(councils_to_scrape)} of {before} councils")
+
     council_lookup = {c['id']: c for c in state_data['councils']}
     hashtags = state_data['config'].get('hashtags', [])
     council_hashtag_map = load_hashtag_map()

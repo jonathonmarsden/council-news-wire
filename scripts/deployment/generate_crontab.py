@@ -180,9 +180,61 @@ def get_queue_processor_line() -> str:
 """
 
 
+def generate_staggered_crontab(slots: int = 6) -> str:
+    """
+    Staggered once-daily schedule (Phase 2 robustness).
+
+    Instead of bursting every council in a state at 06:00/18:00, each state's
+    councils are split into `slots` groups (by stable hash of council id, see
+    main.py --slots/--slot) and each group is scraped once per day in its own
+    cron slot, spread evenly across 24h in UTC. This removes rate-limit bursts
+    (so the proxy can be dropped) and makes failures independent — one slow
+    council can't stall a 130-council batch.
+
+    Times are in UTC and deliberately do NOT track local time / DST: staggering
+    only needs an even spread, not alignment to a local hour, so this schedule
+    never needs DST regeneration. The posting queue (separate cron) paces posts
+    out to each BlueSky account continuously.
+    """
+    states = ['nsw', 'vic', 'qld', 'wa', 'sa', 'tas', 'nt', 'act']
+    lines = ["# === STAGGERED ONCE-DAILY SCRAPING (UTC, DST-independent) ===",
+             f"# Each state's councils split into {slots} hash-stable slots, one slot",
+             "# scraped per cron job, spread across the day. Removes burst load.",
+             ""]
+    # Spread `slots` slots evenly across 24h; offset each state so states don't
+    # all fire in the same minute.
+    hours_per_slot = 24 // slots
+    for si, state in enumerate(states):
+        minute = (si * 7) % 60  # de-align states within the hour
+        slot_lines = []
+        for slot in range(slots):
+            hour = (slot * hours_per_slot + si) % 24  # offset per state
+            slot_lines.append(
+                f"{minute} {hour} * * * cd /opt/council-news-bot && "
+                f"docker compose run --rm bot python3 main.py --state {state} "
+                f"--slots {slots} --slot {slot} --concurrency 4 "
+                f">> /var/log/council_bot_scraper.log 2>&1"
+            )
+        lines.append(f"# {state.upper()} — {slots} slots/day")
+        lines.extend(sorted(slot_lines, key=lambda l: int(l.split()[1])))
+        lines.append("")
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Generate crontab entries for twice-daily scraping"
+    )
+    parser.add_argument(
+        '--staggered',
+        action='store_true',
+        help='Generate the staggered once-daily schedule (Phase 2) instead of twice-daily bursts'
+    )
+    parser.add_argument(
+        '--slots',
+        type=int,
+        default=6,
+        help='Number of daily slots per state for --staggered mode (default 6)'
     )
     parser.add_argument(
         '--date',
@@ -201,7 +253,11 @@ def main():
     )
     
     args = parser.parse_args()
-    
+
+    if args.staggered:
+        print(generate_staggered_crontab(slots=args.slots))
+        return
+
     # Parse reference date
     if args.date:
         try:
