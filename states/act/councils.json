@@ -5,7 +5,8 @@
       "name": "ACT Government",
       "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_directorate_media_releases_rss",
       "scraper": "rss_scraper",
-      "enabled": true
+      "enabled": true,
+      "bypass_proxy": true
     }
   ]
 }
