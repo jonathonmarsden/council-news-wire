@@ -195,11 +195,24 @@ def generate_staggered_crontab(slots: int = 6) -> str:
     only needs an even spread, not alignment to a local hour, so this schedule
     never needs DST regeneration. The posting queue (separate cron) paces posts
     out to each BlueSky account continuously.
+
+    Each job has a wall-clock guard (TIMEOUT_SECONDS). Per-fetch timeouts exist
+    in the scrapers (30-90s), but nothing bounded the overall run, so a wedged
+    Playwright browser or stuck socket could hang the container indefinitely and
+    overlap the next slot. IMPORTANT: `timeout` killing `docker compose run`
+    does NOT stop the container (verified — it leaves an orphan "Up"). So each
+    job gives the container a deterministic --name and ALWAYS runs
+    `docker rm -f <name>` afterwards, force-removing it whether it timed out or
+    exited cleanly. This guarantees no orphan accumulation and that a job can
+    never outlive its slot. 20 min comfortably covers a worst-case slot (~29
+    councils / conc 4, even with slow browser scrapers); slots are 4h apart.
     """
+    TIMEOUT_SECONDS = 1200  # 20 min wall-clock guard per job
     states = ['nsw', 'vic', 'qld', 'wa', 'sa', 'tas', 'nt', 'act']
     lines = ["# === STAGGERED ONCE-DAILY SCRAPING (UTC, DST-independent) ===",
              f"# Each state's councils split into {slots} hash-stable slots, one slot",
              "# scraped per cron job, spread across the day. Removes burst load.",
+             f"# Each job: {TIMEOUT_SECONDS}s timeout + force-rm of the named container.",
              ""]
     # Spread `slots` slots evenly across 24h; offset each state so states don't
     # all fire in the same minute.
@@ -209,10 +222,12 @@ def generate_staggered_crontab(slots: int = 6) -> str:
         slot_lines = []
         for slot in range(slots):
             hour = (slot * hours_per_slot + si) % 24  # offset per state
+            name = f"cnb-{state}-{slot}"  # deterministic; same state's slots never overlap in time
             slot_lines.append(
                 f"{minute} {hour} * * * cd /opt/council-news-bot && "
-                f"docker compose run --rm bot python3 main.py --state {state} "
-                f"--slots {slots} --slot {slot} --concurrency 4 "
+                f"{{ timeout {TIMEOUT_SECONDS} docker compose run --rm --name {name} bot "
+                f"python3 main.py --state {state} --slots {slots} --slot {slot} --concurrency 4; "
+                f"docker rm -f {name} >/dev/null 2>&1; }} "
                 f">> /var/log/council_bot_scraper.log 2>&1"
             )
         lines.append(f"# {state.upper()} — {slots} slots/day")
