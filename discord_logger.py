@@ -31,6 +31,19 @@ class RunTracker:
             self.errors_count = 0
             self.warnings_count = 0
 
+    def _get_db(self) -> Optional[Database]:
+        """
+        Lazily create the DB handle so log_warning/log_error persist events
+        even from scripts that never call start_run() — they used to be
+        silently dropped.
+        """
+        if self._db is None:
+            try:
+                self._db = Database()
+            except Exception:
+                return None
+        return self._db
+
     def start(self, state_code: str) -> str:
         if self._db is None:
             self._db = Database()
@@ -66,9 +79,10 @@ class RunTracker:
             run_id = self.run_id
             state = self.state
 
-        if not self._db:
+        db = self._get_db()
+        if not db:
             return
-        self._db.add_log_event(
+        db.add_log_event(
             event_type=event_type,
             severity="warning",
             message=message,
@@ -90,9 +104,10 @@ class RunTracker:
             run_id = self.run_id
             state = self.state
 
-        if not self._db:
+        db = self._get_db()
+        if not db:
             return
-        self._db.add_log_event(
+        db.add_log_event(
             event_type=event_type,
             severity="error",
             message=message,

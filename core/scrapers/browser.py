@@ -3,11 +3,18 @@ Scraper using Playwright for CSR/JS-heavy sites.
 """
 
 from typing import List, Dict, Optional
+import threading
 import time
 from playwright.sync_api import sync_playwright
 from urllib.parse import urljoin
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
+
+# Each scrape launches a full Chromium (~300MB). The thread pool can
+# co-schedule several browser_scraper councils (NSW alone has 13) — on the
+# 4GB VPS that risks the OOM killer, whose victim may be Postgres.
+_BROWSER_SEMAPHORE = threading.Semaphore(2)
 
 class BrowserScraper(BaseScraper):
     """
@@ -22,7 +29,11 @@ class BrowserScraper(BaseScraper):
         self.user_agent = user_agent
 
     def scrape(self) -> List[NewsArticle]:
-        """Scrape using a real browser."""
+        """Scrape using a real browser (at most 2 concurrent Chromiums)."""
+        with _BROWSER_SEMAPHORE:
+            return self._scrape_with_browser()
+
+    def _scrape_with_browser(self) -> List[NewsArticle]:
         articles = []
         url = self.news_url
         
@@ -40,27 +51,32 @@ class BrowserScraper(BaseScraper):
         print(f"  Browser scraping {url}...")
         
         with sync_playwright() as p:
-            # Launch options: Headless
-            browser = p.chromium.launch(headless=True)
-            
-            ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            if self.user_agent:
-                ua = self.user_agent
-            elif self.use_default_ua:
-                ua = None
-                
-            context = browser.new_context(
-                user_agent=ua
-            )
-            
-            # Block images/fonts to save bandwidth
-            # Note: Do keep CSS as it helps some React apps hydrate correctly
-            if self.block_resources:
-                context.route("**/*.{png,jpg,jpeg,svg,woff,woff2}", lambda route: route.abort())
-            
-            page = context.new_page()
-            
+            # Everything from launch onward sits inside the try so a failure
+            # at any point still reaches the finally and closes the browser.
+            browser = None
             try:
+                browser = p.chromium.launch(
+                    headless=True,
+                    proxy={"server": self.proxy} if self.proxy else None
+                )
+
+                ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                if self.user_agent:
+                    ua = self.user_agent
+                elif self.use_default_ua:
+                    ua = None
+
+                context = browser.new_context(
+                    user_agent=ua
+                )
+
+                # Block images/fonts to save bandwidth
+                # Note: Do keep CSS as it helps some React apps hydrate correctly
+                if self.block_resources:
+                    context.route("**/*.{png,jpg,jpeg,svg,woff,woff2}", lambda route: route.abort())
+
+                page = context.new_page()
+
                 page.goto(url, timeout=60000, wait_until="domcontentloaded")
                 
                 # Wait for content to hydrate
@@ -120,8 +136,11 @@ class BrowserScraper(BaseScraper):
                         continue
                         
             except Exception as e:
-                print(f"  Browser Error: {e}")
+                # Browser/navigation failure is a fetch failure, not an empty
+                # page — raise so it feeds the failure circuit breaker.
+                raise ScrapeError(f"{self.council_id}: browser fetch failed: {e}") from e
             finally:
-                browser.close()
-                
+                if browser:
+                    browser.close()
+
         return articles

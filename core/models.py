@@ -24,6 +24,8 @@ class Article(Base):
     first_seen_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     posted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     posted_to_handle: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    # Failed post attempts (transient errors only); dead-lettered at the cap
+    attempt_count: Mapped[int] = mapped_column(Integer, default=0, server_default='0')
 
 class CouncilHealth(Base):
     __tablename__ = "council_health"

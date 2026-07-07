@@ -15,7 +15,7 @@ import sys
 import time
 import random
 import concurrent.futures
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -44,7 +44,7 @@ from core.timezone_utils import (
     get_recommended_concurrency,
     STATE_TIMEZONES
 )
-from core.exceptions import ScrapeError, ConfigurationError
+from core.exceptions import ScrapeError, ConfigurationError, StateNotFoundError
 from core.processing import process_articles, post_articles
 
 DEFAULT_STATE = 'vic'
@@ -106,16 +106,22 @@ def load_state_config(state_code: str) -> Dict:
     councils_file = base_path / 'councils.json'
 
     if not config_file.exists():
-        raise ValueError(f"State configuration not found: {state_code}")
+        raise StateNotFoundError(f"State configuration not found: {state_code}")
 
-    with open(config_file, 'r') as f:
-        config = json.load(f)
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
 
-    with open(councils_file, 'r') as f:
-        councils_data = json.load(f)
+        with open(councils_file, 'r') as f:
+            councils_data = json.load(f)
+    except json.JSONDecodeError as e:
+        raise ConfigurationError(f"Malformed JSON for state {state_code}: {e}") from e
 
     councils = councils_data.get('councils', [])
-    _validate_councils(councils, state_code)
+    try:
+        _validate_councils(councils, state_code)
+    except ValueError as e:
+        raise ConfigurationError(str(e)) from e
 
     return {
         'config': config,
@@ -140,16 +146,32 @@ def get_scraper(council: Dict, proxy: Optional[str] = None) -> BaseScraper:
     """Get the appropriate scraper for a council."""
     return ScraperFactory.create_scraper(council, proxy)
 
-def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Optional[Database] = None) -> List[NewsArticle]:
-    """Helper to scrape a single council."""
+# Days a disabled council waits before an automatic probation re-attempt.
+# Without this, disabled councils could never run record_success and were
+# trapped until a manual DB reset (June 2026 mass-disable incident).
+PROBATION_DAYS = 3
+
+
+def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Optional[Database] = None) -> Optional[List[NewsArticle]]:
+    """Scrape a single council. Returns None when skipped (disabled council)."""
     start_time = time.time()
-    
+
     # Check Circuit Breaker
     if db:
         health = db.get_council_health(council['id'])
         if health.get('is_disabled'):
-            print(f"Skipping {council['name']} (DISABLED due to {health.get('consecutive_failures')} failures)")
-            return []
+            disabled_at = health.get('disabled_at')
+            probation_due = (
+                disabled_at is None
+                or datetime.utcnow() - disabled_at >= timedelta(days=PROBATION_DAYS)
+            )
+            if not probation_due:
+                print(f"Skipping {council['name']} (DISABLED; probation retry {PROBATION_DAYS}d after disable)")
+                # None = "skipped", distinct from a real 0-article scrape —
+                # otherwise every disabled council fires the silent-failure
+                # alert on every run, burying real alerts.
+                return None
+            print(f"  🔁 PROBATION: {council['name']} is disabled; attempting recovery scrape.")
         empty_runs = health.get('consecutive_empty_runs', 0)
         if empty_runs >= 10:
             print(f"  ⚠️ PERSISTENT EMPTY: {council['name']} has returned 0 articles for {empty_runs} consecutive runs. Check scraper config.")
@@ -181,21 +203,25 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
                 print(f"  ⚠️ CIRCUIT BREAKER: {council['name']} DISABLED after {db.EMPTY_RUN_DISABLE_THRESHOLD} consecutive empty runs. Fix the scraper config to re-enable.")
 
         return articles
-    except ScrapeError as e:
-        print(f"  Error scraping {council['name']}: {e}")
+    except Exception as e:
+        # Any exception — ScrapeError or unexpected — must feed the failure
+        # breaker and telemetry; otherwise broken councils fail invisibly.
+        is_scrape_error = isinstance(e, ScrapeError)
+        label = "Error" if is_scrape_error else f"Unexpected error ({type(e).__name__})"
+        print(f"  {label} scraping {council['name']}: {e}")
         if db:
             is_disabled = db.record_failure(council['id'])
             duration_ms = int((time.time() - start_time) * 1000)
             db.log_scraper_run(council['id'], 0, 'error', duration_ms)
-            
+
             if is_disabled:
                 print(f"  ⚠️ CRITICAL: {council['name']} has been DISABLED after 5 consecutive failures!")
         if DISCORD_LOGGING:
             try:
                 log_error(
                     council['id'],
-                    f"Scraper error: {e}",
-                    event_type="scrape_error",
+                    f"Scraper error: {e}" if is_scrape_error else f"Unhandled scraper exception: {type(e).__name__}: {e}",
+                    event_type="scrape_error" if is_scrape_error else "scrape_exception",
                     event_metadata={"news_url": council.get('news_url')},
                 )
             except Exception as log_err:
@@ -225,6 +251,10 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
             council = future_to_council[future]
             try:
                 articles = future.result()
+                if articles is None:
+                    # Disabled council skipped by the breaker — not a scrape
+                    # result; keep it out of run metrics and alerts.
+                    continue
                 all_articles.extend(articles)
 
                 # Track per-council results for run summary
@@ -374,7 +404,7 @@ def main():
         # Standard load
         try:
             state_data = load_state_config(state_code)
-        except ConfigurationError as e:
+        except (ConfigurationError, ValueError) as e:
             print(f"Error: {e}")
             sys.exit(1)
             
@@ -390,7 +420,7 @@ def main():
     # Initialize Poster
     handle = os.environ.get(state_data['config']['bluesky_handle_env'])
     password = os.environ.get(state_data['config']['bluesky_password_env'])
-    poster = BlueSkyPoster(handle, password)
+    poster = BlueSkyPoster(handle, password, state_code=state_code)
     
     # Prepare council lookup and hashtags
     councils_to_scrape = state_data['councils']
@@ -408,7 +438,9 @@ def main():
     # salted built-in hash()).
     if args.slots and args.slots > 1 and not args.council:
         import hashlib
-        n = args.slot % args.slots
+        if not (0 <= args.slot < args.slots):
+            parser.error(f"--slot must be in 0..{args.slots - 1} (got {args.slot})")
+        n = args.slot
         before = len(councils_to_scrape)
         councils_to_scrape = [
             c for c in councils_to_scrape
@@ -423,10 +455,10 @@ def main():
     # Scrape (unless post-only)
     if not args.post_only:
         articles = scrape_councils(councils_to_scrape, db=db, proxy=proxy_url, max_workers=args.concurrency)
-        unposted = process_articles(articles, db, state_code)
+        unposted = process_articles(articles, db, state_code, force_fresh=args.force_fresh)
     else:
         print("Skipping scrape, checking backlog...")
-        unposted = db.get_unposted_articles(state_code)
+        unposted = db.get_unposted_articles(state_code, suppress_stale=not args.force_fresh)
         
     # Post
     if not args.scrape_only:

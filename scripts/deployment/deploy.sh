@@ -250,23 +250,26 @@ print('Scraper initialization successful')
     fi
 }
 
-# Backup VPS database
+# Backup VPS database (PostgreSQL via pg_dump; the old SQLite copy was a no-op)
 backup_vps_database() {
     print_header "BACKING UP VPS DATABASE"
-    
+
     local TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    local BACKUP_NAME="council_news_backup_${TIMESTAMP}.db"
-    
-    print_info "Creating backup on VPS..."
-    run_remote "cd $REMOTE_PATH && [ -f council_news.db ] && cp council_news.db backups/$BACKUP_NAME || echo 'No database to backup'"
-    
-    # Ensure backups directory exists
+    local BACKUP_NAME="council_news_${TIMESTAMP}.sql.gz"
+
     run_remote "mkdir -p $REMOTE_PATH/backups"
-    
-    # Keep only last 10 backups
-    run_remote "cd $REMOTE_PATH/backups && ls -t council_news_backup_*.db 2>/dev/null | tail -n +11 | xargs -r rm"
-    
-    print_success "Database backed up as $BACKUP_NAME"
+
+    print_info "Running pg_dump on VPS..."
+    # Size check catches a failed/empty dump (gzip exits 0 even when pg_dump fails)
+    if run_remote "cd $REMOTE_PATH && docker compose exec -T db pg_dump -U councilbot council_news | gzip -c > backups/$BACKUP_NAME && [ \$(stat -c%s backups/$BACKUP_NAME) -ge 100000 ]"; then
+        print_success "Database backed up as $BACKUP_NAME"
+    else
+        print_error "pg_dump backup failed (or dump suspiciously small) — aborting deploy"
+        return 1
+    fi
+
+    # Keep only last 10 manual backups
+    run_remote "cd $REMOTE_PATH/backups && ls -t council_news_*.sql.gz 2>/dev/null | tail -n +11 | xargs -r rm"
 }
 
 # Deploy code to VPS

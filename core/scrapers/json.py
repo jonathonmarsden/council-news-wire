@@ -1,10 +1,10 @@
 from typing import List, Optional, Dict, Any
 from datetime import datetime
-from dateutil import parser as date_parser
 import requests
 from curl_cffi import requests as crequests
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class JsonScraper(BaseScraper):
     """
@@ -19,11 +19,16 @@ class JsonScraper(BaseScraper):
                  description_selector: str = None,
                  **kwargs):
         super().__init__(council_id, council_name, news_url, **kwargs)
-        self.item_selector = item_selector
-        self.title_selector = title_selector
-        self.date_selector = date_selector
-        self.link_selector = link_selector
-        self.description_selector = description_selector
+        # The factory normalizes both config styles (flat keys and nested
+        # "selectors") into a selectors dict; honoring it here means a
+        # json_scraper council written in the documented nested style no
+        # longer silently falls back to the defaults ("items", "title", ...).
+        selectors = kwargs.get('selectors') or {}
+        self.item_selector = selectors.get('item_selector') or item_selector
+        self.title_selector = selectors.get('title_selector') or title_selector
+        self.date_selector = selectors.get('date_selector') or date_selector
+        self.link_selector = selectors.get('link_selector') or link_selector
+        self.description_selector = selectors.get('excerpt_selector') or description_selector
         self.use_curl = kwargs.get('use_curl', False)
         
     def _get_nested(self, data: Dict, path: str):
@@ -41,24 +46,28 @@ class JsonScraper(BaseScraper):
         try:
             print(f"[{self.council_name}] Fetching JSON from {self.news_url}")
             
+            proxies = {'http': self.proxy, 'https': self.proxy} if self.proxy else None
+
             if self.use_curl:
                 response = crequests.get(
                     self.news_url,
-                    impersonate="chrome120",
+                    impersonate=self.impersonate,
                     headers={"User-Agent": "Mozilla/5.0"},
-                    timeout=30
+                    timeout=30,
+                    proxies=proxies
                 )
             else:
                 response = requests.get(
                     self.news_url,
                     headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"},
-                    timeout=30
+                    timeout=30,
+                    proxies=proxies,
+                    verify=self.verify_ssl
                 )
             
             if response.status_code != 200:
-                print(f"[{self.council_name}] Failed to fetch JSON. Status: {response.status_code}")
-                return []
-                
+                raise ScrapeError(f"{self.council_id}: JSON fetch failed with HTTP {response.status_code}")
+
             data = response.json()
             
             # Extract list of items
@@ -118,10 +127,7 @@ class JsonScraper(BaseScraper):
                 date_str = self._get_nested(item, self.date_selector)
                 date = None
                 if date_str:
-                    try:
-                        date = date_parser.parse(str(date_str))
-                    except:
-                        pass
+                    date = self.parse_date(str(date_str))
                 
                 # Extract Description
                 description = ""
@@ -138,7 +144,12 @@ class JsonScraper(BaseScraper):
                 ))
                 
             return articles
-            
+
+        except ScrapeError:
+            raise
+        except (requests.RequestException, ValueError) as e:
+            # Network failure or invalid JSON — a fetch failure, not an empty page
+            raise ScrapeError(f"{self.council_id}: JSON fetch/parse failed: {e}") from e
         except Exception as e:
             print(f"[{self.council_name}] JSON Scraper Error: {e}")
             return []

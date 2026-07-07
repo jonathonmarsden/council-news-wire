@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 from typing import List, Optional, Dict, Union
 from sqlalchemy import create_engine, select, update, func, and_
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.dialects.postgresql import insert as pg_upsert
 
@@ -19,7 +20,7 @@ from core.models import Base, Article, CouncilHealth, ScraperStats, LogEvent, Ru
 class Database:
     """SQLAlchemy database handler."""
     
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str = None, create_tables: bool = False):
         """
         Initialize database connection.
         Requires DATABASE_URL env var (Postgres) unless db_url is provided.
@@ -30,11 +31,14 @@ class Database:
 
         # Create Engine
         self.engine = create_engine(self.db_url)
-        
-        # Create Tables (if not exist)
-        # Note: In production with Alembic, we might skip this or use alembic upgrade head
-        Base.metadata.create_all(self.engine)
-        
+
+        # Schema is managed by Alembic (run on container start). create_all
+        # here used to race it: a fresh DB got tables with no alembic_version
+        # stamp ("relation already exists" on upgrade) and missing migrations
+        # were masked everywhere except prod. Opt in explicitly for tests.
+        if create_tables:
+            Base.metadata.create_all(self.engine)
+
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
     
     def get_session(self) -> Session:
@@ -149,37 +153,100 @@ class Database:
         count = 0
         with self.get_session() as session:
             for a in unique_articles:
-                # We do row-by-row check for simplicity in ORM to handle ignore logic
-                # For massive scale, Core Insert with on_conflict_do_nothing is better
-                # but this is fine for batches of ~20-50
                 stmt = select(Article.id).where(Article.url == a['url'])
-                if not session.execute(stmt).first():
-                    new_a = Article(
-                        url=a['url'],
-                        council_id=a['council_id'],
-                        title=a['title'],
-                        date=a.get('date'),
-                        excerpt=a.get('excerpt'),
-                        state=state,
-                        status=status
-                    )
-                    session.add(new_a)
+                if session.execute(stmt).first():
+                    continue
+                session.add(Article(
+                    url=a['url'],
+                    council_id=a['council_id'],
+                    title=a['title'],
+                    date=a.get('date'),
+                    excerpt=a.get('excerpt'),
+                    state=state,
+                    status=status
+                ))
+                # Per-row commit: a concurrent run inserting the same URL
+                # between our SELECT and a single batch commit used to raise
+                # IntegrityError at the end and roll back the ENTIRE batch.
+                try:
+                    session.commit()
                     count += 1
-            session.commit()
+                except IntegrityError:
+                    session.rollback()
         return count
+
+    # Dead-letter an article after this many failed (transient) post attempts
+    MAX_POST_ATTEMPTS = 5
 
     def mark_as_posted(self, url: str, handle: str):
         """Mark an article as posted."""
         with self.get_session() as session:
             stmt = update(Article).where(Article.url == url).values(
                 posted_at=func.now(),
-                posted_to_handle=handle
+                posted_to_handle=handle,
+                status='posted'
             )
             session.execute(stmt)
             session.commit()
 
-    def get_unposted_articles(self, state: str, limit: int = 50) -> List[Dict]:
-        """Get unposted articles for a specific state (Round Robin)."""
+    def mark_as_rejected(self, url: str, reason: str):
+        """
+        Permanently reject an article (validation failure / API 4xx).
+        Leaves posted_at NULL so posting stats don't count rejections;
+        get_unposted_articles excludes it via status.
+        """
+        with self.get_session() as session:
+            stmt = update(Article).where(Article.url == url).values(
+                posted_at=None,
+                posted_to_handle=reason,
+                status='rejected'
+            )
+            session.execute(stmt)
+            session.commit()
+
+    def claim_article(self, url: str) -> bool:
+        """
+        Atomically claim an article for posting. Returns True if this process
+        won the claim; False means another process already claimed/posted it.
+        Claiming sets posted_at so concurrent queue reads skip the row; the
+        claim is confirmed by mark_as_posted or rolled back by release_claim.
+        """
+        with self.get_session() as session:
+            stmt = update(Article).where(
+                and_(Article.url == url, Article.posted_at.is_(None))
+            ).values(posted_at=func.now(), posted_to_handle='CLAIMED')
+            result = session.execute(stmt)
+            session.commit()
+            return result.rowcount > 0
+
+    def release_claim(self, url: str) -> bool:
+        """
+        Roll back a claim after a transient post failure so the article is
+        retried next run. Increments attempt_count; after MAX_POST_ATTEMPTS
+        the article is dead-lettered (status='failed') instead of retried.
+        Returns True if the article was dead-lettered.
+        """
+        with self.get_session() as session:
+            obj = session.execute(select(Article).where(Article.url == url)).scalar_one_or_none()
+            if not obj:
+                return False
+            obj.attempt_count = (obj.attempt_count or 0) + 1
+            obj.posted_at = None
+            obj.posted_to_handle = None
+            dead = obj.attempt_count >= self.MAX_POST_ATTEMPTS
+            if dead:
+                obj.status = 'failed'
+            session.commit()
+            return dead
+
+    def get_unposted_articles(self, state: str, limit: int = 50, suppress_stale: bool = True) -> List[Dict]:
+        """
+        Get unposted articles for a specific state (Round Robin).
+
+        suppress_stale=False (--force-fresh) skips the 7-day auto-suppression,
+        which would otherwise immediately re-suppress the old articles the
+        caller is trying to force out.
+        """
         fetch_limit = max(limit * 5, 200)
         
         with self.get_session() as session:
@@ -187,7 +254,7 @@ class Database:
                 and_(
                     func.upper(Article.state) == state.upper(),
                     Article.posted_at.is_(None),
-                    Article.status != 'archived'
+                    Article.status.not_in(['archived', 'rejected', 'failed'])
                 )
             ).order_by(Article.first_seen_at.desc()).limit(fetch_limit)
             
@@ -201,7 +268,7 @@ class Database:
             
             for o in objs:
                 is_too_old = False
-                if o.date:
+                if suppress_stale and o.date:
                     try:
                         # o.date is a datetime object (post DateTime migration)
                         dt = o.date
@@ -215,9 +282,11 @@ class Database:
                         pass
                 
                 if is_too_old:
-                    # Auto-suppress to clean the queue
+                    # Auto-suppress to clean the queue (func.now() = DB time,
+                    # consistent with mark_as_posted; datetime.now() here was
+                    # container-local Sydney time mixed into UTC data)
                     o.status = 'suppressed_too_old'
-                    o.posted_at = datetime.now()
+                    o.posted_at = func.now()
                 else:
                     raw_articles.append({
                         'id': o.id, 'url': o.url, 'council_id': o.council_id,
@@ -242,6 +311,12 @@ class Database:
                 council_order.append(c_id)
             council_queues[c_id].append(article)
             
+        # Oldest-first within each council: the fetch above is newest-first
+        # (to grab the most recent 200 overall), but draining LIFO per
+        # council let backlog age past 7 days and expire unposted.
+        for queue in council_queues.values():
+            queue.sort(key=lambda a: a['first_seen_at'] or datetime.min)
+
         # Round robin
         varied_articles = []
         while len(varied_articles) < limit and any(council_queues.values()):
@@ -262,12 +337,14 @@ class Database:
                     'council_id': obj.council_id,
                     'consecutive_failures': obj.consecutive_failures,
                     'is_disabled': obj.is_disabled,
+                    'disabled_at': obj.disabled_at,
                     'consecutive_empty_runs': obj.consecutive_empty_runs
                 }
             return {
                 'council_id': council_id,
                 'consecutive_failures': 0,
                 'is_disabled': False,
+                'disabled_at': None,
                 'consecutive_empty_runs': 0
             }
 
@@ -293,14 +370,19 @@ class Database:
             obj.last_success_at = func.now()
             obj.consecutive_empty_runs = new_empty
 
-            # Empty-run circuit breaker: disable after threshold consecutive empty runs
-            if new_empty >= self.EMPTY_RUN_DISABLE_THRESHOLD and not obj.is_disabled:
-                obj.is_disabled = True
-                obj.disabled_at = func.now()
-            elif articles_found > 0:
-                # Re-enable on successful article fetch
+            # Empty-run circuit breaker with probation: main.py re-tries
+            # disabled councils once disabled_at is old enough, so a failed
+            # probation must re-stamp the clock or it would retry every run.
+            if articles_found > 0:
+                # Re-enable on successful article fetch (also passes probation)
                 obj.is_disabled = False
                 obj.disabled_at = None
+            elif obj.is_disabled:
+                # Failed probation (still empty): reset the probation clock
+                obj.disabled_at = func.now()
+            elif new_empty >= self.EMPTY_RUN_DISABLE_THRESHOLD:
+                obj.is_disabled = True
+                obj.disabled_at = func.now()
 
             session.commit()
             return obj.is_disabled
@@ -310,13 +392,17 @@ class Database:
         with self.get_session() as session:
             obj = session.get(CouncilHealth, council_id)
             if not obj:
-                obj = CouncilHealth(council_id=council_id)
+                # Column defaults apply at INSERT, so counters are None pre-flush
+                obj = CouncilHealth(council_id=council_id, consecutive_failures=0,
+                                    consecutive_empty_runs=0, is_disabled=False)
                 session.add(obj)
-            
-            obj.consecutive_failures += 1
+
+            obj.consecutive_failures = (obj.consecutive_failures or 0) + 1
             obj.last_failure_at = func.now()
-            
-            if obj.consecutive_failures >= 5:
+
+            # >= 5 failures disables; a failure while already disabled is a
+            # failed probation attempt and re-stamps the probation clock.
+            if obj.consecutive_failures >= 5 or obj.is_disabled:
                 obj.is_disabled = True
                 obj.disabled_at = func.now()
                 

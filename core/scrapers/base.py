@@ -12,7 +12,7 @@ import time
 import html
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any, Callable
 from urllib.parse import urljoin, quote
 
@@ -20,6 +20,7 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser as date_parser
 
+from core.exceptions import ScrapeError
 from core.utils import get_logger
 
 logger = get_logger(__name__)
@@ -151,16 +152,27 @@ class BaseScraper(ABC):
                 time.sleep(delay)
         return None
 
+    # Wall-clock budget per council scrape. One council fetching 10 detail
+    # pages through the full retry stack could hold a worker thread ~17 min;
+    # only the cron container timeout bounded it. The budget starts at the
+    # listing fetch (fetch_page_or_raise) and makes later fetches no-ops.
+    MAX_COUNCIL_SECONDS = 300
+
     def fetch_page(self, url: str) -> Optional[str]:
         """
         Fetch a web page, handling WAF protection if needed.
-        
+
         Args:
             url: URL to fetch
-            
+
         Returns:
             HTML content as string, or None if fetch failed
         """
+        deadline = getattr(self, '_scrape_deadline', None)
+        if deadline is not None and time.monotonic() > deadline:
+            logger.warning(f"{self.council_id}: per-council time budget exhausted; skipping {url}")
+            return None
+
         # If proxy is configured, we MUST use it to protect IP reputation.
         if self.proxy:
             # Configure requests session
@@ -188,6 +200,23 @@ class BaseScraper(ABC):
 
         return self._retry(lambda: self._fetch_with_requests(url))
     
+    def fetch_page_or_raise(self, url: str) -> str:
+        """
+        Fetch a page, raising ScrapeError when every attempt fails.
+
+        Use this for the primary listing fetch so network/WAF failures count
+        as scrape FAILURES (record_failure / 5-failure circuit breaker),
+        distinct from a successful fetch that matches zero articles (the
+        empty-run breaker). Per-article detail fetches should keep using
+        fetch_page() so one bad article doesn't fail the whole council.
+        """
+        # The primary listing fetch marks the start of this council's scrape
+        self._scrape_deadline = time.monotonic() + self.MAX_COUNCIL_SECONDS
+        content = self.fetch_page(url)
+        if content is None:
+            raise ScrapeError(f"{self.council_id}: fetch failed for {url}")
+        return content
+
     def _fetch_with_cloudscraper(self, url: str) -> Optional[str]:
         """Fetch a URL using cloudscraper to bypass Cloudflare."""
         if not CLOUDSCRAPER_AVAILABLE:
@@ -205,10 +234,25 @@ class BaseScraper(ABC):
             
             response = scraper.get(url, proxies=proxies, timeout=30)
             response.raise_for_status()
-            return response.text
+            return self._decode_response(response)
         except Exception as e:
             logger.error(f"Cloudscraper error for {url}: {e}")
             return None
+
+    @staticmethod
+    def _decode_response(response) -> str:
+        """
+        Decode a requests/cloudscraper response with a sane charset.
+
+        When a server omits charset in Content-Type, requests falls back to
+        ISO-8859-1, turning UTF-8 punctuation into mojibake (â€™ etc.) that
+        gets stored and posted. Prefer the sniffed encoding in that case —
+        this is the ingest-side fix for the fix_mojibake_posts.py symptom.
+        """
+        content_type = response.headers.get('content-type', '').lower()
+        if 'charset' not in content_type:
+            response.encoding = response.apparent_encoding or 'utf-8'
+        return response.text
 
     def _fetch_with_requests(self, url: str) -> Optional[str]:
         """Fetch page using requests library."""
@@ -216,7 +260,7 @@ class BaseScraper(ABC):
             # self.session.proxies is already set in fetch_page
             response = self.session.get(url, timeout=30, allow_redirects=True)
             response.raise_for_status()
-            return response.text
+            return self._decode_response(response)
         except requests.RequestException as e:
             logger.warning(f"Error fetching {url}: {e}")
             return None
@@ -249,15 +293,15 @@ class BaseScraper(ABC):
                         return None
                     
                     lower_text = r_text.lower()
-                    # Check for specific Cloudflare block indicators, avoiding false positives like cdnjs.cloudflare.com
+                    # Only strong, block-page-specific indicators. "ray id:" and
+                    # "please wait..." matched anywhere discarded legitimate pages
+                    # (any Cloudflare-proxied footer / loading widget) as blocked.
                     block_indicators = [
-                        "<title>just a moment...</title>", 
+                        "<title>just a moment...</title>",
                         "<title>attention required! | cloudflare</title>",
                         "cf-error-details",
-                        "ray id:", # Often in block pages
-                        "please wait..."
                     ]
-                    
+
                     # Only flag as blocked if we see strong indicators
                     if ("error code:" in lower_text and "cloudflare" in lower_text) or \
                        any(ind in lower_text for ind in block_indicators):
@@ -294,24 +338,32 @@ class BaseScraper(ABC):
                 
             cmd.append(url)
             
+            # No text=True: that decodes with the LOCALE encoding and can
+            # raise UnicodeDecodeError on UTF-8 pages. Decode explicitly.
             result = subprocess.run(
                 cmd,
                 capture_output=True,
-                text=True,
                 timeout=90
             )
             if result.returncode == 0 and result.stdout:
-                # Validate output
-                lower_stdout = result.stdout.lower()
-                if "error code:" in lower_stdout or "cloudflare" in lower_stdout or "access denied" in lower_stdout:
+                stdout_text = result.stdout.decode('utf-8', errors='replace')
+                # Same strong indicators as the curl_cffi branch — a bare
+                # "cloudflare" match rejected any page with a
+                # cdnjs.cloudflare.com script tag.
+                lower_stdout = stdout_text.lower()
+                if ("error code:" in lower_stdout and "cloudflare" in lower_stdout) or \
+                   "<title>just a moment...</title>" in lower_stdout or \
+                   "<title>attention required! | cloudflare</title>" in lower_stdout or \
+                   "cf-error-details" in lower_stdout or \
+                   "access denied" in lower_stdout:
                     logger.warning(f"Curl blocked by Cloudflare/WAF")
                     return None
-                    
-                logger.debug(f"Curl success, length: {len(result.stdout)}")
-                if len(result.stdout) < 1000:
-                    logger.debug(f"Short content: {result.stdout[:200]}...")
-                return result.stdout
-            logger.warning(f"Curl error for {url}: {result.stderr}")
+
+                logger.debug(f"Curl success, length: {len(stdout_text)}")
+                if len(stdout_text) < 1000:
+                    logger.debug(f"Short content: {stdout_text[:200]}...")
+                return stdout_text
+            logger.warning(f"Curl error for {url}: {result.stderr.decode('utf-8', errors='replace')}")
             return None
         except subprocess.TimeoutExpired:
             logger.warning(f"Curl timeout for {url}")
@@ -343,10 +395,26 @@ class BaseScraper(ABC):
         """
         if not date_str:
             return None
-        
+
         # Clean up common prefixes
         date_str = re.sub(r'^(Published|Updated|Posted|Last updated|News|Media Release)( on)?[:\s/|-]*', '', date_str, flags=re.IGNORECASE)
         date_str = date_str.strip()
+
+        # Relative dates. Without this, "2 days ago" reached the fuzzy parser
+        # and became day 2 of the current month.
+        lower = date_str.lower()
+        if lower in ('today', 'just now', 'now'):
+            return datetime.now()
+        if lower == 'yesterday':
+            return datetime.now() - timedelta(days=1)
+        rel = re.match(r'^(?:about\s+)?(\d+)\s+(minute|hour|day|week|month)s?\s+ago$', lower)
+        if rel:
+            qty = int(rel.group(1))
+            unit = rel.group(2)
+            deltas = {'minute': timedelta(minutes=qty), 'hour': timedelta(hours=qty),
+                      'day': timedelta(days=qty), 'week': timedelta(weeks=qty),
+                      'month': timedelta(days=30 * qty)}
+            return datetime.now() - deltas[unit]
 
         # ISO-8601 (e.g. "2026-06-12T08:13:03+00:00" or "2026-06-12") is
         # unambiguous — parsing it with dayfirst=True swaps day/month for days
@@ -360,11 +428,16 @@ class BaseScraper(ABC):
         try:
             return date_parser.parse(date_str, dayfirst=True)
         except (ValueError, TypeError):
-            # Try fuzzy parsing as a fallback
-            try:
-                return date_parser.parse(date_str, dayfirst=True, fuzzy=True)
-            except (ValueError, TypeError):
-                return None
+            # Fuzzy parsing fills missing components from TODAY, fabricating
+            # near-now dates from junk like "3 min read" (which then passes
+            # the 7-day freshness filter). Only allow it when the text
+            # plausibly contains a full day+month(+year) date.
+            if re.search(r'\d{1,2}[\s/.\-]+[A-Za-z0-9]+[\s/.\-]+\d{2,4}', date_str):
+                try:
+                    return date_parser.parse(date_str, dayfirst=True, fuzzy=True)
+                except (ValueError, TypeError):
+                    return None
+            return None
     
     def clean_text(self, text: str) -> str:
         """Clean and normalize text content."""

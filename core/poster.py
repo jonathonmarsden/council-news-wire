@@ -14,6 +14,7 @@ from typing import Optional, List, Dict, Any
 
 from atproto import Client, models
 
+from core.exceptions import TransientPostError
 from core.validator import validate_post
 
 # State Tag Mappings
@@ -47,19 +48,24 @@ class BlueSkyPoster:
     # Maximum post length for BlueSky
     MAX_POST_LENGTH = 300
     
-    def __init__(self, handle: str, password: str):
+    def __init__(self, handle: str, password: str, state_code: Optional[str] = None):
         """
         Initialize the BlueSky poster.
-        
+
         Args:
             handle: BlueSky handle
             password: BlueSky app password
+            state_code: explicit state ('VIC', 'NSW', ...). Falls back to
+                deriving it from the handle prefix — which silently degrades
+                every post to national hashtags if the handles are ever
+                renamed, so pass it explicitly where known.
         """
         self.handle = handle
         self.password = password
         self.client = None
         self._authenticated = False
-        self.state = self._detect_state(handle)
+        code = (state_code or '').upper()
+        self.state = code if code in STATE_PEAK_BODIES else self._detect_state(handle)
 
     def _detect_state(self, handle: str) -> str:
         """Derive state code from handle."""
@@ -107,11 +113,16 @@ class BlueSkyPoster:
             hashtags: List of hashtags to include
             
         Returns:
-            Post URI if posted successfully, None otherwise
+            Post URI if posted successfully, None if the article itself was
+            rejected (validation / API 4xx) and should never be retried.
+
+        Raises:
+            TransientPostError: on retryable failures (auth/session, network,
+            rate limit, 5xx) — the article should stay queued.
         """
         if not self._authenticated:
             if not self.authenticate():
-                return None
+                raise TransientPostError("BlueSky authentication failed")
         
         # SAFETY VALVE: Clean and validate title before posting
         title = self._sanitize_title(title)
@@ -163,8 +174,14 @@ class BlueSkyPoster:
             print(f"Posted: {title[:50]}...")
             return post_uri
         except Exception as e:
-            print(f"Failed to post: {e}")
-            return None
+            # Only a definitive API rejection of this record is permanent.
+            # 401 (expired session), 408, 429 and everything without a status
+            # (network errors, timeouts, 5xx) are retryable.
+            status = getattr(getattr(e, 'response', None), 'status_code', None)
+            if status is not None and 400 <= status < 500 and status not in (401, 408, 429):
+                print(f"Failed to post (rejected by API, HTTP {status}): {e}")
+                return None
+            raise TransientPostError(f"send_post failed ({status or type(e).__name__}): {e}") from e
     
     def _sanitize_title(self, title: str) -> str:
         """
@@ -326,9 +343,13 @@ class BlueSkyPoster:
         # Improved logic: Prioritize excerpt inclusion
         if excerpt and remaining > 50: # Ensure we have reasonable space
             clean_excerpt = excerpt.strip().replace('\n', ' ')
-            # Truncate clean excerpt if needed
+            # Truncate at a word boundary — a raw slice can cut mid-word or
+            # even mid-emoji (splitting a ZWJ sequence renders garbage)
             if len(clean_excerpt) > remaining:
-                excerpt_text = clean_excerpt[:remaining-4] + "..."
+                cut = clean_excerpt[:remaining - 4]
+                if ' ' in cut:
+                    cut = cut.rsplit(' ', 1)[0]
+                excerpt_text = cut + "..."
             else:
                 excerpt_text = clean_excerpt
             excerpt_text += "\n"
@@ -346,7 +367,10 @@ class BlueSkyPoster:
              if len(full_text) > self.MAX_POST_LENGTH:
                  overage = len(full_text) - self.MAX_POST_LENGTH
                  new_title_len = len(post_title) - overage - 4 # -4 for safety/ellipsis
-                 post_title = post_title[:new_title_len] + "...\n"
+                 cut = post_title[:new_title_len]
+                 if ' ' in cut:
+                     cut = cut.rsplit(' ', 1)[0]
+                 post_title = cut + "...\n"
                  full_text = post_title + date_line + council_line + hashtags_str
 
         # Create Facets
@@ -362,10 +386,13 @@ class BlueSkyPoster:
             index=models.AppBskyRichtextFacet.ByteSlice(byte_start=0, byte_end=title_byte_len)
         ))
         
-        # Hashtag Facets
-        # We need to find each hashtag in the text and create a facet
-        # Simple regex for hashtags
+        # Hashtag Facets — only within the hashtags block at the end. A '#'
+        # inside the title would otherwise get a Tag facet overlapping the
+        # title's Link facet, which renders unpredictably on clients.
+        hashtags_char_start = len(full_text) - len(hashtags_str)
         for match in re.finditer(r'#[a-zA-Z0-9_]+', full_text):
+            if match.start() < hashtags_char_start:
+                continue
             tag = match.group(0)[1:] # remove #
             start = match.start()
             end = match.end()

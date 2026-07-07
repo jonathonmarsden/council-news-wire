@@ -110,4 +110,12 @@ def validate_post(text: str, title: str, excerpt: str, url: str, hashtags: List[
         if start < 0 or end <= start or end > byte_len:
             errors.append(f"Facet span invalid ({start}-{end} vs len {byte_len})")
 
+    # Total post length — the one limit BlueSky actually enforces (300
+    # graphemes / 3000 UTF-8 bytes). len() counts code points >= graphemes,
+    # so this check is safely conservative.
+    if len(text) > 300:
+        errors.append(f"Post too long ({len(text)} chars > 300)")
+    if byte_len > 3000:
+        errors.append(f"Post too long ({byte_len} bytes > 3000)")
+
     return errors

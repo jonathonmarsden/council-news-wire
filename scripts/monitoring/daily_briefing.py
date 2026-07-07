@@ -25,8 +25,10 @@ def generate_briefing():
     db = Database()
     session = db.get_session()
     
-    # Time window: Last 24 hours
-    now = datetime.now() # System local time, as DB might store naive datetimes
+    # Time window: Last 24 hours. DB timestamps are UTC (server_default
+    # func.now() in Postgres); datetime.now() here was container-local Sydney
+    # time, silently shrinking "Last 24 Hours" to ~13-14h of data.
+    now = datetime.utcnow()
     start_time = now - timedelta(hours=24)
     
     # 1. Total Stats

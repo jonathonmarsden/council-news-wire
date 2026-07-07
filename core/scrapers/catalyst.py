@@ -33,10 +33,8 @@ class CatalystScraper(BaseScraper):
         self.selectors = selectors or {}
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
-            
+        html = self.fetch_page_or_raise(self.news_url)
+
         soup = BeautifulSoup(html, 'html.parser')
         container = soup.select_one('.module-list')
         
@@ -99,14 +97,11 @@ class CatalystScraper(BaseScraper):
             if p_tag:
                 excerpt = p_tag.get_text(strip=True)
 
-            article = NewsArticle(
-                council_id=self.council_id,
-                council_name=self.council_name,
+            articles.append(self.create_article(
                 title=title,
                 url=url,
                 date=date,
-                excerpt=excerpt
-            )
-            articles.append(article)
+                excerpt=excerpt or None
+            ))
             
         return articles

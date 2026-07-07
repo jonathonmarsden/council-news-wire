@@ -155,12 +155,25 @@ HOME=/root
 """
 
 
+# Shared ops lock: deploys take it EXCLUSIVE (flock -x) around
+# down/build/up; every cron job takes it SHARED (flock -s) so jobs don't
+# start mid-deploy but never serialize against each other.
+OPS_LOCK = "/opt/council-news-bot/.ops.lock"
+
+
 def get_queue_processor_line() -> str:
-    """Generate the cron line for the global queue processor."""
-    return """# === POSTING QUEUE (Every 10 minutes) ===
+    """Generate the infra cron lines: posting queue + monitoring + cleanup.
+
+    Minutes are deliberately de-aligned (queue :03, watchdog :17, alerts :43,
+    digest :11) so infra jobs never stack on top of each other or on the
+    scrape slots at the top of the hour — four simultaneous containers on the
+    4GB VPS risks the OOM killer taking out Postgres.
+    """
+    return f"""# === POSTING QUEUE (Every 10 minutes) ===
 # Processes backlog of articles and posts them to BlueSky.
-# Reduced from 5-min to 10-min to conserve resources during twice-daily scraping.
-*/10 * * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/cron/process_global_queue.py >> /var/log/council_bot_cron.log 2>&1
+# flock -n: skip the tick entirely if the previous one is still running
+# (overlap would double the posting rate and race the same queue rows).
+3-53/10 * * * * cd /opt/council-news-bot && flock -n /var/lock/cnb-queue.lock flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/cron/process_global_queue.py >> /var/log/council_bot_cron.log 2>&1
 
 # === MONITORING (quiet-by-default: speak only on problems + one daily digest) ===
 # NOTE: the hourly_briefing was removed — 24 "all normal" heartbeats/day trained
@@ -170,18 +183,18 @@ def get_queue_processor_line() -> str:
 
 # Feed watchdog (every 4h) — watches OUTPUT (BlueSky). Alerts to
 # DISCORD_WEBHOOK_ALERTS on stale feed (>24h) or dropped council coverage.
-0 */4 * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/feed_watchdog.py >> /var/log/council_bot_cron.log 2>&1
+17 */4 * * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/monitoring/feed_watchdog.py >> /var/log/council_bot_cron.log 2>&1
 
 # Alert check (every 6h) — watches INTERNAL STATE (DB). Alerts on circuit-breaker
-# trips, zero-post states, proxy/auth failures, and empty-run councils. Silent
-# when healthy.
-0 */6 * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/alert_check.py >> /var/log/council_bot_cron.log 2>&1
+# trips, zero-post states, missed scrape runs, proxy/auth failures, and
+# empty-run councils. Silent when healthy.
+43 */6 * * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/monitoring/alert_check.py >> /var/log/council_bot_cron.log 2>&1
 
-# Daily digest (21:00 UTC = ~07:00 AEST) — the one informational message/day.
-0 21 * * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/monitoring/daily_briefing.py >> /var/log/council_bot_cron.log 2>&1
+# Daily digest (21:11 UTC = ~07:11 AEST) — the one informational message/day.
+11 21 * * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/monitoring/daily_briefing.py >> /var/log/council_bot_cron.log 2>&1
 
-# Monthly cleanup (1st day at midnight UTC)
-0 0 1 * * cd /opt/council-news-bot && docker compose run --rm bot python3 scripts/maintenance/cleanup_remote_db.py >> /var/log/council_bot_cron.log 2>&1
+# Monthly cleanup (1st day, 00:29 UTC)
+29 0 1 * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/maintenance/cleanup_remote_db.py >> /var/log/council_bot_cron.log 2>&1
 
 """
 
@@ -229,10 +242,13 @@ def generate_staggered_crontab(slots: int = 6) -> str:
         for slot in range(slots):
             hour = (slot * hours_per_slot + si) % 24  # offset per state
             name = f"cnb-{state}-{slot}"  # deterministic; same state's slots never overlap in time
+            # --scrape-only: ALL posting goes through the paced queue processor;
+            # scrape runs posting too meant two uncoordinated posters (duplicate
+            # posts + rate blowout). flock -s: don't start mid-deploy.
             slot_lines.append(
                 f"{minute} {hour} * * * cd /opt/council-news-bot && "
-                f"{{ timeout {TIMEOUT_SECONDS} docker compose run --rm --name {name} bot "
-                f"python3 main.py --state {state} --slots {slots} --slot {slot} --concurrency 4; "
+                f"{{ flock -s -w 300 {OPS_LOCK} timeout {TIMEOUT_SECONDS} docker compose run --rm --name {name} bot "
+                f"python3 main.py --state {state} --slots {slots} --slot {slot} --concurrency 4 --scrape-only; "
                 f"docker rm -f {name} >/dev/null 2>&1; }} "
                 f">> /var/log/council_bot_scraper.log 2>&1"
             )
@@ -242,14 +258,41 @@ def generate_staggered_crontab(slots: int = 6) -> str:
     return "\n".join(lines)
 
 
+def get_staggered_header() -> str:
+    """Header for the default (staggered) crontab output."""
+    return f"""# CRONTAB CONFIGURATION - Council News Bot (staggered once-daily scraping)
+# ========================================================================
+# Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} by scripts/deployment/generate_crontab.py
+#
+# This is a COMPLETE crontab: scrape slots AND infra lines (posting queue,
+# feed watchdog, alert check, daily digest, cleanup). Install the whole file:
+#     crontab crontab_generated.txt
+# then verify with: crontab -l
+#
+# All times are UTC and DST-independent — this schedule never needs
+# regeneration at DST transitions.
+
+# === ENVIRONMENT ===
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOME=/root
+
+"""
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate crontab entries for twice-daily scraping"
+        description="Generate the production crontab (staggered once-daily scraping + infra lines)"
     )
     parser.add_argument(
         '--staggered',
         action='store_true',
-        help='Generate the staggered once-daily schedule (Phase 2) instead of twice-daily bursts'
+        help='(default) Generate the staggered once-daily schedule; kept for compatibility'
+    )
+    parser.add_argument(
+        '--legacy-burst',
+        action='store_true',
+        help='DANGER: generate the old twice-daily burst schedule instead. Superseded by staggered scraping; do not install on the VPS.'
     )
     parser.add_argument(
         '--slots',
@@ -275,9 +318,28 @@ def main():
     
     args = parser.parse_args()
 
-    if args.staggered:
-        print(generate_staggered_crontab(slots=args.slots))
+    if not args.legacy_burst:
+        # DEFAULT: staggered once-daily schedule, emitted as a COMPLETE
+        # crontab (env header + scrape slots + infra lines). A rebuild that
+        # omitted the infra lines silently killed posting and monitoring.
+        if args.slots < 1 or args.slots > 24 or 24 % args.slots != 0:
+            parser.error(f"--slots must divide 24 (got {args.slots})")
+        full_crontab = (
+            get_staggered_header()
+            + generate_staggered_crontab(slots=args.slots)
+            + "\n"
+            + get_queue_processor_line()
+        )
+        print(full_crontab)
+
+        output_file = PROJECT_ROOT / 'crontab_generated.txt'
+        with open(output_file, 'w') as f:
+            f.write(full_crontab)
+        print(f"\n# Written to: {output_file}", file=sys.stderr)
         return
+
+    print("# WARNING: --legacy-burst is superseded by the default staggered schedule.", file=sys.stderr)
+    print("# Do NOT install this on the VPS unless you are deliberately rolling back.", file=sys.stderr)
 
     # Parse reference date
     if args.date:
@@ -319,9 +381,10 @@ def main():
     full_crontab = header + scrape_section + queue_section
     
     print(full_crontab)
-    
-    # Also write to a file for reference
-    output_file = PROJECT_ROOT / 'crontab_generated.txt'
+
+    # Write to a SEPARATE file so a legacy run can never clobber the real
+    # crontab_generated.txt that deploys install.
+    output_file = PROJECT_ROOT / 'crontab_legacy_burst.txt'
     with open(output_file, 'w') as f:
         f.write(full_crontab)
     

@@ -298,7 +298,9 @@
       "link_selector": "a.news-listing__item-link",
       "content_selector": ".news-listing__item-teaser",
       "population": 12840,
-      "region": "North West"
+      "region": "North West",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "northern-midlands",

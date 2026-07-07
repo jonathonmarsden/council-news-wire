@@ -16,6 +16,11 @@ past before:
      log_events (the proxy lapse was silent for ~10 days).
   4. EMPTY-RUN COUNCILS — councils repeatedly returning 0 articles (the most
      common breakage; the old failures-only check missed it).
+  5. MISSED SCRAPE RUNS — a state with no run_summaries rows in 24h (wedged
+     cron/docker or a bad crontab install). Backlog can keep feeds looking
+     alive for days while scraping is dead.
+  6. STALLED QUEUE — articles queued for hours while nothing posts (queue
+     processor death, distinct from scrape death).
 
 Pairs with feed_watchdog.py (which watches BlueSky output). This one watches the
 internal state (DB). Read-only. Degrades gracefully without Discord.
@@ -48,7 +53,7 @@ def main():
 
     from sqlalchemy import func
     from core.database import Database
-    from core.models import CouncilHealth, Article, LogEvent
+    from core.models import CouncilHealth, Article, LogEvent, RunSummary
 
     db = Database()
     now = datetime.utcnow()
@@ -116,6 +121,40 @@ def main():
                            f"**Empty runs** (≥{args.empty_threshold}): {len(empties)} council(s) "
                            f"scraping nothing — {shown}{extra}"))
 
+        # 5. Missed scrape runs: staggered scraping gives every state ~6 runs
+        #    per 24h; zero rows means cron/docker is wedged or a crontab
+        #    install dropped the scrape lines.
+        run_counts = {
+            (st or "").lower(): n for st, n in
+            s.query(RunSummary.state, func.count(RunSummary.id))
+            .filter(RunSummary.started_at >= now - timedelta(hours=24))
+            .group_by(RunSummary.state).all()
+        }
+        no_runs = [st for st in all_states if run_counts.get(st, 0) == 0]
+        if len(no_runs) == len(all_states):
+            alerts.append((True,
+                           "**No scrape runs in 24h for ANY state** — cron/docker is dead "
+                           "or the crontab lost its scrape lines"))
+        elif no_runs:
+            alerts.append((len(no_runs) >= 3,
+                           f"**Missed scrape runs**: no runs in 24h for "
+                           f"{', '.join(st.upper() for st in no_runs)}"))
+
+        # 6. Stalled queue: only alert when there IS old queued work but
+        #    nothing has posted — an empty backlog going quiet is normal.
+        stall_cutoff = now - timedelta(hours=2)
+        pending_old = s.query(func.count(Article.id)).filter(
+            Article.posted_at.is_(None),
+            Article.status == 'new',
+            Article.first_seen_at <= stall_cutoff,
+        ).scalar() or 0
+        last_post = s.query(func.max(Article.posted_at)).scalar()
+        if pending_old and (last_post is None or last_post < stall_cutoff):
+            last_str = last_post.strftime('%Y-%m-%d %H:%M UTC') if last_post else 'never'
+            alerts.append((True,
+                           f"**Queue stalled**: {pending_old} article(s) queued >2h but "
+                           f"nothing posted since {last_str} — check the queue processor"))
+
     print(f"Alert check — {now.strftime('%Y-%m-%d %H:%M UTC')} (window {args.window_hours:.0f}h)")
     if not alerts:
         print("  ✅ Nothing to alert.")
@@ -137,5 +176,27 @@ def main():
     sys.exit(1)
 
 
+def _crash_alert(exc: Exception) -> None:
+    """Last-ditch, DB-independent alert that the monitor itself died."""
+    try:
+        from discord_logger import send_discord_embed, DISCORD_WEBHOOK_ALERTS
+        send_discord_embed(DISCORD_WEBHOOK_ALERTS, {
+            "title": "🔴 alert_check CRASHED",
+            "description": f"The alert monitor itself failed — alerting is blind until fixed.\n"
+                           f"`{type(exc).__name__}: {exc}`"[:4000],
+            "color": RED,
+            "timestamp": datetime.utcnow().isoformat(),
+        })
+    except Exception:
+        pass
+
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as e:
+        print(f"alert_check crashed: {type(e).__name__}: {e}")
+        _crash_alert(e)
+        sys.exit(2)

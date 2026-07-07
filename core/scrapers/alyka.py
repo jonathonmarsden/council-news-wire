@@ -3,6 +3,7 @@ from typing import List, Dict, Optional
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class AlykaScraper(BaseScraper):
     """
@@ -91,9 +92,9 @@ class AlykaScraper(BaseScraper):
         try:
             from curl_cffi import requests
             response = requests.post(
-                self.api_endpoint, 
-                json=body, 
-                headers=headers, 
+                self.api_endpoint,
+                json=body,
+                headers=headers,
                 impersonate=self.impersonate or "chrome110",
                 proxies={"http": self.proxy, "https": self.proxy} if self.proxy else None,
                 timeout=30
@@ -101,19 +102,23 @@ class AlykaScraper(BaseScraper):
 
             if response.status_code != 200:
                 print(f"[{self.council_id}] API failed with status {response.status_code}")
-                return []
-            
+                raise ScrapeError(
+                    f"{self.council_id}: Alyka API failed with HTTP {response.status_code}"
+                )
+
             data = response.json()
-            html_content = data.get('htmlResult', '')
-            
-            if not html_content:
-                return []
-                
-            return self.parse_html_content(html_content)
-            
+        except ScrapeError:
+            raise
         except Exception as e:
             print(f"[{self.council_id}] Error in scrape_html_result: {e}")
+            raise ScrapeError(f"{self.council_id}: Alyka API fetch/parse failed: {e}") from e
+
+        html_content = data.get('htmlResult', '')
+
+        if not html_content:
             return []
+
+        return self.parse_html_content(html_content)
 
     def parse_html_content(self, html: str) -> List[NewsArticle]:
         """
@@ -215,38 +220,46 @@ class AlykaScraper(BaseScraper):
         try:
             from curl_cffi import requests
             response = requests.post(
-                self.api_endpoint, 
-                json=body, 
-                headers=headers, 
+                self.api_endpoint,
+                json=body,
+                headers=headers,
                 impersonate=self.impersonate or "chrome110",
                 proxies={"http": self.proxy, "https": self.proxy} if self.proxy else None,
                 timeout=30
             )
-            
+
             if response.status_code != 200:
                 print(f"[{self.council_id}] API failed with status {response.status_code}")
-                return []
-                
+                raise ScrapeError(
+                    f"{self.council_id}: Alyka ksearch API failed with HTTP {response.status_code}"
+                )
+
             data = response.json()
-            articles = []
-            
-            for item in data.get('Data', []):
+        except ScrapeError:
+            raise
+        except Exception as e:
+            print(f"[{self.council_id}] Error scraping: {e}")
+            raise ScrapeError(f"{self.council_id}: Alyka ksearch fetch/parse failed: {e}") from e
+
+        articles = []
+
+        for item in data.get('Data', []):
+            try:
                 title = item.get('ArticleTitle')
                 date_str = item.get('ArticleReleaseDate')
                 summary = item.get('ArticleSummary')
                 page_url = item.get('PageUrl')
-                
+
                 if not title or not page_url:
                     continue
-                    
+
                 url = self.make_absolute_url(page_url)
                 date = self.parse_date(date_str)
-                
+
                 article = self.create_article(title, url, date, summary)
                 articles.append(article)
-                
-            return articles
-            
-        except Exception as e:
-            print(f"[{self.council_id}] Error scraping: {e}")
-            return []
+            except Exception as e:
+                print(f"[{self.council_id}] Error scraping: {e}")
+                continue
+
+        return articles
