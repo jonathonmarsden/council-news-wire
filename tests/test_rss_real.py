@@ -1,24 +1,41 @@
-import sys
-import os
+"""
+Live smoke tests for RSSScraper against real council feeds.
 
-# Add current directory to path so we can import core
+Network failures (site down, WAF blocking the CI runner's IP) skip rather
+than fail — only parsing problems on a successfully fetched feed should fail.
+Previously this file scraped at module level, so a single unreachable feed
+errored the entire CI collection.
+"""
+import os
+import sys
+
+import pytest
+
 sys.path.append(os.getcwd())
 
+from core.exceptions import ScrapeError
 from core.scrapers.rss import RSSScraper
 
-councils = [
-    {"id": "cootamundra-gundagai-regional-council", "url": "https://www.cgrc.nsw.gov.au/feed/", "name": "Cootamundra"},
-    {"id": "kyogle-council", "url": "https://www.kyogle.nsw.gov.au/feed/", "name": "Kyogle"},
-    {"id": "wentworth-shire-council", "url": "https://www.wentworth.nsw.gov.au/feed/", "name": "Wentworth"},
-    {"id": "cook", "url": "https://www.cook.qld.gov.au/feed/", "name": "Cook"},
-    {"id": "douglas", "url": "https://douglas.qld.gov.au/feed/", "name": "Douglas"},
-    {"id": "tablelands", "url": "https://www.trc.qld.gov.au/feed/", "name": "Tablelands"}
+COUNCILS = [
+    ("cootamundra-gundagai-regional-council", "https://www.cgrc.nsw.gov.au/feed/", "Cootamundra"),
+    ("kyogle-council", "https://www.kyogle.nsw.gov.au/feed/", "Kyogle"),
+    ("wentworth-shire-council", "https://www.wentworth.nsw.gov.au/feed/", "Wentworth"),
+    ("cook", "https://www.cook.qld.gov.au/feed/", "Cook"),
+    ("douglas", "https://douglas.qld.gov.au/feed/", "Douglas"),
+    ("tablelands", "https://www.trc.qld.gov.au/feed/", "Tablelands"),
 ]
 
-for c in councils:
-    print(f"\nTesting RSSScraper for {c['name']}...")
-    scraper = RSSScraper(c['id'], c['name'], c['url'])
-    articles = scraper.scrape()
-    print(f"Found {len(articles)} articles.")
-    if len(articles) > 0:
-        print(f"First: {articles[0].title} - {articles[0].url}")
+
+@pytest.mark.parametrize("council_id,url,name", COUNCILS, ids=[c[0] for c in COUNCILS])
+def test_rss_feed_scrapes(council_id, url, name):
+    scraper = RSSScraper(council_id, name, url)
+    try:
+        articles = scraper.scrape()
+    except ScrapeError as e:
+        pytest.skip(f"live feed unreachable from this network: {e}")
+
+    # Fetch succeeded: the feed must parse into at least one sane article
+    assert articles, f"{name}: feed fetched but parsed 0 articles"
+    first = articles[0]
+    assert first.title
+    assert first.url.startswith("http")
