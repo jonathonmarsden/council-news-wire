@@ -41,7 +41,12 @@ class WordPressScraper(BaseScraper):
 
         try:
             # Fetch API
-            response = self.session.get(api_url, timeout=20, verify=False)
+            response = self.session.get(
+                api_url,
+                timeout=20,
+                verify=self.verify_ssl,
+                proxies={'http': self.proxy, 'https': self.proxy} if self.proxy else None
+            )
             if response.status_code != 200:
                 print(f"WordPress API failed for {self.council_name}: {response.status_code}")
                 raise ScrapeError(
@@ -219,23 +224,20 @@ class OpenCitiesScraper(BaseScraper):
                         title = item_data.get('name')
                         url = item_data.get('url')
                         date_str = item_data.get('releaseDate')
-                        excerpt = item_data.get('image', {}).get('imageAlt')
-                        
+                        excerpt = (item_data.get('image') or {}).get('imageAlt')
+
                         if not title or not url:
                             continue
-                            
+
                         # Resolve relative URLs
                         if not url.startswith('http'):
                             from urllib.parse import urljoin
                             url = urljoin(self.news_url, url)
-                            
+
                         date_obj = None
                         if date_str:
-                            try:
-                                date_obj = date_parser.parse(date_str)
-                            except:
-                                pass
-                                
+                            date_obj = self.parse_date(str(date_str))
+
                         article = self.create_article(
                             title=title,
                             url=url,
@@ -278,11 +280,8 @@ class OpenCitiesScraper(BaseScraper):
                 date_elem = item.select_one('.published-on, .date_updated')
                 date_obj = None
                 if date_elem:
-                    date_text = date_elem.get_text(strip=True).replace('Published on', '').strip()
-                    try:
-                        date_obj = date_parser.parse(date_text)
-                    except:
-                        pass
+                    # parse_date strips "Published on" prefixes itself
+                    date_obj = self.parse_date(date_elem.get_text(strip=True))
                 
                 article = self.create_article(
                     title=title,
@@ -397,6 +396,9 @@ class AspNetScraper(CardScraper):
             ):
                 section_links.append(self.make_absolute_url(href))
 
+        # Dedupe while preserving order (nav menus repeat the same links)
+        section_links = list(dict.fromkeys(section_links))
+
         articles = []
         # Visit each section and extract articles using CardScraper logic
         for section_url in section_links[:3]:  # Limit to first 3 sections for speed
@@ -413,17 +415,17 @@ class AspNetScraper(CardScraper):
                         continue
                     title = self._get_clean_title(title_elem)
                     link_elem = item.select_one('a[href]')
-                    link = link_elem['href'] if link_elem else section_url
+                    if not link_elem:
+                        # No per-item link: skip. Falling back to section_url would
+                        # collapse every linkless item into one row (url is UNIQUE).
+                        continue
+                    link = link_elem['href']
                     if link and not link.startswith('http'):
                         link = self.make_absolute_url(link)
                     date_elem = item.select_one(self.DATE_SELECTOR)
                     date_obj = None
                     if date_elem:
-                        date_text = date_elem.get_text(strip=True)
-                        try:
-                            date_obj = date_parser.parse(date_text)
-                        except:
-                            pass
+                        date_obj = self.parse_date(date_elem.get_text(strip=True))
                     excerpt_elem = item.select_one(self.EXCERPT_SELECTOR)
                     excerpt = excerpt_elem.get_text(strip=True) if excerpt_elem else None
                     article = self.create_article(title, link, date_obj, excerpt)
@@ -457,7 +459,14 @@ class LGASAScraper(BaseScraper):
         kwargs['use_curl'] = True
         super().__init__(council_id, council_name, news_url, **kwargs)
 
-    def _resolve_canonical_url(self, redirect_href: str) -> str:
+    def _make_resolver_session(self):
+        """Build one curl_cffi Session (Cloudflare-capable, proxy-aware) reused across items."""
+        from curl_cffi.requests import Session
+        impersonate = getattr(self, 'impersonate', 'chrome124') or 'chrome124'
+        proxies = {'http': self.proxy, 'https': self.proxy} if self.proxy else None
+        return Session(impersonate=impersonate, proxies=proxies)
+
+    def _resolve_canonical_url(self, session, redirect_href: str) -> str:
         """
         Extract the canonical article URL from a Funnelback redirect href.
         The redirect URL contains an index_url param pointing to lgasa-web.squiz.cloud.
@@ -465,12 +474,9 @@ class LGASAScraper(BaseScraper):
         We follow the redirect using curl_cffi so Cloudflare is handled.
         """
         try:
-            from curl_cffi.requests import Session
-            impersonate = getattr(self, 'impersonate', 'chrome124') or 'chrome124'
-            with Session(impersonate=impersonate) as session:
-                r = session.get(redirect_href, timeout=15, allow_redirects=True)
-                if r.url and r.url != redirect_href:
-                    return r.url
+            r = session.get(redirect_href, timeout=15, allow_redirects=True)
+            if r.url and r.url != redirect_href:
+                return r.url
         except Exception:
             pass
         # Fallback: extract index_url param (Squiz asset URL — not ideal but usable as dedup key)
@@ -484,8 +490,24 @@ class LGASAScraper(BaseScraper):
         from bs4 import BeautifulSoup
         soup = BeautifulSoup(content, 'html.parser')
         items = soup.select(self.ITEM_SELECTOR)
+        # Cap BEFORE per-item redirect resolution so one council can't fire
+        # ~20 Cloudflare challenge fetches per run.
+        items = items[:self.limit or 10]
         articles = []
 
+        resolver = self._make_resolver_session()
+        try:
+            articles = self._parse_items(items, resolver)
+        finally:
+            try:
+                resolver.close()
+            except Exception:
+                pass
+
+        return articles
+
+    def _parse_items(self, items, resolver) -> List[NewsArticle]:
+        articles = []
         for item in items:
             title_el = item.select_one(self.TITLE_SELECTOR)
             date_el = item.select_one(self.DATE_SELECTOR)
@@ -500,7 +522,7 @@ class LGASAScraper(BaseScraper):
             if not redirect_href:
                 continue
 
-            url = self._resolve_canonical_url(redirect_href)
+            url = self._resolve_canonical_url(resolver, redirect_href)
             if not url or not url.startswith('http'):
                 continue
 
@@ -764,10 +786,9 @@ class DrupalScraper(BaseScraper):
             date_obj = None
             if date_el:
                 date_text = date_el.get('datetime') or date_el.get_text(strip=True)
-                try:
-                    date_obj = date_parser.parse(date_text, dayfirst=True)
-                except Exception:
-                    pass
+                # parse_date detects ISO datetimes and parses them without
+                # dayfirst (dayfirst=True swaps day/month on ISO dates).
+                date_obj = self.parse_date(date_text)
 
             url = f"{base}/node/{node_id}"
             articles.append(self.create_article(title, url, date_obj))

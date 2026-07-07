@@ -64,10 +64,18 @@ def process_articles(
     if rejected_count > 0:
         print(f"  Rejected {rejected_count} articles as invalid garbage content.")
 
+    dateless_by_council: Dict[str, int] = {}
     for article in valid_articles:
         is_fresh = False
         if force_fresh:
             is_fresh = True
+        elif article.date is None:
+            # No date — treat as fresh (first_seen_at governs downstream,
+            # matching get_unposted_articles). Archiving these silently
+            # stopped a council posting whenever its date_selector broke,
+            # while every health signal stayed green.
+            is_fresh = True
+            dateless_by_council[article.council_id] = dateless_by_council.get(article.council_id, 0) + 1
         elif article.date:
             check_date = article.date
             check_cutoff = cutoff_date
@@ -94,8 +102,11 @@ def process_articles(
     print(f"  - {new_fresh_count} new fresh articles (queued)")
     print(f"  - {new_archived_count} new archived articles (too old)")
     print(f"  - {duplicates} duplicates (already known)")
+    if dateless_by_council:
+        shown = ", ".join(f"{c}({n})" for c, n in sorted(dateless_by_council.items()))
+        print(f"  ⚠️ Dateless articles (check date_selector for): {shown}")
 
-    return db.get_unposted_articles(state_code)
+    return db.get_unposted_articles(state_code, suppress_stale=not force_fresh)
 
 
 def post_articles(

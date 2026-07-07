@@ -1,6 +1,5 @@
 from typing import List, Optional, Dict, Any
 from datetime import datetime
-from dateutil import parser as date_parser
 import requests
 from curl_cffi import requests as crequests
 
@@ -42,18 +41,23 @@ class JsonScraper(BaseScraper):
         try:
             print(f"[{self.council_name}] Fetching JSON from {self.news_url}")
             
+            proxies = {'http': self.proxy, 'https': self.proxy} if self.proxy else None
+
             if self.use_curl:
                 response = crequests.get(
                     self.news_url,
-                    impersonate="chrome120",
+                    impersonate=self.impersonate,
                     headers={"User-Agent": "Mozilla/5.0"},
-                    timeout=30
+                    timeout=30,
+                    proxies=proxies
                 )
             else:
                 response = requests.get(
                     self.news_url,
                     headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"},
-                    timeout=30
+                    timeout=30,
+                    proxies=proxies,
+                    verify=self.verify_ssl
                 )
             
             if response.status_code != 200:
@@ -118,10 +122,7 @@ class JsonScraper(BaseScraper):
                 date_str = self._get_nested(item, self.date_selector)
                 date = None
                 if date_str:
-                    try:
-                        date = date_parser.parse(str(date_str))
-                    except:
-                        pass
+                    date = self.parse_date(str(date_str))
                 
                 # Extract Description
                 description = ""

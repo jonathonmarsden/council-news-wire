@@ -45,7 +45,10 @@ class BrowserScraper(BaseScraper):
             # at any point still reaches the finally and closes the browser.
             browser = None
             try:
-                browser = p.chromium.launch(headless=True)
+                browser = p.chromium.launch(
+                    headless=True,
+                    proxy={"server": self.proxy} if self.proxy else None
+                )
 
                 ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
                 if self.user_agent:

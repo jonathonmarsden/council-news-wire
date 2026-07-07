@@ -146,8 +146,8 @@ def get_scraper(council: Dict, proxy: Optional[str] = None) -> BaseScraper:
 PROBATION_DAYS = 3
 
 
-def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Optional[Database] = None) -> List[NewsArticle]:
-    """Helper to scrape a single council."""
+def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Optional[Database] = None) -> Optional[List[NewsArticle]]:
+    """Scrape a single council. Returns None when skipped (disabled council)."""
     start_time = time.time()
 
     # Check Circuit Breaker
@@ -161,7 +161,10 @@ def scrape_single_council(council: Dict, proxy: Optional[str] = None, db: Option
             )
             if not probation_due:
                 print(f"Skipping {council['name']} (DISABLED; probation retry {PROBATION_DAYS}d after disable)")
-                return []
+                # None = "skipped", distinct from a real 0-article scrape —
+                # otherwise every disabled council fires the silent-failure
+                # alert on every run, burying real alerts.
+                return None
             print(f"  🔁 PROBATION: {council['name']} is disabled; attempting recovery scrape.")
         empty_runs = health.get('consecutive_empty_runs', 0)
         if empty_runs >= 10:
@@ -242,6 +245,10 @@ def scrape_councils(councils: List[Dict], db: Database, enabled_only: bool = Tru
             council = future_to_council[future]
             try:
                 articles = future.result()
+                if articles is None:
+                    # Disabled council skipped by the breaker — not a scrape
+                    # result; keep it out of run metrics and alerts.
+                    continue
                 all_articles.extend(articles)
 
                 # Track per-council results for run summary
@@ -442,10 +449,10 @@ def main():
     # Scrape (unless post-only)
     if not args.post_only:
         articles = scrape_councils(councils_to_scrape, db=db, proxy=proxy_url, max_workers=args.concurrency)
-        unposted = process_articles(articles, db, state_code)
+        unposted = process_articles(articles, db, state_code, force_fresh=args.force_fresh)
     else:
         print("Skipping scrape, checking backlog...")
-        unposted = db.get_unposted_articles(state_code)
+        unposted = db.get_unposted_articles(state_code, suppress_stale=not args.force_fresh)
         
     # Post
     if not args.scrape_only:

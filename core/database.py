@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 from typing import List, Optional, Dict, Union
 from sqlalchemy import create_engine, select, update, func, and_
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.dialects.postgresql import insert as pg_upsert
 
@@ -149,23 +150,26 @@ class Database:
         count = 0
         with self.get_session() as session:
             for a in unique_articles:
-                # We do row-by-row check for simplicity in ORM to handle ignore logic
-                # For massive scale, Core Insert with on_conflict_do_nothing is better
-                # but this is fine for batches of ~20-50
                 stmt = select(Article.id).where(Article.url == a['url'])
-                if not session.execute(stmt).first():
-                    new_a = Article(
-                        url=a['url'],
-                        council_id=a['council_id'],
-                        title=a['title'],
-                        date=a.get('date'),
-                        excerpt=a.get('excerpt'),
-                        state=state,
-                        status=status
-                    )
-                    session.add(new_a)
+                if session.execute(stmt).first():
+                    continue
+                session.add(Article(
+                    url=a['url'],
+                    council_id=a['council_id'],
+                    title=a['title'],
+                    date=a.get('date'),
+                    excerpt=a.get('excerpt'),
+                    state=state,
+                    status=status
+                ))
+                # Per-row commit: a concurrent run inserting the same URL
+                # between our SELECT and a single batch commit used to raise
+                # IntegrityError at the end and roll back the ENTIRE batch.
+                try:
+                    session.commit()
                     count += 1
-            session.commit()
+                except IntegrityError:
+                    session.rollback()
         return count
 
     # Dead-letter an article after this many failed (transient) post attempts
@@ -232,8 +236,14 @@ class Database:
             session.commit()
             return dead
 
-    def get_unposted_articles(self, state: str, limit: int = 50) -> List[Dict]:
-        """Get unposted articles for a specific state (Round Robin)."""
+    def get_unposted_articles(self, state: str, limit: int = 50, suppress_stale: bool = True) -> List[Dict]:
+        """
+        Get unposted articles for a specific state (Round Robin).
+
+        suppress_stale=False (--force-fresh) skips the 7-day auto-suppression,
+        which would otherwise immediately re-suppress the old articles the
+        caller is trying to force out.
+        """
         fetch_limit = max(limit * 5, 200)
         
         with self.get_session() as session:
@@ -255,7 +265,7 @@ class Database:
             
             for o in objs:
                 is_too_old = False
-                if o.date:
+                if suppress_stale and o.date:
                     try:
                         # o.date is a datetime object (post DateTime migration)
                         dt = o.date
@@ -269,9 +279,11 @@ class Database:
                         pass
                 
                 if is_too_old:
-                    # Auto-suppress to clean the queue
+                    # Auto-suppress to clean the queue (func.now() = DB time,
+                    # consistent with mark_as_posted; datetime.now() here was
+                    # container-local Sydney time mixed into UTC data)
                     o.status = 'suppressed_too_old'
-                    o.posted_at = datetime.now()
+                    o.posted_at = func.now()
                 else:
                     raw_articles.append({
                         'id': o.id, 'url': o.url, 'council_id': o.council_id,

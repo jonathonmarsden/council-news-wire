@@ -140,8 +140,12 @@ class CardScraper(BaseScraper):
             else:
                 print("Failed to parse article from item")
         
-        # If no articles found, try finding news links directly
-        if not articles:
+        # If no articles found AND no selectors were configured, try finding
+        # news links directly. For councils WITH a configured selector, a miss
+        # means the markup changed — return [] so the empty-run breaker and
+        # silent-failure alert fire, instead of sweeping every <a> on the page
+        # and posting nav links as "articles".
+        if not articles and not self.selectors.get('item_selector'):
             articles = self._scrape_links_directly(soup)
             if self.limit:
                 articles = articles[:self.limit]
@@ -222,9 +226,6 @@ class CardScraper(BaseScraper):
                         article.excerpt = text
                 else:
                     print(f"  Full content selector '{content_selector}' found nothing.")
-                    text = self.clean_text(str(content_elem))
-                    if text:
-                        article.excerpt = text
 
         except Exception as e:
             print(f"Error fetching details for {article.url}: {e}")

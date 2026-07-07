@@ -47,25 +47,17 @@ class WannerooScraper(BaseScraper):
             date_tag = item.select_one('.subtext')
             if date_tag:
                 date_text = date_tag.get_text(strip=True)
-                # Clean up "Published on "
-                clean_date = date_text.replace('Published on', '').strip()
-                # Clean up ordinals
-                clean_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', clean_date)
-                try:
-                    date = date_parser.parse(clean_date)
-                except Exception:
-                    pass
-            
-            article = NewsArticle(
-                council_id=self.council_id,
-                council_name=self.council_name,
+                # Clean up ordinals (parse_date strips the "Published on" prefix itself)
+                clean_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date_text)
+                date = self.parse_date(clean_date)
+
+            articles.append(self.create_article(
                 title=title,
                 url=url,
                 date=date,
-                excerpt=""
-            )
-            articles.append(article)
-            
+                excerpt=None
+            ))
+
         return articles
 
 class PerthScraper(BaseScraper):
@@ -111,29 +103,23 @@ class PerthScraper(BaseScraper):
             date_tag = item.select_one('.card-list__date')
             if date_tag:
                 date_text = date_tag.get_text(strip=True)
-                # Remove "- X min read"
+                # Remove "- X min read" (council-specific; parse_date won't strip this)
                 if '-' in date_text:
                     date_text = date_text.split('-')[0].strip()
-                try:
-                    date = date_parser.parse(date_text)
-                except Exception:
-                    pass
-            
+                date = self.parse_date(date_text)
+
             excerpt = ""
             excerpt_tag = item.select_one('.card-list__synopsis')
             if excerpt_tag:
                 excerpt = excerpt_tag.get_text(strip=True)
-                
-            article = NewsArticle(
-                council_id=self.council_id,
-                council_name=self.council_name,
+
+            articles.append(self.create_article(
                 title=title,
                 url=url,
                 date=date,
-                excerpt=excerpt
-            )
-            articles.append(article)
-            
+                excerpt=excerpt or None
+            ))
+
         return articles
 
 class ClaremontScraper(BaseScraper):
@@ -179,25 +165,15 @@ class ClaremontScraper(BaseScraper):
             date = None
             date_tag = item.select_one('.news-card-details strong')
             if date_tag:
-                date_text = date_tag.get_text(strip=True)
-                try:
-                    date = date_parser.parse(date_text)
-                except Exception:
-                    pass
-            
-            # Excerpt
-            excerpt = ""
-            
-            article = NewsArticle(
-                council_id=self.council_id,
-                council_name=self.council_name,
+                date = self.parse_date(date_tag.get_text(strip=True))
+
+            articles.append(self.create_article(
                 title=title,
                 url=url,
                 date=date,
-                excerpt=excerpt
-            )
-            articles.append(article)
-            
+                excerpt=None
+            ))
+
         return articles
 
 class JoondalupScraper(BaseScraper):
@@ -302,25 +278,20 @@ class JoondalupScraper(BaseScraper):
                         title = aria
 
                 if not title:
-                    title = "No Title"
+                    # Skip rather than post a literal "No Title" article
+                    continue
 
                 date = None
                 date_str = item.get('data-datetime')
                 if date_str:
-                    try:
-                        date = date_parser.parse(date_str)
-                    except:
-                        pass
+                    date = self.parse_date(date_str)
 
-                article = NewsArticle(
-                    council_id=self.council_id,
-                    council_name=self.council_name,
+                articles.append(self.create_article(
                     title=title,
                     url=url,
                     date=date,
-                    excerpt=""
-                )
-                articles.append(article)
+                    excerpt=None
+                ))
             except Exception as e:
                 print(f"Error scraping Joondalup: {e}")
                 continue
@@ -372,7 +343,13 @@ class BelmontScraper(BaseScraper):
             })
 
             # Using self.session to maintain headers/cookies if needed, though mostly stateless API
-            response = self.session.get(api_url, params=params, headers=headers)
+            response = self.session.get(
+                api_url,
+                params=params,
+                headers=headers,
+                timeout=30,
+                proxies={'http': self.proxy, 'https': self.proxy} if self.proxy else None
+            )
             response.raise_for_status()
             data = response.json()
         except ScrapeError:
@@ -426,15 +403,12 @@ class BelmontScraper(BaseScraper):
                     excerpt_el = item.find(class_="desc")
                     excerpt = excerpt_el.get_text(strip=True) if excerpt_el else ""
 
-                    article = NewsArticle(
-                        council_id=self.council_id,
-                        council_name=self.council_name,
+                    articles.append(self.create_article(
                         title=title,
                         url=url,
                         date=date_val,
-                        excerpt=excerpt
-                    )
-                    articles.append(article)
+                        excerpt=excerpt or None
+                    ))
                 except Exception as e:
                     print(f"Error scraping Belmont: {e}")
                     continue
@@ -479,21 +453,19 @@ class DumbleyungScraper(BaseScraper):
             # Parse date from text (e.g. "January 2026")
             date = None
             try:
-                # Add a dummy day 1 to parse "Month Year" or similar
-                # Just basic parsing, let dateutil handle "January 2026"
-                date = date_parser.parse(text, default=datetime(2025, 1, 1))
+                # Add a dummy day 1 to parse "Month Year" or similar.
+                # Default to the CURRENT year so year-less dates don't get
+                # pinned to a hardcoded year forever.
+                date = date_parser.parse(text, default=datetime(datetime.now().year, 1, 1))
             except Exception:
                 pass
-                
-            article = NewsArticle(
-                council_id=self.council_id,
-                council_name=self.council_name,
+
+            articles.append(self.create_article(
                 title=f"{text} Newsletter",
                 url=url,
                 date=date,
                 excerpt="Dumbleyung Shire Newsletter (Mailchimp)"
-            )
-            articles.append(article)
+            ))
             
         return articles
 

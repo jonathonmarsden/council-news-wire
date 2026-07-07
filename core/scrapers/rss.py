@@ -5,7 +5,6 @@ RSS feed scraper implementation.
 from typing import List, Optional, Dict
 from urllib.parse import unquote
 from bs4 import BeautifulSoup
-from dateutil import parser as date_parser
 
 from .base import BaseScraper, NewsArticle
 
@@ -52,10 +51,7 @@ class RSSScraper(BaseScraper):
             
             date = None
             if date_elem:
-                try:
-                    date = date_parser.parse(date_elem.get_text(strip=True))
-                except Exception:
-                    pass
+                date = self.parse_date(date_elem.get_text(strip=True))
             
             excerpt = None
             

@@ -48,7 +48,13 @@ class SparkNewsListingScraper(BaseScraper):
             }
 
             # Using standard requests for now as this is a JSON API
-            response = requests.get(api_url, params=params, headers=headers, timeout=30)
+            response = requests.get(
+                api_url,
+                params=params,
+                headers=headers,
+                timeout=30,
+                proxies={'http': self.proxy, 'https': self.proxy} if self.proxy else None
+            )
             response.raise_for_status()
             data = response.json()
         except ScrapeError:
@@ -84,13 +90,11 @@ class SparkNewsListingScraper(BaseScraper):
                         except Exception:
                             pass
 
-                    articles.append(NewsArticle(
-                        council_id=self.council_id,
-                        council_name=self.council_name,
+                    articles.append(self.create_article(
                         title=title,
                         url=full_url,
                         date=date,
-                        excerpt=summary
+                        excerpt=summary or None
                     ))
                 except Exception as e:
                     print(f"[{self.council_name}] Error scraping Spark API: {e}")
