@@ -14,6 +14,7 @@ from typing import Optional, List, Dict, Any
 
 from atproto import Client, models
 
+from core.exceptions import TransientPostError
 from core.validator import validate_post
 
 # State Tag Mappings
@@ -107,11 +108,16 @@ class BlueSkyPoster:
             hashtags: List of hashtags to include
             
         Returns:
-            Post URI if posted successfully, None otherwise
+            Post URI if posted successfully, None if the article itself was
+            rejected (validation / API 4xx) and should never be retried.
+
+        Raises:
+            TransientPostError: on retryable failures (auth/session, network,
+            rate limit, 5xx) — the article should stay queued.
         """
         if not self._authenticated:
             if not self.authenticate():
-                return None
+                raise TransientPostError("BlueSky authentication failed")
         
         # SAFETY VALVE: Clean and validate title before posting
         title = self._sanitize_title(title)
@@ -163,8 +169,14 @@ class BlueSkyPoster:
             print(f"Posted: {title[:50]}...")
             return post_uri
         except Exception as e:
-            print(f"Failed to post: {e}")
-            return None
+            # Only a definitive API rejection of this record is permanent.
+            # 401 (expired session), 408, 429 and everything without a status
+            # (network errors, timeouts, 5xx) are retryable.
+            status = getattr(getattr(e, 'response', None), 'status_code', None)
+            if status is not None and 400 <= status < 500 and status not in (401, 408, 429):
+                print(f"Failed to post (rejected by API, HTTP {status}): {e}")
+                return None
+            raise TransientPostError(f"send_post failed ({status or type(e).__name__}): {e}") from e
     
     def _sanitize_title(self, title: str) -> str:
         """

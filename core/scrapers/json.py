@@ -5,6 +5,7 @@ import requests
 from curl_cffi import requests as crequests
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class JsonScraper(BaseScraper):
     """
@@ -56,9 +57,8 @@ class JsonScraper(BaseScraper):
                 )
             
             if response.status_code != 200:
-                print(f"[{self.council_name}] Failed to fetch JSON. Status: {response.status_code}")
-                return []
-                
+                raise ScrapeError(f"{self.council_id}: JSON fetch failed with HTTP {response.status_code}")
+
             data = response.json()
             
             # Extract list of items
@@ -138,7 +138,12 @@ class JsonScraper(BaseScraper):
                 ))
                 
             return articles
-            
+
+        except ScrapeError:
+            raise
+        except (requests.RequestException, ValueError) as e:
+            # Network failure or invalid JSON — a fetch failure, not an empty page
+            raise ScrapeError(f"{self.council_id}: JSON fetch/parse failed: {e}") from e
         except Exception as e:
             print(f"[{self.council_name}] JSON Scraper Error: {e}")
             return []

@@ -6,6 +6,7 @@ from dateutil import parser as date_parser
 import re
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class WannerooScraper(BaseScraper):
     """
@@ -20,10 +21,8 @@ class WannerooScraper(BaseScraper):
                          mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
-            
+        html = self.fetch_page_or_raise(self.news_url)
+
         soup = BeautifulSoup(html, 'html.parser')
         articles = []
         
@@ -84,10 +83,8 @@ class PerthScraper(BaseScraper):
                          mobile_mode=mobile_mode, limit=limit, proxy=proxy, impersonate="chrome110", **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
-            
+        html = self.fetch_page_or_raise(self.news_url)
+
         soup = BeautifulSoup(html, 'html.parser')
         articles = []
         
@@ -152,10 +149,8 @@ class ClaremontScraper(BaseScraper):
                          mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
-            
+        html = self.fetch_page_or_raise(self.news_url)
+
         soup = BeautifulSoup(html, 'html.parser')
         articles = []
         
@@ -261,31 +256,40 @@ class JoondalupScraper(BaseScraper):
                 timeout=30,
                 proxies={"http": self.proxy, "https": self.proxy} if self.proxy else None
             )
-            
+
             if response.status_code != 200:
                 print(f"Joondalup API failed: {response.status_code}")
-                return []
-                
+                raise ScrapeError(
+                    f"{self.council_id}: Joondalup API failed with HTTP {response.status_code}"
+                )
+
             data = response.json()
-            html_content = data.get("htmlResult", "")
-            
-            if not html_content:
-                return []
-                
-            soup = BeautifulSoup(html_content, 'html.parser')
-            articles = []
-            
-            # Select items
-            items = soup.select('article.card')
-            
-            for item in items:
+        except ScrapeError:
+            raise
+        except Exception as e:
+            print(f"Error scraping Joondalup: {e}")
+            raise ScrapeError(f"{self.council_id}: Joondalup API fetch/parse failed: {e}") from e
+
+        html_content = data.get("htmlResult", "")
+
+        if not html_content:
+            return []
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+        articles = []
+
+        # Select items
+        items = soup.select('article.card')
+
+        for item in items:
+            try:
                 link_tag = item.select_one('a.hotbox')
                 if not link_tag:
                     continue
-                
+
                 link_url = link_tag.get('href')
                 url = urljoin("https://www.joondalup.wa.gov.au", link_url)
-                
+
                 title = ""
                 heading = item.select_one('h3, h4, .title, .hotbox-content h3')
                 if heading:
@@ -296,7 +300,7 @@ class JoondalupScraper(BaseScraper):
                         title = aria.split("News Date:")[0].strip()
                     else:
                         title = aria
-                
+
                 if not title:
                     title = "No Title"
 
@@ -307,7 +311,7 @@ class JoondalupScraper(BaseScraper):
                         date = date_parser.parse(date_str)
                     except:
                         pass
-                
+
                 article = NewsArticle(
                     council_id=self.council_id,
                     council_name=self.council_name,
@@ -317,12 +321,11 @@ class JoondalupScraper(BaseScraper):
                     excerpt=""
                 )
                 articles.append(article)
-                
-            return articles
-            
-        except Exception as e:
-            print(f"Error scraping Joondalup: {e}")
-            return []
+            except Exception as e:
+                print(f"Error scraping Joondalup: {e}")
+                continue
+
+        return articles
 
 class BelmontScraper(BaseScraper):
     """
@@ -372,21 +375,27 @@ class BelmontScraper(BaseScraper):
             response = self.session.get(api_url, params=params, headers=headers)
             response.raise_for_status()
             data = response.json()
-            
-            articles = []
-            if "PartialHTML" in data:
-                soup = BeautifulSoup(data["PartialHTML"], "html.parser")
-                items = soup.find_all(class_="news-item")
-                
-                for item in items:
+        except ScrapeError:
+            raise
+        except Exception as e:
+            print(f"Error scraping Belmont: {e}")
+            raise ScrapeError(f"{self.council_id}: Belmont API fetch/parse failed: {e}") from e
+
+        articles = []
+        if "PartialHTML" in data:
+            soup = BeautifulSoup(data["PartialHTML"], "html.parser")
+            items = soup.find_all(class_="news-item")
+
+            for item in items:
+                try:
                     title_el = item.find(class_="title")
                     if not title_el:
                         continue
-                    
+
                     # Check for strong tag inside title
                     strong = title_el.find("strong")
                     title = strong.get_text(strip=True) if strong else title_el.get_text(strip=True)
-                    
+
                     # Link
                     link = item.find("a")
                     # Fallback if link not found immediately
@@ -402,7 +411,7 @@ class BelmontScraper(BaseScraper):
                              url = "https://www.belmont.wa.gov.au" + (url if url.startswith("/") else "/" + url)
                     else:
                         continue
-                        
+
                     # Date
                     date_el = item.find(class_="release-date")
                     date_val = None
@@ -413,10 +422,10 @@ class BelmontScraper(BaseScraper):
                             date_val = datetime.strptime(date_str, "%d %B %Y")
                         except ValueError:
                             pass
-                            
+
                     excerpt_el = item.find(class_="desc")
                     excerpt = excerpt_el.get_text(strip=True) if excerpt_el else ""
-                    
+
                     article = NewsArticle(
                         council_id=self.council_id,
                         council_name=self.council_name,
@@ -426,12 +435,11 @@ class BelmontScraper(BaseScraper):
                         excerpt=excerpt
                     )
                     articles.append(article)
-                    
-            return articles
-            
-        except Exception as e:
-            print(f"Error scraping Belmont: {e}")
-            return []
+                except Exception as e:
+                    print(f"Error scraping Belmont: {e}")
+                    continue
+
+        return articles
 
 class DumbleyungScraper(BaseScraper):
     """
@@ -448,10 +456,8 @@ class DumbleyungScraper(BaseScraper):
                          mobile_mode, limit, proxy, impersonate, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
-            
+        html = self.fetch_page_or_raise(self.news_url)
+
         soup = BeautifulSoup(html, 'html.parser')
         articles = []
         

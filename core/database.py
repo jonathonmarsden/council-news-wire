@@ -168,15 +168,69 @@ class Database:
             session.commit()
         return count
 
+    # Dead-letter an article after this many failed (transient) post attempts
+    MAX_POST_ATTEMPTS = 5
+
     def mark_as_posted(self, url: str, handle: str):
         """Mark an article as posted."""
         with self.get_session() as session:
             stmt = update(Article).where(Article.url == url).values(
                 posted_at=func.now(),
-                posted_to_handle=handle
+                posted_to_handle=handle,
+                status='posted'
             )
             session.execute(stmt)
             session.commit()
+
+    def mark_as_rejected(self, url: str, reason: str):
+        """
+        Permanently reject an article (validation failure / API 4xx).
+        Leaves posted_at NULL so posting stats don't count rejections;
+        get_unposted_articles excludes it via status.
+        """
+        with self.get_session() as session:
+            stmt = update(Article).where(Article.url == url).values(
+                posted_at=None,
+                posted_to_handle=reason,
+                status='rejected'
+            )
+            session.execute(stmt)
+            session.commit()
+
+    def claim_article(self, url: str) -> bool:
+        """
+        Atomically claim an article for posting. Returns True if this process
+        won the claim; False means another process already claimed/posted it.
+        Claiming sets posted_at so concurrent queue reads skip the row; the
+        claim is confirmed by mark_as_posted or rolled back by release_claim.
+        """
+        with self.get_session() as session:
+            stmt = update(Article).where(
+                and_(Article.url == url, Article.posted_at.is_(None))
+            ).values(posted_at=func.now(), posted_to_handle='CLAIMED')
+            result = session.execute(stmt)
+            session.commit()
+            return result.rowcount > 0
+
+    def release_claim(self, url: str) -> bool:
+        """
+        Roll back a claim after a transient post failure so the article is
+        retried next run. Increments attempt_count; after MAX_POST_ATTEMPTS
+        the article is dead-lettered (status='failed') instead of retried.
+        Returns True if the article was dead-lettered.
+        """
+        with self.get_session() as session:
+            obj = session.execute(select(Article).where(Article.url == url)).scalar_one_or_none()
+            if not obj:
+                return False
+            obj.attempt_count = (obj.attempt_count or 0) + 1
+            obj.posted_at = None
+            obj.posted_to_handle = None
+            dead = obj.attempt_count >= self.MAX_POST_ATTEMPTS
+            if dead:
+                obj.status = 'failed'
+            session.commit()
+            return dead
 
     def get_unposted_articles(self, state: str, limit: int = 50) -> List[Dict]:
         """Get unposted articles for a specific state (Round Robin)."""
@@ -187,7 +241,7 @@ class Database:
                 and_(
                     func.upper(Article.state) == state.upper(),
                     Article.posted_at.is_(None),
-                    Article.status != 'archived'
+                    Article.status.not_in(['archived', 'rejected', 'failed'])
                 )
             ).order_by(Article.first_seen_at.desc()).limit(fetch_limit)
             
@@ -262,12 +316,14 @@ class Database:
                     'council_id': obj.council_id,
                     'consecutive_failures': obj.consecutive_failures,
                     'is_disabled': obj.is_disabled,
+                    'disabled_at': obj.disabled_at,
                     'consecutive_empty_runs': obj.consecutive_empty_runs
                 }
             return {
                 'council_id': council_id,
                 'consecutive_failures': 0,
                 'is_disabled': False,
+                'disabled_at': None,
                 'consecutive_empty_runs': 0
             }
 
@@ -293,14 +349,19 @@ class Database:
             obj.last_success_at = func.now()
             obj.consecutive_empty_runs = new_empty
 
-            # Empty-run circuit breaker: disable after threshold consecutive empty runs
-            if new_empty >= self.EMPTY_RUN_DISABLE_THRESHOLD and not obj.is_disabled:
-                obj.is_disabled = True
-                obj.disabled_at = func.now()
-            elif articles_found > 0:
-                # Re-enable on successful article fetch
+            # Empty-run circuit breaker with probation: main.py re-tries
+            # disabled councils once disabled_at is old enough, so a failed
+            # probation must re-stamp the clock or it would retry every run.
+            if articles_found > 0:
+                # Re-enable on successful article fetch (also passes probation)
                 obj.is_disabled = False
                 obj.disabled_at = None
+            elif obj.is_disabled:
+                # Failed probation (still empty): reset the probation clock
+                obj.disabled_at = func.now()
+            elif new_empty >= self.EMPTY_RUN_DISABLE_THRESHOLD:
+                obj.is_disabled = True
+                obj.disabled_at = func.now()
 
             session.commit()
             return obj.is_disabled
@@ -310,13 +371,17 @@ class Database:
         with self.get_session() as session:
             obj = session.get(CouncilHealth, council_id)
             if not obj:
-                obj = CouncilHealth(council_id=council_id)
+                # Column defaults apply at INSERT, so counters are None pre-flush
+                obj = CouncilHealth(council_id=council_id, consecutive_failures=0,
+                                    consecutive_empty_runs=0, is_disabled=False)
                 session.add(obj)
-            
-            obj.consecutive_failures += 1
+
+            obj.consecutive_failures = (obj.consecutive_failures or 0) + 1
             obj.last_failure_at = func.now()
-            
-            if obj.consecutive_failures >= 5:
+
+            # >= 5 failures disables; a failure while already disabled is a
+            # failed probation attempt and re-stamps the probation clock.
+            if obj.consecutive_failures >= 5 or obj.is_disabled:
                 obj.is_disabled = True
                 obj.disabled_at = func.now()
                 

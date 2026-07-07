@@ -17,9 +17,7 @@ class RSSScraper(BaseScraper):
         self.selectors = selectors or {}
     
     def scrape(self) -> List[NewsArticle]:
-        content = self.fetch_page(self.news_url)
-        if not content:
-            return []
+        content = self.fetch_page_or_raise(self.news_url)
             
         # Use 'xml' parser for RSS if available, else html.parser
         try:

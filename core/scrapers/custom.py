@@ -11,6 +11,7 @@ from urllib.parse import urlparse, parse_qs
 
 from .base import NewsArticle, BaseScraper
 from .card import CardScraper
+from core.exceptions import ScrapeError
 
 class WordPressScraper(BaseScraper):
     """
@@ -37,17 +38,25 @@ class WordPressScraper(BaseScraper):
             api_url += "&per_page=20"
 
         articles = []
-        
+
         try:
             # Fetch API
             response = self.session.get(api_url, timeout=20, verify=False)
             if response.status_code != 200:
                 print(f"WordPress API failed for {self.council_name}: {response.status_code}")
-                return []
-                
+                raise ScrapeError(
+                    f"{self.council_id}: WordPress API failed with HTTP {response.status_code}"
+                )
+
             posts = response.json()
-            
-            for post in posts:
+        except ScrapeError:
+            raise
+        except Exception as e:
+            print(f"Error scraping WordPress for {self.council_name}: {e}")
+            raise ScrapeError(f"{self.council_id}: WordPress API fetch/parse failed: {e}") from e
+
+        for post in posts:
+            try:
                 title = post.get('title', {}).get('rendered')
                 # Use 'link' if available, otherwise construct from slug (fallback)
                 url = post.get('link')
@@ -87,10 +96,11 @@ class WordPressScraper(BaseScraper):
                     excerpt=content
                 )
                 articles.append(article)
-                
-        except Exception as e:
-            print(f"Error scraping WordPress for {self.council_name}: {e}")
-            
+
+            except Exception as e:
+                print(f"Error scraping WordPress for {self.council_name}: {e}")
+                continue
+
         return articles
 
 class BunburyScraper(WordPressScraper):
@@ -179,13 +189,11 @@ class OpenCitiesScraper(BaseScraper):
         self.selectors = selectors or {}
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
+        html = self.fetch_page_or_raise(self.news_url)
         soup = self.parse_html(html)
 
         articles = []
-        
+
         # Strategy 1: Standard OpenCities (e.g. Goulburn)
         # Container: .list-container.news-list-container .list-item-container
         items = soup.select('.list-container.news-list-container .list-item-container')
@@ -304,13 +312,11 @@ class APYScraper(BaseScraper):
         self.selectors = selectors or {}
     
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
-            
+        html = self.fetch_page_or_raise(self.news_url)
+
         soup = self.parse_html(html)
         articles = []
-        
+
         # Find all PDF links
         pdf_links = soup.find_all('a', href=lambda x: x and 'PDF' in x.upper() if x else False)
         
@@ -377,9 +383,7 @@ class AspNetScraper(CardScraper):
     Follows section links and extracts articles from nested tables/divs.
     """
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
+        html = self.fetch_page_or_raise(self.news_url)
         soup = self.parse_html(html)
 
         # Find section links (e.g., /News-From-The-City, /Newsletter, /Media-Releases-and-Responses)
@@ -475,9 +479,7 @@ class LGASAScraper(BaseScraper):
         return index_url or redirect_href
 
     def scrape(self) -> List[NewsArticle]:
-        content = self.fetch_page(self.news_url)
-        if not content:
-            return []
+        content = self.fetch_page_or_raise(self.news_url)
 
         from bs4 import BeautifulSoup
         soup = BeautifulSoup(content, 'html.parser')
@@ -543,9 +545,7 @@ class NarromineScraper(BaseScraper):
         super().__init__(council_id, council_name, news_url, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
+        html = self.fetch_page_or_raise(self.news_url)
 
         soup = self.parse_html(html)
         articles = []
@@ -598,12 +598,12 @@ class CatalystBrowserScraper(BaseScraper):
         super().__init__(council_id, council_name, news_url, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        from playwright.sync_api import sync_playwright
-
         ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
               "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36")
         html = None
         try:
+            from playwright.sync_api import sync_playwright
+
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=True)
                 page = browser.new_context(user_agent=ua).new_page()
@@ -618,7 +618,7 @@ class CatalystBrowserScraper(BaseScraper):
                 browser.close()
         except Exception as e:
             print(f"Catalyst browser scrape failed for {self.council_name}: {e}")
-            return []
+            raise ScrapeError(f"{self.council_id}: browser scrape failed: {e}") from e
 
         if not html:
             return []
@@ -670,9 +670,7 @@ class MoreePlainsScraper(BaseScraper):
         super().__init__(council_id, council_name, news_url, **kwargs)
 
     def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
+        html = self.fetch_page_or_raise(self.news_url)
 
         soup = self.parse_html(html)
         articles = []
@@ -741,9 +739,7 @@ class DrupalScraper(BaseScraper):
         from bs4 import BeautifulSoup
         from urllib.parse import urlparse
 
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return []
+        html = self.fetch_page_or_raise(self.news_url)
 
         soup = BeautifulSoup(html, 'html.parser')
         base = "{0.scheme}://{0.netloc}".format(urlparse(self.news_url))

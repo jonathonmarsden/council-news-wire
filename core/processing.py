@@ -15,6 +15,7 @@ from typing import Dict, List, Optional
 from dateutil import parser as date_parser
 
 from core.database import Database
+from core.exceptions import TransientPostError
 from core.poster import BlueSkyPoster
 from core.validator import is_valid_article
 from core.scrapers.base import NewsArticle
@@ -173,7 +174,7 @@ def post_articles(
 
         if not is_valid_article(article):
             print(f"⚠️ Skipping invalid article (metadata/garbage): {article.get('title', 'Unknown')}")
-            db.mark_as_posted(article['url'], "REJECTED_VALIDATION")
+            db.mark_as_rejected(article['url'], "REJECTED_VALIDATION")
             continue
 
         council_config = council_lookup.get(c_id, {})
@@ -188,15 +189,29 @@ def post_articles(
         if council_tag and council_tag not in tags_for_post:
             tags_for_post.append(council_tag)
 
-        post_uri = poster.post_article(
-            council_name,
-            article['title'],
-            article['url'],
-            date=article_date,
-            excerpt=excerpt,
-            hashtags=tags_for_post,
-            council_hashtag=council_tag,
-        )
+        # Atomic claim so a concurrent posting process can't send the same
+        # article; confirmed by mark_as_posted, rolled back by release_claim.
+        if not db.claim_article(article['url']):
+            print(f"  ⚠️ Skipping {article['title'][:30]}... (claimed by another process)")
+            continue
+
+        try:
+            post_uri = poster.post_article(
+                council_name,
+                article['title'],
+                article['url'],
+                date=article_date,
+                excerpt=excerpt,
+                hashtags=tags_for_post,
+                council_hashtag=council_tag,
+            )
+        except TransientPostError as e:
+            dead_lettered = db.release_claim(article['url'])
+            if dead_lettered:
+                print(f"❌ Dead-lettered after {db.MAX_POST_ATTEMPTS} attempts: {article['title'][:50]}")
+            print(f"⚠️ Transient posting failure ({e}); stopping this batch — articles stay queued.")
+            break
+
         if post_uri:
             db.mark_as_posted(article['url'], poster.handle)
             posted_count += 1
@@ -213,6 +228,6 @@ def post_articles(
                 time.sleep(2)
         else:
             print(f"⚠️ Rejected: {article['title'][:30]}... (permanently skipping)")
-            db.mark_as_posted(article['url'], "REJECTED_POSTER_VALIDATION")
+            db.mark_as_rejected(article['url'], "REJECTED_POSTER_VALIDATION")
 
     print(f"\n✅ Posted {posted_count} articles")

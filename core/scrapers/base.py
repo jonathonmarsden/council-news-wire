@@ -20,6 +20,7 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import parser as date_parser
 
+from core.exceptions import ScrapeError
 from core.utils import get_logger
 
 logger = get_logger(__name__)
@@ -188,6 +189,21 @@ class BaseScraper(ABC):
 
         return self._retry(lambda: self._fetch_with_requests(url))
     
+    def fetch_page_or_raise(self, url: str) -> str:
+        """
+        Fetch a page, raising ScrapeError when every attempt fails.
+
+        Use this for the primary listing fetch so network/WAF failures count
+        as scrape FAILURES (record_failure / 5-failure circuit breaker),
+        distinct from a successful fetch that matches zero articles (the
+        empty-run breaker). Per-article detail fetches should keep using
+        fetch_page() so one bad article doesn't fail the whole council.
+        """
+        content = self.fetch_page(url)
+        if content is None:
+            raise ScrapeError(f"{self.council_id}: fetch failed for {url}")
+        return content
+
     def _fetch_with_cloudscraper(self, url: str) -> Optional[str]:
         """Fetch a URL using cloudscraper to bypass Cloudflare."""
         if not CLOUDSCRAPER_AVAILABLE:

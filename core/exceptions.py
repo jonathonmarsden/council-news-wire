@@ -59,6 +59,16 @@ class PublicationError(CouncilBotException):
     pass
 
 
+class TransientPostError(PublicationError):
+    """
+    Raised when a BlueSky post fails for a retryable reason (network error,
+    rate limit, 5xx, expired session). The article must NOT be marked as
+    rejected — leave it queued so the next run retries it.
+    """
+
+    pass
+
+
 class TimeZoneError(CouncilBotException):
     """Raised when timezone conversion or handling fails."""
 

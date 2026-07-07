@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright
 from urllib.parse import urljoin
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class BrowserScraper(BaseScraper):
     """
@@ -40,27 +41,29 @@ class BrowserScraper(BaseScraper):
         print(f"  Browser scraping {url}...")
         
         with sync_playwright() as p:
-            # Launch options: Headless
-            browser = p.chromium.launch(headless=True)
-            
-            ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            if self.user_agent:
-                ua = self.user_agent
-            elif self.use_default_ua:
-                ua = None
-                
-            context = browser.new_context(
-                user_agent=ua
-            )
-            
-            # Block images/fonts to save bandwidth
-            # Note: Do keep CSS as it helps some React apps hydrate correctly
-            if self.block_resources:
-                context.route("**/*.{png,jpg,jpeg,svg,woff,woff2}", lambda route: route.abort())
-            
-            page = context.new_page()
-            
+            # Everything from launch onward sits inside the try so a failure
+            # at any point still reaches the finally and closes the browser.
+            browser = None
             try:
+                browser = p.chromium.launch(headless=True)
+
+                ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                if self.user_agent:
+                    ua = self.user_agent
+                elif self.use_default_ua:
+                    ua = None
+
+                context = browser.new_context(
+                    user_agent=ua
+                )
+
+                # Block images/fonts to save bandwidth
+                # Note: Do keep CSS as it helps some React apps hydrate correctly
+                if self.block_resources:
+                    context.route("**/*.{png,jpg,jpeg,svg,woff,woff2}", lambda route: route.abort())
+
+                page = context.new_page()
+
                 page.goto(url, timeout=60000, wait_until="domcontentloaded")
                 
                 # Wait for content to hydrate
@@ -120,8 +123,11 @@ class BrowserScraper(BaseScraper):
                         continue
                         
             except Exception as e:
-                print(f"  Browser Error: {e}")
+                # Browser/navigation failure is a fetch failure, not an empty
+                # page — raise so it feeds the failure circuit breaker.
+                raise ScrapeError(f"{self.council_id}: browser fetch failed: {e}") from e
             finally:
-                browser.close()
-                
+                if browser:
+                    browser.close()
+
         return articles

@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 import requests
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class SparkNewsListingScraper(BaseScraper):
     """
@@ -45,24 +46,30 @@ class SparkNewsListingScraper(BaseScraper):
                 "Accept": "application/json, text/javascript, */*; q=0.01",
                 "X-Requested-With": "XMLHttpRequest"
             }
-            
+
             # Using standard requests for now as this is a JSON API
             response = requests.get(api_url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
             data = response.json()
-            
-            articles = []
-            if "NewsItems" in data:
-                for item in data["NewsItems"]:
+        except ScrapeError:
+            raise
+        except (requests.RequestException, ValueError) as e:
+            print(f"[{self.council_name}] Error scraping Spark API: {e}")
+            raise ScrapeError(f"{self.council_id}: Spark API fetch/parse failed: {e}") from e
+
+        articles = []
+        if "NewsItems" in data:
+            for item in data["NewsItems"]:
+                try:
                     # Item structure: {"Title": "...", "Summary": "...", "ArticleDate": "...", "Url": "..."}
                     title = item.get("Title")
                     summary = item.get("Summary")
                     date_str = item.get("ArticleDate")
                     rel_url = item.get("Url")
-                    
+
                     if not title or not rel_url:
                         continue
-                        
+
                     full_url = urljoin(base_url, rel_url)
                     date = None
                     if date_str:
@@ -72,11 +79,11 @@ class SparkNewsListingScraper(BaseScraper):
                             # Ensure naive/aware consistency if needed, but BaseScraper usually handles whatever
                             if date.tzinfo:
                                 date = date.replace(tzinfo=None) # naive UTC or local? Usually we want naive for simplicity or keep it.
-                                # The base scraper expects naive or handles it? 
+                                # The base scraper expects naive or handles it?
                                 # Let's keep it simple.
                         except Exception:
                             pass
-                            
+
                     articles.append(NewsArticle(
                         council_id=self.council_id,
                         council_name=self.council_name,
@@ -85,8 +92,7 @@ class SparkNewsListingScraper(BaseScraper):
                         date=date,
                         excerpt=summary
                     ))
-            return articles
-
-        except Exception as e:
-            print(f"[{self.council_name}] Error scraping Spark API: {e}")
-            return []
+                except Exception as e:
+                    print(f"[{self.council_name}] Error scraping Spark API: {e}")
+                    continue
+        return articles

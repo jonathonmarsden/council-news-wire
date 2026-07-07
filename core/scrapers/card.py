@@ -119,10 +119,8 @@ class CardScraper(BaseScraper):
     def scrape(self) -> List[NewsArticle]:
         """Scrape news articles from the news page."""
         articles = []
-        
-        html = self.fetch_page(self.news_url)
-        if not html:
-            return articles
+
+        html = self.fetch_page_or_raise(self.news_url)
         
         soup = self.parse_html(html)
         
