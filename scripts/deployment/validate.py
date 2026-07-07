@@ -128,11 +128,12 @@ def check_env_example() -> Tuple[bool, List[str]]:
     if 'xxxx-xxxx-xxxx-xxxx' not in content:
         errors.append(".env.example may contain real credentials")
     
-    # Check for known real passwords (from previous version)
-    suspicious = ['uiz2-yqs4', 'esdi-vwhx', 'puw2-46da', '53pd-262q']
-    for pattern in suspicious:
-        if pattern in content:
-            errors.append(f".env.example contains suspicious pattern: {pattern}")
+    # Any real-looking BlueSky app password (xxxx-xxxx-xxxx-xxxx format that
+    # isn't the literal placeholder) means real credentials leaked in.
+    import re
+    for match in re.findall(r'\b[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}\b', content):
+        if match != 'xxxx-xxxx-xxxx-xxxx':
+            errors.append(f".env.example contains a real-looking app password: {match[:4]}-****")
     
     return len(errors) == 0, errors
 

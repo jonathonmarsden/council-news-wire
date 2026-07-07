@@ -44,7 +44,7 @@ scraped_documents.json
 posted_documents.json
 
 # Secrets
-scripts/deploy_secrets.py
+scripts/deployment/deploy_secrets.py
 
 # Database
 council_news.db
