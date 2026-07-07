@@ -442,7 +442,9 @@
         "date": "time.card-date"
       },
       "population": 76000,
-      "region": "Hunter"
+      "region": "Hunter",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "randwick-city-council",
@@ -591,7 +593,8 @@
       "link_selector": "a[href*='council_news']",
       "date_selector": "td strong",
       "population": 74410,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "impersonate": "safari15_5"
     },
     {
       "id": "city-of-willoughby",
@@ -615,7 +618,8 @@
       "date_selector": ".news-list__item-date",
       "content_selector": ".news-list__item-blurb",
       "population": 221935,
-      "region": "Illawarra"
+      "region": "Illawarra",
+      "impersonate": "safari15_5"
     },
     {
       "id": "woollahra-municipal-council",
@@ -681,7 +685,9 @@
       "bypass_proxy": true,
       "enabled": true,
       "population": 44535,
-      "region": "Central West"
+      "region": "Central West",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "queanbeyan-palerang-regional-council",
@@ -732,7 +738,9 @@
       "name": "Balranald Shire Council",
       "news_url": "https://balranald.nsw.gov.au/feed/",
       "scraper": "rss_scraper",
-      "enabled": true
+      "enabled": true,
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "bellingen-shire-council",

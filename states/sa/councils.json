@@ -45,7 +45,9 @@
       },
       "population": 10395,
       "region": "Barossa",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "alexandrina",
@@ -143,7 +145,9 @@
       },
       "population": 53810,
       "region": "Adelaide Metro",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "ceduna",
@@ -176,7 +180,9 @@
       },
       "population": 122605,
       "region": "Adelaide Metro",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "clare-and-gilbert-valleys",
@@ -209,7 +215,9 @@
       },
       "population": 1890,
       "region": "Eyre Peninsula",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "coober-pedy",
@@ -225,7 +233,9 @@
       },
       "population": 1780,
       "region": "Outback",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "coorong-district",
@@ -256,7 +266,9 @@
         "date": "div.news-listing__item-date",
         "link": "a.news-listing__item-link"
       },
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "elliston",
@@ -272,7 +284,9 @@
       },
       "population": 1145,
       "region": "Eyre Peninsula",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "flinders-ranges",
@@ -288,7 +302,9 @@
       },
       "population": 1675,
       "region": "Flinders Ranges",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "franklin-harbour",
@@ -304,7 +320,9 @@
       },
       "population": 1385,
       "region": "Eyre Peninsula",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "gawler",
@@ -320,7 +338,9 @@
       },
       "population": 26260,
       "region": "Barossa",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "goyder",
@@ -336,7 +356,9 @@
       },
       "population": 4375,
       "region": "Mid North",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "grant",
@@ -352,7 +374,9 @@
       },
       "population": 9000,
       "region": "Limestone Coast",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "holdfast-bay",
@@ -384,7 +408,9 @@
       },
       "population": 5150,
       "region": "Kangaroo Island",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "karoonda-east-murray",
@@ -400,7 +426,9 @@
       },
       "population": 1075,
       "region": "Murray Mallee",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "kimba",
@@ -416,7 +444,9 @@
       },
       "population": 1070,
       "region": "Eyre Peninsula",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "kingston-district",
@@ -432,7 +462,9 @@
       },
       "population": 2595,
       "region": "Limestone Coast",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "light-regional",
@@ -448,7 +480,9 @@
       },
       "population": 16855,
       "region": "Barossa",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "lower-eyre",
@@ -464,7 +498,9 @@
       },
       "population": 5590,
       "region": "Eyre Peninsula",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "loxton-waikerie",
@@ -480,7 +516,9 @@
       },
       "population": 11880,
       "region": "Riverland",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "marion",
@@ -512,7 +550,9 @@
       },
       "population": 9225,
       "region": "Murray Mallee",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "mitcham",
@@ -528,7 +568,9 @@
       },
       "population": 68745,
       "region": "Adelaide Metro",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "mount-barker-district",
@@ -576,7 +618,9 @@
       },
       "population": 3035,
       "region": "Flinders Ranges",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "murray-bridge",
@@ -592,7 +636,9 @@
       },
       "population": 24275,
       "region": "Murray Mallee",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "naracoorte-lucindale",
@@ -601,7 +647,7 @@
       "enabled": true,
       "scraper": "card_scraper",
       "use_curl": true,
-      "impersonate": "safari15_3",
+      "impersonate": "safari15_5",
       "selectors": {
         "container": ".card-listing__item",
         "title": ".card-listing__title",
@@ -912,7 +958,8 @@
       },
       "population": 17735,
       "region": "Fleurieu",
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "use_curl": true
     },
     {
       "id": "wakefield-regional",

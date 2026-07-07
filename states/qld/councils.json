@@ -139,7 +139,8 @@
       "date_selector": "div.card-footer small",
       "content_selector": "p.card-description",
       "population": 173810,
-      "region": "Far North Queensland"
+      "region": "Far North Queensland",
+      "impersonate": "safari15_5"
     },
     {
       "id": "carpentaria",
@@ -705,7 +706,8 @@
       "date_selector": "time.media-release__date",
       "content_selector": "p.media-release__summary",
       "population": 202430,
-      "region": "North Queensland"
+      "region": "North Queensland",
+      "impersonate": "safari15_5"
     },
     {
       "id": "western-downs",
