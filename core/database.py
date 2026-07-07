@@ -20,7 +20,7 @@ from core.models import Base, Article, CouncilHealth, ScraperStats, LogEvent, Ru
 class Database:
     """SQLAlchemy database handler."""
     
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str = None, create_tables: bool = False):
         """
         Initialize database connection.
         Requires DATABASE_URL env var (Postgres) unless db_url is provided.
@@ -31,11 +31,14 @@ class Database:
 
         # Create Engine
         self.engine = create_engine(self.db_url)
-        
-        # Create Tables (if not exist)
-        # Note: In production with Alembic, we might skip this or use alembic upgrade head
-        Base.metadata.create_all(self.engine)
-        
+
+        # Schema is managed by Alembic (run on container start). create_all
+        # here used to race it: a fresh DB got tables with no alembic_version
+        # stamp ("relation already exists" on upgrade) and missing migrations
+        # were masked everywhere except prod. Opt in explicitly for tests.
+        if create_tables:
+            Base.metadata.create_all(self.engine)
+
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
     
     def get_session(self) -> Session:
@@ -308,6 +311,12 @@ class Database:
                 council_order.append(c_id)
             council_queues[c_id].append(article)
             
+        # Oldest-first within each council: the fetch above is newest-first
+        # (to grab the most recent 200 overall), but draining LIFO per
+        # council let backlog age past 7 days and expire unposted.
+        for queue in council_queues.values():
+            queue.sort(key=lambda a: a['first_seen_at'] or datetime.min)
+
         # Round robin
         varied_articles = []
         while len(varied_articles) < limit and any(council_queues.values()):

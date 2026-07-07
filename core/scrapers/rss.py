@@ -7,6 +7,7 @@ from urllib.parse import unquote
 from bs4 import BeautifulSoup
 
 from .base import BaseScraper, NewsArticle
+from core.exceptions import ScrapeError
 
 class RSSScraper(BaseScraper):
     """Scraper for RSS feeds."""
@@ -18,14 +19,17 @@ class RSSScraper(BaseScraper):
     def scrape(self) -> List[NewsArticle]:
         content = self.fetch_page_or_raise(self.news_url)
             
-        # Use 'xml' parser for RSS if available, else html.parser
+        # Requires the lxml XML parser. The old html.parser fallback was
+        # silently non-functional (lowercased tags, <link> treated as a void
+        # element → every feed yielded 0 articles) — fail loudly instead.
         try:
             soup = BeautifulSoup(content, 'xml')
-        except Exception:
-            soup = BeautifulSoup(content, 'html.parser')
+        except Exception as e:
+            raise ScrapeError(f"{self.council_id}: XML parser unavailable (install lxml): {e}") from e
         articles = []
-        
-        items = soup.find_all('item')
+
+        # 'item' = RSS, 'entry' = Atom
+        items = soup.find_all(['item', 'entry'])
         for item in items:
             title_elem = item.find('title')
             link_elem = item.find('link')
@@ -35,7 +39,8 @@ class RSSScraper(BaseScraper):
             
             link = None
             if link_elem:
-                link = link_elem.get_text(strip=True)
+                # RSS puts the URL in the tag text; Atom uses <link href="...">
+                link = link_elem.get_text(strip=True) or link_elem.get('href')
             elif url_elem:
                 raw_url = url_elem.get_text(strip=True)
                 # Check if URL is encoded (e.g. https%3a%2f%2f)

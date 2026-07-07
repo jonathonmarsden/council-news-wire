@@ -8,6 +8,9 @@ from datetime import datetime
 from typing import List, Optional, Dict
 
 from .base import BaseScraper, NewsArticle
+from core.utils import get_logger
+
+logger = get_logger(__name__)
 
 class CardScraper(BaseScraper):
     """
@@ -322,7 +325,9 @@ class CardScraper(BaseScraper):
     
     def _parse_article(self, item) -> Optional[NewsArticle]:
         """Parse a single article item from the page."""
-        print(f"Parsing item: {item.prettify()[:1000]}...")
+        # debug-level: at print level this emitted up to 1KB of HTML per card
+        # per council per run — megabytes of interleaved cron-log noise
+        logger.debug(f"Parsing item: {item.prettify()[:1000]}...")
         title = None
         url = None
         date = None
@@ -364,9 +369,9 @@ class CardScraper(BaseScraper):
                     title_elem = item.select_one(title_selector)
                     
                 if title_elem:
-                    print(f"Found title elem: {str(title_elem)[:100]}")
+                    logger.debug(f"Found title elem: {str(title_elem)[:100]}")
                     title = self._get_clean_title(title_elem)
-                    print(f"Extracted title: '{title}'")
+                    logger.debug(f"Extracted title: '{title}'")
                 else:
                     # Debug
                     # print(f"Could not find title with selector {title_selector} in {str(item)[:50]}...")

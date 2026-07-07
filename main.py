@@ -44,7 +44,7 @@ from core.timezone_utils import (
     get_recommended_concurrency,
     STATE_TIMEZONES
 )
-from core.exceptions import ScrapeError, ConfigurationError
+from core.exceptions import ScrapeError, ConfigurationError, StateNotFoundError
 from core.processing import process_articles, post_articles
 
 DEFAULT_STATE = 'vic'
@@ -106,16 +106,22 @@ def load_state_config(state_code: str) -> Dict:
     councils_file = base_path / 'councils.json'
 
     if not config_file.exists():
-        raise ValueError(f"State configuration not found: {state_code}")
+        raise StateNotFoundError(f"State configuration not found: {state_code}")
 
-    with open(config_file, 'r') as f:
-        config = json.load(f)
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
 
-    with open(councils_file, 'r') as f:
-        councils_data = json.load(f)
+        with open(councils_file, 'r') as f:
+            councils_data = json.load(f)
+    except json.JSONDecodeError as e:
+        raise ConfigurationError(f"Malformed JSON for state {state_code}: {e}") from e
 
     councils = councils_data.get('councils', [])
-    _validate_councils(councils, state_code)
+    try:
+        _validate_councils(councils, state_code)
+    except ValueError as e:
+        raise ConfigurationError(str(e)) from e
 
     return {
         'config': config,
@@ -398,7 +404,7 @@ def main():
         # Standard load
         try:
             state_data = load_state_config(state_code)
-        except ConfigurationError as e:
+        except (ConfigurationError, ValueError) as e:
             print(f"Error: {e}")
             sys.exit(1)
             
@@ -414,7 +420,7 @@ def main():
     # Initialize Poster
     handle = os.environ.get(state_data['config']['bluesky_handle_env'])
     password = os.environ.get(state_data['config']['bluesky_password_env'])
-    poster = BlueSkyPoster(handle, password)
+    poster = BlueSkyPoster(handle, password, state_code=state_code)
     
     # Prepare council lookup and hashtags
     councils_to_scrape = state_data['councils']

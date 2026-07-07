@@ -19,11 +19,16 @@ class JsonScraper(BaseScraper):
                  description_selector: str = None,
                  **kwargs):
         super().__init__(council_id, council_name, news_url, **kwargs)
-        self.item_selector = item_selector
-        self.title_selector = title_selector
-        self.date_selector = date_selector
-        self.link_selector = link_selector
-        self.description_selector = description_selector
+        # The factory normalizes both config styles (flat keys and nested
+        # "selectors") into a selectors dict; honoring it here means a
+        # json_scraper council written in the documented nested style no
+        # longer silently falls back to the defaults ("items", "title", ...).
+        selectors = kwargs.get('selectors') or {}
+        self.item_selector = selectors.get('item_selector') or item_selector
+        self.title_selector = selectors.get('title_selector') or title_selector
+        self.date_selector = selectors.get('date_selector') or date_selector
+        self.link_selector = selectors.get('link_selector') or link_selector
+        self.description_selector = selectors.get('excerpt_selector') or description_selector
         self.use_curl = kwargs.get('use_curl', False)
         
     def _get_nested(self, data: Dict, path: str):

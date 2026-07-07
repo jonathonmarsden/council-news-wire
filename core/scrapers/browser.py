@@ -3,12 +3,18 @@ Scraper using Playwright for CSR/JS-heavy sites.
 """
 
 from typing import List, Dict, Optional
+import threading
 import time
 from playwright.sync_api import sync_playwright
 from urllib.parse import urljoin
 
 from .base import BaseScraper, NewsArticle
 from core.exceptions import ScrapeError
+
+# Each scrape launches a full Chromium (~300MB). The thread pool can
+# co-schedule several browser_scraper councils (NSW alone has 13) — on the
+# 4GB VPS that risks the OOM killer, whose victim may be Postgres.
+_BROWSER_SEMAPHORE = threading.Semaphore(2)
 
 class BrowserScraper(BaseScraper):
     """
@@ -23,7 +29,11 @@ class BrowserScraper(BaseScraper):
         self.user_agent = user_agent
 
     def scrape(self) -> List[NewsArticle]:
-        """Scrape using a real browser."""
+        """Scrape using a real browser (at most 2 concurrent Chromiums)."""
+        with _BROWSER_SEMAPHORE:
+            return self._scrape_with_browser()
+
+    def _scrape_with_browser(self) -> List[NewsArticle]:
         articles = []
         url = self.news_url
         
