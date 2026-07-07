@@ -30,7 +30,8 @@ services:
         max-size: "10m"
         max-file: "3"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     # Run migrations, then idle. External cron jobs handle execution.
     command: sh -c "python -m alembic upgrade head && tail -f /dev/null"
 
@@ -40,10 +41,15 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: councilbot
-      POSTGRES_PASSWORD: securepassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-securepassword}
       POSTGRES_DB: council_news
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U councilbot -d council_news"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     logging:
       driver: "json-file"
       options:

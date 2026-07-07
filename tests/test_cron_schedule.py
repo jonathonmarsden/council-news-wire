@@ -196,3 +196,65 @@ class TestCronScheduleEdgeCases:
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
+
+
+class TestStaggeredCrontabOutput:
+    """Lock in the DEFAULT generator output: a COMPLETE crontab.
+
+    A rebuild that omits the infra lines (posting queue, watchdog, alerts)
+    silently kills posting and monitoring — these tests make that regression
+    impossible to ship.
+    """
+
+    SLOTS = 6
+    STATES = ['nsw', 'vic', 'qld', 'wa', 'sa', 'tas', 'nt', 'act']
+
+    @pytest.fixture(scope='class')
+    def crontab(self, tmp_path_factory):
+        import subprocess
+        import sys as _sys
+        from pathlib import Path
+        root = Path(__file__).resolve().parents[1]
+        result = subprocess.run(
+            [_sys.executable, str(root / 'scripts/deployment/generate_crontab.py')],
+            capture_output=True, text=True, cwd=root,
+        )
+        assert result.returncode == 0, result.stderr
+        return result.stdout
+
+    def test_includes_all_infra_lines(self, crontab):
+        for script in ['process_global_queue.py', 'feed_watchdog.py',
+                       'alert_check.py', 'daily_briefing.py', 'cleanup_remote_db.py']:
+            assert script in crontab, f"infra line missing from default crontab: {script}"
+
+    def test_includes_env_header(self, crontab):
+        assert 'SHELL=/bin/bash' in crontab
+        assert 'PATH=' in crontab
+
+    def test_each_state_covers_every_slot_exactly_once(self, crontab):
+        import re
+        for state in self.STATES:
+            jobs = re.findall(
+                rf'--state {state} --slots {self.SLOTS} --slot (\d+)', crontab)
+            assert sorted(int(s) for s in jobs) == list(range(self.SLOTS)), \
+                f"{state}: expected slots 0..{self.SLOTS - 1} exactly once, got {jobs}"
+
+    def test_scrape_jobs_are_scrape_only(self, crontab):
+        scrape_lines = [l for l in crontab.splitlines() if 'main.py --state' in l]
+        assert len(scrape_lines) == len(self.STATES) * self.SLOTS
+        for line in scrape_lines:
+            assert '--scrape-only' in line, f"scrape job may post (missing --scrape-only): {line}"
+
+    def test_same_state_jobs_never_close_together(self, crontab):
+        """Slots for one state must be separated by more than the 20-min timeout."""
+        import re
+        for state in self.STATES:
+            times = []
+            for line in crontab.splitlines():
+                if f'--state {state} ' in line:
+                    m = re.match(r'^(\d+) (\d+) ', line)
+                    assert m, f"unparseable cron time: {line}"
+                    times.append(int(m.group(2)) * 60 + int(m.group(1)))
+            times.sort()
+            gaps = [b - a for a, b in zip(times, times[1:])]
+            assert all(g > 20 for g in gaps), f"{state}: jobs within 20 min: {times}"

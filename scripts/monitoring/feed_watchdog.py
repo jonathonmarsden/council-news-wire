@@ -42,6 +42,13 @@ HANDLES = {
     "NT": "roundupnewsbotnt.bsky.social", "ACT": "roundupnewsbotact.bsky.social",
 }
 API = "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed"
+# Low-volume states are legitimately quiet for longer (few councils, slow
+# weekends) — a flat 24h threshold re-alerts every 4h and trains channel
+# blindness, which is what quiet-by-default was meant to fix.
+STALE_HOURS_OVERRIDE = {"TAS": 48.0, "NT": 48.0, "ACT": 48.0}
+# Re-alerting an UNCHANGED problem set is suppressed for this long.
+COOLDOWN_FILE = ROOT / "logs" / ".watchdog_last_alert"
+COOLDOWN_HOURS = 24.0
 SUFFIXES = ["regional council", "shire council", "city council", "municipal council",
             "district council", "town council", "aboriginal shire", "council", "shire",
             "city of", "the ", "regional"]
@@ -103,9 +110,10 @@ def check(stale_hours, coverage_floor, depth):
         coverage = seen / len(councils) if councils else 0
 
         flags = []
-        if age_h is not None and age_h > stale_hours:
+        st_stale = STALE_HOURS_OVERRIDE.get(st, stale_hours)
+        if age_h is not None and age_h > st_stale:
             flags.append(f"STALE {age_h:.0f}h")
-            problems.append(f"**{st}**: stale — last post {age_h:.0f}h ago (>{stale_hours}h)")
+            problems.append(f"**{st}**: stale — last post {age_h:.0f}h ago (>{st_stale:.0f}h)")
         # Coverage floor only meaningful for multi-council states.
         if len(councils) >= 10 and coverage < coverage_floor:
             flags.append(f"THIN {coverage:.0%}")
@@ -135,21 +143,78 @@ def main():
     if problems:
         body = "\n".join(f"• {p}" for p in problems)
         print("\nALERT:\n" + body)
-        try:
-            from discord_logger import send_discord_embed, DISCORD_WEBHOOK_ALERTS
-            send_discord_embed(DISCORD_WEBHOOK_ALERTS, {
-                "title": "🚨 Feed watchdog: output looks wrong",
-                "description": body[:4000],
-                "color": RED,
-                "timestamp": datetime.utcnow().isoformat(),
-            })
-        except Exception as e:
-            print(f"(Discord alert not sent: {e})")
+        if _in_cooldown(problems):
+            print("(unchanged problem set — Discord re-alert suppressed by cooldown)")
+        else:
+            try:
+                from discord_logger import send_discord_embed, DISCORD_WEBHOOK_ALERTS
+                send_discord_embed(DISCORD_WEBHOOK_ALERTS, {
+                    "title": "🚨 Feed watchdog: output looks wrong",
+                    "description": body[:4000],
+                    "color": RED,
+                    "timestamp": datetime.utcnow().isoformat(),
+                })
+                _record_alert(problems)
+            except Exception as e:
+                print(f"(Discord alert not sent: {e})")
         sys.exit(1)
 
+    _clear_cooldown()
     print("\n✅ All feeds fresh and representative.")
     sys.exit(0)
 
 
+def _problems_hash(problems):
+    import hashlib
+    return hashlib.md5("\n".join(sorted(problems)).encode()).hexdigest()
+
+
+def _in_cooldown(problems) -> bool:
+    try:
+        state = json.loads(COOLDOWN_FILE.read_text())
+        age_h = time.time() / 3600 - state["ts_hours"]
+        return state["hash"] == _problems_hash(problems) and age_h < COOLDOWN_HOURS
+    except Exception:
+        return False
+
+
+def _record_alert(problems) -> None:
+    try:
+        COOLDOWN_FILE.parent.mkdir(parents=True, exist_ok=True)
+        COOLDOWN_FILE.write_text(json.dumps(
+            {"hash": _problems_hash(problems), "ts_hours": time.time() / 3600}))
+    except Exception as e:
+        print(f"(cooldown state not written: {e})")
+
+
+def _clear_cooldown() -> None:
+    try:
+        COOLDOWN_FILE.unlink()
+    except Exception:
+        pass
+
+
+def _crash_alert(exc: Exception) -> None:
+    """The watchdog watching nothing is itself an alert-worthy failure."""
+    try:
+        from discord_logger import send_discord_embed, DISCORD_WEBHOOK_ALERTS
+        send_discord_embed(DISCORD_WEBHOOK_ALERTS, {
+            "title": "🔴 feed_watchdog CRASHED",
+            "description": f"The feed watchdog itself failed — output monitoring is blind.\n"
+                           f"`{type(exc).__name__}: {exc}`"[:4000],
+            "color": RED,
+            "timestamp": datetime.utcnow().isoformat(),
+        })
+    except Exception:
+        pass
+
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as e:
+        print(f"feed_watchdog crashed: {type(e).__name__}: {e}")
+        _crash_alert(e)
+        sys.exit(2)
