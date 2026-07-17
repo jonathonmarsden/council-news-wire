@@ -95,7 +95,7 @@ class AlykaScraper(BaseScraper):
                 self.api_endpoint,
                 json=body,
                 headers=headers,
-                impersonate=self.impersonate or "chrome110",
+                impersonate=self.impersonate or "chrome124",
                 proxies={"http": self.proxy, "https": self.proxy} if self.proxy else None,
                 timeout=30
             )
@@ -223,7 +223,7 @@ class AlykaScraper(BaseScraper):
                 self.api_endpoint,
                 json=body,
                 headers=headers,
-                impersonate=self.impersonate or "chrome110",
+                impersonate=self.impersonate or "chrome124",
                 proxies={"http": self.proxy, "https": self.proxy} if self.proxy else None,
                 timeout=30
             )

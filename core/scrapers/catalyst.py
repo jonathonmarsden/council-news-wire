@@ -27,7 +27,7 @@ class CatalystScraper(BaseScraper):
                  use_curl: bool = False, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
                  limit: Optional[int] = None, proxy: Optional[str] = None, 
-                 impersonate: str = "chrome110", **kwargs):
+                 impersonate: str = "chrome124", **kwargs):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
                          mobile_mode, limit, proxy, impersonate, **kwargs)
         self.selectors = selectors or {}

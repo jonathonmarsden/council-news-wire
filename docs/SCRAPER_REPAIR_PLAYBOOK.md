@@ -142,3 +142,37 @@ print(f'valid={len(v)} dated={len(d)} newest={max((a.date for a in d), default=N
 # Recovery is proven by re-running the feed-representation triage after the next
 # scrape window, NOT by the local scrape alone.
 ```
+
+## 2026-07-17 full-sweep repair (22 councils → 531/531 enabled scraping)
+
+Ground-truth tool: `scripts/analysis/test_all_councils_noproxy.py` (DB-free, ~2 min
+for the fleet). The June backlog had entirely self-healed (residential IP + config
+fixes); the real broken set was 22, all content-side rot. All fixed or
+evidence-disabled same day. Recipes learned:
+
+- **VIC Drupal 10/11 rebuild wave**: vendors are rolling VIC councils onto new
+  Drupal themes — expect moved news paths (`/news` → `/community/news` etc.), new
+  card class schemes, dead legacy `/rss/news` endpoints, and in one case a whole
+  new domain (geelongcity.vic.gov.au). Check path, then cards, then feed.
+- **LGASA "0 items" is usually a landing-page URL**, not template drift: the real
+  listing lives at `<section>/latest-news`. Also: `LGASAScraper` IGNORES config
+  selectors (class-level constants) — if a site lacks `news-listing__*` markup,
+  switch it to `curl_scraper` (which honors selectors) rather than adding a
+  decorative selectors block.
+- **Cloudflare now rejects the `chrome110` fingerprint** on several platforms
+  (LGASA/Squiz, OpenCities). Factory default is now `chrome124`; one OpenCities
+  site (burnside) requires `safari15_5` specifically.
+- **Dateless listing cards**: point `date_selector` at a detail-page element
+  (`time`, or `meta[name='DC.Date.created']` on elcomCMS) — CardScraper's
+  detail-fetch path resolves it, capped at 10 articles; pair with `"limit"` on
+  huge flat listings (buloke's elcom ArticleList has 399 items).
+- **Re-platformed-to-WordPress sites behind TLS-fingerprint WAFs** (laverton):
+  `wordpress_scraper` ignores `use_curl` (core follow-up), but `json_scraper` with
+  `use_curl` + `wp-json/wp/v2/posts?_envelope=true` works (`_envelope` because
+  JsonScraper can't index a top-level array).
+- **Umbraco Delivery API** (subiaco) and **custom WP JSON routes** (harvey
+  `/wp-json/aw/v1/post`) let former browser_scraper councils downgrade to
+  json_scraper — 10-40x faster, no Chromium.
+- **Unfixable = disable honestly**: `"enabled": false` + `"disabled_reason"` in
+  councils.json (pormpuraaw: no scrapeable news anywhere — hub tiles, undated
+  inline text, empty WP API). Re-check quarterly via the harness.

@@ -111,6 +111,7 @@
       },
       "population": 11185,
       "region": "Riverland",
+      "impersonate": "chrome124",
       "scraper": "lgasa_scraper"
     },
     {
@@ -121,14 +122,14 @@
       "parser": "html",
       "use_curl": true,
       "selectors": {
-        "container": ".news-listing__item",
-        "title": ".news-listing__item-title",
-        "date": ".news-listing__item-date",
-        "link": ".news-listing__item-link"
+        "container": ".list-item-container",
+        "title": ".list-item-title",
+        "date": "p.published-on",
+        "link": "a"
       },
       "population": 47145,
       "region": "Adelaide Metro",
-      "impersonate": "chrome124",
+      "impersonate": "safari15_5",
       "scraper": "card_scraper"
     },
     {
@@ -586,7 +587,8 @@
       },
       "population": 44365,
       "region": "Adelaide Hills",
-      "scraper": "lgasa_scraper"
+      "impersonate": "chrome124",
+      "scraper": "curl_scraper"
     },
     {
       "id": "mount-gambier",
@@ -1066,7 +1068,7 @@
     {
       "id": "yankalilla",
       "name": "District Council of Yankalilla",
-      "news_url": "https://www.yankalilla.sa.gov.au/news-and-events",
+      "news_url": "https://www.yankalilla.sa.gov.au/news-and-events/latest-news",
       "enabled": true,
       "scraper": "lgasa_scraper",
       "parser": "html",

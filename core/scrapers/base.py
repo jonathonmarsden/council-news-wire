@@ -94,7 +94,7 @@ class BaseScraper(ABC):
         'Upgrade-Insecure-Requests': '1',
     }
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome110", **kwargs):
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome124", **kwargs):
         """
         Initialize the scraper.
         
