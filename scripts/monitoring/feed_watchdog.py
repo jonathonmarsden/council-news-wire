@@ -45,7 +45,9 @@ API = "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed"
 # Low-volume states are legitimately quiet for longer (few councils, slow
 # weekends) — a flat 24h threshold re-alerts every 4h and trains channel
 # blindness, which is what quiet-by-default was meant to fix.
-STALE_HOURS_OVERRIDE = {"TAS": 48.0, "NT": 48.0, "ACT": 48.0}
+# ACT is one source (ACT gov media feed) that legitimately goes quiet for
+# weeks (verified July 2026: 8+ days with zero releases) — 7-day threshold.
+STALE_HOURS_OVERRIDE = {"TAS": 48.0, "NT": 48.0, "ACT": 168.0}
 # Re-alerting an UNCHANGED problem set is suppressed for this long.
 COOLDOWN_FILE = ROOT / "logs" / ".watchdog_last_alert"
 COOLDOWN_HOURS = 24.0
