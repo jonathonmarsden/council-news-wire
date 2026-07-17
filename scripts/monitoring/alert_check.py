@@ -124,10 +124,14 @@ def main():
         # 5. Missed scrape runs: staggered scraping gives every state ~6 runs
         #    per 24h; zero rows means cron/docker is wedged or a crontab
         #    install dropped the scrape lines.
+        # councils_scraped > 0 filters out post-only queue runs (~1152/day),
+        # which otherwise mask a dead scraper: a state with zero scrapes
+        # still accumulates queue-run rows.
         run_counts = {
             (st or "").lower(): n for st, n in
             s.query(RunSummary.state, func.count(RunSummary.id))
-            .filter(RunSummary.started_at >= now - timedelta(hours=24))
+            .filter(RunSummary.started_at >= now - timedelta(hours=24),
+                    RunSummary.councils_scraped > 0)
             .group_by(RunSummary.state).all()
         }
         no_runs = [st for st in all_states if run_counts.get(st, 0) == 0]
