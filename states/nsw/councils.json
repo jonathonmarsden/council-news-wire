@@ -784,9 +784,14 @@
     {
       "id": "bogan-shire-council",
       "name": "Bogan Shire Council",
-      "news_url": "https://www.bogan.nsw.gov.au/public-notices?format=feed&type=rss",
-      "scraper": "rss_scraper",
+      "news_url": "https://bogan.nsw.gov.au/your-council/public-notices/latest-news",
+      "scraper": "curl_scraper",
       "enabled": true,
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "item_selector": ".widget-items-container article",
+      "title_selector": "h2",
+      "link_selector": "h2 a",
       "population": 2835,
       "region": "Central West"
     },

@@ -551,16 +551,14 @@
     {
       "id": "harvey",
       "name": "Shire of Harvey",
-      "news_url": "https://www.harvey.wa.gov.au/news-and-events/latest-news",
-      "scraper": "browser_scraper",
+      "news_url": "https://www.harvey.wa.gov.au/wp-json/aw/v1/post",
+      "scraper": "json_scraper",
       "enabled": true,
-      "selectors": {
-        "wait_for": ".news-item",
-        "container": ".news-item",
-        "title": "h3",
-        "date": ".date",
-        "link": "a"
-      }
+      "item_selector": "data",
+      "title_selector": "title",
+      "date_selector": "date_gmt",
+      "link_selector": "permalink",
+      "excerpt_selector": "excerpt"
     },
     {
       "id": "irwin",
@@ -711,11 +709,15 @@
     {
       "id": "laverton",
       "name": "Shire of Laverton",
-      "news_url": "https://www.laverton.wa.gov.au/news/",
-      "scraper": "catalyst_scraper",
+      "news_url": "https://laverton.wa.gov.au/wp-json/wp/v2/posts?per_page=20&_envelope=true",
+      "scraper": "json_scraper",
       "enabled": true,
-      "use_curl": false,
-      "disabled_reason": "Catalyst, but news does not render on /news/ (no .pageTypeListing/.module-list after JS). Likely wrong URL or empty. Pending."
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "item_selector": "body",
+      "title_selector": "title.rendered",
+      "date_selector": "date",
+      "link_selector": "link"
     },
     {
       "id": "leonora",
@@ -728,15 +730,15 @@
     {
       "id": "mandurah",
       "name": "City of Mandurah",
-      "news_url": "https://www.mandurah.wa.gov.au/explore/whats-on/news",
+      "news_url": "https://www.mandurah.wa.gov.au/our-council/news-and-public-notices",
       "scraper": "browser_scraper",
       "enabled": true,
       "selectors": {
-        "wait_for": ".news-archive__item",
-        "container": ".news-archive__item",
-        "title": ".news-archive__title",
-        "date": ".news-archive__date",
-        "link": "a.news-archive__title"
+        "wait_for": "li.listing-item article[id^='Card-']",
+        "container": "li.listing-item",
+        "title": "h3",
+        "date": "span[id$='-date'] span:not(.sr-only)",
+        "link": "a"
       }
     },
     {
@@ -1094,17 +1096,13 @@
     {
       "id": "subiaco",
       "name": "City of Subiaco",
-      "news_url": "https://www.subiaco.wa.gov.au/see-do/good-to-know/news",
-      "scraper": "browser_scraper",
+      "news_url": "https://www.subiaco.wa.gov.au/umbraco/delivery/api/v2/content?fetch=children%3Acc4a106d-3a72-4fdf-84d7-cd928dd455fb&skip=0&take=12&sort=createDate%3Adesc",
+      "scraper": "json_scraper",
       "enabled": true,
-      "selectors": {
-        "wait_for": ".news-item",
-        "container": ".news-item",
-        "title": ".title",
-        "link": "a.news-link",
-        "date": ".release-date",
-        "content": ".summary"
-      },
+      "item_selector": "items",
+      "title_selector": "name",
+      "date_selector": "properties.articleDate",
+      "link_selector": "https://www.subiaco.wa.gov.au{route.path}",
       "population": 17975,
       "region": "Perth Metro"
     },
@@ -1374,11 +1372,16 @@
     {
       "id": "murray",
       "name": "Shire of Murray",
-      "news_url": "https://www.murray.wa.gov.au/news/",
-      "scraper": "catalyst_scraper",
+      "news_url": "https://www.murray.wa.gov.au/",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": false,
-      "disabled_reason": "Catalyst but classic .module-list/.module-item-wrapper (not .pageTypeListing); also loads slowly/times out. Needs the classic-layout browser variant. Pending."
+      "selectors": {
+        "container": ".newsfeed article.news-item",
+        "title": ".title",
+        "date": ".date",
+        "link": "a",
+        "excerpt": ".summary"
+      }
     }
   ]
 }

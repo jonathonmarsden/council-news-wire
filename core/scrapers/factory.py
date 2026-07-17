@@ -107,8 +107,8 @@ class ScraperFactory:
             # Use CLI proxy if provided, otherwise check council config
             use_proxy = proxy or council.get('proxy')
         
-        # Get impersonation setting (default to chrome110)
-        impersonate = council.get('impersonate', 'chrome110')
+        # Default chrome124: Cloudflare began rejecting the chrome110 fingerprint (July 2026)
+        impersonate = council.get('impersonate', 'chrome124')
         
         # Pass all other council config as kwargs to allow custom scrapers to assume parameters
         reserved_keys = {'id', 'name', 'news_url', 'scraper', 'selectors', 'limit', 'proxy', 'impersonate', 'use_curl', 'use_cloudscraper', 'mobile_mode', 'verify_ssl'}
