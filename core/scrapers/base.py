@@ -407,6 +407,11 @@ class BaseScraper(ABC):
             return datetime.now()
         if lower == 'yesterday':
             return datetime.now() - timedelta(days=1)
+        # A bare year ("2026") strict-parses to today's month/day — a
+        # fabricated date. Refuse it.
+        if re.fullmatch(r'\d{4}', date_str):
+            return None
+
         rel = re.match(r'^(?:about\s+)?(\d+)\s+(minute|hour|day|week|month)s?\s+ago$', lower)
         if rel:
             qty = int(rel.group(1))
@@ -431,8 +436,11 @@ class BaseScraper(ABC):
             # Fuzzy parsing fills missing components from TODAY, fabricating
             # near-now dates from junk like "3 min read" (which then passes
             # the 7-day freshness filter). Only allow it when the text
-            # plausibly contains a full day+month(+year) date.
-            if re.search(r'\d{1,2}[\s/.\-]+[A-Za-z0-9]+[\s/.\-]+\d{2,4}', date_str):
+            # plausibly contains a full day+month(+year) date, or a
+            # month-name + year (PDF newsletter titles like
+            # "Newsletter October 2025" — junk lacks the 4-digit year).
+            if re.search(r'\d{1,2}[\s/.\-]+[A-Za-z0-9]+[\s/.\-]+\d{2,4}', date_str) or \
+               re.search(r'(?i)\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{4}\b', date_str):
                 try:
                     return date_parser.parse(date_str, dayfirst=True, fuzzy=True)
                 except (ValueError, TypeError):
