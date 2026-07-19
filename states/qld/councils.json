@@ -344,11 +344,16 @@
     {
       "id": "lockhart-river",
       "name": "Lockhart River Aboriginal Shire Council",
-      "news_url": "https://lockhart.qld.gov.au",
+      "news_url": "https://lockhart.qld.gov.au/waanta-newsletters",
       "scraper": "card_scraper",
-      "enabled": false,
-      "disabled_reason": "No RSS feed, PDF-only newsletters (2026)",
+      "enabled": true,
       "use_curl": true,
+      "impersonate": "chrome124",
+      "item_selector": "a.card-no-bs[href$=\".pdf\"]",
+      "link_selector": "self",
+      "title_selector": ".card-title",
+      "date_selector": ".card-title",
+      "limit": 3,
       "population": 695,
       "region": "Cape York"
     },
@@ -577,11 +582,16 @@
       "name": "Richmond Shire Council",
       "news_url": "https://www.richmond.qld.gov.au/monthly-newsletters",
       "scraper": "curl_scraper",
-      "enabled": false,
-      "disabled_reason": "Only PDF Newsletters available",
+      "enabled": true,
+      "item_selector": "div[itemprop=\"articleBody\"] p:has(a[href*=\".pdf\"])",
+      "link_selector": "a[href*=\".pdf\"]",
+      "title_selector": "self",
+      "date_selector": "i",
+      "limit": 3,
       "population": 870,
       "region": "North West Queensland",
-      "use_curl": true
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "rockhampton",
@@ -757,13 +767,18 @@
     {
       "id": "wujal-wujal",
       "name": "Wujal Wujal Aboriginal Shire Council",
-      "news_url": "https://www.wujalwujalcouncil.qld.gov.au/council/newsandnotices/",
+      "news_url": "https://www.wujalwujalcouncil.qld.gov.au/Council/News-and-Notices",
       "scraper": "curl_scraper",
-      "enabled": false,
-      "disabled_reason": "Single page unstructured content",
+      "enabled": true,
+      "item_selector": ".list-item-container",
+      "link_selector": "article > a",
+      "title_selector": ".list-item-title",
+      "date_selector": ".published-on",
+      "excerpt_selector": "a > p:not([class])",
       "population": 325,
       "region": "Far North Queensland",
-      "use_curl": true
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "yarrabah",
