@@ -98,7 +98,7 @@ Tunnel connection failed: 407 Proxy Authentication Required
 **Diagnosis**:
 ```bash
 # Test proxy from command line
-curl -v -x http://REDACTED-rotate:REDACTED@proxy.example.com:80 https://httpbin.org/ip
+curl -v -x http://user:pass@proxy.example.com:port https://httpbin.org/ip
 
 # Expected output: {"origin": "XXX.XXX.XXX.XXX"}
 # Error output: 407 response
@@ -122,7 +122,7 @@ docker-compose restart bot
 # 5. Verify it works
 docker-compose exec bot python -c "
 import requests
-proxies = {'https': 'http://REDACTED-rotate:REDACTED@proxy.example.com:80'}
+proxies = {'https': 'http://user:pass@proxy.example.com:port'}
 r = requests.get('https://httpbin.org/ip', proxies=proxies)
 print(r.json())
 "

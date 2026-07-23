@@ -145,7 +145,7 @@ The June 2026 incident (85 councils silently disabled) was not a fluke — it is
 - **Fix:** log all non-empty child output (post-only runs are small), and call `discord_logger.log_error` from `post_articles` on auth failure so it lands in `log_events` (which alert_check reads).
 
 ### OPS-4: Default (legacy) generator output is broken and dangerous — and still the default
-- **Where:** `generate_crontab.py` no-flags emits `--concurrency $(dynamic)` (line 62 — cron executes it as command substitution → argparse failure, every scrape fails) and the old twice-daily burst schedule, overwriting `crontab_generated.txt`. This is exactly what the assistant "regenerate after DST" instruction produces.
+- **Where:** `generate_crontab.py` no-flags emits `--concurrency $(dynamic)` (line 62 — cron executes it as command substitution → argparse failure, every scrape fails) and the old twice-daily burst schedule, overwriting `crontab_generated.txt`. This is exactly what the docs/DEVELOPER_GUIDE.md "regenerate after DST" instruction produces.
 - **Fix:** make `--staggered` the default; delete the legacy path or gate behind `--legacy-burst` with a loud warning. (If legacy survives: the group stagger is also a silent no-op — `timezone_utils.py:135-139` adds the offset to the *date*, but `get_utc_time` reads only Y/M/D, so NSW/VIC/ACT all fire at the identical UTC minute; `tests/test_cron_schedule.py:35-55` asserts nothing real.)
 
 ### OPS-5: Deploy/rollback race with cron jobs
@@ -210,7 +210,7 @@ The June 2026 incident (85 councils silently disabled) was not a fluke — it is
 - **QUAL-12** `database.py:36`: `Base.metadata.create_all` in `Database.__init__` fights alembic (fresh DB gets tables without a version stamp; masks missing migrations). Remove; rely on the container's `alembic upgrade head`; keep behind an explicit flag for sqlite tests.
 - **QUAL-13** `main.py:411`: `args.slot % args.slots` silently wraps an out-of-range `--slot` (a `--slot 6 --slots 6` typo double-scrapes slot 0 while the intended councils never run). Hard `parser.error` on out-of-range. Also validate in `generate_staggered_crontab` that `slots` divides 24 (`--slots 25` → `hours_per_slot=0`, all slots stack).
 - **QUAL-14** Hardcoding rot: `wa_custom.py:478` (Dumbleyung) pins year-less dates to `datetime(2025,1,1)` forever-stale; `wa_custom.py:301` posts literal `"No Title"`; `wa_custom.py:356` bakes in a Kentico `userguid` that rots on index rebuild; `alyka.py:36-38` embeds the Stirling endpoint behind `if 'stirling' in council_id` — move all to config.
-- **QUAL-15** `core/poster.py:64-72` + assistant: state detection is regex-coupled to the `roundupnewsbot` handle prefix. **Verified this works today** (production `.env` uses `roundupnewsbot*`; assistant's `lgnews*` is stale documentation — fix assistant). But a rebrand silently degrades every account to `'NAT'`/`#ALGA` with zero errors — pass `state_code` explicitly into `BlueSkyPoster.__init__` from `main.py:393` and keep the regex as fallback.
+- **QUAL-15** `core/poster.py:64-72` + docs/DEVELOPER_GUIDE.md: state detection is regex-coupled to the `roundupnewsbot` handle prefix. **Verified this works today** (production `.env` uses `roundupnewsbot*`; docs/DEVELOPER_GUIDE.md's `lgnews*` is stale documentation — fix docs/DEVELOPER_GUIDE.md). But a rebrand silently degrades every account to `'NAT'`/`#ALGA` with zero errors — pass `state_code` explicitly into `BlueSkyPoster.__init__` from `main.py:393` and keep the regex as fallback.
 - **QUAL-16** `discord_logger.py:69-70,93-94`: `log_warning`/`log_error` early-return (drop events) if `start_run()` was never called — lazily create `Database()` so maintenance scripts' events persist.
 - **OPS-10** Duplicate daily briefing: both the generated crontab (`generate_crontab.py:181`) and `ops_monitoring.yml` (cron `0 21 * * *`) run it — keep the GH one (has failure alerting), drop the crontab line.
 - **OPS-11** Watchdog alert fatigue: one 24h stale threshold for all 8 states + no cooldown → NT/ACT/TAS lulls re-alert every 4h, retraining channel-blindness. Per-state `stale_hours` (48h for TAS/NT/ACT) + a hash-of-problems cooldown file.
@@ -247,7 +247,7 @@ OPS-1 (complete staggered crontab; regenerate + reinstall on VPS, diff against `
 - Protocol-relative `//host/path` URLs — `urljoin` resolves correctly.
 - Staggered slot math — `md5(id) % slots` partitions every council into exactly one slot; state-pair hour collisions are separated by 28 min > the 20-min container timeout.
 - Naive-vs-aware datetime *crashes* — database.py:209-210 strips tzinfo before comparing (skew is QUAL-11, but no crash).
-- `feed_watchdog`'s hardcoded `roundupnewsbot*` handles — correct; assistant's `lgnews*` is the stale side. Network failure to BlueSky is correctly treated as a problem, not as healthy.
+- `feed_watchdog`'s hardcoded `roundupnewsbot*` handles — correct; docs/DEVELOPER_GUIDE.md's `lgnews*` is the stale side. Network failure to BlueSky is correctly treated as a problem, not as healthy.
 - Alembic heads (`d99b9970035d` → `2f3a0c8b2b9d` → `e4a1c3f7b8d2`) match `core/models.py` — no drift beyond QUAL-12.
 - Page-1-only pagination — correct for newest-first feeds scraped daily.
 - `_detect_state` regex — works today (see QUAL-15).

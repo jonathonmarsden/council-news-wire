@@ -314,9 +314,9 @@ curl -X POST -H 'Content-type: application/json' \
 **Check every 6 hours**:
 ```bash
 # Test rotation (should return different IPs)
-IP1=$(curl -s -x http://REDACTED-rotate:REDACTED@proxy.example.com:80 https://httpbin.org/ip | jq -r .origin)
+IP1=$(curl -s -x http://user:pass@proxy.example.com:port https://httpbin.org/ip | jq -r .origin)
 sleep 2
-IP2=$(curl -s -x http://REDACTED-rotate:REDACTED@proxy.example.com:80 https://httpbin.org/ip | jq -r .origin)
+IP2=$(curl -s -x http://user:pass@proxy.example.com:port https://httpbin.org/ip | jq -r .origin)
 
 if [ "$IP1" = "$IP2" ]; then
     echo "⚠️  WARNING: Proxy not rotating (same IP: $IP1)"

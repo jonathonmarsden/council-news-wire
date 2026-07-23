@@ -79,3 +79,7 @@ wa_selector_report.json
 *.html
 *_files/
 
+
+# Debug artefacts (never commit scraped page dumps)
+_debug_logs/
+_debug_archive/
