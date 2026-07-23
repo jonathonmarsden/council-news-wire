@@ -1,8 +1,9 @@
 import json
 import os
+from pathlib import Path
 
 def audit_wa_scrapers():
-    file_path = '/home/user/projects/council-news-bot/states/wa/councils.json'
+    file_path = Path(__file__).resolve().parents[1] / 'states' / 'wa' / 'councils.json'
     with open(file_path, 'r') as f:
         data = json.load(f)
     

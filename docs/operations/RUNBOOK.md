@@ -140,7 +140,7 @@ docker logs council_news_bot | grep -i joondalup | tail -20
    - **Fix**: Enable `use_curl: true` or `use_cloudscraper: true` in config
 
 3. **Proxy Issues**: 407 errors
-   - **Check**: `curl -x http://REDACTED-rotate:REDACTED@proxy.example.com:80 https://httpbin.org/ip`
+   - **Check**: `curl -x http://user:pass@proxy.example.com:port https://httpbin.org/ip`
    - **Fix**: Update proxy credentials in `.env`
 
 4. **Empty News Page**: Council has no news this week
@@ -159,7 +159,7 @@ curl: (56) CONNECT tunnel failed, response 407
 **Quick Fix**:
 ```bash
 # Test proxy credentials
-curl -x http://REDACTED-rotate:REDACTED@proxy.example.com:80 https://httpbin.org/ip
+curl -x http://user:pass@proxy.example.com:port https://httpbin.org/ip
 
 # If fails: Update .env on VPS
 ssh root@vps.example.com
