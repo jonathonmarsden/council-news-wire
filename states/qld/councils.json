@@ -512,9 +512,14 @@
     {
       "id": "north-burnett",
       "name": "North Burnett Regional Council",
-      "news_url": "https://northburnett.qld.gov.au/",
-      "scraper": "wordpress_scraper",
+      "news_url": "https://www.northburnett.qld.gov.au/news/",
+      "scraper": "curl_scraper",
       "enabled": true,
+      "impersonate": "chrome124",
+      "item_selector": "article",
+      "title_selector": "h2.entry-title",
+      "link_selector": "h2.entry-title a",
+      "date_selector": ".post-meta",
       "population": 10895,
       "region": "Wide Bay-Burnett"
     },

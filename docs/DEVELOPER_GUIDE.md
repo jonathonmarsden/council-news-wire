@@ -217,7 +217,7 @@ python scripts/maintenance/health_check.py
 
 ## Deployment
 
-Production runs on **home-server the container** (unprivileged Debian LXC, Docker Compose, 4GB/2vCPU). Access: `ssh user@server` (hypervisor host, private network) then `bash`. App at `/opt/council-news-bot`, secrets at `/root/secrets/.env`.
+Production runs on **home-server the container** (unprivileged Debian LXC, Docker Compose, 4GB/2vCPU). Access: `ssh <admin-user>@<private network-host>` (hypervisor host, private network) then `bash`. App at `/opt/council-news-bot`, secrets at `/root/secrets/.env`.
 
 **Deploys are pull-based**: merging to master is deploying. `/usr/local/bin/council-bot-pull-deploy` (cron, every 10 min on the CT) fast-forwards to origin/master, rebuilds, and swaps containers under the ops lock. There is no push-deploy; GitHub runners cannot reach the LAN.
 

@@ -142,11 +142,30 @@ class Database:
                 existing = session.execute(select(Article).where(Article.url == article['url'])).scalar_one_or_none()
                 return existing.id if existing else -1
 
+    @staticmethod
+    def _coerce_date(value):
+        """
+        Accept either a datetime or an ISO-8601 string for the date column.
+
+        NewsArticle.to_dict() serialises dates to ISO strings. PostgreSQL
+        silently casts those on insert, but that implicit coercion is a
+        portability trap (SQLite rejects it outright) and hides type errors.
+        Normalise at the boundary instead of relying on the driver.
+        """
+        if value is None or isinstance(value, datetime):
+            return value
+        if isinstance(value, str):
+            try:
+                return parser.parse(value)
+            except (ValueError, TypeError):
+                return None
+        return None
+
     def add_articles_bulk(self, articles: List[Dict], state: str, status: str = 'new') -> int:
         """Add multiple articles using bulk insert ignore logic."""
         if not articles:
             return 0
-        
+
         # Deduplicate incoming list by URL
         unique_articles = {a['url']: a for a in articles}.values()
         
@@ -160,7 +179,7 @@ class Database:
                     url=a['url'],
                     council_id=a['council_id'],
                     title=a['title'],
-                    date=a.get('date'),
+                    date=self._coerce_date(a.get('date')),
                     excerpt=a.get('excerpt'),
                     state=state,
                     status=status
