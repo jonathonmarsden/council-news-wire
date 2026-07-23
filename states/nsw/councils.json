@@ -1204,7 +1204,8 @@
       "limit": 8,
       "population": 13585,
       "region": "North West",
-      "use_curl": true
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "murray-river-council",
