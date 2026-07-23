@@ -123,6 +123,15 @@ class BaseScraper(ABC):
         self.session = requests.Session()
         self.session.headers.update(self.HEADERS)
         self.session.verify = self.verify_ssl
+
+        # Honest-crawler mode: councils that allowlist the bot get an
+        # identifiable User-Agent pointing at the public crawler page,
+        # instead of a browser UA. Set "user_agent" in the council config
+        # (pair with use_curl: false — the curl_cffi path impersonates a
+        # browser and ignores this header).
+        self.custom_user_agent = kwargs.pop('user_agent', None)
+        if self.custom_user_agent:
+            self.session.headers['User-Agent'] = self.custom_user_agent
         
         if self.use_cloudscraper and CLOUDSCRAPER_AVAILABLE:
             self.scraper = cloudscraper.create_scraper()

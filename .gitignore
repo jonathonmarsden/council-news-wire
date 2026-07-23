@@ -53,7 +53,7 @@ council_news.db-wal
 
 # Development & Temporary
 dev/
-reports/
+/reports/
 .DS_Store
 *.tmp
 *.temp
