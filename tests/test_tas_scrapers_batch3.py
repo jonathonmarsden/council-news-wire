@@ -3,6 +3,8 @@ from core.scrapers import CardScraper, ScraperFactory
 import json
 import os
 
+pytestmark = pytest.mark.integration
+
 def get_council_config(council_id):
     with open('states/tas/councils.json', 'r') as f:
         data = json.load(f)

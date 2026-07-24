@@ -1,4 +1,7 @@
 from curl_cffi import requests
+import pytest
+
+pytestmark = pytest.mark.integration
 
 def test_armadale():
     url = "https://my.armadale.wa.gov.au/service/news-and-media-releases"

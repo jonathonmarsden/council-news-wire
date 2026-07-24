@@ -5,6 +5,9 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from core.scrapers import CardScraper
+import pytest
+
+pytestmark = pytest.mark.integration
 
 def test_ballarat():
     selectors = {

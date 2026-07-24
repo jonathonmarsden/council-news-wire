@@ -1,5 +1,8 @@
 from curl_cffi import requests
 import requests as standard_requests
+import pytest
+
+pytestmark = pytest.mark.integration
 
 def test_quairading_rss():
     url = "https://www.quairading.wa.gov.au/feed/"

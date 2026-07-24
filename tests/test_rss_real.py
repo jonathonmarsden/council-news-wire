@@ -1,10 +1,15 @@
 """
 Live smoke tests for RSSScraper against real council feeds.
 
-Network failures (site down, WAF blocking the CI runner's IP) skip rather
-than fail — only parsing problems on a successfully fetched feed should fail.
-Previously this file scraped at module level, so a single unreachable feed
-errored the entire CI collection.
+These are OPT-IN and excluded from the default suite: they depend on live
+council websites, so they flake for reasons that have nothing to do with our
+code (a feed is briefly down, a council has published nothing this week, the
+runner's IP is WAF-blocked). Run them deliberately:
+
+    pytest -m integration tests/test_rss_real.py
+
+The default `pytest` run and CI skip them. Real correctness is covered by the
+hermetic parsing tests in the regression suite.
 """
 import os
 import sys
@@ -15,6 +20,8 @@ sys.path.append(os.getcwd())
 
 from core.exceptions import ScrapeError
 from core.scrapers.rss import RSSScraper
+
+pytestmark = pytest.mark.integration
 
 COUNCILS = [
     ("cootamundra-gundagai-regional-council", "https://www.cgrc.nsw.gov.au/feed/", "Cootamundra"),

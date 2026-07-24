@@ -4,6 +4,8 @@ from core.database import Database
 import json
 import os
 
+pytestmark = pytest.mark.integration
+
 # Batch 5: Circular Head, Derwent Valley, Kentish
 # These councils use Squiz Matrix and require mobile_mode to bypass Cloudflare WAF.
 

@@ -2,6 +2,8 @@ import pytest
 from core.scrapers import CardScraper, RSSScraper
 from main import load_state_config, get_scraper
 
+pytestmark = pytest.mark.integration
+
 @pytest.fixture
 def tas_config():
     return load_state_config('tas')
