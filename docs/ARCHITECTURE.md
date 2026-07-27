@@ -82,7 +82,7 @@ The system is designed to run on a low-cost VPS (DigitalOcean Basic Droplet) wit
 The scraping logic is modular and handles various website structures and anti-bot protections.
 
 *   **`CardScraper`**: The primary scraper. It targets news "cards" on HTML pages using CSS selectors.
-    *   **WAF Bypass**: Uses `curl_cffi` to impersonate real browsers (`chrome110`, `chrome120`) to bypass Cloudflare/Incapsula. See [WAF Strategy](WAF_STRATEGY.md) for research workflow.
+    *   **Browser impersonation**: Uses `curl_cffi` to present a realistic browser TLS fingerprint (`chrome110`, `chrome120`), which many council CMS front-ends require before serving pages to a client.
     *   **Mobile Mode**: Can impersonate an iPhone to get a simpler mobile layout.
 *   **`CatalystScraper`**: Specialized class for ~116 WA councils using the Catalyst CMS. It handles their specific table-based layout and date parsing automatically.
 *   **`RSSScraper`**: Consumes standard RSS feeds where available.
