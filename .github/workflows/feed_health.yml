@@ -1,0 +1,20 @@
+name: Feed Health
+
+# Offsite watchdog: runs on GitHub's infrastructure, deliberately independent
+# of the production host. If the server goes down, feeds go stale or the site
+# goes dark, this workflow fails and GitHub emails the repository owner.
+# Complements the on-host daily ntfy heartbeat, which dies with the host.
+
+on:
+  schedule:
+    - cron: '0 21 * * *'   # daily 21:00 UTC = 07:00 AEST
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check 8 state feeds and website
+        run: python3 scripts/monitoring/check_feed_health.py --stale-hours 48
