@@ -399,14 +399,15 @@
       "name": "Mackay Regional Council",
       "news_url": "https://www.mackay.qld.gov.au/about_council/news_and_media/media_releases",
       "scraper": "curl_scraper",
-      "enabled": false,
-      "item_selector": "div.inside-content-news-item",
-      "title_selector": "h3",
+      "enabled": true,
+      "item_selector": "article",
+      "title_selector": "h2.list-item-title",
       "link_selector": "a",
-      "date_selector": "p",
-      "content_selector": "p",
+      "date_selector": "p.published-on",
       "population": 126580,
-      "region": "Mackay-Isaac-Whitsunday"
+      "region": "Mackay-Isaac-Whitsunday",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "mapoon",

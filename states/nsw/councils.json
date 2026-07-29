@@ -1083,14 +1083,18 @@
     {
       "id": "inverell-shire-council",
       "name": "Inverell Shire Council",
-      "news_url": "https://inverell.nsw.gov.au/feed/",
-      "scraper": "rss_scraper",
-      "enabled": false,
+      "news_url": "https://inverell.nsw.gov.au/council/news/",
+      "scraper": "card_scraper",
+      "enabled": true,
       "disabled_reason": "No structured news markup. WP REST /wp/v2/posts returns []; /feed/ near-empty; even a full Playwright render (networkidle) shows only a free-text .news-ticker, not a per-article grid with title/date/link. Needs the ticker's source AJAX endpoint reverse-engineered. Pending.",
       "use_curl": true,
       "population": 17505,
       "region": "New England",
-      "rss_url": "https://inverell.nsw.gov.au/feed/"
+      "item_selector": "div.mtphr-dnt-tick",
+      "title_selector": "a",
+      "link_selector": "a",
+      "impersonate": "chrome124",
+      "disabled_reason_history": "Was disabled: WP API/feed empty, no article grid. Fixed 2026-07-29: scrape the mtphr-dnt news ticker (3 items, no dates)."
     },
     {
       "id": "junee-shire-council",
