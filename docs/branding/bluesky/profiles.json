@@ -8,12 +8,12 @@
   "pinned_len": 292
  },
  "nsw": {
-  "display_name": "NSW Councils News Wire",
+  "display_name": "New South Wales Councils News Wire",
   "bio": "Every council in New South Wales. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
-  "pinned": "Every story from all 128 NSW councils, via @roundupnewsbotnsw.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 22,
+  "pinned": "Every story from all 128 New South Wales councils, via @roundupnewsbotnsw.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
+  "display_len": 34,
   "bio_len": 242,
-  "pinned_len": 287
+  "pinned_len": 299
  },
  "qld": {
   "display_name": "Queensland Councils News Wire",
@@ -32,12 +32,12 @@
   "pinned_len": 298
  },
  "wa": {
-  "display_name": "WA Councils News Wire",
+  "display_name": "Western Australia Councils News Wire",
   "bio": "Every council in Western Australia. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
-  "pinned": "Every story from all 138 WA councils, via @roundupnewsbotwa.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 21,
+  "pinned": "Every story from 138 Western Australian councils, via @roundupnewsbotwa.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
+  "display_len": 36,
   "bio_len": 244,
-  "pinned_len": 285
+  "pinned_len": 297
  },
  "tas": {
   "display_name": "Tasmania Councils News Wire",
