@@ -94,7 +94,6 @@ def push_ntfy(ntfy_url, healthy, lines):
     headers = {
         "Title": title,
         "Priority": "default" if healthy else "high",
-        "Tags": "white_check_mark" if healthy else "rotating_light",
     }
     token = os.environ.get("NTFY_TOKEN")
     if token:

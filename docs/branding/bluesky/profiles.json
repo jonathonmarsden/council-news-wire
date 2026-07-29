@@ -1,66 +1,66 @@
 {
  "vic": {
-  "display_name": "Victoria Council News — LG News Roundup",
-  "display_len": 39,
-  "bio": "🤖 All 79 Victorian councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/vic",
-  "bio_len": 247,
-  "pinned": "Every media release from all 79 Victorian councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 240
+  "display_name": "Victoria Council News",
+  "display_len": 21,
+  "bio": "All 79 Victorian councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/vic",
+  "bio_len": 249,
+  "pinned": "Every media release from all 79 Victorian councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 282
  },
  "nsw": {
-  "display_name": "NSW Council News — LG News Roundup",
-  "display_len": 34,
-  "bio": "🤖 All 130 NSW councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/nsw",
-  "bio_len": 242,
-  "pinned": "Every media release from all 130 NSW councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 235
+  "display_name": "NSW Council News",
+  "display_len": 16,
+  "bio": "All 130 NSW councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/nsw",
+  "bio_len": 244,
+  "pinned": "Every media release from all 130 NSW councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 277
  },
  "qld": {
-  "display_name": "Queensland Council News — LG News Roundup",
-  "display_len": 41,
-  "bio": "🤖 All 77 Queensland councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/qld",
-  "bio_len": 248,
-  "pinned": "Every media release from all 77 Queensland councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 241
+  "display_name": "Queensland Council News",
+  "display_len": 23,
+  "bio": "All 77 Queensland councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/qld",
+  "bio_len": 250,
+  "pinned": "Every media release from all 77 Queensland councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 283
  },
  "sa": {
-  "display_name": "South Australia Council News — LG News Roundup",
-  "display_len": 46,
-  "bio": "🤖 All 68 SA councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/sa",
-  "bio_len": 239,
-  "pinned": "Every media release from all 68 South Australian councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 247
+  "display_name": "South Australia Council News",
+  "display_len": 28,
+  "bio": "All 68 SA councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/sa",
+  "bio_len": 241,
+  "pinned": "Every media release from all 68 South Australian councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 289
  },
  "wa": {
-  "display_name": "WA Council News — LG News Roundup",
-  "display_len": 33,
-  "bio": "🤖 All 135 WA councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/wa",
-  "bio_len": 240,
-  "pinned": "Every media release from all 135 WA councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 234
+  "display_name": "WA Council News",
+  "display_len": 15,
+  "bio": "All 135 WA councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/wa",
+  "bio_len": 242,
+  "pinned": "Every media release from all 135 WA councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 276
  },
  "tas": {
-  "display_name": "Tasmania Council News — LG News Roundup",
-  "display_len": 39,
-  "bio": "🤖 All 29 Tasmanian councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/tas",
-  "bio_len": 247,
-  "pinned": "Every media release from all 29 Tasmanian councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 240
+  "display_name": "Tasmania Council News",
+  "display_len": 21,
+  "bio": "All 29 Tasmanian councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/tas",
+  "bio_len": 249,
+  "pinned": "Every media release from all 29 Tasmanian councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 282
  },
  "nt": {
-  "display_name": "Northern Territory Council News — LG News Roundup",
-  "display_len": 49,
-  "bio": "🤖 All 20 NT councils' news as it happens — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/nt",
-  "bio_len": 239,
-  "pinned": "Every media release from all 20 NT councils — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 233
+  "display_name": "Northern Territory Council News",
+  "display_len": 31,
+  "bio": "All 20 NT councils' news as it happens - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/nt",
+  "bio_len": 241,
+  "pinned": "Every media release from all 20 NT councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 275
  },
  "act": {
-  "display_name": "Canberra & ACT News — LG News Roundup",
-  "display_len": 37,
-  "bio": "🤖 Canberra's city services & ACT government news — uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by Jonathon Marsden 🔧 lgnews.jonathonmarsden.com/act",
-  "bio_len": 248,
-  "pinned": "Canberra and ACT government news — automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nThe human context: Chris Eddy's LG News Roundup podcast — lgnewsroundup.com",
-  "pinned_len": 222
+  "display_name": "Canberra & ACT News",
+  "display_len": 19,
+  "bio": "Canberra's city services & ACT government news - uncurated & free.\nCompanion to LG News Roundup, Chris Eddy's daily podcast, sponsored by the Victorian Local Governance Association.\nBuilt & run by @jonathonmarsden.com - lgnews.jonathonmarsden.com/act",
+  "bio_len": 250,
+  "pinned": "Every media release from ACT councils - automated, free and uncurated, straight from the source.\n\nAll 8 states in one place: lgnews.jonathonmarsden.com\nFor the human take, hear Chris Eddy's LG News Roundup podcast: lgnewsroundup.com\n\nBuilt & run by @jonathonmarsden.com",
+  "pinned_len": 269
  }
 }
