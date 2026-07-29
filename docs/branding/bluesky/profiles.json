@@ -1,57 +1,57 @@
 {
  "vic": {
-  "display_name": "Victoria Council News Wire",
+  "display_name": "Victoria Councils News Wire",
   "bio": "Every council in Victoria. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 79 Victorian councils, via @roundupnewsbotvic.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 26,
+  "display_len": 27,
   "bio_len": 235,
   "pinned_len": 292
  },
  "nsw": {
-  "display_name": "NSW Council News Wire",
+  "display_name": "NSW Councils News Wire",
   "bio": "Every council in New South Wales. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 128 NSW councils, via @roundupnewsbotnsw.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 21,
+  "display_len": 22,
   "bio_len": 242,
   "pinned_len": 287
  },
  "qld": {
-  "display_name": "Queensland Council News Wire",
+  "display_name": "Queensland Councils News Wire",
   "bio": "Every council in Queensland. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 77 Queensland councils, via @roundupnewsbotqld.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 28,
+  "display_len": 29,
   "bio_len": 237,
   "pinned_len": 293
  },
  "sa": {
-  "display_name": "South Australia Council News Wire",
+  "display_name": "South Australia Councils News Wire",
   "bio": "Every council in South Australia. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 68 South Australian councils, via @roundupnewsbotsa.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 33,
+  "display_len": 34,
   "bio_len": 242,
   "pinned_len": 298
  },
  "wa": {
-  "display_name": "WA Council News Wire",
+  "display_name": "WA Councils News Wire",
   "bio": "Every council in Western Australia. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 138 WA councils, via @roundupnewsbotwa.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 20,
+  "display_len": 21,
   "bio_len": 244,
   "pinned_len": 285
  },
  "tas": {
-  "display_name": "Tasmania Council News Wire",
+  "display_name": "Tasmania Councils News Wire",
   "bio": "Every council in Tasmania. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 29 Tasmanian councils, via @roundupnewsbottas.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 26,
+  "display_len": 27,
   "bio_len": 235,
   "pinned_len": 292
  },
  "nt": {
-  "display_name": "Northern Territory Council News Wire",
+  "display_name": "Northern Territory Councils News Wire",
   "bio": "Every council in Northern Territory. Automated, unfiltered, unedited, straight from the source. A public good, free to read.\nSibling to LG News Roundup - Chris Eddy's local government podcast, sponsored by the VLGA.\nBuilt by @jonathonmarsden.com",
   "pinned": "Every story from all 18 NT councils, via @roundupnewsbotnt.bsky.social - automated, free and unedited, straight from the source.\n\nAll 8 state feeds: lgnews.jonathonmarsden.com\n\nAustralia's leading local government podcast: Chris Eddy's lgnewsroundup.com\n\nBuilt by @jonathonmarsden.com",
-  "display_len": 36,
+  "display_len": 37,
   "bio_len": 245,
   "pinned_len": 284
  },
