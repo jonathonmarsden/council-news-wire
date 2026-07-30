@@ -26,10 +26,20 @@ from bs4 import BeautifulSoup
 
 FETCH_TIMEOUT = 20
 MAX_IMAGE_BYTES = 900_000  # Bluesky blob limit is ~1MB; stay safely under
-# Site-name cruft commonly tacked onto <title>/og:title by council CMSs.
-_TITLE_CRUFT = re.compile(
+# Site-name cruft commonly SUFFIXED to <title>/og:title by council CMSs,
+# e.g. "Arbiter report tabled | City of Ballarat", "… » Shire of X".
+_TITLE_SUFFIX = re.compile(
     r"\s*[|»\-–—]\s*(?:[A-Z][\w'&.]*\s*){0,6}"
     r"(?:Council|Shire|City|News|Government|Gov)\b.*$",
+    re.IGNORECASE,
+)
+
+# Generic labels council CMSs PREFIX onto the real headline, e.g.
+# "News Story - MRC Opens …", "Media Release: …", "Latest News | …".
+_TITLE_PREFIX = re.compile(
+    r"^\s*(?:news story|news release|media release|media statement|latest news"
+    r"|council news|news(?:\s*&\s*(?:notices|media))?|announcement|press release)"
+    r"\s*[:|»\-–—]\s*",
     re.IGNORECASE,
 )
 
@@ -43,10 +53,12 @@ def _meta(soup: BeautifulSoup, *names: str) -> str:
 
 
 def clean_title(raw: str) -> str:
-    """Strip trailing site-name cruft ('… | City of Ballarat', '… » Shire')."""
+    """Strip site-name cruft: trailing ('… | City of Ballarat') and leading
+    ('News Story - …', 'Media Release: …') generic labels."""
     if not raw:
         return raw
-    cleaned = _TITLE_CRUFT.sub("", raw).strip()
+    cleaned = _TITLE_SUFFIX.sub("", raw).strip()
+    cleaned = _TITLE_PREFIX.sub("", cleaned).strip()
     # Never strip everything away; fall back to the original if we over-cut.
     return cleaned if len(cleaned) >= 8 else raw.strip()
 

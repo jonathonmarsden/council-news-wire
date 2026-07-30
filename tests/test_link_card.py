@@ -17,13 +17,28 @@ from core import link_card
 @pytest.mark.parametrize("raw,expected", [
     ("Arbiter report tabled | City of Ballarat", "Arbiter report tabled"),
     ("News Story - DBCA to Manage Rabbits » Shire of Wongan-Ballidu",
-     "News Story - DBCA to Manage Rabbits"),
+     "DBCA to Manage Rabbits"),
     ("A Winter's Night Returns to Light Up Tonsley | News",
      "A Winter's Night Returns to Light Up Tonsley"),
     ("Plain headline with no cruft", "Plain headline with no cruft"),
+    # leading generic labels (the real MacDonnell case + common variants)
+    ("News Story - MRC Officially Opens New Change Rooms at Hermannsburg",
+     "MRC Officially Opens New Change Rooms at Hermannsburg"),
+    ("Media Release: Council adopts new budget", "Council adopts new budget"),
+    ("Latest News | Pool reopens for summer", "Pool reopens for summer"),
+    ("Announcement - Road closure this weekend", "Road closure this weekend"),
+    # both ends at once
+    ("News Story - Rabbits managed in park » Shire of Wongan-Ballidu",
+     "Rabbits managed in park"),
 ])
 def test_clean_title_strips_site_cruft(raw, expected):
     assert link_card.clean_title(raw) == expected
+
+
+def test_clean_title_keeps_headline_that_merely_starts_with_news():
+    # 'Newstead' / 'News for residents' must NOT be stripped as a label.
+    assert link_card.clean_title("Newstead heritage listing approved") == \
+        "Newstead heritage listing approved"
 
 
 def test_clean_title_never_returns_empty():
