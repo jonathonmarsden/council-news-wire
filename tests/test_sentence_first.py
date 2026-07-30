@@ -128,3 +128,30 @@ def test_the_lede_is_the_clickable_link(monkeypatch):
     span = facets[0].index
     linked = text.encode()[span.byte_start:span.byte_end].decode()
     assert linked == text.split("\n")[0] == GOOD
+
+
+# --- missing-space regression (found in a live SA post) -------------------
+
+def test_splits_when_the_source_lost_the_space_after_a_full_stop():
+    """Scraped copy often runs sentences together: '...program.Each year...'.
+
+    A live SA post published exactly that, so the splitter must insert the
+    missing space rather than emit both sentences as one lede.
+    """
+    text = ("COMMUNITY groups in Wakefield Regional Council will benefit from "
+            "$98,000 in funding through Council's Minor and Major Community "
+            "Grants program.Each year, grants are awarded in the Minor and "
+            "Major categories.")
+    out = _first_sentence(text)
+    assert out.endswith("program.")
+    assert "Each year" not in out
+
+
+@pytest.mark.parametrize("text,intact", [
+    ("Cr. Smith said the plan would deliver savings for ratepayers over four years.", "Cr."),
+    ("The upgrade will deliver $1.5M in savings for ratepayers across the region.", "$1.5M"),
+    ("Visit gov.au for details about the new rates policy and how it affects you.", "gov.au"),
+])
+def test_does_not_split_abbreviations_decimals_or_domains(text, intact):
+    out = _first_sentence(text)
+    assert out and intact in out

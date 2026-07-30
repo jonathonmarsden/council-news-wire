@@ -92,6 +92,12 @@ def _first_sentence(text: Optional[str]) -> Optional[str]:
     clean = " ".join(text.strip().split())
     if not clean or clean.startswith("..."):
         return None
+    # Scraped copy often loses the space after a full stop ("...program.Each
+    # year..."), so a split that requires whitespace runs two sentences
+    # together. Insert the missing space before splitting - but only where a
+    # lower-case letter or digit is followed by a capital, which leaves
+    # abbreviations and decimals ("Cr.", "$1.5M", "gov.au") alone.
+    clean = re.sub(r'(?<=[a-z0-9])([.!?])(?=[A-Z])', r'\1 ', clean)
     # Split on sentence enders, keeping abbreviations like "Cr." intact by
     # requiring a following space and capital or end-of-string.
     parts = re.split(r'(?<=[.!?])\s+(?=[A-Z"‘“])', clean)
