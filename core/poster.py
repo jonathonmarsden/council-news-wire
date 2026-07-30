@@ -75,6 +75,45 @@ STATE_COUNCILS_TAG = {
 }
 
 
+MIN_LEDE_LEN = 60          # shorter than this reads as a fragment, not a lede
+MAX_LEDE_LEN = 220         # leave room for date, council and tags
+
+
+def _first_sentence(text: Optional[str]) -> Optional[str]:
+    """Return the opening sentence of `text`, or None if it isn't usable.
+
+    Council excerpts are inconsistent: some are a full paragraph, some a
+    truncated fragment ending in an ellipsis, some just repeat the headline.
+    Only a sentence that stands on its own is worth leading a post with;
+    anything else falls back to the headline.
+    """
+    if not text:
+        return None
+    clean = " ".join(text.strip().split())
+    if not clean or clean.startswith("..."):
+        return None
+    # Split on sentence enders, keeping abbreviations like "Cr." intact by
+    # requiring a following space and capital or end-of-string.
+    parts = re.split(r'(?<=[.!?])\s+(?=[A-Z"‘“])', clean)
+    first = parts[0].strip() if parts else clean
+    # A truncated scrape ("... more") is not a sentence.
+    if first.endswith("...") or first.endswith("…"):
+        first = first.rstrip(".…").strip()
+        if not first:
+            return None
+    if len(first) < MIN_LEDE_LEN:
+        # Too short to stand alone; try the first two sentences together.
+        if len(parts) > 1:
+            joined = f"{first} {parts[1].strip()}".strip()
+            if MIN_LEDE_LEN <= len(joined) <= MAX_LEDE_LEN:
+                return joined
+        return None
+    if len(first) > MAX_LEDE_LEN:
+        cut = first[:MAX_LEDE_LEN].rsplit(" ", 1)[0].rstrip(",;:")
+        return cut + "..." if cut else None
+    return first
+
+
 def _is_own_tag(tag: str, council_name: str = "") -> bool:
     """True if `tag` is one this project owns rather than a shared community.
 
@@ -141,6 +180,25 @@ class BlueSkyPoster:
         self.last_post_meta: Dict[str, Any] = {}
         code = (state_code or '').upper()
         self.state = code if code in STATE_PEAK_BODIES else self._detect_state(handle)
+
+    def _sentence_first_enabled(self) -> bool:
+        """True if this feed leads posts with a sentence instead of the headline.
+
+        Measured on Bluesky (2026-07-30), every high-engagement news bot -
+        unofficial ABC (12.8k followers, 3.50 eng/post), SBS (3.72), BBC UK
+        (2.36) - writes the story's opening sentence as the post text and lets
+        the card carry the headline. Ours did the reverse, printing the
+        headline in the text and again on the card.
+
+        Controlled by SENTENCE_FIRST_STATES (comma-separated codes, or ALL);
+        unset means off, so this can be trialled on a few feeds and compared.
+        """
+        raw = (os.environ.get("SENTENCE_FIRST_STATES") or "").strip().upper()
+        if not raw:
+            return False
+        if raw == "ALL":
+            return True
+        return self.state in {c.strip() for c in raw.split(",") if c.strip()}
 
     def _link_cards_enabled(self) -> bool:
         """True if this feed's state is opted into rich link cards.
@@ -434,8 +492,20 @@ class BlueSkyPoster:
         # 0. Enrich URL with UTM
         final_url = self._add_tracking_params(url)
 
-        # 1. Title
-        post_title = f"{title}\n"
+        # 1. Lede. With a card attached, the card already prints the headline,
+        # so repeating it in the text wastes the most valuable line of the
+        # post. Every high-engagement news bot measured on Bluesky instead
+        # opens with the story's first sentence and lets the card carry the
+        # headline. We do the same when a sentence is available; without one
+        # (many councils publish no summary) we fall back to the headline,
+        # which is better than opening with nothing.
+        lede = title
+        if has_card and self._sentence_first_enabled():
+            sentence = _first_sentence(excerpt)
+            if sentence:
+                lede = sentence
+                excerpt = None  # the sentence IS the text now
+        post_title = f"{lede}\n"
         
         # 2. Council Name
         council_line = f"{council_name}\n"
