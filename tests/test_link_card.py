@@ -133,23 +133,39 @@ def test_embed_none_when_page_unusable(monkeypatch):
     assert link_card.build_external_embed(FakeClient(), fake_models(), "https://x/dead") is None
 
 
-def test_embed_built_without_thumb_when_no_image(monkeypatch):
+def test_no_image_falls_back_to_text_by_default(monkeypatch):
+    # Default require_image=True: a page with no og:image -> None (post plain text)
     patch_get(monkeypatch, FakeResp(text=
         '<html><head><meta property="og:title" content="Headline long enough here">'
         '<meta property="og:description" content="d"></head></html>'))
-    embed = link_card.build_external_embed(FakeClient(), fake_models(), "https://x/a")
+    assert link_card.build_external_embed(FakeClient(), fake_models(), "https://x/a") is None
+
+
+def test_no_image_allowed_when_require_image_false(monkeypatch):
+    patch_get(monkeypatch, FakeResp(text=
+        '<html><head><meta property="og:title" content="Headline long enough here">'
+        '<meta property="og:description" content="d"></head></html>'))
+    embed = link_card.build_external_embed(
+        FakeClient(), fake_models(), "https://x/a", require_image=False)
     assert embed is not None
-    kind, external = embed
-    assert external[1]["thumb"] is None
+    assert embed[1][1]["thumb"] is None  # text-card, no thumb
 
 
-def test_embed_survives_blob_upload_failure(monkeypatch):
-    # og:image present, but blob upload throws -> card with no thumb, not a crash
+def test_embed_with_image_is_built(monkeypatch):
+    # og:image present and blob upload succeeds -> full card with thumb
     monkeypatch.setattr(link_card._requests, "get",
                         lambda *a, **k: FakeResp(text=PAGE, content=b"imgbytes", ctype="image/jpeg"))
-    embed = link_card.build_external_embed(FakeClient(fail_upload=True), fake_models(), "https://x/a")
+    embed = link_card.build_external_embed(FakeClient(), fake_models(), "https://x/a")
     assert embed is not None
-    assert embed[1][1]["thumb"] is None
+    assert embed[1][1]["thumb"] is not None
+
+
+def test_blob_upload_failure_falls_back_to_text_by_default(monkeypatch):
+    # og:image present but blob upload throws -> no thumb -> None under default
+    monkeypatch.setattr(link_card._requests, "get",
+                        lambda *a, **k: FakeResp(text=PAGE, content=b"imgbytes", ctype="image/jpeg"))
+    assert link_card.build_external_embed(
+        FakeClient(fail_upload=True), fake_models(), "https://x/a") is None
 
 
 def test_embed_never_raises(monkeypatch):

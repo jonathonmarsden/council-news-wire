@@ -108,12 +108,18 @@ def _download_image(url: str) -> Optional[bytes]:
     return data
 
 
-def build_external_embed(client, models, url: str):
+def build_external_embed(client, models, url: str, require_image: bool = True):
     """Return an app.bsky.embed.external for `url`, or None to fall back to text.
 
     `client` is an authenticated atproto Client (for uploadBlob); `models` is
     the atproto models module. Any failure returns None - never raises into
     the posting path.
+
+    require_image (default True): only produce a card when a real thumbnail
+    was fetched and uploaded. An image-less card is a title+description box
+    with no picture, which can look emptier than the plain text post; with
+    require_image, those simply fall back to text. Set False to allow
+    text-cards (title/description, no thumb).
     """
     try:
         data = fetch_card_data(url)
@@ -127,7 +133,10 @@ def build_external_embed(client, models, url: str):
                 try:
                     thumb = client.upload_blob(img_bytes).blob
                 except Exception:
-                    thumb = None  # image failed -> card with no thumb, still fine
+                    thumb = None  # image failed -> treat as no image below
+
+        if thumb is None and require_image:
+            return None  # no usable thumbnail -> fall back to clean text post
 
         external = models.AppBskyEmbedExternal.External(
             uri=data["uri"],
