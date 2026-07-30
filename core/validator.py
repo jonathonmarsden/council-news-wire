@@ -7,7 +7,12 @@ MAX_TITLE_LEN = 250
 IDEAL_TITLE_LEN = 120
 IDEAL_EXCERPT_LEN = 250
 MAX_HASHTAGS = 15
-MIN_HASHTAGS = 3
+# Routine posts now carry only tags this project owns - its own tag and the
+# council's - because at ~8,000 posts a month any community tag would be
+# swamped (we would be 98% of #LocalGov, 86% of #NSWpol). Two is therefore the
+# normal, intended count; the floor exists only to catch a post that lost its
+# tags entirely.
+MIN_HASHTAGS = 1
 
 HASHTAG_ORDER = [
     "#LGNewsRoundup",

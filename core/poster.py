@@ -39,17 +39,26 @@ from core.validator import validate_post
 # Override with LGNEWS_TAGS_<STATE> (comma-separated) to retune without a deploy.
 BRAND_TAG = '#LGNewsRoundup'
 
-STATE_TAGS = {
-    'NSW': ['#LocalGov', '#NSWpol'],
-    'VIC': ['#LocalGov', '#SpringSt'],
-    'QLD': ['#LocalGov', '#QldPol'],
-    'SA':  ['#LocalGov', '#Adelaide'],    # no live SA politics tag: #sapol is SA Police
-    'WA':  ['#LocalGov', '#WApol'],
-    'TAS': ['#LocalGov', '#politas'],
-    'NT':  ['#LocalGov', '#NTpol'],
-    'ACT': ['#LocalGov', '#Canberra'],    # #actpol is effectively dead (10/mo)
-    'NAT': ['#LocalGov'],
-}
+# Routine posts carry no community hashtags at all, and the arithmetic is the
+# reason. This network publishes ~8,000 posts a month. Measured tag volumes are
+# tiny beside that, so using them would not be participating in a community -
+# it would be replacing it:
+#
+#   #LocalGov 158/mo  -> we would be 98% of the tag
+#   #WApol    101/mo  -> 93%      #SpringSt 256/mo -> 88%
+#   #NSWpol   350/mo  -> 86%      #QldPol   604/mo -> 70%
+#   #Auspol 10,000/mo -> 44%
+#
+# A tag belongs to the people already in it. Staying under roughly 5-10% of its
+# volume would need a tag with 80,000+ posts a month; no Australian tag is that
+# large. So the firehose carries only tags we own - the project's own tag and
+# the council's - which nobody else posts in and which make the archive
+# searchable per council. Community tags are reserved for occasional curated
+# amplification from the personal account (see scripts/monitoring/
+# amplify_candidates.py), where the volume is a handful a day rather than
+# hundreds.
+STATE_TAGS = {s: [] for s in
+              ('NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT', 'NAT')}
 
 # Retained for backwards compatibility: other modules and tests import these.
 # No longer added to routine posts (see the note above on self-generated reach).
@@ -64,6 +73,26 @@ STATE_COUNCILS_TAG = {
     'SA': '#SACouncils', 'WA': '#WACouncils', 'TAS': '#TasCouncils',
     'NT': '#NTCouncils', 'ACT': '', 'NAT': '',
 }
+
+
+def _is_own_tag(tag: str, council_name: str = "") -> bool:
+    """True if `tag` is one this project owns rather than a shared community.
+
+    Owned tags are the project's own (#LGNewsRoundup) and per-council tags
+    (#BathurstRegionalCouncil): nobody else posts in them, so publishing at
+    volume floods no one. Everything else - peak bodies, state politics,
+    #LocalGov, #Auspol - belongs to other people.
+    """
+    t = (tag or "").lstrip("#").lower()
+    if not t:
+        return False
+    if t == BRAND_TAG.lstrip("#").lower():
+        return True
+    # A council tag is the council's name with the spaces removed.
+    if council_name:
+        if t == re.sub(r"[^a-z0-9]", "", council_name.lower()):
+            return True
+    return t.endswith("council") or t.endswith("shire") or t.endswith("citycouncil")
 
 
 def tags_for_state(state: str) -> List[str]:
@@ -191,9 +220,34 @@ class BlueSkyPoster:
             print(f"Skipping post: Title too long ({len(title)} chars). Check scraper for {council_name}.")
             return None
         
+        # Build the link card first: whether one is attached decides how much
+        # text the post needs. A card already shows the headline, summary and
+        # source, so duplicating them below it just repeats the same words.
+        embed = None
+        card_data = None
+        if self._link_cards_enabled():
+            from core.link_card import build_external_embed, fetch_card_data
+            from core.card_image import render_card
+            card_data = fetch_card_data(url)
+
+            def _branded_card():
+                # Councils whose sites expose no og:image still get a card,
+                # rendered in the account's own visual language.
+                return render_card(
+                    title=(card_data or {}).get("title") or title,
+                    council_name=council_name,
+                    state=self.state,
+                    date_str=date.strftime("%d %B %Y") if date else "",
+                    subtitle=(card_data or {}).get("description") or "",
+                )
+
+            embed = build_external_embed(self.client, models, url,
+                                         fallback=_branded_card)
+
         # Format the post text and get facets for clickable links
         post_text, facets, tags_list, used_excerpt = self._format_post_with_facets(
-            council_name, title, url, date, excerpt, hashtags, council_hashtag
+            council_name, title, url, date, excerpt, hashtags, council_hashtag,
+            has_card=embed is not None
         )
 
         # Build simple facet spans for validation (byte offsets in text)
@@ -228,31 +282,6 @@ class BlueSkyPoster:
                 print(f"Skipping post: Validation failed for {council_name} ({'; '.join(validation_errors)})")
                 return None
         
-        # Optional rich link card (app.bsky.embed.external). Enabled per-feed
-        # via LINK_CARDS_STATES (comma-separated codes, e.g. "NT,ACT"). Purely
-        # additive: build_external_embed returns None on any problem and we
-        # post the identical text-only record we always have.
-        embed = None
-        card_data = None
-        if self._link_cards_enabled():
-            from core.link_card import build_external_embed, fetch_card_data
-            from core.card_image import render_card
-            card_data = fetch_card_data(url)
-
-            def _branded_card():
-                # Councils whose sites expose no og:image still get a card,
-                # rendered in the account's own visual language.
-                return render_card(
-                    title=(card_data or {}).get("title") or title,
-                    council_name=council_name,
-                    state=self.state,
-                    date_str=date.strftime("%d %B %Y") if date else "",
-                    subtitle=(card_data or {}).get("description") or "",
-                )
-
-            embed = build_external_embed(self.client, models, url,
-                                         fallback=_branded_card)
-
         try:
             if embed is not None:
                 response = self.client.send_post(text=post_text, facets=facets, embed=embed)
@@ -381,19 +410,26 @@ class BlueSkyPoster:
             return url
 
     def _format_post_with_facets(self, council_name: str, title: str, url: str,
-                                  date: Optional[datetime] = None, 
+                                  date: Optional[datetime] = None,
                                   excerpt: Optional[str] = None,
                                   extra_hashtags: List[str] = None,
-                                  council_hashtag: Optional[str] = None) -> tuple:
+                                  council_hashtag: Optional[str] = None,
+                                  has_card: bool = False) -> tuple:
         """
         Format the post text and generate facets for links/hashtags.
-        
-        Format:
-        [Title] (Linked)
-        [Excerpt]
-        [Date]
-        [Council Name]
-        [Hashtags]
+
+        Without a card:
+            [Title] (linked)
+            [Excerpt]
+            [Date]
+            [Council Name]
+            [Hashtags]
+
+        With a card (has_card=True) the card already shows the headline, the
+        summary and the source domain, so repeating them puts the same words on
+        screen twice. The text is reduced to the attribution the card does not
+        carry - which council, and when - and the headline stays clickable
+        there for anyone whose client does not render embeds.
         """
         # 0. Enrich URL with UTM
         final_url = self._add_tracking_params(url)
@@ -409,16 +445,20 @@ class BlueSkyPoster:
         if date:
             date_line = f"{date.strftime('%d %B %Y')}\n"
         
-        # 4. Hashtags — brand tag plus the state's live communities. The
-        # per-council and peak-body tags that used to be added here reached
-        # essentially no one outside this network (see the note by STATE_TAGS),
-        # so they cost characters and clutter without buying discovery.
+        # 4. Hashtags — only tags we own: the project's own tag and the
+        # council's. See the note by STATE_TAGS for why no community tag can
+        # ride on a feed of this volume.
         tags_list = tags_for_state(self.state)
+        c_tag = council_hashtag or self._council_to_hashtag(council_name)
+        if c_tag and c_tag not in tags_list:
+            tags_list.append(c_tag)
 
-        # Extra topics from the caller (deduplicated)
+        # Extra topics from the caller, filtered to tags we own. State configs
+        # still carry legacy community tags (#VLGA, #NSWCouncils); silently
+        # dropping them here keeps a stale config from re-flooding a tag.
         if extra_hashtags:
             for t in extra_hashtags:
-                if t not in tags_list:
+                if t not in tags_list and _is_own_tag(t, council_name):
                     tags_list.append(t)
         
         hashtags_str = " ".join(tags_list)
@@ -428,8 +468,11 @@ class BlueSkyPoster:
         fixed_len = len(post_title) + len(date_line) + len(council_line) + len(hashtags_str) + 2 # +2 for newlines
         remaining = self.MAX_POST_LENGTH - fixed_len
         
-        # 5. Excerpt
+        # 5. Excerpt — omitted when a card is attached, since the card already
+        # shows the same summary directly beneath this text.
         excerpt_text = ""
+        if has_card:
+            excerpt = None
         # Improved logic: Prioritize excerpt inclusion
         if excerpt and remaining > 50: # Ensure we have reasonable space
             clean_excerpt = excerpt.strip().replace('\n', ' ')

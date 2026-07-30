@@ -1,62 +1,84 @@
 """Tests for the routine-post hashtag set.
 
-A 2026-07-30 survey found the tags then in use were almost entirely our own
-output (#VLGA 100% self, #LGNSW 100%, #VicCouncils 96%, #MAV 92%), so five tags
-per post bought no discovery. These tests pin the replacement: a small set of
-tags with real external communities, and no #Auspol on routine posts - at this
-posting volume that tag would be swamped.
+Policy: routine posts carry only tags this project owns - its own tag and the
+council's. Community tags are excluded because of the arithmetic, not taste.
+The network publishes ~8,000 posts a month against measured tag volumes of
+#LocalGov 158/mo, #WApol 101, #SpringSt 256, #NSWpol 350, #Auspol 10,000. Using
+them would make this feed 98%, 93%, 88%, 86% and 44% of those tags
+respectively: not participating in a community, replacing it.
+
+Community tags belong to curated amplification from the personal account, a
+few posts a day (scripts/monitoring/amplify_candidates.py).
 """
 import pytest
 
-from core.poster import BRAND_TAG, STATE_TAGS, tags_for_state
+from core.poster import BRAND_TAG, STATE_TAGS, _is_own_tag, tags_for_state
 
 
 ALL_STATES = ["VIC", "NSW", "QLD", "SA", "WA", "TAS", "NT", "ACT"]
 
-
-@pytest.mark.parametrize("state", ALL_STATES)
-def test_every_state_has_a_small_tag_set(state):
-    tags = tags_for_state(state)
-    assert tags[0] == BRAND_TAG
-    assert 2 <= len(tags) <= 4, f"{state} has {len(tags)} tags; keep posts uncluttered"
-    assert len(set(tags)) == len(tags), "no duplicate tags"
-    assert all(t.startswith("#") for t in tags)
-
-
-@pytest.mark.parametrize("state", ALL_STATES)
-def test_auspol_is_never_on_routine_posts(state):
-    """#Auspol is reserved for curated amplification, not the firehose."""
-    assert not any(t.lower() == "#auspol" for t in tags_for_state(state))
+# Tags owned by other people. None of these may appear on a routine post.
+COMMUNITY_TAGS = {
+    "#auspol", "#localgov", "#localnews", "#springst", "#nswpol", "#qldpol",
+    "#wapol", "#politas", "#ntpol", "#actpol", "#adelaide", "#canberra",
+    "#melbourne", "#sydney", "#brisbane", "#perth",
+    # peak bodies - ours in spirit but read by no one, so still excluded
+    "#vlga", "#mav", "#lgnsw", "#lgaq", "#lgasa", "#walga", "#lgat", "#lgant",
+    "#alga", "#viccouncils", "#nswcouncils", "#qldcouncils", "#sacouncils",
+    "#wacouncils", "#tascouncils", "#ntcouncils",
+}
 
 
 @pytest.mark.parametrize("state", ALL_STATES)
-def test_self_generated_tags_are_dropped(state):
-    """The tags the survey showed nobody outside this network reads."""
-    dead = {"#vlga", "#mav", "#lgnsw", "#lgaq", "#lgasa", "#walga", "#lgat",
-            "#lgant", "#alga", "#viccouncils", "#nswcouncils", "#qldcouncils",
-            "#sacouncils", "#wacouncils", "#tascouncils", "#ntcouncils"}
-    assert not (set(t.lower() for t in tags_for_state(state)) & dead)
+def test_routine_posts_carry_no_community_tags(state):
+    tags = {t.lower() for t in tags_for_state(state)}
+    assert not (tags & COMMUNITY_TAGS), (
+        f"{state} would flood a tag it does not own")
 
 
-def test_localgov_is_present_for_states():
-    """The one real sector community that isn't ours."""
-    for state in ALL_STATES:
-        assert "#LocalGov" in tags_for_state(state)
+@pytest.mark.parametrize("state", ALL_STATES)
+def test_brand_tag_is_present(state):
+    assert tags_for_state(state) == [BRAND_TAG]
 
 
 def test_unknown_state_falls_back_to_national():
-    assert tags_for_state("ZZZ") == tags_for_state("NAT")
-    assert tags_for_state(None) == tags_for_state("NAT")
+    assert tags_for_state("ZZZ") == tags_for_state("NAT") == [BRAND_TAG]
+    assert tags_for_state(None) == [BRAND_TAG]
 
 
-def test_env_override_replaces_state_tags(monkeypatch):
-    monkeypatch.setenv("LGNEWS_TAGS_VIC", "#LocalGov,#Melbourne")
-    assert tags_for_state("VIC") == [BRAND_TAG, "#LocalGov", "#Melbourne"]
+# --- ownership test, which decides what a stale config may re-introduce ----
+
+def test_brand_tag_is_owned():
+    assert _is_own_tag("#LGNewsRoundup")
 
 
-def test_env_override_adds_missing_hash(monkeypatch):
-    monkeypatch.setenv("LGNEWS_TAGS_VIC", "LocalGov, Melbourne")
-    assert tags_for_state("VIC") == [BRAND_TAG, "#LocalGov", "#Melbourne"]
+@pytest.mark.parametrize("tag", ["#BathurstRegionalCouncil", "#MoyneShireCouncil",
+                                 "#CityOfDarwin council", "#GlenelgShire"])
+def test_council_tags_are_owned(tag):
+    assert _is_own_tag(tag), f"{tag} should count as a council tag"
+
+
+def test_council_tag_matches_by_name():
+    assert _is_own_tag("#BathurstRegionalCouncil", "Bathurst Regional Council")
+
+
+@pytest.mark.parametrize("tag", ["#Auspol", "#LocalGov", "#NSWpol", "#VLGA",
+                                 "#NSWCouncils", "#Melbourne", "#housing"])
+def test_community_tags_are_not_owned(tag):
+    assert not _is_own_tag(tag), f"{tag} belongs to other people"
+
+
+def test_empty_tag_is_not_owned():
+    assert not _is_own_tag("")
+    assert not _is_own_tag("#")
+
+
+# --- env override ---------------------------------------------------------
+
+def test_env_override_can_add_a_tag(monkeypatch):
+    """The override exists so tagging can be retuned without a deploy."""
+    monkeypatch.setenv("LGNEWS_TAGS_VIC", "#Melbourne")
+    assert tags_for_state("VIC") == [BRAND_TAG, "#Melbourne"]
 
 
 def test_empty_env_override_leaves_brand_tag_only(monkeypatch):
