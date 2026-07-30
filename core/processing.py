@@ -224,7 +224,8 @@ def post_articles(
             break
 
         if post_uri:
-            db.mark_as_posted(article['url'], poster.handle)
+            db.mark_as_posted(article['url'], poster.handle,
+                              getattr(poster, 'last_post_meta', None))
             posted_count += 1
             council_counts[c_id] = council_counts.get(c_id, 0) + 1
             print(f"✅ Posted: {article['title'][:50]}...")

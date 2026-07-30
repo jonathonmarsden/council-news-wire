@@ -27,6 +27,21 @@ class Article(Base):
     # Failed post attempts (transient errors only); dead-lettered at the cap
     attempt_count: Mapped[int] = mapped_column(Integer, default=0, server_default='0')
 
+    # Where this article was published on BlueSky. Without these we cannot find
+    # a story's own post again: deduplicating or correcting one meant scraping
+    # the public feed and matching on title.
+    bluesky_uri: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
+    bluesky_cid: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    # OpenGraph data captured when building a link card, kept so cards can be
+    # rebuilt or audited without re-fetching the council's page, and so image
+    # availability can be measured per council.
+    og_image_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    og_description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    # 'image' (og:image usable) | 'generated' (branded fallback card) |
+    # 'none' (no card) | 'failed' (fetch or upload failed)
+    image_status: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
+
 class CouncilHealth(Base):
     __tablename__ = "council_health"
     

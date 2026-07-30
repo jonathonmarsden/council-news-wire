@@ -197,15 +197,25 @@ class Database:
     # Dead-letter an article after this many failed (transient) post attempts
     MAX_POST_ATTEMPTS = 5
 
-    def mark_as_posted(self, url: str, handle: str):
-        """Mark an article as posted."""
+    def mark_as_posted(self, url: str, handle: str, post_meta: Optional[dict] = None):
+        """Mark an article as posted.
+
+        post_meta optionally records where and how it was published:
+        bluesky_uri, bluesky_cid, og_image_url, og_description, image_status.
+        Only keys that are present are written, so older callers that pass
+        nothing keep the previous behaviour.
+        """
+        values = {
+            'posted_at': func.now(),
+            'posted_to_handle': handle,
+            'status': 'posted',
+        }
+        if post_meta:
+            allowed = ('bluesky_uri', 'bluesky_cid', 'og_image_url',
+                       'og_description', 'image_status')
+            values.update({k: v for k, v in post_meta.items() if k in allowed})
         with self.get_session() as session:
-            stmt = update(Article).where(Article.url == url).values(
-                posted_at=func.now(),
-                posted_to_handle=handle,
-                status='posted'
-            )
-            session.execute(stmt)
+            session.execute(update(Article).where(Article.url == url).values(**values))
             session.commit()
 
     def mark_as_rejected(self, url: str, reason: str):

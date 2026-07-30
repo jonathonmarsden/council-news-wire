@@ -64,6 +64,9 @@ class BlueSkyPoster:
         self.password = password
         self.client = None
         self._authenticated = False
+        # Metadata from the most recent successful post (URI/CID, OG data,
+        # image_status), for the caller to persist alongside the article.
+        self.last_post_meta: Dict[str, Any] = {}
         code = (state_code or '').upper()
         self.state = code if code in STATE_PEAK_BODIES else self._detect_state(handle)
 
@@ -187,8 +190,10 @@ class BlueSkyPoster:
         # additive: build_external_embed returns None on any problem and we
         # post the identical text-only record we always have.
         embed = None
+        card_data = None
         if self._link_cards_enabled():
-            from core.link_card import build_external_embed
+            from core.link_card import build_external_embed, fetch_card_data
+            card_data = fetch_card_data(url)
             embed = build_external_embed(self.client, models, url)
 
         try:
@@ -197,6 +202,18 @@ class BlueSkyPoster:
             else:
                 response = self.client.send_post(text=post_text, facets=facets)
             post_uri = response.uri
+            # Record where and how this went out so callers can persist it.
+            # Without the URI, finding a story's own post again means scraping
+            # the public feed and matching on title.
+            self.last_post_meta = {
+                'bluesky_uri': post_uri,
+                'bluesky_cid': getattr(response, 'cid', None),
+                'og_image_url': (card_data or {}).get('image') or None,
+                'og_description': (card_data or {}).get('description') or None,
+                'image_status': ('image' if embed is not None
+                                 else 'none' if card_data is None
+                                 else 'failed'),
+            }
             print(f"Posted{' [card]' if embed is not None else ''}: {title[:50]}...")
             return post_uri
         except Exception as e:
