@@ -17,30 +17,73 @@ from atproto import Client, models
 from core.exceptions import TransientPostError
 from core.validator import validate_post
 
-# State Tag Mappings
+# --- Hashtags -------------------------------------------------------------
+#
+# Measured on 2026-07-30 by searching Bluesky for each tag and checking who was
+# posting in it. The peak-body and "<State>Councils" tags we had been using were
+# almost entirely our own output - #VLGA 100% self, #LGNSW 100%, #VicCouncils
+# 96%, #MAV 92% - so five tags per post were reaching no one outside this
+# network, while tags with real communities went unused.
+#
+# Tags with genuine external audiences (monthly post volume, ~0% ours):
+#   #Auspol 10,000+   #LocalNews 697   #QldPol 604   #NSWpol 350
+#   #SpringSt 256     #LocalGov 158
+#
+# #Auspol is deliberately NOT used here. At ~536 posts a day this feed would
+# swamp it many times over, which is both antisocial and the pattern spam
+# heuristics look for. It is reserved for occasional curated amplification from
+# the personal account, chosen by measured engagement.
+#
+# Kept per routine post: one real sector community (#LocalGov), one live state
+# politics community, and the project's own tag for archive/branding.
+# Override with LGNEWS_TAGS_<STATE> (comma-separated) to retune without a deploy.
+BRAND_TAG = '#LGNewsRoundup'
+
+STATE_TAGS = {
+    'NSW': ['#LocalGov', '#NSWpol'],
+    'VIC': ['#LocalGov', '#SpringSt'],
+    'QLD': ['#LocalGov', '#QldPol'],
+    'SA':  ['#LocalGov', '#Adelaide'],    # no live SA politics tag: #sapol is SA Police
+    'WA':  ['#LocalGov', '#WApol'],
+    'TAS': ['#LocalGov', '#politas'],
+    'NT':  ['#LocalGov', '#NTpol'],
+    'ACT': ['#LocalGov', '#Canberra'],    # #actpol is effectively dead (10/mo)
+    'NAT': ['#LocalGov'],
+}
+
+# Retained for backwards compatibility: other modules and tests import these.
+# No longer added to routine posts (see the note above on self-generated reach).
 STATE_PEAK_BODIES = {
-    'NSW': ['#LGNSW'],
-    'VIC': ['#VLGA', '#MAV'],
-    'QLD': ['#LGAQ'],
-    'SA': ['#LGASA'],
-    'WA': ['#WALGA'],
-    'TAS': ['#LGAT'],
-    'NT': ['#LGANT'],
-    'ACT': [],
-    'NAT': ['#ALGA']
+    'NSW': ['#LGNSW'], 'VIC': ['#VLGA', '#MAV'], 'QLD': ['#LGAQ'],
+    'SA': ['#LGASA'], 'WA': ['#WALGA'], 'TAS': ['#LGAT'], 'NT': ['#LGANT'],
+    'ACT': [], 'NAT': ['#ALGA'],
 }
 
 STATE_COUNCILS_TAG = {
-    'NSW': '#NSWCouncils',
-    'VIC': '#VicCouncils',
-    'QLD': '#QldCouncils',
-    'SA': '#SACouncils',
-    'WA': '#WACouncils',
-    'TAS': '#TasCouncils',
-    'NT': '#NTCouncils',
-    'ACT': '',
-    'NAT': ''
+    'NSW': '#NSWCouncils', 'VIC': '#VicCouncils', 'QLD': '#QldCouncils',
+    'SA': '#SACouncils', 'WA': '#WACouncils', 'TAS': '#TasCouncils',
+    'NT': '#NTCouncils', 'ACT': '', 'NAT': '',
 }
+
+
+def tags_for_state(state: str) -> List[str]:
+    """Hashtags for a routine post from `state`, brand tag first.
+
+    LGNEWS_TAGS_<STATE> overrides the defaults, e.g. LGNEWS_TAGS_VIC="#LocalGov,#Melbourne".
+    Set it to an empty string to post with the brand tag only.
+    """
+    code = (state or 'NAT').upper()
+    override = os.environ.get(f'LGNEWS_TAGS_{code}')
+    if override is not None:
+        extra = [t.strip() for t in override.split(',') if t.strip()]
+    else:
+        extra = list(STATE_TAGS.get(code, STATE_TAGS['NAT']))
+    tags = [BRAND_TAG]
+    for t in extra:
+        tag = t if t.startswith('#') else f'#{t}'
+        if tag not in tags:
+            tags.append(tag)
+    return tags
 
 class BlueSkyPoster:
     """Posts council news articles to BlueSky."""
@@ -366,24 +409,13 @@ class BlueSkyPoster:
         if date:
             date_line = f"{date.strftime('%d %B %Y')}\n"
         
-        # 4. Hashtags
-        # Standard Set
-        tags_list = ["#LGNewsRoundup"]
-        
-        # State Peaks
-        if self.state in STATE_PEAK_BODIES:
-            tags_list.extend(STATE_PEAK_BODIES[self.state])
-            
-        # State Council Tag
-        if self.state in STATE_COUNCILS_TAG and STATE_COUNCILS_TAG[self.state]:
-            tags_list.append(STATE_COUNCILS_TAG[self.state])
-            
-        # Council Tag
-        c_tag = council_hashtag or self._council_to_hashtag(council_name)
-        if c_tag not in tags_list:
-            tags_list.append(c_tag)
-            
-        # Extra topics (deduplicated)
+        # 4. Hashtags — brand tag plus the state's live communities. The
+        # per-council and peak-body tags that used to be added here reached
+        # essentially no one outside this network (see the note by STATE_TAGS),
+        # so they cost characters and clutter without buying discovery.
+        tags_list = tags_for_state(self.state)
+
+        # Extra topics from the caller (deduplicated)
         if extra_hashtags:
             for t in extra_hashtags:
                 if t not in tags_list:
