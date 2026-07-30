@@ -193,8 +193,22 @@ class BlueSkyPoster:
         card_data = None
         if self._link_cards_enabled():
             from core.link_card import build_external_embed, fetch_card_data
+            from core.card_image import render_card
             card_data = fetch_card_data(url)
-            embed = build_external_embed(self.client, models, url)
+
+            def _branded_card():
+                # Councils whose sites expose no og:image still get a card,
+                # rendered in the account's own visual language.
+                return render_card(
+                    title=(card_data or {}).get("title") or title,
+                    council_name=council_name,
+                    state=self.state,
+                    date_str=date.strftime("%d %B %Y") if date else "",
+                    subtitle=(card_data or {}).get("description") or "",
+                )
+
+            embed = build_external_embed(self.client, models, url,
+                                         fallback=_branded_card)
 
         try:
             if embed is not None:
@@ -210,7 +224,8 @@ class BlueSkyPoster:
                 'bluesky_cid': getattr(response, 'cid', None),
                 'og_image_url': (card_data or {}).get('image') or None,
                 'og_description': (card_data or {}).get('description') or None,
-                'image_status': ('image' if embed is not None
+                'image_status': (getattr(embed, 'lgnews_image_status', 'image')
+                                 if embed is not None
                                  else 'none' if card_data is None
                                  else 'failed'),
             }

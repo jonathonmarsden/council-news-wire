@@ -108,7 +108,8 @@ def _download_image(url: str) -> Optional[bytes]:
     return data
 
 
-def build_external_embed(client, models, url: str, require_image: bool = True):
+def build_external_embed(client, models, url: str, require_image: bool = True,
+                         fallback=None):
     """Return an app.bsky.embed.external for `url`, or None to fall back to text.
 
     `client` is an authenticated atproto Client (for uploadBlob); `models` is
@@ -120,6 +121,11 @@ def build_external_embed(client, models, url: str, require_image: bool = True):
     with no picture, which can look emptier than the plain text post; with
     require_image, those simply fall back to text. Set False to allow
     text-cards (title/description, no thumb).
+
+    fallback: optional zero-argument callable returning PNG bytes to use as the
+    thumbnail when the council's site offers no usable image. This is how
+    small-shire stories still get a card - a branded one we render ourselves -
+    instead of posting as a bare link.
     """
     try:
         data = fetch_card_data(url)
@@ -135,6 +141,16 @@ def build_external_embed(client, models, url: str, require_image: bool = True):
                 except Exception:
                     thumb = None  # image failed -> treat as no image below
 
+        generated = False
+        if thumb is None and fallback is not None:
+            try:
+                png = fallback()
+                if png:
+                    thumb = client.upload_blob(png).blob
+                    generated = True
+            except Exception:
+                thumb = None
+
         if thumb is None and require_image:
             return None  # no usable thumbnail -> fall back to clean text post
 
@@ -144,6 +160,13 @@ def build_external_embed(client, models, url: str, require_image: bool = True):
             description=data["description"],
             thumb=thumb,
         )
-        return models.AppBskyEmbedExternal.Main(external=external)
+        embed = models.AppBskyEmbedExternal.Main(external=external)
+        # How the thumbnail was obtained, for the caller to persist as
+        # image_status: 'generated' means we rendered a branded fallback.
+        try:
+            embed.lgnews_image_status = "generated" if generated else "image"
+        except Exception:
+            pass  # pydantic models may forbid extra attrs; status is optional
+        return embed
     except Exception:
         return None

@@ -12,9 +12,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Install system dependencies
 # We need curl for the WAF bypass scraper, and tzdata for correct timezone
 # DEBIAN_FRONTEND=noninteractive prevents tzdata from hanging on build
+# fonts-dejavu-core supplies the serif/sans faces used to render the branded
+# fallback link card for councils whose sites expose no og:image. The base
+# image ships only CJK/Thai/emoji fonts, which cannot set a Latin headline.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     tzdata \
+    fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies

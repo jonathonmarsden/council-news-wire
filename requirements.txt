@@ -10,5 +10,6 @@ SQLAlchemy>=2.0.0
 alembic>=1.13.0
 psycopg2-binary>=2.9.9
 pytz>=2024.1
+Pillow>=10.0.0  # renders the branded fallback link card (core/card_image.py)
 
 playwright==1.58.0  # MUST match the Dockerfile base image (mcr playwright/python:v1.58.0) — browsers are baked in; a version drift means "Executable doesn't exist at /ms-playwright"

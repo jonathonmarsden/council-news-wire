@@ -174,3 +174,46 @@ def test_embed_never_raises(monkeypatch):
     monkeypatch.setattr(link_card, "fetch_card_data", boom)
     # must swallow and return None, never propagate into the posting path
     assert link_card.build_external_embed(FakeClient(), fake_models(), "https://x/a") is None
+
+
+# ---- branded fallback wiring ---------------------------------------------
+
+def test_fallback_is_used_when_no_og_image(monkeypatch):
+    """No og:image but a fallback renderer -> a card with the generated thumb."""
+    patch_get(monkeypatch, FakeResp(text=
+        '<html><head><meta property="og:title" content="Headline long enough here">'
+        '<meta property="og:description" content="d"></head></html>'))
+    embed = link_card.build_external_embed(
+        FakeClient(), fake_models(), "https://x/a", fallback=lambda: b"PNGBYTES")
+    assert embed is not None
+    assert embed[1][1]["thumb"] is not None
+
+
+def test_fallback_failure_still_falls_back_to_text(monkeypatch):
+    patch_get(monkeypatch, FakeResp(text=
+        '<html><head><meta property="og:title" content="Headline long enough here">'
+        '<meta property="og:description" content="d"></head></html>'))
+    def boom():
+        raise RuntimeError("render failed")
+    assert link_card.build_external_embed(
+        FakeClient(), fake_models(), "https://x/a", fallback=boom) is None
+
+
+def test_fallback_returning_none_falls_back_to_text(monkeypatch):
+    patch_get(monkeypatch, FakeResp(text=
+        '<html><head><meta property="og:title" content="Headline long enough here">'
+        '<meta property="og:description" content="d"></head></html>'))
+    assert link_card.build_external_embed(
+        FakeClient(), fake_models(), "https://x/a", fallback=lambda: None) is None
+
+
+def test_real_og_image_preferred_over_fallback(monkeypatch):
+    """When the council supplies an image we use theirs, not our generated one."""
+    calls = []
+    monkeypatch.setattr(link_card._requests, "get",
+                        lambda *a, **k: FakeResp(text=PAGE, content=b"img", ctype="image/jpeg"))
+    embed = link_card.build_external_embed(
+        FakeClient(), fake_models(), "https://x/a",
+        fallback=lambda: calls.append(1) or b"GEN")
+    assert embed is not None
+    assert not calls, "fallback must not run when og:image works"
