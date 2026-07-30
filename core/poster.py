@@ -67,6 +67,20 @@ class BlueSkyPoster:
         code = (state_code or '').upper()
         self.state = code if code in STATE_PEAK_BODIES else self._detect_state(handle)
 
+    def _link_cards_enabled(self) -> bool:
+        """True if this feed's state is opted into rich link cards.
+
+        Controlled by the LINK_CARDS_STATES env var: a comma-separated list of
+        state codes (e.g. "NT,ACT"), or "ALL" for every feed. Empty/unset means
+        off everywhere - the safe default while the feature is a prototype.
+        """
+        raw = (os.environ.get("LINK_CARDS_STATES") or "").strip().upper()
+        if not raw:
+            return False
+        if raw == "ALL":
+            return True
+        return self.state in {c.strip() for c in raw.split(",") if c.strip()}
+
     def _detect_state(self, handle: str) -> str:
         """Derive state code from handle."""
         if not handle: return 'NAT'
@@ -168,10 +182,22 @@ class BlueSkyPoster:
                 print(f"Skipping post: Validation failed for {council_name} ({'; '.join(validation_errors)})")
                 return None
         
+        # Optional rich link card (app.bsky.embed.external). Enabled per-feed
+        # via LINK_CARDS_STATES (comma-separated codes, e.g. "NT,ACT"). Purely
+        # additive: build_external_embed returns None on any problem and we
+        # post the identical text-only record we always have.
+        embed = None
+        if self._link_cards_enabled():
+            from core.link_card import build_external_embed
+            embed = build_external_embed(self.client, models, url)
+
         try:
-            response = self.client.send_post(text=post_text, facets=facets)
+            if embed is not None:
+                response = self.client.send_post(text=post_text, facets=facets, embed=embed)
+            else:
+                response = self.client.send_post(text=post_text, facets=facets)
             post_uri = response.uri
-            print(f"Posted: {title[:50]}...")
+            print(f"Posted{' [card]' if embed is not None else ''}: {title[:50]}...")
             return post_uri
         except Exception as e:
             # Only a definitive API rejection of this record is permanent.

@@ -1,0 +1,128 @@
+"""Build a Bluesky external link card (app.bsky.embed.external) for an article.
+
+Bluesky does not auto-generate link previews: the posting client must fetch the
+target page's OpenGraph tags, upload any thumbnail as a blob, and attach the
+embed to the post record itself. This module does that, defensively.
+
+Design contract: this is *additive and never destructive*. If anything is
+missing or fails (no OG tags, no image, a 404, a network error), it returns
+None and the caller posts exactly the text post it would have posted anyway.
+A link card must never make a post worse than the plain-text version.
+"""
+from __future__ import annotations
+
+import re
+from typing import Optional
+from urllib.parse import urljoin, urlparse
+
+try:
+    from curl_cffi import requests as _requests
+    _IMPERSONATE = {"impersonate": "chrome124"}
+except ImportError:  # pragma: no cover - curl_cffi is a hard dep in prod
+    import requests as _requests  # type: ignore
+    _IMPERSONATE = {}
+
+from bs4 import BeautifulSoup
+
+FETCH_TIMEOUT = 20
+MAX_IMAGE_BYTES = 900_000  # Bluesky blob limit is ~1MB; stay safely under
+# Site-name cruft commonly tacked onto <title>/og:title by council CMSs.
+_TITLE_CRUFT = re.compile(
+    r"\s*[|»\-–—]\s*(?:[A-Z][\w'&.]*\s*){0,6}"
+    r"(?:Council|Shire|City|News|Government|Gov)\b.*$",
+    re.IGNORECASE,
+)
+
+
+def _meta(soup: BeautifulSoup, *names: str) -> str:
+    for n in names:
+        tag = soup.find("meta", property=n) or soup.find("meta", attrs={"name": n})
+        if tag and tag.get("content"):
+            return tag["content"].strip()
+    return ""
+
+
+def clean_title(raw: str) -> str:
+    """Strip trailing site-name cruft ('… | City of Ballarat', '… » Shire')."""
+    if not raw:
+        return raw
+    cleaned = _TITLE_CRUFT.sub("", raw).strip()
+    # Never strip everything away; fall back to the original if we over-cut.
+    return cleaned if len(cleaned) >= 8 else raw.strip()
+
+
+def fetch_card_data(url: str) -> Optional[dict]:
+    """Fetch OG data for `url`. Returns a dict or None if unusable.
+
+    Returns None (caller falls back to text) when: the fetch fails, the page is
+    an error page (4xx/5xx), or there is no usable title. An absent image is
+    fine - a card with title+description is still worth showing.
+    """
+    try:
+        resp = _requests.get(url, timeout=FETCH_TIMEOUT, **_IMPERSONATE)
+    except Exception:
+        return None
+    if resp.status_code >= 400:
+        return None
+
+    soup = BeautifulSoup(resp.text, "html.parser")
+    title = _meta(soup, "og:title", "twitter:title")
+    if not title and soup.title:
+        title = soup.title.get_text(strip=True)
+    title = clean_title(title)
+    # Guard against error pages that still return 200.
+    if not title or re.search(r"page not found|404|error", title, re.IGNORECASE):
+        return None
+
+    description = _meta(soup, "og:description", "twitter:description", "description")
+    image = _meta(soup, "og:image", "twitter:image")
+    if image:
+        image = urljoin(url, image)  # resolve protocol-relative / relative URLs
+
+    return {"uri": url, "title": title[:300], "description": description[:1000], "image": image}
+
+
+def _download_image(url: str) -> Optional[bytes]:
+    try:
+        resp = _requests.get(url, timeout=FETCH_TIMEOUT, **_IMPERSONATE)
+    except Exception:
+        return None
+    if resp.status_code >= 400:
+        return None
+    data = resp.content
+    ctype = resp.headers.get("content-type", "")
+    if not ctype.startswith("image/") or len(data) > MAX_IMAGE_BYTES or not data:
+        return None
+    return data
+
+
+def build_external_embed(client, models, url: str):
+    """Return an app.bsky.embed.external for `url`, or None to fall back to text.
+
+    `client` is an authenticated atproto Client (for uploadBlob); `models` is
+    the atproto models module. Any failure returns None - never raises into
+    the posting path.
+    """
+    try:
+        data = fetch_card_data(url)
+        if not data:
+            return None
+
+        thumb = None
+        if data["image"]:
+            img_bytes = _download_image(data["image"])
+            if img_bytes:
+                try:
+                    thumb = client.upload_blob(img_bytes).blob
+                except Exception:
+                    thumb = None  # image failed -> card with no thumb, still fine
+
+        external = models.AppBskyEmbedExternal.External(
+            uri=data["uri"],
+            title=data["title"],
+            description=data["description"],
+            thumb=thumb,
+        )
+        return models.AppBskyEmbedExternal.Main(external=external)
+    except Exception:
+        return None
