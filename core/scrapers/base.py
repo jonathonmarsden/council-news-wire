@@ -435,7 +435,16 @@ class BaseScraper(ABC):
         # 1-12. Detect a leading YYYY-MM-DD and parse without dayfirst.
         if re.match(r'^\d{4}-\d{2}-\d{2}', date_str):
             try:
-                return date_parser.parse(date_str)
+                parsed = date_parser.parse(date_str)
+                # A trailing Z or offset yields an aware datetime, but every
+                # comparison downstream (freshness checks) and the DateTime
+                # column itself are naive, so an aware value raises
+                # "can't compare offset-naive and offset-aware datetimes" and
+                # the article ends up with no usable date. Normalise to naive
+                # local time.
+                if parsed.tzinfo is not None:
+                    parsed = parsed.astimezone().replace(tzinfo=None)
+                return parsed
             except (ValueError, TypeError):
                 pass
 
