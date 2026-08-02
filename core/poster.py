@@ -251,7 +251,40 @@ class BlueSkyPoster:
             print(f"Authentication failed: {e}")
             return False
     
-    def post_article(self, council_name: str, title: str, url: str, 
+    def build_facets_for_text(self, text: str):
+        """Facet a free-text post: make its URLs and hashtags clickable.
+
+        The article path builds facets alongside its own layout (title as one
+        link, tags only in the trailing block). Promotional posts are ordinary
+        prose, so they need the general case: mark up every URL and every tag
+        wherever they appear.
+
+        Returns (text, facets). Without facets a hashtag is inert - it renders
+        as plain text and the post never enters the tag's feed, which for a
+        promotional post is the entire point.
+        """
+        facets = []
+
+        def _slice(start: int, end: int):
+            byte_start = len(text[:start].encode('utf-8'))
+            return models.AppBskyRichtextFacet.ByteSlice(
+                byte_start=byte_start,
+                byte_end=byte_start + len(text[start:end].encode('utf-8')))
+
+        for match in re.finditer(r'https?://[^\s<>"\)]+', text):
+            uri = match.group(0).rstrip('.,;:')
+            facets.append(models.AppBskyRichtextFacet.Main(
+                features=[models.AppBskyRichtextFacet.Link(uri=uri)],
+                index=_slice(match.start(), match.start() + len(uri))))
+
+        for match in re.finditer(r'(?<!\w)#([A-Za-z][A-Za-z0-9_]*)', text):
+            facets.append(models.AppBskyRichtextFacet.Main(
+                features=[models.AppBskyRichtextFacet.Tag(tag=match.group(1))],
+                index=_slice(match.start(), match.end())))
+
+        return text, facets
+
+    def post_article(self, council_name: str, title: str, url: str,
                      date: Optional[datetime] = None, excerpt: Optional[str] = None,
                      hashtags: List[str] = None, council_hashtag: Optional[str] = None) -> Optional[str]:
         """
