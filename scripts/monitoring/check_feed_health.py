@@ -38,6 +38,19 @@ APPVIEW = "https://public.api.bsky.app/xrpc"
 WEBSITE = "https://lgnews.jonathonmarsden.com/"
 TIMEOUT = 15
 
+# Feeds publish at very different rates, so one staleness threshold cannot fit
+# them all. ACT covers a single territory government rather than a set of
+# councils: across its last 38 posting intervals, 12 exceeded 48 hours and the
+# longest ran to several weeks. A 48-hour alarm therefore fired on ACT about a
+# third of the time when nothing was wrong - and an alarm that cries wolf is
+# one you learn to ignore, which is exactly how a real outage gets missed.
+# NT is similarly quiet: 18 small councils that often publish nothing for days.
+STALE_HOURS_BY_STATE = {
+    "act": 14 * 24,
+    "nt": 5 * 24,
+    "tas": 3 * 24,
+}
+
 
 def fetch_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "lgnews-monitor/1.0"})
@@ -46,7 +59,13 @@ def fetch_json(url):
 
 
 def check_feed(state, stale_hours):
-    """Return (ok: bool, detail: str) for one state account."""
+    """Return (ok: bool, detail: str) for one state account.
+
+    `stale_hours` is the default; a feed listed in STALE_HOURS_BY_STATE uses
+    its own threshold instead, because the quiet feeds would otherwise alarm
+    routinely while publishing perfectly normally.
+    """
+    stale_hours = STALE_HOURS_BY_STATE.get(state, stale_hours)
     handle = HANDLE.format(state)
     url = "{}/app.bsky.feed.getAuthorFeed?{}".format(
         APPVIEW, urllib.parse.urlencode({"actor": handle, "limit": 1})
