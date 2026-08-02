@@ -26,6 +26,29 @@ from core.utils import get_logger
 logger = get_logger(__name__)
 
 
+def _resolve_missing_year(parsed: Optional[datetime], raw: str) -> Optional[datetime]:
+    """Roll a year-less date back when the assumed year puts it in the future.
+
+    Councils often print "16 December" with no year. dateutil fills the gap
+    with the CURRENT year, so a December 2025 story scraped in August 2026
+    becomes December 2026 - dated in the future, permanently rejected by the
+    freshness filter. 66 articles were stuck this way, almost all stamped
+    November or December.
+
+    Only applies when the source text carries no 4-digit year, so a council
+    genuinely announcing a future event ("Australia Day 2027") is untouched. A
+    small tolerance allows for clock skew and same-day publishing.
+    """
+    if parsed is None or re.search(r'\b\d{4}\b', raw or ''):
+        return parsed
+    if parsed > datetime.now() + timedelta(days=1):
+        try:
+            return parsed.replace(year=parsed.year - 1)
+        except ValueError:      # 29 February in a non-leap year
+            return parsed.replace(year=parsed.year - 1, day=28)
+    return parsed
+
+
 def _naive(parsed: Optional[datetime]) -> Optional[datetime]:
     """Strip the timezone, converting to local time first.
 
@@ -455,7 +478,8 @@ class BaseScraper(ABC):
                 pass
 
         try:
-            return _naive(date_parser.parse(date_str, dayfirst=True))
+            return _naive(_resolve_missing_year(
+                date_parser.parse(date_str, dayfirst=True), date_str))
         except (ValueError, TypeError):
             # Fuzzy parsing fills missing components from TODAY, fabricating
             # near-now dates from junk like "3 min read" (which then passes
@@ -466,7 +490,8 @@ class BaseScraper(ABC):
             if re.search(r'\d{1,2}[\s/.\-]+[A-Za-z0-9]+[\s/.\-]+\d{2,4}', date_str) or \
                re.search(r'(?i)\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{4}\b', date_str):
                 try:
-                    return _naive(date_parser.parse(date_str, dayfirst=True, fuzzy=True))
+                    return _naive(_resolve_missing_year(
+                        date_parser.parse(date_str, dayfirst=True, fuzzy=True), date_str))
                 except (ValueError, TypeError):
                     return None
             return None

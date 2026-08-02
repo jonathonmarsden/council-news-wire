@@ -6,7 +6,7 @@ The mismatch raised "can't compare offset-naive and offset-aware datetimes",
 so those articles ended up unpostable - NT had 9 future-dated and 16 undated
 rows stuck in the queue for this reason.
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 
@@ -90,3 +90,46 @@ def test_every_parse_path_returns_naive(scraper):
         parsed = scraper.parse_date(raw)
         if parsed is not None:
             assert parsed.tzinfo is None, f"{raw} produced an aware datetime"
+
+
+# --- year-less dates must not land in the future --------------------------
+
+def test_yearless_december_scraped_in_august_rolls_back(scraper):
+    """Councils print '16 December' with no year.
+
+    dateutil fills the gap with the CURRENT year, so a December 2025 story
+    scraped in August 2026 became December 2026 - dated in the future and
+    permanently rejected by the freshness filter. 66 articles were stuck this
+    way across six states, almost all stamped November or December.
+    """
+    parsed = scraper.parse_date("16 December")
+    assert parsed is not None
+    assert parsed <= datetime.now() + timedelta(days=1), (
+        "a year-less date must never resolve into the future")
+
+
+@pytest.mark.parametrize("raw", ["22 December", "Mon 15 Dec", "December 16",
+                                 "1 November", "25 Dec"])
+def test_no_yearless_date_resolves_to_the_future(scraper, raw):
+    parsed = scraper.parse_date(raw)
+    if parsed is not None:
+        assert parsed <= datetime.now() + timedelta(days=1)
+
+
+@pytest.mark.parametrize("raw,year", [
+    ("16 December 2026", 2026),
+    ("1 January 2027", 2027),
+    ("2026-12-16", 2026),
+])
+def test_an_explicit_year_is_never_overridden(scraper, raw, year):
+    """A council genuinely announcing a future event must be left alone."""
+    parsed = scraper.parse_date(raw)
+    assert parsed is not None and parsed.year == year
+
+
+def test_recent_past_yearless_date_keeps_this_year(scraper):
+    """Only future-resolving dates roll back; a recent one stays put."""
+    last_month = datetime.now() - timedelta(days=30)
+    raw = last_month.strftime("%d %B")
+    parsed = scraper.parse_date(raw)
+    assert parsed is not None and parsed.year == last_month.year
