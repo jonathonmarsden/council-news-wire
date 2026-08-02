@@ -145,7 +145,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 19255,
-      "region": "Greater Hobart"
+      "region": "Greater Hobart",
+      "fetch_date_from_article": true
     },
     {
       "id": "central-coast",
@@ -307,7 +308,8 @@
       "content_selector": "p.hidden-xs",
       "use_curl": true,
       "population": 14235,
-      "region": "Northern"
+      "region": "Northern",
+      "fetch_date_from_article": true
     },
     {
       "id": "sorell",

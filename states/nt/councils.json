@@ -73,7 +73,8 @@
       "item_selector": "div.news-grid-item",
       "title_selector": ".field--name-node-title h3 a",
       "date_selector": "div.news-grid-item",
-      "link_selector": ".field--name-node-title h3 a"
+      "link_selector": ".field--name-node-title h3 a",
+      "fetch_date_from_article": true
     },
     {
       "name": "East Arnhem Regional Council",

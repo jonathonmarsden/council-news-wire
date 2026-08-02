@@ -140,7 +140,8 @@
         "link": "a"
       },
       "population": 61755,
-      "region": "Hunter"
+      "region": "Hunter",
+      "fetch_date_from_article": true
     },
     {
       "id": "coffs-harbour-city-council",
@@ -157,7 +158,8 @@
         "link": "a"
       },
       "population": 80435,
-      "region": "North Coast"
+      "region": "North Coast",
+      "fetch_date_from_article": true
     },
     {
       "id": "cumberland-city-council",
@@ -269,7 +271,8 @@
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "fetch_date_from_article": true
     },
     {
       "id": "lake-macquarie-city-council",
@@ -512,7 +515,8 @@
       "link_selector": "a.featured-news-listing-item__link",
       "date_selector": "time.featured-news-listing-item__time",
       "population": 237020,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "fetch_date_from_article": true
     },
     {
       "id": "city-of-sydney",
@@ -523,7 +527,8 @@
       "item_selector": "a[href*='/articles/']",
       "date_selector": "p.text-gray-600",
       "population": 234245,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "fetch_date_from_article": true
     },
     {
       "id": "tamworth-regional-council",
@@ -563,7 +568,8 @@
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "fetch_date_from_article": true
     },
     {
       "id": "wagga-wagga-city-council",
@@ -579,7 +585,8 @@
       "link_selector": "a",
       "date_selector": "meta[property='article:published_time']",
       "population": 68835,
-      "region": "Riverina"
+      "region": "Riverina",
+      "fetch_date_from_article": true
     },
     {
       "id": "waverley-council",
@@ -697,7 +704,8 @@
       "enabled": true,
       "use_curl": true,
       "population": 64535,
-      "region": "Southern Tablelands"
+      "region": "Southern Tablelands",
+      "fetch_date_from_article": true
     },
     {
       "id": "snowy-monaro-regional-council",
@@ -710,7 +718,8 @@
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "fetch_date_from_article": true
     },
     {
       "id": "albury-city-council",
@@ -925,7 +934,8 @@
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "fetch_date_from_article": true
     },
     {
       "id": "dungog-shire-council",
@@ -1029,7 +1039,8 @@
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "fetch_date_from_article": true
     },
     {
       "id": "gunnedah-shire-council",

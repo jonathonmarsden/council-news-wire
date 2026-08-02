@@ -140,7 +140,8 @@
       "content_selector": "p.card-description",
       "population": 173810,
       "region": "Far North Queensland",
-      "impersonate": "safari15_5"
+      "impersonate": "safari15_5",
+      "fetch_date_from_article": true
     },
     {
       "id": "carpentaria",
@@ -436,7 +437,8 @@
       "scraper": "curl_scraper",
       "enabled": true,
       "population": 23245,
-      "region": "Far North Queensland"
+      "region": "Far North Queensland",
+      "fetch_date_from_article": true
     },
     {
       "id": "mckinlay",
@@ -469,7 +471,8 @@
       "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 1250,
-      "region": "Gulf"
+      "region": "Gulf",
+      "fetch_date_from_article": true
     },
     {
       "id": "mount-isa",
@@ -612,7 +615,8 @@
       "content_selector": "div.list-item-content",
       "use_curl": true,
       "population": 86210,
-      "region": "Central Queensland"
+      "region": "Central Queensland",
+      "fetch_date_from_article": true
     },
     {
       "id": "scenic-rim",
@@ -674,7 +678,8 @@
       "date_selector": "time[datetime]",
       "item_selector": "article.Card",
       "title_selector": "h2 a",
-      "link_selector": "a[href]"
+      "link_selector": "a[href]",
+      "fetch_date_from_article": true
     },
     {
       "id": "tablelands",

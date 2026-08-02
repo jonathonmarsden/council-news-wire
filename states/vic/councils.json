@@ -46,7 +46,8 @@
       "title_selector": ".listing-content-title h3",
       "link_selector": "a",
       "date_selector": "time",
-      "content_selector": ".listing-content-body p"
+      "content_selector": ".listing-content-body p",
+      "fetch_date_from_article": true
     },
     {
       "id": "benalla",
@@ -168,7 +169,8 @@
       "date_selector": ".card-item__date",
       "population": 277102,
       "region": "Barwon",
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "greater-shepparton",
@@ -210,7 +212,8 @@
       "date_selector": ".card__meta",
       "content_selector": ".card__description",
       "population": 184694,
-      "region": "Melbourne North"
+      "region": "Melbourne North",
+      "fetch_date_from_article": true
     },
     {
       "id": "south-gippsland",
@@ -349,7 +352,8 @@
       "use_curl": true,
       "category": "B",
       "population": 217040,
-      "region": "Melbourne West"
+      "region": "Melbourne West",
+      "fetch_date_from_article": true
     },
     {
       "id": "greater-bendigo",
@@ -416,7 +420,8 @@
       "category": "A",
       "date_selector": ".article-date",
       "population": 178955,
-      "region": "Melbourne Inner"
+      "region": "Melbourne Inner",
+      "fetch_date_from_article": true
     },
     {
       "id": "mitchell",
@@ -831,7 +836,8 @@
       "link_selector": "a",
       "date_selector": ".published-on",
       "population": 205305,
-      "region": "Melbourne East"
+      "region": "Melbourne East",
+      "fetch_date_from_article": true
     },
     {
       "id": "moorabool",
@@ -1024,7 +1030,8 @@
       "date_selector": ".published-on",
       "use_curl": true,
       "population": 21270,
-      "region": "Loddon Mallee"
+      "region": "Loddon Mallee",
+      "fetch_date_from_article": true
     },
     {
       "id": "wangaratta",
@@ -1085,7 +1092,8 @@
       "date_selector": ".published-on",
       "use_curl": true,
       "population": 242673,
-      "region": "Melbourne North"
+      "region": "Melbourne North",
+      "fetch_date_from_article": true
     },
     {
       "id": "yarra",

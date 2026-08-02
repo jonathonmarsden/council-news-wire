@@ -559,7 +559,8 @@
       "title_selector": "title",
       "date_selector": "date_gmt",
       "link_selector": "permalink",
-      "excerpt_selector": "excerpt"
+      "excerpt_selector": "excerpt",
+      "fetch_date_from_article": true
     },
     {
       "id": "irwin",
@@ -1382,7 +1383,8 @@
         "date": ".date",
         "link": "a",
         "excerpt": ".summary"
-      }
+      },
+      "fetch_date_from_article": true
     }
   ]
 }

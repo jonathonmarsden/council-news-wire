@@ -29,7 +29,8 @@
       },
       "population": 42105,
       "region": "Adelaide Hills",
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "adelaide-plains",
@@ -165,7 +166,8 @@
       "population": 3680,
       "region": "Eyre Peninsula",
       "impersonate": "chrome124",
-      "scraper": "lgasa_scraper"
+      "scraper": "lgasa_scraper",
+      "fetch_date_from_article": true
     },
     {
       "id": "charles-sturt",
@@ -200,7 +202,8 @@
       },
       "population": 10135,
       "region": "Mid North",
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "cleve",
@@ -393,7 +396,8 @@
         "link": "self"
       },
       "population": 39605,
-      "region": "Adelaide Metro"
+      "region": "Adelaide Metro",
+      "fetch_date_from_article": true
     },
     {
       "id": "kangaroo-island",
@@ -519,7 +523,8 @@
       "region": "Riverland",
       "scraper": "lgasa_scraper",
       "use_curl": true,
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "marion",
@@ -553,7 +558,8 @@
       "region": "Murray Mallee",
       "scraper": "lgasa_scraper",
       "use_curl": true,
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "mitcham",
@@ -754,7 +760,8 @@
       "scraper": "lgasa_scraper",
       "population": 15995,
       "region": "Eyre Peninsula",
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "port-pirie-regional",
@@ -1095,7 +1102,8 @@
         "date": "time.entry-time",
         "link": "h1.entry-title a"
       },
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "fetch_date_from_article": true
     },
     {
       "id": "port-adelaide-enfield",
