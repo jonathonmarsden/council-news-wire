@@ -134,6 +134,23 @@ def test_hourly_ticks_across_the_window_still_post_once(runner):
     assert [k for k, _, _ in runner.sent].count("nsw") == 1
 
 
+def test_an_unwritable_ledger_stops_the_run(runner, tmp_path, monkeypatch):
+    """Without a writable ledger nothing prevents a repeat post, and the cron
+    line ticks five times a night - so refuse to start."""
+    blocked = tmp_path / "readonly"
+    blocked.mkdir()
+    blocked.chmod(0o500)
+    monkeypatch.setattr(runner, "LEDGER", blocked / "sub" / "ledger.json")
+    try:
+        assert runner.check_ledger_is_writable() is False
+    finally:
+        blocked.chmod(0o700)
+
+
+def test_a_writable_ledger_passes_the_check(runner):
+    assert runner.check_ledger_is_writable() is True
+
+
 def test_the_ledger_records_what_was_actually_posted(runner):
     day = _first_promo_day(runner, "nsw")
     runner.run(day, dry_run=False, verbose=False)

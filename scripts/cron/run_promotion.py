@@ -56,10 +56,38 @@ def _load(path):
 
 
 def _save(path, data):
+    """Write `data` to `path` atomically.
+
+    The temp-then-replace keeps a crash from leaving a half-written ledger, and
+    a ledger that cannot be trusted is one that lets a promo post twice.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(data, indent=2, sort_keys=True))
-    tmp.replace(path)          # atomic: a crash cannot leave a half-written ledger
+    tmp.replace(path)
+
+
+def check_ledger_is_writable():
+    """Fail loudly before posting if the ledger cannot be written.
+
+    The ledger is the only thing preventing a repeat post, and the cron line
+    ticks five times a night. An unwritable ledger would therefore post the
+    same promo five times into someone else's hashtag - so this refuses to
+    start rather than risking it. (The container runs as botuser while data/ is
+    root-owned, which is exactly how this was first hit.)
+    """
+    try:
+        LEDGER.parent.mkdir(parents=True, exist_ok=True)
+        probe = LEDGER.parent / ".write-probe"
+        probe.write_text("ok")
+        probe.unlink()
+        return True
+    except OSError as exc:
+        print("FATAL: cannot write the promotion ledger at {} ({})".format(
+            LEDGER.parent, exc), file=sys.stderr)
+        print("Nothing was posted. Set LGNEWS_DATA_DIR to a writable path.",
+              file=sys.stderr)
+        return False
 
 
 def ledger_key(channel_key, occurrence):
@@ -234,6 +262,10 @@ def main():
     # Default to dry-run when nothing is configured, so a mis-set cron
     # environment prints instead of failing silently.
     dry_run = args.dry_run or not os.environ.get("BLUESKY_PASSWORD_VIC")
+
+    # A dry run touches nothing, so it is allowed to proceed regardless.
+    if not dry_run and not check_ledger_is_writable():
+        return 1
 
     if args.approve:
         return approve(args.approve, dry_run)
