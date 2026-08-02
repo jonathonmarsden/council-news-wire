@@ -155,3 +155,40 @@ def test_splits_when_the_source_lost_the_space_after_a_full_stop():
 def test_does_not_split_abbreviations_decimals_or_domains(text, intact):
     out = _first_sentence(text)
     assert out and intact in out
+
+
+# --- card description as lede source (live gap found 2026-08-02) ----------
+
+def test_lede_source_prefers_excerpt_then_card_description():
+    """post_article picks the lede source: scraped excerpt first, else the
+    card's own description.
+
+    Many council pages carry an og:description but no scrapeable excerpt.
+    Passing only the excerpt meant those posts fell back to the headline even
+    though a usable sentence had already been fetched for the card - VIC was
+    leading with a sentence on 5 posts out of 45. This pins the precedence
+    rule that fixes it.
+    """
+    desc = ("Council has allocated $40,000 in its 2026/27 Budget to design a "
+            "new play space in Wesley Hill, with construction to follow.")
+
+    # the expression used in post_article
+    def lede_source(excerpt, card_data):
+        return excerpt or (card_data or {}).get("description")
+
+    # no excerpt -> the card description is used
+    assert lede_source(None, {"description": desc}) == desc
+    # excerpt present -> the council's own summary wins
+    assert lede_source(GOOD, {"description": desc}) == GOOD
+    # neither -> nothing, and the headline will lead
+    assert lede_source(None, {"description": ""}) in (None, "")
+    assert lede_source(None, None) is None
+
+
+def test_card_description_makes_a_usable_lede():
+    """The description that was being discarded is a valid sentence."""
+    desc = ("Council has allocated $40,000 in its 2026/27 Budget to design a "
+            "new play space in Wesley Hill, with construction to follow.")
+    out = _first_sentence(desc)
+    assert out and out.startswith("Council has allocated $40,000")
+    assert MIN_LEDE_LEN <= len(out) <= MAX_LEDE_LEN

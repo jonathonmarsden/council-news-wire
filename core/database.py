@@ -161,6 +161,28 @@ class Database:
                 return None
         return None
 
+    # How far back a repeated headline from the same council counts as a
+    # duplicate. Long enough to catch a notice re-issued over a few weeks,
+    # short enough that a yearly event ("Get ready for the school year") is
+    # published again next year rather than silently dropped.
+    DUPLICATE_TITLE_WINDOW_DAYS = 60
+
+    def _recent_duplicate_title(self, session, title: Optional[str],
+                                council_id: Optional[str]) -> bool:
+        """True if this council published the same headline recently."""
+        if not title or not council_id:
+            return False
+        normalised = " ".join(title.split()).strip().lower()
+        if len(normalised) < 12:
+            return False  # too generic to match on safely
+        cutoff = datetime.now() - timedelta(days=self.DUPLICATE_TITLE_WINDOW_DAYS)
+        stmt = select(Article.id).where(
+            Article.council_id == council_id,
+            func.lower(func.trim(Article.title)) == normalised,
+            Article.first_seen_at >= cutoff,
+        )
+        return session.execute(stmt).first() is not None
+
     def add_articles_bulk(self, articles: List[Dict], state: str, status: str = 'new') -> int:
         """Add multiple articles using bulk insert ignore logic."""
         if not articles:
@@ -174,6 +196,17 @@ class Database:
             for a in unique_articles:
                 stmt = select(Article.id).where(Article.url == a['url'])
                 if session.execute(stmt).first():
+                    continue
+                # Councils re-issue the same story at a new URL - a recurring
+                # notice republished each term, a story moved between sections.
+                # URL matching alone lets those through as fresh articles, which
+                # is how the same headline appeared four times on one feed. Also
+                # skip an identical title from the same council within the recent
+                # window. Scoped to one council and a short window so two
+                # councils can still run "Parks Maintenance Works", and so a
+                # genuinely annual notice is not suppressed a year later.
+                if self._recent_duplicate_title(session, a.get('title'),
+                                                a.get('council_id')):
                     continue
                 session.add(Article(
                     url=a['url'],

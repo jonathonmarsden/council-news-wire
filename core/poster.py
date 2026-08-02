@@ -309,8 +309,16 @@ class BlueSkyPoster:
                                          fallback=_branded_card)
 
         # Format the post text and get facets for clickable links
+        # The card's own description is a perfectly good lede and is often
+        # present when the scraper found no excerpt - many council pages carry
+        # an og:description but no summary element the scraper can reach. Using
+        # only the scraped excerpt meant most posts fell back to the headline
+        # even though a usable sentence had already been fetched: VIC was
+        # leading with a sentence on 5 posts out of 45.
+        lede_source = excerpt or (card_data or {}).get("description")
+
         post_text, facets, tags_list, used_excerpt = self._format_post_with_facets(
-            council_name, title, url, date, excerpt, hashtags, council_hashtag,
+            council_name, title, url, date, lede_source, hashtags, council_hashtag,
             has_card=embed is not None
         )
 
