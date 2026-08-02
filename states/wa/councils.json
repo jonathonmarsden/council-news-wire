@@ -398,7 +398,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "A",
-      "use_curl": false
+      "use_curl": false,
+      "fetch_date_from_article": true
     },
     {
       "id": "derby-west-kimberley",

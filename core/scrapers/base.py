@@ -26,6 +26,14 @@ from core.utils import get_logger
 logger = get_logger(__name__)
 
 
+# A date printed in an article's body, e.g. "30 July 2026". Deliberately
+# demands day + month name + 4-digit year so it cannot match a bare year or a
+# fragment, which the fuzzy parser would otherwise complete from today.
+_BODY_DATE = re.compile(
+    r'\b(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|'
+    r'September|October|November|December)\s+\d{4})\b', re.IGNORECASE)
+
+
 def _resolve_missing_year(parsed: Optional[datetime], raw: str) -> Optional[datetime]:
     """Roll a year-less date back when the assumed year puts it in the future.
 
@@ -158,6 +166,13 @@ class BaseScraper(ABC):
         self.proxy = proxy
         self.impersonate = impersonate
         self.verify_ssl = kwargs.pop('verify_ssl', True)
+
+        # Opt-in per council: when the listing carries no date, fetch the
+        # article's own page to find one. Off by default because it costs one
+        # extra request per new article - worth it for the ~40 councils whose
+        # listings omit dates entirely, wasteful everywhere else.
+        self.fetch_date_from_article = kwargs.pop('fetch_date_from_article', False)
+
         self.session = requests.Session()
         self.session.headers.update(self.HEADERS)
         self.session.verify = self.verify_ssl
@@ -562,6 +577,53 @@ class BaseScraper(ABC):
         """
         pass
     
+    def date_from_article_page(self, url: str) -> Optional[datetime]:
+        """Read the publication date from an article's own page.
+
+        Many councils print the date on the article but not on the listing that
+        links to it, so the listing scrape yields no date at all. Denmark is the
+        clearest case: its RSS feed carries no date field whatsoever, yet every
+        article page prints "30 July 2026" in the body.
+
+        Reading the *article's* page rather than the listing also avoids a trap
+        that makes listing-level metadata untrustworthy: on several sites the
+        listing's `article:published_time` describes the listing itself, so
+        using it stamps every story with one wrong shared date (Wagga's read
+        2023, Shellharbour's 2018). A date found here belongs to this article.
+
+        Returns None rather than guessing - no date is better than a wrong one,
+        since a fabricated date can push a stale story through the freshness
+        filter or bury a fresh one.
+
+        Uses fetch_page (not fetch_page_or_raise) so one unreachable article
+        cannot fail the whole council, and so this inherits the per-council
+        time budget: on a long feed the budget stops the extra requests and
+        the remaining articles are simply stored undated, exactly as before.
+        """
+        html = self.fetch_page(url)
+        if not html:
+            return None
+        soup = self.parse_html(html)
+
+        el = soup.select_one('time[datetime]')
+        if el and el.get('datetime'):
+            parsed = self.parse_date(el['datetime'])
+            if parsed:
+                return parsed
+
+        for meta in soup.select('meta'):
+            key = (meta.get('property') or meta.get('name') or '').lower()
+            if 'published' in key or key == 'dcterms.date':
+                parsed = self.parse_date(meta.get('content') or '')
+                if parsed:
+                    return parsed
+
+        # Last resort: a full "30 July 2026" in the body. Requires day, month
+        # name and 4-digit year together, so it cannot match a bare year or a
+        # navigation label.
+        match = _BODY_DATE.search(soup.get_text(' ', strip=True))
+        return self.parse_date(match.group(1)) if match else None
+
     def create_article(
         self,
         title: str,
@@ -571,21 +633,25 @@ class BaseScraper(ABC):
     ) -> NewsArticle:
         """
         Create a NewsArticle with this scraper's council info.
-        
+
         Args:
             title: Article title
             url: Article URL (will be made absolute)
             date: Publication date
             excerpt: Article excerpt/summary
-            
+
         Returns:
             NewsArticle object
         """
+        absolute_url = self.make_absolute_url(url)
+        if date is None and self.fetch_date_from_article:
+            date = self.date_from_article_page(absolute_url)
+
         return NewsArticle(
             council_id=self.council_id,
             council_name=self.council_name,
             title=self.clean_text(title),
-            url=self.make_absolute_url(url),
+            url=absolute_url,
             date=date,
             excerpt=self.clean_text(excerpt) if excerpt else None
         )
