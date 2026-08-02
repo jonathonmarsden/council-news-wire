@@ -25,6 +25,21 @@ from core.utils import get_logger
 
 logger = get_logger(__name__)
 
+
+def _naive(parsed: Optional[datetime]) -> Optional[datetime]:
+    """Strip the timezone, converting to local time first.
+
+    Freshness comparisons and the DateTime column are both naive, so an aware
+    datetime raises "can't compare offset-naive and offset-aware datetimes" and
+    the article ends up with no usable date - the fault that left NT with 16
+    dateless and 9 future-dated rows stuck in the queue. RSS feeds routinely
+    carry an offset (RFC-822 "Fri, 31 Jul 2026 00:00:00 +1000"), so every
+    parse path has to normalise, not just the ISO one.
+    """
+    if parsed is not None and parsed.tzinfo is not None:
+        return parsed.astimezone().replace(tzinfo=None)
+    return parsed
+
 try:
     from curl_cffi import requests as curl_requests
     CURL_CFFI_AVAILABLE = True
@@ -435,21 +450,12 @@ class BaseScraper(ABC):
         # 1-12. Detect a leading YYYY-MM-DD and parse without dayfirst.
         if re.match(r'^\d{4}-\d{2}-\d{2}', date_str):
             try:
-                parsed = date_parser.parse(date_str)
-                # A trailing Z or offset yields an aware datetime, but every
-                # comparison downstream (freshness checks) and the DateTime
-                # column itself are naive, so an aware value raises
-                # "can't compare offset-naive and offset-aware datetimes" and
-                # the article ends up with no usable date. Normalise to naive
-                # local time.
-                if parsed.tzinfo is not None:
-                    parsed = parsed.astimezone().replace(tzinfo=None)
-                return parsed
+                return _naive(date_parser.parse(date_str))
             except (ValueError, TypeError):
                 pass
 
         try:
-            return date_parser.parse(date_str, dayfirst=True)
+            return _naive(date_parser.parse(date_str, dayfirst=True))
         except (ValueError, TypeError):
             # Fuzzy parsing fills missing components from TODAY, fabricating
             # near-now dates from junk like "3 min read" (which then passes
@@ -460,7 +466,7 @@ class BaseScraper(ABC):
             if re.search(r'\d{1,2}[\s/.\-]+[A-Za-z0-9]+[\s/.\-]+\d{2,4}', date_str) or \
                re.search(r'(?i)\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{4}\b', date_str):
                 try:
-                    return date_parser.parse(date_str, dayfirst=True, fuzzy=True)
+                    return _naive(date_parser.parse(date_str, dayfirst=True, fuzzy=True))
                 except (ValueError, TypeError):
                     return None
             return None

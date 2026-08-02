@@ -55,3 +55,38 @@ def test_posted_prefix_dates_still_work(scraper, raw):
     parsed = scraper.parse_date(raw)
     assert parsed is not None and parsed.tzinfo is None
     assert parsed.year == 2026
+
+
+# --- RFC-822 (RSS) dates must also be naive -------------------------------
+
+@pytest.mark.parametrize("raw", [
+    "Fri, 31 Jul 2026 00:00:00 +1000",   # ACT ministerial feed
+    "Wed, 29 Jul 2026 09:30:00 GMT",
+    "Sat, 25 Jul 2026 12:00:00 -0700",
+])
+def test_rfc822_rss_dates_parse_to_naive(scraper, raw):
+    """RSS feeds carry an offset; only the ISO branch normalised it before.
+
+    An aware datetime cannot be compared with the naive freshness cutoff, so
+    those articles ended up dateless and unpostable - the fault that stranded
+    NT's queue. Every parse path normalises now, not just the ISO one.
+    """
+    parsed = scraper.parse_date(raw)
+    assert parsed is not None
+    assert parsed.tzinfo is None
+
+
+def test_bare_iso_date_from_our_canberra(scraper):
+    """The Our Canberra feed uses '2026-04-13' rather than RFC-822."""
+    parsed = scraper.parse_date("2026-04-13")
+    assert parsed is not None and parsed.tzinfo is None
+    assert (parsed.year, parsed.month, parsed.day) == (2026, 4, 13)
+
+
+def test_every_parse_path_returns_naive(scraper):
+    for raw in ["2026-07-20T12:00:00Z", "2026-04-13",
+                "Fri, 31 Jul 2026 00:00:00 +1000", "28 November 2025",
+                "Published 28 Nov 2025"]:
+        parsed = scraper.parse_date(raw)
+        if parsed is not None:
+            assert parsed.tzinfo is None, f"{raw} produced an aware datetime"

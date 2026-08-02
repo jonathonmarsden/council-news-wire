@@ -7,6 +7,22 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "bypass_proxy": true
+    },
+    {
+      "id": "act_ministers",
+      "name": "ACT Government",
+      "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_minister_media_releases_rss",
+      "scraper": "rss_scraper",
+      "enabled": true,
+      "bypass_proxy": true
+    },
+    {
+      "id": "our_canberra",
+      "name": "ACT Government",
+      "news_url": "https://www.act.gov.au/our-canberra/rss",
+      "scraper": "rss_scraper",
+      "enabled": true,
+      "bypass_proxy": true
     }
   ]
 }
