@@ -26,19 +26,23 @@ def _channel(key):
 
 # --- footprint: the whole point of the exercise -------------------------------
 
-def test_no_channel_exceeds_a_tenth_of_its_tag():
+def test_no_tag_carries_more_than_a_tenth_of_its_traffic_from_us():
     """A promo should be a participant in a tag, not a fixture of it.
 
-    Share is one post per interval against the tag's weekly volume. Anything
-    approaching double figures means the tag is too small to carry us at that
-    cadence - which is why ACT is excluded rather than merely slowed down.
+    Shares are summed PER TAG, not per channel: #Auspol carries both the human
+    account weekly and a rotating bot slot fortnightly, and it is the total
+    footprint in someone else's tag that matters, not any one channel's.
     """
+    from collections import defaultdict
+    per_tag = defaultdict(float)
+    volume = {}
     for channel in CHANNELS:
-        posts_per_week = 7.0 / interval_for(channel)
-        share = 100.0 * posts_per_week / channel.weekly_volume
+        per_tag[channel.tag] += 7.0 / interval_for(channel)
+        volume[channel.tag] = channel.weekly_volume
+    for tag, posts_per_week in per_tag.items():
+        share = 100.0 * posts_per_week / volume[tag]
         assert share < 10.0, (
-            "{} would be {:.1f}% of {} - too large a share".format(
-                channel.key, share, channel.tag))
+            "{} would carry {:.1f}% of its traffic from us".format(tag, share))
 
 
 def test_act_is_excluded_entirely():
@@ -59,9 +63,10 @@ def test_smaller_tags_get_longer_intervals():
         "quieter tags must not be posted to more often than busy ones")
 
 
-def test_only_one_account_posts_to_localgov_per_occurrence():
-    """Eight feeds each posting fortnightly would be eight times the footprint."""
-    channel = _channel("localgov")
+def test_only_one_account_posts_to_the_national_tag_per_occurrence():
+    """Eight feeds each posting fortnightly would be eight times the footprint,
+    and eight near-identical accounts in one tag reads as a swarm."""
+    channel = _channel("national_bots")
     assert channel.rotating_account
     accounts = {account_for(channel, occ) for occ in range(len(channel.accounts))}
     assert len(accounts) == len(channel.accounts), "should cycle through feeds"
@@ -243,10 +248,30 @@ def test_national_channel_is_gated_on_approval():
     assert national.account == "ADMIN"
 
 
-def test_no_bot_account_posts_to_auspol():
-    """Eight near-identical bots in the national tag reads as a swarm, and at
-    3,200 posts a week each one would be invisible anyway."""
+def test_the_national_tag_is_never_hit_by_eight_accounts_at_once():
+    """One rotating feed at a time, plus the human account - never a swarm."""
+    auspol = [c for c in CHANNELS if "auspol" in c.tag.lower()]
+    assert auspol, "the national tag should be in use"
+    for channel in auspol:
+        assert channel.account == "ADMIN" or channel.rotating_account, (
+            "{} would put a fixed bot account in the national tag".format(
+                channel.key))
+
+
+def test_we_do_not_promote_into_a_foreign_tag():
+    """#LocalGov is British Columbia municipal politics, not Australian: its
+    companions are #bclocalgov, #bcmuni, #cariboord and #cdnmuni, and we were
+    already its fourth-largest poster. Measured 2026-08-02."""
     for channel in CHANNELS:
-        if "auspol" in channel.tag.lower():
-            assert channel.account == "ADMIN", (
-                "{} must not post to the national tag".format(channel.key))
+        assert "localgov" not in channel.tag.lower(), (
+            "{} targets a Canadian tag".format(channel.key))
+
+
+def test_the_two_national_channels_speak_differently():
+    """One is a person, one is a feed. Identical copy from both would make the
+    human slot look like just another bot."""
+    human = _channel("national")
+    bots = _channel("national_bots")
+    human_copy = {compose(human, "ADMIN", occ) for occ in range(4)}
+    bot_copy = {compose(bots, account_for(bots, occ), occ) for occ in range(4)}
+    assert not (human_copy & bot_copy), "the two national voices overlap"

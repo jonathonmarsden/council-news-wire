@@ -220,16 +220,16 @@ def approve(channel_key, dry_run):
 
 def print_schedule(days):
     print("Promotion schedule from {} ({} days)\n".format(EPOCH, days))
-    print("{:<12}{:<11}{:<10}{:<9}{}".format(
+    print("{:<12}{:<11}{:<15}{:<9}{}".format(
         "date", "weekday", "channel", "account", "tag"))
-    print("-" * 60)
+    print("-" * 66)
     for offset in range(days):
         day = EPOCH + timedelta(days=offset)
         for channel in due_channels(day, EPOCH):
             occurrence = occurrence_index(channel, day, EPOCH)
             account = account_for(channel, occurrence)
             when = post_time_utc(channel, day, occurrence)
-            print("{:<12}{:<11}{:<10}{:<9}{}{}".format(
+            print("{:<12}{:<11}{:<15}{:<9}{}{}".format(
                 day.isoformat(), day.strftime("%a"), channel.key, account,
                 channel.tag,
                 "  [approval] {} UTC".format(when.strftime("%H:%M"))

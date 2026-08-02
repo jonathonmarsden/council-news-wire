@@ -87,18 +87,25 @@ CHANNELS: List[Channel] = [
     Channel("nt", "NT", "#NTpol", 28, 7, 15.13, phase=12,
             timezone="Australia/Darwin"),
 
-    # #LocalGov belongs to the whole sector, so one feed at a time posts there.
-    # Eight feeds each posting fortnightly would be eight times the footprint.
-    Channel("localgov", "VIC", "#LocalGov", 14, 35, 2.83, phase=3,
+    # One feed at a time reaches the national tag, rotating through the states.
+    # Eight feeds each posting fortnightly would be eight times the footprint,
+    # and eight near-identical accounts in one tag reads as coordinated
+    # behaviour whatever the intent.
+    #
+    # This slot used to be #LocalGov. A co-occurrence sample on 2026-08-02
+    # showed that tag is not Australian: its companions are #bclocalgov,
+    # #bcmuni, #cariboord, #cdnmuni and #williamslake - British Columbia
+    # municipal politics, with a UK cluster second and average engagement of
+    # 0.4. We were already its fourth-largest poster. #Auspol is where
+    # Australian readers of council news actually are.
+    Channel("national_bots", "VIC", "#Auspol", 14, 3200, 0.02, phase=3,
             rotating_account=True,
             accounts=("VIC", "NSW", "QLD", "WA", "SA", "TAS", "NT")),
 
-    # National promotion comes from the human account, not a bot. #auspol runs
-    # ~3,200 posts a week, so a bot's weekly post is 0.03% - invisible, and
-    # eight near-identical bots reaching into the national tag would read as
-    # coordinated behaviour whatever the intent. A person describing feeds they
-    # run is legitimate there in a way a broadcasting bot is not, which is also
-    # why this one is drafted for review rather than published unattended.
+    # National promotion also comes from the human account. A person describing
+    # feeds they run is legitimate in #auspol in a way a broadcasting bot is
+    # not - which is why this one is drafted for review rather than published
+    # unattended, and why it carries different copy from the bot slot above.
     Channel("national", "ADMIN", "#Auspol", 7, 3200, 0.03, phase=5,
             requires_approval=True),
 ]

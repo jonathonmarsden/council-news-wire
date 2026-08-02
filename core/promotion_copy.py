@@ -71,7 +71,10 @@ NATIONAL_VARIANTS = [
     "from all 538 Australian councils, unedited and free.",
 ]
 
-LOCALGOV_VARIANTS = [
+# Posted by a state feed into the national tag, so it speaks as a feed rather
+# than as a person - the national/ADMIN copy above is written in first person
+# and the two must not sound like the same voice.
+NATIONAL_BOT_VARIANTS = [
     "Every news item from all 538 Australian councils, split into eight "
     "state and territory feeds. Automated, unedited, free to follow.",
 
@@ -80,6 +83,9 @@ LOCALGOV_VARIANTS = [
 
     "All 538 Australian councils, eight feeds, every story unedited. "
     "Automated and free.",
+
+    "Council decisions rarely reach the news. These eight feeds carry every "
+    "item published by all 538 Australian councils, unedited.",
 ]
 
 
@@ -87,8 +93,8 @@ def body_for(channel: Channel, account: str, occurrence: int) -> str:
     """The promo text for one occurrence, before the link and hashtags."""
     if channel.key == "national":
         return NATIONAL_VARIANTS[occurrence % len(NATIONAL_VARIANTS)]
-    if channel.key == "localgov":
-        return LOCALGOV_VARIANTS[occurrence % len(LOCALGOV_VARIANTS)]
+    if channel.key == "national_bots":
+        return NATIONAL_BOT_VARIANTS[occurrence % len(NATIONAL_BOT_VARIANTS)]
     facts = STATE_FACTS[account]
     variants = _state_variants(facts)
     return variants[occurrence % len(variants)]
@@ -103,6 +109,6 @@ def compose(channel: Channel, account: str, occurrence: int) -> str:
     """
     body = body_for(channel, account, occurrence)
     link = SITE
-    if channel.key not in ("national", "localgov"):
+    if channel.key not in ("national", "national_bots"):
         link = "https://bsky.app/profile/" + STATE_FACTS[account]["handle"]
     return "{}\n\n{}\n\n{} #LGNewsRoundup".format(body, link, channel.tag)
