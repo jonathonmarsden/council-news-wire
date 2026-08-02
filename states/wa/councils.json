@@ -630,7 +630,7 @@
       "title_selector": ".field-content",
       "link_selector": "a",
       "category": "C",
-      "date_selector": ".date"
+      "date_selector": "time[datetime]"
     },
     {
       "id": "katanning",

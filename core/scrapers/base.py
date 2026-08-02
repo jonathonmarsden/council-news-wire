@@ -510,6 +510,20 @@ class BaseScraper(ABC):
         # 2. Remove HTML tags
         text = re.sub(r'<[^>]+>', ' ', text)
 
+        # Vue and other hydration frameworks mark fragment boundaries with
+        # comment nodes (<!--[--> ... <!--]-->). Once the tags are stripped
+        # their bare brackets survive, so a Sunshine Coast headline arrived as
+        # "[ [ Sport, food and fun ] ]" - 146 stored titles look like that.
+        # Strip only balanced, empty bracket runs wrapping the whole string.
+        # Stripping any leading bracket would mangle a real title such as
+        # "[2026] Annual Report released" into "2026] Annual Report released",
+        # which is worse than leaving the markup alone.
+        while True:
+            stripped = re.sub(r'^\s*\[\s*(.*?)\s*\]\s*$', r'\1', text, flags=re.S)
+            if stripped == text:
+                break
+            text = stripped
+
         # Fix common mojibake (UTF-8 bytes interpreted as Windows-1252/Latin-1)
         replacements = {
             'â': "'",

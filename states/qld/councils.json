@@ -670,7 +670,11 @@
       "scraper": "curl_scraper",
       "enabled": true,
       "population": 380595,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "date_selector": "time[datetime]",
+      "item_selector": "article.Card",
+      "title_selector": "h2 a",
+      "link_selector": "a[href]"
     },
     {
       "id": "tablelands",
