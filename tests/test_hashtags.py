@@ -89,3 +89,22 @@ def test_empty_env_override_leaves_brand_tag_only(monkeypatch):
 def test_state_tags_table_covers_all_feeds():
     for state in ALL_STATES:
         assert state in STATE_TAGS, f"{state} missing from STATE_TAGS"
+
+
+def test_the_same_tag_in_different_case_appears_once():
+    """Hashtags are case-insensitive on Bluesky: #ACTGovernment and
+    #ActGovernment are one tag and land in one feed.
+
+    Every ACT post printed both, because the caller passes #ACTGovernment while
+    _council_to_hashtag derives #ActGovernment from the council name, and the
+    de-duplication compared them case-sensitively.
+    """
+    from core.poster import BlueSkyPoster
+    poster = BlueSkyPoster("h", "p", "ACT")
+    text, _, tags, _ = poster._format_post_with_facets(
+        "ACT Government", "New Cabinet announced", "https://act.gov.au/a",
+        None, "The new Cabinet was announced today.",
+        ["#ACTGovernment"], "#ACTGovernment", has_card=True)
+    lowered = [t.lower() for t in tags]
+    assert len(lowered) == len(set(lowered)), "duplicate tag differing only in case"
+    assert text.lower().count("#actgovernment") == 1

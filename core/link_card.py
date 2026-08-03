@@ -26,6 +26,17 @@ from bs4 import BeautifulSoup
 
 FETCH_TIMEOUT = 20
 MAX_IMAGE_BYTES = 900_000  # Bluesky blob limit is ~1MB; stay safely under
+
+# Bluesky renders a card thumbnail at roughly 1200x630 (1.91:1). An image much
+# narrower than this is upscaled to fill it and looks visibly fuzzy.
+#
+# The ACT government serves the same 221x214 site logo (oglogo.jpg, 11KB) as the
+# og:image on every media release: stretched 5.4x and cropped by 46% to reach
+# 1.91:1, it rendered as a blurry fragment of a coat of arms on every ACT post.
+# A generic logo carries no information about the story anyway, so below this
+# threshold we prefer our own branded card.
+MIN_IMAGE_WIDTH = 600
+MIN_IMAGE_HEIGHT = 315
 # Site-name cruft commonly SUFFIXED to <title>/og:title by council CMSs,
 # e.g. "Arbiter report tabled | City of Ballarat", "… » Shire of X".
 _TITLE_SUFFIX = re.compile(
@@ -105,7 +116,32 @@ def _download_image(url: str) -> Optional[bytes]:
     ctype = resp.headers.get("content-type", "")
     if not ctype.startswith("image/") or len(data) > MAX_IMAGE_BYTES or not data:
         return None
+    if _too_small_to_render(data):
+        return None
     return data
+
+
+def _too_small_to_render(data: bytes) -> bool:
+    """True if `data` is too small to fill a card thumbnail without blurring.
+
+    Measured rather than guessed: Pillow reads the real dimensions from the
+    bytes, because a site can serve a tiny logo from a URL that looks like a
+    photo. If Pillow is unavailable or the bytes are unreadable we say False -
+    an unmeasurable image is treated as acceptable, keeping this module's
+    contract that a card never makes a post worse than the plain text version.
+    """
+    try:
+        from io import BytesIO
+
+        from PIL import Image
+    except ImportError:  # pragma: no cover - Pillow is a hard dep in prod
+        return False
+    try:
+        with Image.open(BytesIO(data)) as img:
+            width, height = img.size
+    except Exception:
+        return False
+    return width < MIN_IMAGE_WIDTH or height < MIN_IMAGE_HEIGHT
 
 
 def build_external_embed(client, models, url: str, require_image: bool = True,

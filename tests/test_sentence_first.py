@@ -117,17 +117,33 @@ def test_all_keyword_enables_every_state(monkeypatch):
         assert p._sentence_first_enabled()
 
 
-def test_the_lede_is_the_clickable_link(monkeypatch):
-    """Whatever leads the post must be what links to the article."""
+def test_the_lede_leads_the_post(monkeypatch):
+    """The story's own sentence is what opens the post.
+
+    It is no longer also a link: with a card attached the card is the click
+    target, and blue-linking a whole sentence made the post read as a wall of
+    link. See test_no_link_facet_on_the_opening_line_when_a_card_is_attached.
+    """
     monkeypatch.setenv("SENTENCE_FIRST_STATES", "SA")
     p = BlueSkyPoster("roundupnewsbotsa.bsky.social", "x", "SA")
     text, facets, _, _ = p._format_post_with_facets(
         council_name="City of Marion", title="Headline", url="https://x.gov.au/a",
         date=datetime(2026, 7, 30), excerpt=GOOD, council_hashtag="#CityOfMarion",
         has_card=True)
+    assert text.split("\n")[0] == GOOD
+
+
+def test_the_lede_is_the_clickable_link_when_there_is_no_card(monkeypatch):
+    """Without a card, whatever leads the post must link to the article."""
+    monkeypatch.setenv("SENTENCE_FIRST_STATES", "SA")
+    p = BlueSkyPoster("roundupnewsbotsa.bsky.social", "x", "SA")
+    text, facets, _, _ = p._format_post_with_facets(
+        council_name="City of Marion", title="Headline", url="https://x.gov.au/a",
+        date=datetime(2026, 7, 30), excerpt=GOOD, council_hashtag="#CityOfMarion",
+        has_card=False)
     span = facets[0].index
     linked = text.encode()[span.byte_start:span.byte_end].decode()
-    assert linked == text.split("\n")[0] == GOOD
+    assert linked == text.split("\n")[0]
 
 
 # --- missing-space regression (found in a live SA post) -------------------
@@ -192,3 +208,43 @@ def test_card_description_makes_a_usable_lede():
     out = _first_sentence(desc)
     assert out and out.startswith("Council has allocated $40,000")
     assert MIN_LEDE_LEN <= len(out) <= MAX_LEDE_LEN
+
+
+# --- the opening line is linked only when there is no card ------------------
+
+def _facet_kinds(facets):
+    kinds = []
+    for f in facets:
+        for feat in f.features:
+            kinds.append(type(feat).__name__)
+    return kinds
+
+
+def test_no_link_facet_on_the_opening_line_when_a_card_is_attached():
+    """The card is already a click target for the same URL.
+
+    Linking the opening line too gives two routes to one story, and since that
+    line became the story's first SENTENCE rather than its headline, blue-
+    linking it reads as prose-turned-into-a-link - a wall of blue text.
+    """
+    poster = BlueSkyPoster("h", "p", "VIC")
+    _, facets, _, _ = poster._format_post_with_facets(
+        "Bayside City Council", "Council adopts new plan",
+        "https://example.gov.au/news/plan", None,
+        "The council has adopted a new waste plan after months of consultation.",
+        ["#LGNewsRoundup"], "#BaysideCityCouncil", has_card=True)
+    assert "Link" not in _facet_kinds(facets), \
+        "the card is the click target; the text should not be a second one"
+    assert "Tag" in _facet_kinds(facets), "hashtags must stay clickable"
+
+
+def test_the_opening_line_keeps_its_link_when_there_is_no_card():
+    """Without a card the linked line is the only route to the story."""
+    poster = BlueSkyPoster("h", "p", "VIC")
+    _, facets, _, _ = poster._format_post_with_facets(
+        "Bayside City Council", "Council adopts new plan",
+        "https://example.gov.au/news/plan", None,
+        "The council has adopted a new waste plan.",
+        ["#LGNewsRoundup"], "#BaysideCityCouncil", has_card=False)
+    assert "Link" in _facet_kinds(facets), \
+        "with no card, removing the link would make the story unreachable"

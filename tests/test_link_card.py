@@ -217,3 +217,37 @@ def test_real_og_image_preferred_over_fallback(monkeypatch):
         fallback=lambda: calls.append(1) or b"GEN")
     assert embed is not None
     assert not calls, "fallback must not run when og:image works"
+
+
+# --- minimum thumbnail size -------------------------------------------------
+
+def _png_bytes(width, height):
+    from io import BytesIO
+
+    from PIL import Image
+    buf = BytesIO()
+    Image.new("RGB", (width, height), (30, 60, 90)).save(buf, "PNG")
+    return buf.getvalue()
+
+
+def test_a_tiny_site_logo_is_rejected_as_a_thumbnail():
+    """The ACT government serves the same 221x214 logo as og:image on every
+    media release. Bluesky renders thumbnails near 1200x630, so it was upscaled
+    5.4x and cropped by 46% - a blurry fragment of a coat of arms on every post,
+    carrying no information about the story either."""
+    from core.link_card import _too_small_to_render
+    assert _too_small_to_render(_png_bytes(221, 214)) is True
+
+
+def test_a_real_og_image_is_kept():
+    from core.link_card import _too_small_to_render
+    assert _too_small_to_render(_png_bytes(1200, 630)) is False
+    assert _too_small_to_render(_png_bytes(800, 400)) is False
+
+
+def test_unreadable_bytes_are_treated_as_acceptable():
+    """This module's contract is that a card never makes a post worse than the
+    plain text version, so an image we cannot measure gets the benefit of the
+    doubt rather than being dropped."""
+    from core.link_card import _too_small_to_render
+    assert _too_small_to_render(b"not an image") is False

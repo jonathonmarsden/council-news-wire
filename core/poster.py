@@ -566,17 +566,28 @@ class BlueSkyPoster:
         # council's. See the note by STATE_TAGS for why no community tag can
         # ride on a feed of this volume.
         tags_list = tags_for_state(self.state)
-        c_tag = council_hashtag or self._council_to_hashtag(council_name)
-        if c_tag and c_tag not in tags_list:
-            tags_list.append(c_tag)
+
+        # Hashtags are case-insensitive on Bluesky: #ACTGovernment and
+        # #ActGovernment are the same tag and land in the same feed. Comparing
+        # them case-sensitively printed both on every ACT post, because the
+        # caller passes #ACTGovernment while _council_to_hashtag derives
+        # #ActGovernment from the council name.
+        seen = {t.lower() for t in tags_list}
+
+        def _add(tag: str) -> None:
+            if tag and tag.lower() not in seen:
+                tags_list.append(tag)
+                seen.add(tag.lower())
+
+        _add(council_hashtag or self._council_to_hashtag(council_name))
 
         # Extra topics from the caller, filtered to tags we own. State configs
         # still carry legacy community tags (#VLGA, #NSWCouncils); silently
         # dropping them here keeps a stale config from re-flooding a tag.
         if extra_hashtags:
             for t in extra_hashtags:
-                if t not in tags_list and _is_own_tag(t, council_name):
-                    tags_list.append(t)
+                if _is_own_tag(t, council_name):
+                    _add(t)
         
         hashtags_str = " ".join(tags_list)
         
@@ -625,17 +636,30 @@ class BlueSkyPoster:
 
         # Create Facets
         facets = []
-        
-        # Link Facet for Title
-        # Title is at the start.
-        title_text = post_title.strip()
-        title_byte_len = len(title_text.encode('utf-8'))
-        
-        facets.append(models.AppBskyRichtextFacet.Main(
-            features=[models.AppBskyRichtextFacet.Link(uri=final_url)],
-            index=models.AppBskyRichtextFacet.ByteSlice(byte_start=0, byte_end=title_byte_len)
-        ))
-        
+
+        # Link facet on the opening line - but only when there is no card.
+        #
+        # This dates from before link cards existed, when the linked headline
+        # was the only route to the story. With a card attached it is a second
+        # click target for the same URL, and since the opening line became the
+        # story's first SENTENCE rather than its headline, linking it reads
+        # wrongly too: a headline looks like a label you click, a sentence
+        # looks like prose you read, and blue-linking a whole sentence makes
+        # the post look like a wall of link.
+        #
+        # So: card present -> the card is the click, the text is the reading.
+        # No card -> keep the link, or the story becomes unreachable.
+        if not has_card:
+            title_text = post_title.strip()
+            title_byte_len = len(title_text.encode('utf-8'))
+
+            facets.append(models.AppBskyRichtextFacet.Main(
+                features=[models.AppBskyRichtextFacet.Link(uri=final_url)],
+                index=models.AppBskyRichtextFacet.ByteSlice(
+                    byte_start=0, byte_end=title_byte_len)
+            ))
+
+
         # Hashtag Facets — only within the hashtags block at the end. A '#'
         # inside the title would otherwise get a Tag facet overlapping the
         # title's Link facet, which renders unpredictably on clients.
