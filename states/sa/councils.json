@@ -536,7 +536,8 @@
       "selectors": {
         "container": "div.listing__item",
         "title": "h3.listing__heading",
-        "date": "div.listing__date, span.date, time",
+        "date": "p.listing__subheading",
+   "excerpt": "p.listing__summary",
         "link": "h3.listing__heading a"
       },
       "population": 96915,

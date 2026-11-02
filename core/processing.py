@@ -215,6 +215,7 @@ def post_articles(
                 excerpt=excerpt,
                 hashtags=tags_for_post,
                 council_hashtag=council_tag,
+                description_is_recurring=lambda d, _c=c_id: db.is_recurring_description(_c, d),
             )
         except TransientPostError as e:
             dead_lettered = db.release_claim(article['url'])

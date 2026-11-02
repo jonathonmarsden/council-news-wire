@@ -3,6 +3,7 @@ Card-based scraper implementation.
 """
 
 import re
+from bs4 import Comment
 import time
 from datetime import datetime
 from typing import List, Optional, Dict
@@ -77,6 +78,8 @@ class CardScraper(BaseScraper):
                 text = child.get_text(" ", strip=True)
                 # print(f"  Child {child.name} text: '{text}'")
                 text_parts.append(text)
+            elif isinstance(child, Comment):
+                continue  # markup commentary, never a title
             elif child.string:
                 text = child.string.strip()
                 # print(f"  String child text: '{text}'")

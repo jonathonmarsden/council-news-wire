@@ -17,11 +17,11 @@ from typing import List, Optional, Dict, Any, Callable
 from urllib.parse import urljoin, quote
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from dateutil import parser as date_parser
 
 from core.exceptions import ScrapeError
-from core.utils import get_logger
+from core.utils import get_logger, repair_entities
 
 logger = get_logger(__name__)
 
@@ -435,8 +435,20 @@ class BaseScraper(ABC):
             return None
     
     def parse_html(self, html: str) -> BeautifulSoup:
-        """Parse HTML content into BeautifulSoup object."""
-        return BeautifulSoup(html, 'html.parser')
+        """Parse HTML content into BeautifulSoup object, without its comments.
+
+        A Comment is a NavigableString, so any code that walks children and
+        reads `.string` picks comment text up as content. Bayside's Drupal
+        site shipped with Twig debugging on (132 "<!-- THEME DEBUG -->"
+        blocks per page), and every title came out as 400+ characters of
+        "THEME DEBUG THEME HOOK: 'field' FILE NAME SUGGESTIONS" - rejected,
+        so the council posted nothing for four months. Comments are never
+        content; drop them before anything reads the tree.
+        """
+        soup = BeautifulSoup(html, 'html.parser')
+        for comment in soup.find_all(string=lambda s: isinstance(s, Comment)):
+            comment.extract()
+        return soup
     
     def make_absolute_url(self, url: str) -> str:
         """Convert relative URL to absolute URL."""
@@ -519,8 +531,9 @@ class BaseScraper(ABC):
         if not isinstance(text, str):
             return str(text)
 
-        # 1. Unescape HTML entities first (handles &lt;p&gt; -> <p>)
-        text = html.unescape(text)
+        # 1. Unescape HTML entities first (handles &lt;p&gt; -> <p>), repairing
+        #    the semicolon-less ones the LGA SA platform emits ("&rsquo s")
+        text = repair_entities(text)
 
         # 2. Remove HTML tags
         text = re.sub(r'<[^>]+>', ' ', text)

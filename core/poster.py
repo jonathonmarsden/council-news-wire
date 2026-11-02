@@ -10,11 +10,12 @@ import os
 import re
 import urllib.parse
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Callable
 
 from atproto import Client, models
 
 from core.exceptions import TransientPostError
+from core.utils import repair_entities
 from core.validator import validate_post
 
 # --- Hashtags -------------------------------------------------------------
@@ -118,6 +119,51 @@ def _first_sentence(text: Optional[str]) -> Optional[str]:
         cut = first[:MAX_LEDE_LEN].rsplit(" ", 1)[0].rstrip(",;:")
         return cut + "..." if cut else None
     return first
+
+
+# Descriptions that describe the website, not the story. Some CMSs put the
+# site's tagline in og:description on every page: "Welcome to Warren Shire.
+# Information about the Council and the district...", "Latest Shire news,
+# public notices, opportunities to have your say", "Click here for more
+# information". Led with, they make three different stories open with the
+# same sentence and push the headline below the fold.
+_GENERIC_DESCRIPTION = re.compile(
+    r"^(?:(?:click|see|tap) here\b.*"
+    r"|welcome to\b.*"
+    r"|find out more about\b.*"
+    r"|(?:keep|stay) up to date\b.*"
+    r"|latest (?:shire|council|city|town) news\b.*"
+    r"|(?:information|news) about the (?:council|shire|city)\b.*)$",
+    re.IGNORECASE,
+)
+
+
+def _usable_description(description: Optional[str], council_name: str = "",
+                        is_recurring: Optional[Callable[[str], bool]] = None) -> Optional[str]:
+    """Return `description` if it is about the story, None if it is boilerplate.
+
+    Three tests, cheapest first: the council's own name alone; a phrase from
+    the generic-tagline list above; and, when the caller can look it up, a
+    description this council has already published under a different URL
+    (a real summary is specific to one story, a site tagline recurs). The
+    lookup is advisory - any failure in it keeps the description.
+    """
+    if not description:
+        return None
+    text = " ".join(description.split())
+    if not text:
+        return None
+    if text.lower().rstrip(".") == (council_name or "").lower().rstrip("."):
+        return None
+    if _GENERIC_DESCRIPTION.match(text):
+        return None
+    if is_recurring is not None:
+        try:
+            if is_recurring(description):
+                return None
+        except Exception:
+            pass
+    return text
 
 
 def _is_own_tag(tag: str, council_name: str = "") -> bool:
@@ -286,7 +332,9 @@ class BlueSkyPoster:
 
     def post_article(self, council_name: str, title: str, url: str,
                      date: Optional[datetime] = None, excerpt: Optional[str] = None,
-                     hashtags: List[str] = None, council_hashtag: Optional[str] = None) -> Optional[str]:
+                     hashtags: List[str] = None, council_hashtag: Optional[str] = None,
+                     description_is_recurring: Optional[Callable[[str], bool]] = None
+                     ) -> Optional[str]:
         """
         Post a news article to BlueSky.
         
@@ -297,6 +345,10 @@ class BlueSkyPoster:
             date: Publication date (optional)
             excerpt: Article excerpt/subtitle (optional)
             hashtags: List of hashtags to include
+            description_is_recurring: optional lookup answering "has this
+                council already published a different story with exactly this
+                card description?" - used to keep a site-wide tagline from
+                becoming the lede (see _usable_description)
             
         Returns:
             Post URI if posted successfully, None if the article itself was
@@ -310,6 +362,11 @@ class BlueSkyPoster:
             if not self.authenticate():
                 raise TransientPostError("BlueSky authentication failed")
         
+        # Articles queued before the entity repair existed still carry
+        # "&rsquo s"; decode at post time so the backlog goes out clean too.
+        title = repair_entities(title)
+        excerpt = repair_entities(excerpt)
+
         # SAFETY VALVE: Clean and validate title before posting
         title = self._sanitize_title(title)
         
@@ -322,10 +379,15 @@ class BlueSkyPoster:
         # source, so duplicating them below it just repeats the same words.
         embed = None
         card_data = None
+        description = None
         if self._link_cards_enabled():
             from core.link_card import build_external_embed, fetch_card_data
             from core.card_image import render_card
             card_data = fetch_card_data(url)
+            # The raw description is still recorded in og_description below;
+            # only its use as lede and card subtitle is filtered here.
+            description = _usable_description(
+                (card_data or {}).get("description"), council_name, description_is_recurring)
 
             def _branded_card():
                 # Councils whose sites expose no og:image still get a card,
@@ -335,7 +397,7 @@ class BlueSkyPoster:
                     council_name=council_name,
                     state=self.state,
                     date_str=date.strftime("%d %B %Y") if date else "",
-                    subtitle=(card_data or {}).get("description") or "",
+                    subtitle=description or "",
                 )
 
             embed = build_external_embed(self.client, models, url,
@@ -348,7 +410,7 @@ class BlueSkyPoster:
         # only the scraped excerpt meant most posts fell back to the headline
         # even though a usable sentence had already been fetched: VIC was
         # leading with a sentence on 5 posts out of 45.
-        lede_source = excerpt or (card_data or {}).get("description")
+        lede_source = excerpt or description
 
         post_text, facets, tags_list, used_excerpt = self._format_post_with_facets(
             council_name, title, url, date, lede_source, hashtags, council_hashtag,

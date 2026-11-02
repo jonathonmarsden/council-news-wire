@@ -24,6 +24,8 @@ except ImportError:  # pragma: no cover - curl_cffi is a hard dep in prod
 
 from bs4 import BeautifulSoup
 
+from core.utils import repair_entities
+
 FETCH_TIMEOUT = 20
 MAX_IMAGE_BYTES = 900_000  # Bluesky blob limit is ~1MB; stay safely under
 
@@ -59,7 +61,7 @@ def _meta(soup: BeautifulSoup, *names: str) -> str:
     for n in names:
         tag = soup.find("meta", property=n) or soup.find("meta", attrs={"name": n})
         if tag and tag.get("content"):
-            return tag["content"].strip()
+            return repair_entities(tag["content"].strip())
     return ""
 
 

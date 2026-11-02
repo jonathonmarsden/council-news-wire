@@ -251,6 +251,25 @@ class Database:
             session.execute(update(Article).where(Article.url == url).values(**values))
             session.commit()
 
+    def is_recurring_description(self, council_id: str, description: str) -> bool:
+        """True if this council has already published a story carrying exactly
+        this card description.
+
+        og_description is written at mark_as_posted, so the article being
+        considered is never counted: any match is a different URL. A real
+        summary belongs to one story; a description seen twice is the site's
+        tagline (Augusta Margaret River: 18 stories, Stirling: 24).
+        """
+        if not description:
+            return False
+        with self.get_session() as session:
+            n = session.execute(
+                select(func.count()).select_from(Article).where(
+                    and_(Article.council_id == council_id,
+                         Article.og_description == description))
+            ).scalar_one()
+        return n > 0
+
     def mark_as_rejected(self, url: str, reason: str):
         """
         Permanently reject an article (validation failure / API 4xx).
@@ -342,6 +361,15 @@ class Database:
                     except Exception:
                         # Keep it if we can't compare (safer than suppressing valid items)
                         pass
+                elif suppress_stale and o.first_seen_at and o.first_seen_at < cutoff_date:
+                    # No date at all, so the check above could never apply
+                    # and the article stayed eligible forever. It surfaced
+                    # whenever the fresh queue ran dry: on 1 Nov 2026 the SA
+                    # feed posted a Father's Day story (6 Sept) and a
+                    # Christmas-lights one from Marion, both dateless. The
+                    # day we first saw it is the best date we have; give a
+                    # dateless story the same week a dated one gets.
+                    is_too_old = True
                 
                 if is_too_old:
                     # Auto-suppress to clean the queue (func.now() = DB time,
