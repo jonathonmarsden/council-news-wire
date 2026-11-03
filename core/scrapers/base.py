@@ -472,7 +472,9 @@ class BaseScraper(ABC):
 
         # Clean up common prefixes
         date_str = re.sub(r'^(Published|Updated|Posted|Last updated|News|Media Release)( on)?[:\s/|-]*', '', date_str, flags=re.IGNORECASE)
-        date_str = date_str.strip()
+        # Decorative separators between date parts ("Oct 29 | 2026" on
+        # Central Highlands TAS) are not part of any date format.
+        date_str = re.sub(r'\s*\|\s*', ' ', date_str).strip()
 
         # Relative dates. Without this, "2 days ago" reached the fuzzy parser
         # and became day 2 of the current month.

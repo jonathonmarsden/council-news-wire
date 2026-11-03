@@ -88,7 +88,7 @@ class CardScraper(BaseScraper):
         text = " ".join(filter(None, text_parts))
         
         # Remove common prefixes
-        text = re.sub(r'^(Media Release|Press Release|News Release)[:\s-]*', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'^(Media Release|Press Release|News Release)[:\s\-\u2013\u2014]*', '', text, flags=re.IGNORECASE)
         
         return text.strip()
 

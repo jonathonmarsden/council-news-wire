@@ -798,17 +798,14 @@
     {
       "id": "yarrabah",
       "name": "Yarrabah Aboriginal Shire Council",
-      "news_url": "https://www.yarrabah.qld.gov.au/latest-news/",
-      "scraper": "curl_scraper",
-      "enabled": true,
+      "news_url": "https://www.yarrabah.qld.gov.au/latest-news/feed/",
+      "scraper": "rss_scraper",
+      "enabled": false,
       "use_curl": true,
       "impersonate": "chrome124",
-      "item_selector": ".elementor-post",
-      "title_selector": ".elementor-post__title",
-      "link_selector": ".elementor-post__title a",
-      "date_selector": "time",
       "population": 2800,
-      "region": "Far North Queensland"
+      "region": "Far North Queensland",
+      "note": "Disabled 2026-11-03: every post is an untitled image-only notice (no title, alt or text in feed or page); nothing to relay. Feed URL kept in case the site adds text."
     },
     {
       "id": "doomadgee",
@@ -822,8 +819,8 @@
     {
       "id": "hinchinbrook",
       "name": "Hinchinbrook Shire Council",
-      "news_url": "https://www.hinchinbrook.qld.gov.au/our-council/news-and-announcements/latest-news/",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.hinchinbrook.qld.gov.au/Our-Council/Latest-News",
+      "scraper": "opencities_scraper",
       "enabled": true,
       "mobile_mode": true,
       "item_selector": ".infinates .item",
@@ -832,7 +829,10 @@
       "link_selector": "a.obutton",
       "content_selector": ".text p:not(.date)",
       "population": 11225,
-      "region": "North Queensland"
+      "region": "North Queensland",
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "note": "2026-11-03: moved to OpenCities"
     },
     {
       "id": "hope-vale",

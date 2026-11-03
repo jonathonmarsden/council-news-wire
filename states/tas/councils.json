@@ -84,7 +84,10 @@
       "date_selector": "time",
       "link_selector": "a",
       "population": 43625,
-      "region": "Greater Hobart"
+      "region": "Greater Hobart",
+      "impersonate": "safari15_5",
+      "use_curl": true,
+      "note": "2026-11-03: chrome124 fingerprint gets an empty 200 body"
     },
     {
       "id": "huon-valley",
@@ -160,11 +163,17 @@
     {
       "id": "central-highlands-tas",
       "name": "Central Highlands Council",
-      "news_url": "https://centralhighlands.tas.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://centralhighlands.tas.gov.au/news",
+      "scraper": "curl_scraper",
       "enabled": true,
       "population": 2175,
-      "region": "Southern"
+      "region": "Southern",
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "item_selector": "a[href*='/news/']",
+      "note": "2026-11-03: /feed/ returns 500 (new site); HTML listing",
+      "title_selector": "h3",
+      "date_selector": "p.date"
     },
     {
       "id": "circular-head",
@@ -241,16 +250,18 @@
     {
       "id": "glamorgan-spring-bay",
       "name": "Glamorgan Spring Bay Council",
-      "news_url": "https://gsbc.tas.gov.au/services-facilities/media-releases/",
+      "news_url": "https://gsbc.tas.gov.au/council/news-media/",
       "scraper": "curl_scraper",
       "enabled": true,
-      "item_selector": "div[id^=\"tab-\"] p",
-      "title_selector": "a",
-      "date_selector": "",
-      "link_selector": "a",
       "use_curl": true,
       "population": 4815,
-      "region": "Southern"
+      "region": "Southern",
+      "item_selector": "div.grid-item",
+      "title_selector": "h5.grid-item__title",
+      "link_selector": "a.grid-item__inner",
+      "fetch_date_from_article": true,
+      "note": "2026-11-03: tab layout replaced by grid; date only on article page",
+      "content_selector": ".grid-item__description"
     },
     {
       "id": "kentish",
@@ -298,18 +309,15 @@
     {
       "id": "northern-midlands",
       "name": "Northern Midlands Council",
-      "news_url": "https://northernmidlands.tas.gov.au/community/news-events/media-releases-publications/news",
+      "news_url": "https://northernmidlands.tas.gov.au/",
       "scraper": "curl_scraper",
       "enabled": true,
-      "item_selector": "ul#news-list article",
-      "title_selector": "h3",
-      "date_selector": "span.posted",
-      "link_selector": "a",
-      "content_selector": "p.hidden-xs",
       "use_curl": true,
       "population": 14235,
       "region": "Northern",
-      "fetch_date_from_article": true
+      "item_selector": "a.event-list-container[href*='/news/']",
+      "note": "2026-11-03: /news is 404 and the listing page is JS-rendered; the homepage carries the latest four with dates",
+      "date_selector": ".date time"
     },
     {
       "id": "sorell",

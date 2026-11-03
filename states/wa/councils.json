@@ -522,11 +522,13 @@
     {
       "id": "gosnells",
       "name": "City of Gosnells",
-      "news_url": "https://www.gosnells.wa.gov.au/rss.xml",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.gosnells.wa.gov.au/Your-Council/About-Your-City/News",
+      "scraper": "opencities_scraper",
       "enabled": true,
       "category": "A",
-      "use_curl": false
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "note": "2026-11-03: site moved to OpenCities; old URL dead"
     },
     {
       "id": "greater-geraldton",
@@ -947,9 +949,15 @@
       "id": "northampton",
       "name": "Shire of Northampton",
       "news_url": "https://www.northampton.wa.gov.au/news/",
-      "scraper": "catalyst_scraper",
+      "scraper": "curl_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "item_selector": ".news-item",
+      "link_selector": "a.btn",
+      "note": "2026-11-03: Catalyst markup replaced by .news-item cards",
+      "title_selector": "span.h4",
+      "date_selector": "span.h5"
     },
     {
       "id": "nungarin",

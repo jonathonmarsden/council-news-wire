@@ -113,16 +113,19 @@
     {
       "id": "east-gippsland",
       "name": "East Gippsland Shire Council",
-      "news_url": "https://www.eastgippsland.vic.gov.au/council/media-releases",
-      "scraper": "browser_scraper",
+      "news_url": "https://www.eastgippsland.vic.gov.au/our-council/media-releases",
+      "scraper": "curl_scraper",
       "enabled": true,
       "category": "A",
       "population": 47735,
       "region": "Gippsland",
-      "item_selector": ".article-item",
-      "title_selector": "h4",
-      "date_selector": ".article-inner > div.small-text",
-      "link_selector": ".article-link"
+      "item_selector": ".notices-item",
+      "title_selector": ".notices-title",
+      "link_selector": "a.notices-link",
+      "date_selector": ".notices-date div:last-child",
+      "note": "2026-11-03: Webflow rebuild; old .article-item gone",
+      "use_curl": true,
+      "impersonate": "chrome124"
     },
     {
       "id": "glen-eira",
@@ -1107,9 +1110,10 @@
       "item_selector": "a.card-y",
       "title_selector": "h3",
       "link_selector": "self",
-      "date_selector": "div.absolute div.text-xs",
+      "date_selector": "div.absolute div.text-xs:last-child",
       "population": 104163,
-      "region": "Melbourne Inner"
+      "region": "Melbourne Inner",
+      "note": "2026-11-03: the date chip lost its div.absolute wrapper"
     },
     {
       "id": "yarra-ranges",
@@ -1156,12 +1160,18 @@
       "id": "port-phillip",
       "name": "Port Phillip City Council",
       "news_url": "https://www.portphillip.vic.gov.au/about-the-council/news-and-media",
-      "scraper": "curl_scraper",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "use_curl": true,
       "category": "A",
       "population": 120612,
-      "region": "Melbourne Inner"
+      "region": "Melbourne Inner",
+      "note": "2026-11-03: listing is rendered client-side; curl gets an empty shell",
+      "item_selector": "div.i-tile",
+      "title_selector": "h2.i-tile__text--title",
+      "link_selector": "a.i-tile__link",
+      "date_selector": "p.i-tile__text--subtitle",
+      "content_selector": "p.i-tile__text--description",
+      "wait_selector": "div.i-tile"
     }
   ]
 }

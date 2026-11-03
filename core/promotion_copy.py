@@ -24,7 +24,7 @@ STATE_FACTS: Dict[str, Dict[str, str]] = {
             "handle": "roundupnewsbotnsw.bsky.social"},
     "VIC": {"name": "Victoria", "adj": "Victorian", "councils": "79",
             "handle": "roundupnewsbotvic.bsky.social"},
-    "QLD": {"name": "Queensland", "adj": "Queensland", "councils": "76",
+    "QLD": {"name": "Queensland", "adj": "Queensland", "councils": "75",
             "handle": "roundupnewsbotqld.bsky.social"},
     "WA": {"name": "Western Australia", "adj": "WA", "councils": "138",
            "handle": "roundupnewsbotwa.bsky.social"},

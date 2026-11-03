@@ -521,14 +521,18 @@
     {
       "id": "city-of-sydney",
       "name": "City of Sydney",
-      "news_url": "https://news.cityofsydney.nsw.gov.au/",
+      "news_url": "https://news.cityofsydney.nsw.gov.au/media-releases",
       "scraper": "curl_scraper",
       "enabled": true,
-      "item_selector": "a[href*='/articles/']",
-      "date_selector": "p.text-gray-600",
       "population": 234245,
       "region": "Greater Sydney",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "item_selector": "article",
+      "title_selector": "h3 a",
+      "link_selector": "h3 a",
+      "date_selector": "time",
+      "content_selector": "p",
+      "note": "2026-11-03: root page lists evergreen features; media-releases is chronological"
     },
     {
       "id": "tamworth-regional-council",
@@ -598,10 +602,11 @@
       "item_selector": "table tr:has(a[href*='council_news'])",
       "title_selector": "a[href*='council_news']",
       "link_selector": "a[href*='council_news']",
-      "date_selector": "td strong",
+      "date_selector": "td > strong:nth-of-type(2)",
       "population": 74410,
       "region": "Greater Sydney",
-      "impersonate": "safari15_5"
+      "impersonate": "safari15_5",
+      "note": "2026-11-03: first <strong> is the title; the date is the second"
     },
     {
       "id": "city-of-willoughby",
@@ -725,12 +730,15 @@
       "id": "albury-city-council",
       "name": "Albury City Council",
       "news_url": "https://www.alburycity.nsw.gov.au/news",
-      "scraper": "opencities_scraper",
+      "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
       "impersonate": "chrome124",
       "population": 56020,
-      "region": "Riverina"
+      "region": "Riverina",
+      "item_selector": "div.cards a.card-y",
+      "fetch_date_from_article": true,
+      "note": "2026-11-03: OpenCities markup gone; now Drupal cards"
     },
     {
       "id": "ballina-shire-council",
@@ -745,11 +753,17 @@
     {
       "id": "balranald-shire-council",
       "name": "Balranald Shire Council",
-      "news_url": "https://balranald.nsw.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://balranald.nsw.gov.au/community/community-announcements/",
+      "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
-      "impersonate": "chrome124"
+      "impersonate": "chrome124",
+      "item_selector": "article.elementor-post",
+      "title_selector": ".elementor-post__title a",
+      "link_selector": ".elementor-post__title a",
+      "date_selector": ".elementor-post-date",
+      "content_selector": ".elementor-post__excerpt",
+      "note": "2026-11-03: /feed/ is 410; /news/ lists 2023 items; announcements page is the live one"
     },
     {
       "id": "bellingen-shire-council",
@@ -977,7 +991,11 @@
       "scraper": "card_scraper",
       "enabled": true,
       "population": 10260,
-      "region": "Central West"
+      "region": "Central West",
+      "item_selector": "li:has(> h6 a[href*='/news/'])",
+      "title_selector": "h6 a",
+      "link_selector": "h6 a",
+      "date_selector": "span.mainItemDate, span.subItemDate"
     },
     {
       "id": "gilgandra-shire-council",
@@ -1045,15 +1063,14 @@
     {
       "id": "gunnedah-shire-council",
       "name": "Gunnedah Shire Council",
-      "news_url": "https://www.gunnedah.nsw.gov.au/index.php/council/keep-in-touch/latest-news-media",
-      "scraper": "card_scraper",
+      "news_url": "https://www.gunnedah.nsw.gov.au/News-articles",
+      "scraper": "opencities_scraper",
       "enabled": true,
       "population": 13315,
       "region": "North West",
-      "item_selector": ".catItemView",
-      "title_selector": ".catItemTitle a",
-      "link_selector": ".catItemTitle a",
-      "date_selector": ".catItemDateCreated"
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "note": "2026-11-03: site moved to OpenCities; old URL dead"
     },
     {
       "id": "gwydir-shire-council",
@@ -1139,11 +1156,19 @@
     {
       "id": "kyogle-council",
       "name": "Kyogle Council",
-      "news_url": "https://www.kyogle.nsw.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.kyogle.nsw.gov.au/latest-news",
+      "scraper": "curl_scraper",
       "enabled": true,
       "population": 9635,
-      "region": "North Coast"
+      "region": "North Coast",
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "item_selector": "div.node--news-page",
+      "title_selector": "h3.node--card__title",
+      "link_selector": "a.node--card__link-wrapper",
+      "date_selector": "time",
+      "content_selector": ".node--card__teaser",
+      "note": "2026-11-03: site re-platformed (Drupal); old /feed/ is 404"
     },
     {
       "id": "lachlan-shire-council",
@@ -1254,15 +1279,14 @@
     {
       "id": "nambucca-valley-council",
       "name": "Nambucca Valley Council",
-      "news_url": "https://www.nambucca.nsw.gov.au/Council/News-Community-Feedback/Media-Releases",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.nambucca.nsw.gov.au/News-articles",
+      "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
-      "item_selector": ".list-item-container article",
-      "title_selector": "h2.list-item-title",
-      "link_selector": "a",
       "population": 21155,
-      "region": "North Coast"
+      "region": "North Coast",
+      "impersonate": "chrome124",
+      "note": "2026-11-03: site moved to OpenCities; old URL dead"
     },
     {
       "id": "narrabri-shire-council",
@@ -1332,7 +1356,12 @@
       "enabled": true,
       "population": 78445,
       "region": "Illawarra",
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": "table.views-table tbody tr",
+      "title_selector": "td.views-field-title a",
+      "link_selector": "td.views-field-title a",
+      "date_selector": "td.views-field-field-mr-date",
+      "note": "2026-11-03: Drupal views table; dates were never read"
     },
     {
       "id": "singleton-council",
@@ -1366,7 +1395,8 @@
       "title_selector": "self",
       "link_selector": "self",
       "population": 6355,
-      "region": "Riverina"
+      "region": "Riverina",
+      "date_selector": "p.published-on"
     },
     {
       "id": "tenterfield-shire-council",
@@ -1503,7 +1533,12 @@
         "title": "a",
         "link": "a",
         "time": "p:contains('Posted')"
-      }
+      },
+      "item_selector": "div.summary-body",
+      "title_selector": "h3 a",
+      "link_selector": "h3 a",
+      "date_selector": "p.blog-post-meta a",
+      "note": "2026-11-03: default selectors matched bare h3s; date is relative text in the meta line"
     },
     {
       "id": "yass-valley-council",
