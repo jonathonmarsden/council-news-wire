@@ -17,15 +17,14 @@
     {
       "name": "Barkly Regional Council",
       "id": "barkly",
-      "news_url": "https://www.barkly.nt.gov.au/news",
-      "item_selector": ".postArticle",
-      "title_selector": ".postTitle h3",
-      "link_selector": ".postTitle h3 a",
-      "date_selector": ".authorBar span",
+      "news_url": "https://www.barkly.nt.gov.au/feed/rss2",
       "enabled": true,
       "population": 7595,
       "region": "Barkly",
-      "use_curl": true
+      "use_curl": true,
+      "scraper": "rss_scraper",
+      "impersonate": "chrome124",
+      "note": "2026-11-03: silent on HTML scrape; site advertises this feed"
     },
     {
       "name": "Belyuen Community Government Council",
@@ -93,15 +92,14 @@
     {
       "name": "Groote Archipelago Regional Council",
       "id": "groote_archipelago",
-      "news_url": "https://groote.nt.gov.au/news-and-events",
-      "item_selector": ".postArticle",
-      "title_selector": ".postTitle a",
-      "date_selector": ".authorBar span",
-      "link_selector": ".postTitle a",
+      "news_url": "https://groote.nt.gov.au/feed/rss2",
       "enabled": true,
       "population": 2580,
       "region": "Arnhem",
-      "use_curl": true
+      "use_curl": true,
+      "scraper": "rss_scraper",
+      "impersonate": "chrome124",
+      "note": "2026-11-03: silent on HTML scrape; site advertises this feed"
     },
     {
       "name": "Katherine Town Council",

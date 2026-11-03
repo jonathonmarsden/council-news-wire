@@ -467,12 +467,15 @@
     {
       "id": "mornington",
       "name": "Mornington Shire Council",
-      "news_url": "https://www.mornington.qld.gov.au/news/latest-news/",
-      "scraper": "wordpress_scraper",
+      "news_url": "https://www.mornington.qld.gov.au/feed/",
+      "scraper": "rss_scraper",
       "enabled": true,
       "population": 1250,
       "region": "Gulf",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "use_curl": true,
+      "impersonate": "chrome124",
+      "note": "2026-11-03: silent on HTML scrape; site advertises this feed"
     },
     {
       "id": "mount-isa",
