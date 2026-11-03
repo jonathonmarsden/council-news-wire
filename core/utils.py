@@ -10,8 +10,31 @@ import re
 import sys
 import json
 from datetime import datetime
+
 from typing import Optional
 from dateutil import parser as date_parser
+
+DEFAULT_MAX_ARTICLE_AGE_DAYS = 7
+
+
+def max_article_age_days() -> int:
+    """How old an article may be and still be posted.
+
+    Seven days by default. After an outage the operator sets
+    MAX_ARTICLE_AGE_DAYS in the environment (for example 10 after a
+    three-day gap) so the stories that were published while the bot was
+    down are relayed instead of archived. Read at call time, not import
+    time, so one setting covers the scrape path and the queue path in the
+    same run without a restart. Anything unparseable means the default.
+    """
+    import os
+    raw = os.environ.get("MAX_ARTICLE_AGE_DAYS", "")
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return DEFAULT_MAX_ARTICLE_AGE_DAYS
+    return value if value > 0 else DEFAULT_MAX_ARTICLE_AGE_DAYS
+
 
 # An entity whose terminating semicolon has gone missing: "&rsquo s",
 # "Clare &amp Gilbert". Numeric and named forms, at least two characters so

@@ -314,6 +314,7 @@ def main():
     parser.add_argument('--concurrency', type=int, default=5, help='Number of concurrent scrapers')
     parser.add_argument('--council', type=str, help='Run for a specific council ID only')
     parser.add_argument('--force-fresh', action='store_true', help='Bypass 7-day freshness check (force post old articles)')
+    parser.add_argument('--max-age-days', type=int, help='Widen the 7-day freshness window for this run (after an outage); same as MAX_ARTICLE_AGE_DAYS in the environment')
     parser.add_argument('--time-window', type=str, choices=['morning', 'evening'],
                         help='Times window for dynamic concurrency reduction (passed by cron)')
     parser.add_argument('--slots', type=int, default=0,
@@ -322,6 +323,8 @@ def main():
                         help='Which slot (0..slots-1) to scrape this run. Used with --slots.')
 
     args = parser.parse_args()
+    if args.max_age_days:
+        os.environ['MAX_ARTICLE_AGE_DAYS'] = str(args.max_age_days)
     
     # Determine proxy: CLI arg > Env Var > None
     proxy_url = args.proxy or os.environ.get('COUNCIL_BOT_PROXY')

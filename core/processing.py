@@ -18,8 +18,12 @@ from core.database import Database
 from core.exceptions import TransientPostError
 from core.poster import BlueSkyPoster
 from core.validator import is_valid_article
+from core.utils import max_article_age_days
 from core.scrapers.base import NewsArticle
 
+# Kept as a name for callers that import it; the live value comes from
+# core.utils.max_article_age_days() so MAX_ARTICLE_AGE_DAYS in the
+# environment can widen the window after an outage.
 MAX_ARTICLE_AGE_DAYS = 7
 
 # Optional Discord logging
@@ -55,7 +59,8 @@ def process_articles(
         List of unposted article dicts from the database
     """
     now = datetime.now()
-    cutoff_date = now - timedelta(days=MAX_ARTICLE_AGE_DAYS)
+    max_age = max_article_age_days()
+    cutoff_date = now - timedelta(days=max_age)
     fresh_articles = []
     archived_articles = []
 
@@ -80,7 +85,7 @@ def process_articles(
             check_date = article.date
             check_cutoff = cutoff_date
             if check_date.tzinfo is not None and check_date.tzinfo.utcoffset(check_date) is not None:
-                check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=MAX_ARTICLE_AGE_DAYS)
+                check_cutoff = datetime.now(check_date.tzinfo) - timedelta(days=max_age)
             is_fresh = check_date >= check_cutoff
 
         if is_fresh:

@@ -16,6 +16,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.dialects.postgresql import insert as pg_upsert
 
 from core.models import Base, Article, CouncilHealth, ScraperStats, LogEvent, RunSummary
+from core.utils import max_article_age_days
 
 class Database:
     """SQLAlchemy database handler."""
@@ -344,8 +345,9 @@ class Database:
             # Convert to dicts
             raw_articles = []
             
-            # Filter for freshness (User Request: < 7 days old)
-            cutoff_date = datetime.now() - timedelta(days=7)
+            # Filter for freshness: 7 days unless MAX_ARTICLE_AGE_DAYS widens it
+            # (set by the operator after an outage; see core.utils).
+            cutoff_date = datetime.now() - timedelta(days=max_article_age_days())
             
             for o in objs:
                 is_too_old = False
