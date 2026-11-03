@@ -22,11 +22,9 @@ env/
 .DS_Store
 
 # Private workshop: strategy, planning, drafts, work logs.
-# These belong in the private private-private ops repository, never here.
+# These live in a separate private repo, never here.
 # The folder is git-ignored so nothing private can be committed to the public repo.
 private/
-assistant
-.assistant/
 
 # Test coverage
 .coverage

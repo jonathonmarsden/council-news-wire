@@ -19,7 +19,7 @@
 
 
 
-**Reviewed by:** assistant Fable 5 (five parallel high-effort subsystem reviews + independent spot-verification of headline findings).
+**Reviewed by:** an automated multi-pass review (five parallel subsystem reviews + independent spot-verification of headline findings).
 **Purpose:** hand-off document for a future agent (or human) to implement fixes. Every finding was verified against the actual code at commit `8776603`; several were reproduced empirically (the `record_failure` TypeError, the dateutil `dayfirst` behaviors). Findings the reviewers investigated and found to be *non-issues* are listed at the end so nobody re-chases them.
 
 **How to use this doc:** work through the phases in [Fix Order](#fix-order) — they're sequenced so each phase de-risks the next. Each finding has an ID for cross-referencing. Line numbers are accurate as of commit `8776603`; re-locate by the quoted code if the file has drifted.
