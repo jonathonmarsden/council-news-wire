@@ -107,8 +107,9 @@ async function rss(url: URL, env: Env): Promise<Response> {
   } else if ((m = /^\/rss\/state\/([a-z]+)\.xml$/.exec(path)) && (STATES as readonly string[]).includes(m[1])) {
     where = "WHERE state = ?1"; arg = m[1];
     ch = { title: `${STATE_NAMES[m[1]]} council news`, description: `News from every council in ${STATE_NAMES[m[1]]}, relayed from each council's own news page.`, link: `${SITE}/${m[1]}` };
-  } else if ((m = /^\/rss\/council\/([a-z0-9_-]+)\.xml$/.exec(path)) && COUNCILS[m[1]]) {
-    const c = COUNCILS[m[1]];
+  } else if ((m = /^\/rss\/council\/([^/]{1,120})\.xml$/.exec(path)) && Object.hasOwn(COUNCILS, safeDecode(m[1]))) {
+    // Ids are slugs, but one contains "&", so links percent-encode the id.
+    const c = COUNCILS[safeDecode(m[1])];
     where = "WHERE council_id = ?1"; arg = c.id;
     ch = { title: `${c.name} news`, description: `News from ${c.name}, relayed from its own news page.`, link: c.news_url };
   } else if ((m = /^\/rss\/([a-z0-9-]{1,15})\.xml$/.exec(path)) && FEED_BY_ID.has(m[1])) {
@@ -135,7 +136,7 @@ function opml(env: Env): Response {
     ...STATES.map((s) => ({ title: STATE_NAMES[s], xmlUrl: `${base}/state/${s}.xml`, group: "States and territories" })),
     ...FEEDS.map((f) => ({ title: f.name, xmlUrl: `${base}/${f.id}.xml`, group: `Regions: ${f.state}` })),
     ...Object.values(COUNCILS).sort((a, b) => a.state.localeCompare(b.state) || a.name.localeCompare(b.name))
-      .map((c) => ({ title: c.name, xmlUrl: `${base}/council/${c.id}.xml`, group: `Councils: ${c.state.toUpperCase()}` })),
+      .map((c) => ({ title: c.name, xmlUrl: `${base}/council/${encodeURIComponent(c.id)}.xml`, group: `Councils: ${c.state.toUpperCase()}` })),
   ];
   return new Response(renderOpml("Australian council news", entries), {
     headers: { "content-type": "text/x-opml; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` },
@@ -150,7 +151,7 @@ function index(env: Env): Response {
   const sections = STATES.map((st) => `
     <h2>${esc(STATE_NAMES[st])}</h2>
     <ul>${li(`/rss/state/${st}.xml`, `All ${STATE_NAMES[st]} councils`)}${byState(st).map((f) => li(`/rss/${f.id}.xml`, f.name)).join("")}</ul>
-    <details><summary>Each council</summary><ul>${councils(st).map((c) => li(`/rss/council/${c.id}.xml`, c.name)).join("")}</ul></details>`).join("");
+    <details><summary>Each council</summary><ul>${councils(st).map((c) => li(`/rss/council/${encodeURIComponent(c.id)}.xml`, c.name)).join("")}</ul></details>`).join("");
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RSS feeds · Australian council news</title>
 <style>body{font:16px/1.5 system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#1a1a1a;background:#fff}a{color:#0b5cad}h2{margin-top:2rem}@media(prefers-color-scheme:dark){body{background:#111;color:#eee}a{color:#7db7ff}}</style></head>
@@ -215,4 +216,8 @@ async function health(env: Env): Promise<Response> {
   const row = await env.DB.prepare("SELECT COUNT(*) AS posts, MAX(posted_at) AS newest FROM posts").first<{ posts: number; newest: string | null }>();
   return json({ posts: row?.posts ?? 0, newest: row?.newest ?? null, feeds: FEEDS.length, councils: Object.keys(COUNCILS).length },
     200, { "cache-control": "no-store" });
+}
+
+function safeDecode(s: string): string {
+  try { return decodeURIComponent(s); } catch { return ""; }
 }

@@ -124,7 +124,7 @@
     },
     {
       "id": "nsw-se-syd",
-      "name": "Southern & Eastern Sydne",
+      "name": "Sydney's south & east",
       "state": "NSW",
       "kind": "region",
       "description": "News from the 12 councils of Southern & Eastern Sydne: Bayside, Burwood, Canada Bay, Canterbury Bankstown, Georges River, Inner West, Randwick, Strathfield, Sutherland, Sydney, Waverley, Woollahra. Relayed from each council's own news page.",
@@ -596,7 +596,7 @@
     },
     {
       "id": "vic-melb-ise",
-      "name": "Melbourne inner south-ea",
+      "name": "Inner SE Melbourne",
       "state": "VIC",
       "kind": "region",
       "description": "News from the 4 councils of Melbourne inner south-ea: Bayside, Boroondara, Glen Eira, Stonnington. Relayed from each council's own news page.",
@@ -944,7 +944,7 @@
     },
     {
       "id": "qld-cape-torres",
-      "name": "Cape York & Torres Strai",
+      "name": "Torres & Cape York",
       "state": "QLD",
       "kind": "region",
       "description": "News from the 14 councils of Cape York & Torres Strai, including Aurukun, Cook, Doomadgee Aboriginal, Hope Vale Aboriginal, Kowanyama Aboriginal, Lockhart River Aboriginal, Mapoon Aboriginal, Mornington, Napranum Aboriginal, Northern Peninsula Area, Palm Island Aboriginal, Torres and more.…",
@@ -1088,7 +1088,7 @@
     },
     {
       "id": "sa-hills-fleur",
-      "name": "Adelaide Hills & Fleurie",
+      "name": "Hills & Fleurieu",
       "state": "SA",
       "kind": "region",
       "description": "News from the 6 councils of Adelaide Hills & Fleurie: Adelaide Hills, Alexandrina, District of Yankalilla, Kangaroo Island, Mount Barker District, Victor Harbor. Relayed from each council's own news page.",
@@ -1198,7 +1198,7 @@
     },
     {
       "id": "sa-flinders",
-      "name": "Flinders Ranges & Outbac",
+      "name": "Flinders & Outback SA",
       "state": "SA",
       "kind": "region",
       "description": "News from the 4 councils of Flinders Ranges & Outbac: District of Coober Pedy, Municipal of Roxby Downs, Port Augusta, The Flinders Ranges. Relayed from each council's own news page.",
