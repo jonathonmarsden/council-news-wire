@@ -13,7 +13,7 @@ import data from "./data.json";
 import { SCHEMA } from "./schema";
 import {
   type Feed, type Post, STATES, STATE_NAMES, clampLimit, cleanPost, decodeCursor,
-  didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage,
+  didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage, PAGE_CSS,
 } from "./lib";
 
 type Council = { id: string; name: string; state: string; news_url: string };
@@ -155,22 +155,26 @@ function opml(env: Env): Response {
 
 function index(env: Env): Response {
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
-  const li = (href: string, text: string) => `<li><a href="${href}">${esc(text)}</a></li>`;
+  const chip = (href: string, text: string, cls = "") => `<li><a${cls ? ` class="${cls}"` : ""} href="${href}">${esc(text)}</a></li>`;
   const byState = (st: string) => FEEDS.filter((f) => f.state.toLowerCase() === st);
   const councils = (st: string) => Object.values(COUNCILS).filter((c) => c.state === st).sort((a, b) => a.name.localeCompare(b.name));
   const sections = STATES.map((st) => `
-    <h2>${esc(STATE_NAMES[st])}</h2>
-    <ul>${li(`/rss/state/${st}.xml`, `All ${STATE_NAMES[st]} councils`)}${byState(st).map((f) => li(`/rss/${f.id}.xml`, f.name)).join("")}</ul>
-    <details><summary>Each council</summary><ul>${councils(st).map((c) => li(`/rss/council/${encodeURIComponent(c.id)}.xml`, c.name)).join("")}</ul></details>`).join("");
+<section class="st"><h2>${esc(STATE_NAMES[st])}</h2>
+  <ul class="chips">${chip(`/rss/state/${st}.xml`, `All of ${STATE_NAMES[st]}`, "all")}${byState(st).map((f) => chip(`/rss/${f.id}.xml`, f.name)).join("")}</ul>
+  <details><summary>Each council (${councils(st).length})</summary><ul class="cl">${councils(st).map((c) => `<li><a href="/rss/council/${encodeURIComponent(c.id)}.xml">${esc(c.name)}</a></li>`).join("")}</ul></details>
+</section>`).join("");
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RSS feeds · Australian council news</title>
-<style>body{font:16px/1.5 system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#1a1a1a;background:#fff}a{color:#0b5cad}h2{margin-top:2rem}@media(prefers-color-scheme:dark){body{background:#111;color:#eee}a{color:#7db7ff}}</style></head>
-<body><h1>RSS feeds</h1>
-<p>News from Australian councils, relayed from each council's own news page. Every item links to the council's original story.
-Subscribe to <a href="/rss/all.xml">all of Australia</a>, a state, a region or a single council, or import
-<a href="/rss/feeds.opml">every feed</a> into your reader at once.</p>
-<p>New to RSS? Open any feed below: it shows the latest stories and how to add it to a feed reader, Outlook, Teams or Slack.</p>${sections}
-<p><a href="${SITE}">Back to the news site</a></p></body></html>`;
+<title>RSS feeds · Local Government News</title>
+<meta name="description" content="RSS feeds for every Australian council, region and state.">
+<style>${PAGE_CSS}</style></head><body><main>
+<a class="top" href="${SITE}">Local Government News</a>
+<h1>RSS feeds</h1>
+<p class="lead">News from every Australian council, relayed from each council's own news page. Every item links to the original story.</p>
+<section class="box"><h2>New to RSS?</h2>
+<p>Open any feed below: it shows the latest stories and how to add it to a feed reader, Outlook, Teams or Slack. Or subscribe to <a href="/rss/all.xml">all of Australia</a>, or import <a href="/rss/feeds.opml">every feed</a> into your reader at once.</p></section>
+${sections}
+<footer><a href="${SITE}">Back to the news site</a></footer>
+</main></body></html>`;
   return new Response(html, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` } });
 }
 

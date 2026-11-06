@@ -169,6 +169,32 @@ export function cleanPost(x: any): Post | null {
 
 // ---- Readable feed page (for people who open a feed in a browser) ----------
 
+/** Shared look for the edge's HTML pages, matching lgnews.jonathonmarsden.com. */
+export const PAGE_CSS = `:root{--bg:#f7f4ef;--surface:#fff;--border:#e5ded3;--text:#141414;--text-2:#4a4a4a;--text-3:#7a766f;--accent:#c0711f;--h:Georgia,'Times New Roman',serif}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0d0b;--surface:#1a1814;--border:#302c25;--text:#eeece8;--text-2:#a8a59f;--text-3:#8a867f;--accent:#e8902f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif}
+a{color:var(--accent)}main{max-width:46rem;margin:0 auto;padding:1.5rem 1rem 3rem}
+.top{font-family:var(--h);font-weight:700;color:var(--accent);text-decoration:none}
+h1{font-family:var(--h);font-size:1.7rem;line-height:1.2;margin:1rem 0 .3rem}.lead{color:var(--text-2);margin:0 0 1.25rem}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.75rem}
+.box h2{font-family:var(--h);font-size:1.05rem;margin:0 0 .35rem}.box p{margin:.2rem 0 .8rem;color:var(--text-2);font-size:.92rem}
+.row{display:flex;gap:.5rem;flex-wrap:wrap}.row input{flex:1 1 16rem;min-width:0;font:inherit;font-size:.85rem;padding:.45rem .55rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)}
+.btn{display:inline-block;font:inherit;font-size:.88rem;font-weight:600;padding:.45rem .8rem;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;text-decoration:none;cursor:pointer}
+.btn.alt{background:transparent;color:var(--accent)}.apps{margin-top:.7rem}
+details{margin-top:.8rem;font-size:.9rem;color:var(--text-2)}summary{cursor:pointer;color:var(--text)}details li{margin:.35rem 0}
+ol{list-style:none;padding:0;margin:0}ol li{padding:.85rem 0;border-top:1px solid var(--border)}
+.t{font-family:var(--h);font-size:1.05rem;font-weight:700;text-decoration:none;color:var(--text)}.t:hover{color:var(--accent)}
+.m{font-size:.8rem;color:var(--text-3);margin-top:.15rem}ol p{margin:.35rem 0 0;font-size:.92rem;color:var(--text-2)}
+footer{margin-top:2rem;font-size:.85rem;color:var(--text-3)}
+
+.st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-bottom:1rem}
+.st h2{font-family:var(--h);font-size:1.15rem;margin:0 0 .6rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:0;padding:0;list-style:none}
+.chips a{display:inline-block;font-size:.85rem;padding:.28rem .7rem;border-radius:999px;border:1px solid var(--border);color:var(--text);text-decoration:none;background:var(--bg)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}.chips a.all{border-color:var(--accent);color:var(--accent);font-weight:600}
+.st details{margin-top:.75rem}.cl{columns:2 14rem;font-size:.88rem;padding-left:1.1rem;margin:.5rem 0 0}.cl a{color:var(--text)}
+`;
+
 /** True when a person is opening the address in a browser tab. Browsers mark
  *  page navigations with Sec-Fetch-Dest: document; feed readers fetch from
  *  their own servers and never send it, so they keep getting RSS. ?view=html
@@ -190,24 +216,7 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
 <title>${xmlEscape(ch.title)} · RSS feed</title>
 <meta name="description" content="${xmlEscape(ch.description)}">
 <link rel="alternate" type="application/rss+xml" title="${xmlEscape(ch.title)}" href="${xmlEscape(ch.selfUrl)}">
-<style>
-:root{--bg:#f7f4ef;--surface:#fff;--border:#e5ded3;--text:#141414;--text-2:#4a4a4a;--text-3:#7a766f;--accent:#c0711f;--h:Georgia,'Times New Roman',serif}
-@media(prefers-color-scheme:dark){:root{--bg:#0e0d0b;--surface:#1a1814;--border:#302c25;--text:#eeece8;--text-2:#a8a59f;--text-3:#8a867f;--accent:#e8902f}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif}
-a{color:var(--accent)}main{max-width:46rem;margin:0 auto;padding:1.5rem 1rem 3rem}
-.top{font-family:var(--h);font-weight:700;color:var(--accent);text-decoration:none}
-h1{font-family:var(--h);font-size:1.7rem;line-height:1.2;margin:1rem 0 .3rem}.lead{color:var(--text-2);margin:0 0 1.25rem}
-.box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.75rem}
-.box h2{font-family:var(--h);font-size:1.05rem;margin:0 0 .35rem}.box p{margin:.2rem 0 .8rem;color:var(--text-2);font-size:.92rem}
-.row{display:flex;gap:.5rem;flex-wrap:wrap}.row input{flex:1 1 16rem;min-width:0;font:inherit;font-size:.85rem;padding:.45rem .55rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)}
-.btn{display:inline-block;font:inherit;font-size:.88rem;font-weight:600;padding:.45rem .8rem;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;text-decoration:none;cursor:pointer}
-.btn.alt{background:transparent;color:var(--accent)}.apps{margin-top:.7rem}
-details{margin-top:.8rem;font-size:.9rem;color:var(--text-2)}summary{cursor:pointer;color:var(--text)}details li{margin:.35rem 0}
-ol{list-style:none;padding:0;margin:0}ol li{padding:.85rem 0;border-top:1px solid var(--border)}
-.t{font-family:var(--h);font-size:1.05rem;font-weight:700;text-decoration:none;color:var(--text)}.t:hover{color:var(--accent)}
-.m{font-size:.8rem;color:var(--text-3);margin-top:.15rem}ol p{margin:.35rem 0 0;font-size:.92rem;color:var(--text-2)}
-footer{margin-top:2rem;font-size:.85rem;color:var(--text-3)}
-</style></head><body><main>
+<style>${PAGE_CSS}</style></head><body><main>
 <a class="top" href="${xmlEscape(site)}">Local Government News</a>
 <h1>${xmlEscape(ch.title)}</h1>
 <p class="lead">${xmlEscape(ch.description)}</p>
