@@ -78,15 +78,18 @@
     {
       "id": "brisbane",
       "name": "Brisbane City Council",
-      "news_url": "https://www.brisbane.qld.gov.au/about-council/your-brisbane",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.brisbane.qld.gov.au/about-council/news-and-community-updates/community-service-announcements",
+      "scraper": "browser_scraper",
       "enabled": true,
-      "item_selector": "a.compact-card-link",
-      "title_selector": "p.compact-card-title span",
+      "item_selector": "a[data-testid=\"test-listingLink\"]",
+      "title_selector": "h4[data-testid=\"test-listingTitle\"]",
       "link_selector": "self",
-      "date_selector": "meta[name='bcc:publication_date']",
+      "date_selector": "p[data-testid=\"test-listing-date\"]",
       "population": 1355640,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "wait_selector": "a[data-testid=\"test-listingLink\"]",
+      "excerpt_selector": "a[data-testid=\"test-listingLink\"] > div > p",
+      "note": "2026-11-06: was the 'Your Brisbane' lifestyle magazine (undated features). The newsroom list is rendered by JavaScript; data-testid hooks are stable"
     },
     {
       "id": "bulloo",
@@ -178,8 +181,8 @@
       "link_selector": "a.post-top",
       "date_selector": ".full-date",
       "content_selector": ".text-container p",
-      "population": 2175,
-      "region": "Southern"
+      "population": 27836,
+      "region": "Central Queensland"
     },
     {
       "id": "charters-towers",
@@ -204,7 +207,8 @@
       "title_selector": "h2.entry-title a",
       "link_selector": "h2.entry-title a",
       "date_selector": "time.entry-date.published",
-      "content_selector": ".entry-summary"
+      "content_selector": ".entry-summary",
+      "region": "Wide Bay-Burnett"
     },
     {
       "id": "cloncurry",
@@ -275,8 +279,8 @@
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
-      "population": 1055,
-      "region": "Northern"
+      "population": 1500,
+      "region": "North West Queensland"
     },
     {
       "id": "fraser-coast",

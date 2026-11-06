@@ -11,7 +11,8 @@
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "category": "C"
+      "category": "C",
+      "region": "Great Southern"
     },
     {
       "id": "armadale",
@@ -23,7 +24,8 @@
       "title_selector": "fields.title",
       "date_selector": "fields.releaseDate",
       "link_selector": "https://my.armadale.wa.gov.au/service/news-and-media-releases/{fields.slug}",
-      "category": "C"
+      "category": "C",
+      "region": "Perth metropolitan"
     },
     {
       "id": "ashburton",
@@ -32,7 +34,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": false
+      "use_curl": false,
+      "region": "Pilbara"
     },
     {
       "id": "augusta-margaret-river",
@@ -49,7 +52,8 @@
       "title_selector": "h3",
       "date_selector": "span.date",
       "link_selector": "a.hotbox",
-      "category": "C"
+      "category": "C",
+      "region": "South West"
     },
     {
       "id": "bassendean",
@@ -62,7 +66,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Perth metropolitan"
     },
     {
       "id": "bayswater",
@@ -76,7 +81,8 @@
       "date_selector": "span.date",
       "link_selector": "a",
       "enabled": true,
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "belmont",
@@ -85,7 +91,8 @@
       "scraper": "belmont_scraper",
       "use_curl": true,
       "enabled": true,
-      "category": "B"
+      "category": "B",
+      "region": "Perth metropolitan"
     },
     {
       "id": "beverley",
@@ -98,7 +105,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Wheatbelt"
     },
     {
       "id": "boddington",
@@ -106,7 +114,8 @@
       "news_url": "https://www.boddington.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Peel"
     },
     {
       "id": "boyup-brook",
@@ -114,7 +123,8 @@
       "news_url": "https://www.boyupbrook.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "South West"
     },
     {
       "id": "bridgetown-greenbushes",
@@ -128,7 +138,8 @@
       "date_selector": "span.h5",
       "excerpt_selector": "p",
       "link_selector": "a.btn",
-      "category": "C"
+      "category": "C",
+      "region": "South West"
     },
     {
       "id": "brookton",
@@ -136,7 +147,8 @@
       "news_url": "https://www.brookton.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "broome",
@@ -149,7 +161,8 @@
       "link_selector": "self",
       "enabled": true,
       "use_curl": true,
-      "category": "C"
+      "category": "C",
+      "region": "Kimberley"
     },
     {
       "id": "broomehill-tambellup",
@@ -162,7 +175,8 @@
       "title_selector": ".item-title",
       "date_selector": ".item-date",
       "link_selector": "a",
-      "category": "C"
+      "category": "C",
+      "region": "Great Southern"
     },
     {
       "id": "bruce-rock",
@@ -175,7 +189,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Wheatbelt"
     },
     {
       "id": "bunbury",
@@ -184,7 +199,8 @@
       "scraper": "bunbury_scraper",
       "enabled": true,
       "category": "A",
-      "use_curl": false
+      "use_curl": false,
+      "region": "South West"
     },
     {
       "id": "busselton",
@@ -194,7 +210,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "South West"
     },
     {
       "id": "cambridge",
@@ -203,7 +220,8 @@
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
-      "category": "C"
+      "category": "C",
+      "region": "Perth metropolitan"
     },
     {
       "id": "canning",
@@ -212,7 +230,8 @@
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "capel",
@@ -220,7 +239,8 @@
       "news_url": "https://www.capel.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "South West"
     },
     {
       "id": "carnamah",
@@ -229,7 +249,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "use_curl": true,
-      "category": "C"
+      "category": "C",
+      "region": "Mid West"
     },
     {
       "id": "carnarvon",
@@ -237,7 +258,8 @@
       "news_url": "https://www.carnarvon.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Gascoyne"
     },
     {
       "id": "chapman-valley",
@@ -245,7 +267,8 @@
       "news_url": "https://www.chapmanvalley.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "chittering",
@@ -253,7 +276,8 @@
       "news_url": "https://www.chittering.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "claremont",
@@ -262,7 +286,8 @@
       "scraper": "claremont_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": true
+      "use_curl": true,
+      "region": "Perth metropolitan"
     },
     {
       "id": "cockburn",
@@ -275,7 +300,8 @@
       "date_selector": ".hotbox-item span:nth-of-type(2)",
       "link_selector": "a",
       "category": "C",
-      "use_curl": true
+      "use_curl": true,
+      "region": "Perth metropolitan"
     },
     {
       "id": "cocos-keeling-islands",
@@ -283,7 +309,8 @@
       "news_url": "https://www.shire.cc/en/latest-news.feed?type=rss",
       "scraper": "rss_scraper",
       "enabled": true,
-      "category": "C"
+      "category": "C",
+      "region": "Indian Ocean Territories (no RDC)"
     },
     {
       "id": "collie",
@@ -298,7 +325,8 @@
         "title": "h2.entry-title",
         "link": "h2.entry-title a",
         "date": ".entry-date"
-      }
+      },
+      "region": "South West"
     },
     {
       "id": "coolgardie",
@@ -306,7 +334,8 @@
       "news_url": "https://www.coolgardie.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "coorow",
@@ -315,7 +344,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "cottesloe",
@@ -323,7 +353,8 @@
       "news_url": "https://www.cottesloe.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Perth metropolitan"
     },
     {
       "id": "cranbrook",
@@ -336,7 +367,8 @@
       "title_selector": "a.entry-title",
       "date_selector": ".entry-meta",
       "link_selector": "a.entry-title",
-      "category": "C"
+      "category": "C",
+      "region": "Great Southern"
     },
     {
       "id": "cuballing",
@@ -344,7 +376,8 @@
       "news_url": "https://www.cuballing.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "cue",
@@ -352,7 +385,8 @@
       "news_url": "https://www.cue.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "cunderdin",
@@ -365,7 +399,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Wheatbelt"
     },
     {
       "id": "dalwallinu",
@@ -373,7 +408,8 @@
       "news_url": "https://www.dalwallinu.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "dandaragan",
@@ -381,7 +417,8 @@
       "news_url": "https://www.dandaragan.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "dardanup",
@@ -389,7 +426,8 @@
       "news_url": "https://www.dardanup.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "South West"
     },
     {
       "id": "denmark",
@@ -399,7 +437,8 @@
       "enabled": true,
       "category": "A",
       "use_curl": false,
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "region": "Great Southern"
     },
     {
       "id": "derby-west-kimberley",
@@ -412,7 +451,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Kimberley"
     },
     {
       "id": "donnybrook-balingup",
@@ -420,7 +460,8 @@
       "news_url": "https://www.donnybrook-balingup.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "South West"
     },
     {
       "id": "dowerin",
@@ -428,14 +469,16 @@
       "news_url": "https://www.dowerin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "dumbleyung",
       "name": "Shire of Dumbleyung",
       "news_url": "https://www.dumbleyung.wa.gov.au/newsletters",
       "scraper": "dumbleyung_scraper",
-      "enabled": true
+      "enabled": true,
+      "region": "Wheatbelt"
     },
     {
       "id": "dundas",
@@ -443,7 +486,8 @@
       "news_url": "https://www.dundas.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "east-fremantle",
@@ -451,7 +495,8 @@
       "news_url": "https://www.eastfremantle.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Perth metropolitan"
     },
     {
       "id": "east-pilbara",
@@ -459,7 +504,8 @@
       "news_url": "https://www.eastpilbara.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Pilbara"
     },
     {
       "id": "esperance",
@@ -471,7 +517,8 @@
       "date_selector": "span.h5",
       "link_selector": "a.btn",
       "enabled": true,
-      "use_curl": true
+      "use_curl": true,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "exmouth",
@@ -484,7 +531,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Gascoyne"
     },
     {
       "id": "fremantle",
@@ -493,7 +541,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "A",
-      "use_curl": false
+      "use_curl": false,
+      "region": "Perth metropolitan"
     },
     {
       "id": "gingin",
@@ -501,7 +550,8 @@
       "news_url": "https://www.gingin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "gnowangerup",
@@ -509,7 +559,8 @@
       "news_url": "https://www.gnowangerup.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "goomalling",
@@ -517,7 +568,8 @@
       "news_url": "https://www.goomalling.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "gosnells",
@@ -528,7 +580,8 @@
       "category": "A",
       "use_curl": true,
       "impersonate": "chrome124",
-      "note": "2026-11-03: site moved to OpenCities; old URL dead"
+      "note": "2026-11-03: site moved to OpenCities; old URL dead",
+      "region": "Perth metropolitan"
     },
     {
       "id": "greater-geraldton",
@@ -536,7 +589,8 @@
       "news_url": "https://www.cgg.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "halls-creek",
@@ -549,7 +603,8 @@
         "date": "time",
         "link": "a"
       },
-      "enabled": true
+      "enabled": true,
+      "region": "Kimberley"
     },
     {
       "id": "harvey",
@@ -562,7 +617,8 @@
       "date_selector": "date_gmt",
       "link_selector": "permalink",
       "excerpt_selector": "excerpt",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "region": "South West"
     },
     {
       "id": "irwin",
@@ -576,7 +632,8 @@
       "link_selector": ".eael-entry-title a",
       "date_selector": "meta[property='article:published_time']",
       "limit": 8,
-      "category": "C"
+      "category": "C",
+      "region": "Mid West"
     },
     {
       "id": "jerramungup",
@@ -584,7 +641,8 @@
       "news_url": "https://www.jerramungup.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "joondalup",
@@ -593,7 +651,8 @@
       "scraper": "joondalup_scraper",
       "enabled": true,
       "use_curl": true,
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "kalamunda",
@@ -608,7 +667,8 @@
         "title": "h3.listing__title",
         "link": "h3.listing__title a",
         "date": ".listing__time"
-      }
+      },
+      "region": "Perth metropolitan"
     },
     {
       "id": "kalgoorlie-boulder",
@@ -621,7 +681,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "karratha",
@@ -634,7 +695,8 @@
       "title_selector": ".field-content",
       "link_selector": "a",
       "category": "C",
-      "date_selector": "time[datetime]"
+      "date_selector": "time[datetime]",
+      "region": "Pilbara"
     },
     {
       "id": "katanning",
@@ -642,7 +704,8 @@
       "news_url": "https://www.katanning.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "kellerberrin",
@@ -655,7 +718,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Wheatbelt"
     },
     {
       "id": "kent",
@@ -664,7 +728,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "kojonup",
@@ -672,7 +737,8 @@
       "news_url": "https://www.kojonup.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "koorda",
@@ -685,7 +751,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Wheatbelt"
     },
     {
       "id": "kulin",
@@ -693,14 +760,16 @@
       "news_url": "https://www.kulin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "kwinana",
       "name": "City of Kwinana",
       "news_url": "https://www.kwinana.wa.gov.au/council/news",
       "scraper": "catalyst_browser_scraper",
-      "enabled": true
+      "enabled": true,
+      "region": "Perth metropolitan"
     },
     {
       "id": "lake-grace",
@@ -708,7 +777,8 @@
       "news_url": "https://www.lakegrace.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "laverton",
@@ -721,7 +791,8 @@
       "item_selector": "body",
       "title_selector": "title.rendered",
       "date_selector": "date",
-      "link_selector": "link"
+      "link_selector": "link",
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "leonora",
@@ -729,7 +800,8 @@
       "news_url": "https://www.leonora.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "mandurah",
@@ -743,7 +815,8 @@
         "title": "h3",
         "date": "span[id$='-date'] span:not(.sr-only)",
         "link": "a"
-      }
+      },
+      "region": "Peel"
     },
     {
       "id": "manjimup",
@@ -758,7 +831,8 @@
         "date": "time",
         "link": "a"
       },
-      "enabled": true
+      "enabled": true,
+      "region": "South West"
     },
     {
       "id": "meekatharra",
@@ -768,7 +842,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Mid West"
     },
     {
       "id": "melville",
@@ -776,7 +851,8 @@
       "news_url": "https://www.melvillecity.com.au/our-city/news/latest-news",
       "scraper": "catalyst_browser_scraper",
       "enabled": true,
-      "category": "C"
+      "category": "C",
+      "region": "Perth metropolitan"
     },
     {
       "id": "menzies",
@@ -789,7 +865,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "merredin",
@@ -797,7 +874,8 @@
       "news_url": "https://www.merredin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "mingenew",
@@ -810,7 +888,8 @@
       "link_selector": ".stretched-link",
       "date_selector": "meta[property='article:published_time']",
       "use_curl": true,
-      "category": "C"
+      "category": "C",
+      "region": "Mid West"
     },
     {
       "id": "moora",
@@ -818,7 +897,8 @@
       "news_url": "https://www.moora.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "morawa",
@@ -826,7 +906,8 @@
       "news_url": "https://www.morawa.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "mosman-park",
@@ -838,7 +919,8 @@
       "item_selector": "a.options-link",
       "title_selector": "h2",
       "link_selector": "self",
-      "category": "C"
+      "category": "C",
+      "region": "Perth metropolitan"
     },
     {
       "id": "mount-magnet",
@@ -850,7 +932,8 @@
       "item_selector": "a[href*='sharepoint.com'][href$='.pdf']",
       "title_selector": "self",
       "link_selector": "self",
-      "category": "C"
+      "category": "C",
+      "region": "Mid West"
     },
     {
       "id": "mount-marshall",
@@ -864,7 +947,8 @@
       "link_selector": ".elementor-post__title a",
       "date_selector": ".elementor-post-info__item--type-date",
       "limit": 8,
-      "category": "C"
+      "category": "C",
+      "region": "Wheatbelt"
     },
     {
       "id": "mukinbudin",
@@ -877,7 +961,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Wheatbelt"
     },
     {
       "id": "mundaring",
@@ -890,7 +975,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Perth metropolitan"
     },
     {
       "id": "nannup",
@@ -898,7 +984,8 @@
       "news_url": "https://www.nannup.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "South West"
     },
     {
       "id": "narembeen",
@@ -906,7 +993,8 @@
       "news_url": "https://www.narembeen.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "narrogin",
@@ -914,7 +1002,8 @@
       "news_url": "https://www.narrogin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "nedlands",
@@ -927,7 +1016,8 @@
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn"
+      "link_selector": "a.btn",
+      "region": "Perth metropolitan"
     },
     {
       "id": "ngaanyatjarraku",
@@ -935,7 +1025,8 @@
       "news_url": "https://www.ngaanyatjarraku.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "northam",
@@ -943,7 +1034,8 @@
       "news_url": "https://www.northam.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "northampton",
@@ -957,7 +1049,8 @@
       "link_selector": "a.btn",
       "note": "2026-11-03: Catalyst markup replaced by .news-item cards",
       "title_selector": "span.h4",
-      "date_selector": "span.h5"
+      "date_selector": "span.h5",
+      "region": "Mid West"
     },
     {
       "id": "nungarin",
@@ -965,7 +1058,8 @@
       "news_url": "https://www.nungarin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "peppermint-grove",
@@ -978,7 +1072,8 @@
       "item_selector": ".module-list > .row",
       "title_selector": ".h4",
       "date_selector": "span.h5",
-      "link_selector": "a.btn-primary"
+      "link_selector": "a.btn-primary",
+      "region": "Perth metropolitan"
     },
     {
       "id": "perenjori",
@@ -986,7 +1081,8 @@
       "news_url": "https://www.perenjori.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "perth",
@@ -996,7 +1092,8 @@
       "enabled": true,
       "use_curl": true,
       "impersonate": "chrome110",
-      "category": "C"
+      "category": "C",
+      "region": "Perth metropolitan"
     },
     {
       "id": "pingelly",
@@ -1004,7 +1101,8 @@
       "news_url": "https://www.pingelly.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "plantagenet",
@@ -1012,7 +1110,8 @@
       "news_url": "https://www.plantagenet.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "port-hedland",
@@ -1020,7 +1119,8 @@
       "news_url": "https://www.porthedland.wa.gov.au/news/general",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Pilbara"
     },
     {
       "id": "quairading",
@@ -1031,7 +1131,8 @@
       "title_selector": ".post_title",
       "link_selector": ".news-link a",
       "enabled": true,
-      "category": "C"
+      "category": "C",
+      "region": "Wheatbelt"
     },
     {
       "id": "ravensthorpe",
@@ -1039,7 +1140,8 @@
       "news_url": "https://www.ravensthorpe.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "rockingham",
@@ -1048,7 +1150,8 @@
       "scraper": "catalyst_browser_scraper",
       "check_content": false,
       "enabled": true,
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "sandstone",
@@ -1061,7 +1164,8 @@
       "title_selector": "h2",
       "date_selector": "time",
       "link_selector": "a",
-      "enabled": true
+      "enabled": true,
+      "region": "Mid West"
     },
     {
       "id": "serpentine-jarrahdale",
@@ -1069,7 +1173,8 @@
       "news_url": "https://www.sjshire.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Peel"
     },
     {
       "id": "shark-bay",
@@ -1077,7 +1182,8 @@
       "news_url": "https://www.sharkbay.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Gascoyne"
     },
     {
       "id": "south-perth",
@@ -1091,7 +1197,8 @@
       "date_selector": ".sp-news__date",
       "link_selector": "h3.sp-news__title a",
       "body_selector": ".sp-news__text",
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "stirling",
@@ -1101,7 +1208,8 @@
       "api_url": "https://www.stirling.wa.gov.au/ksearchnews/ksearchresult",
       "enabled": true,
       "use_curl": true,
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "subiaco",
@@ -1114,7 +1222,7 @@
       "date_selector": "properties.articleDate",
       "link_selector": "https://www.subiaco.wa.gov.au{route.path}",
       "population": 17975,
-      "region": "Perth Metro"
+      "region": "Perth metropolitan"
     },
     {
       "id": "swan",
@@ -1133,7 +1241,8 @@
       "date_selector": "div.date",
       "excerpt_selector": "div.hotbox-body p",
       "use_curl": true,
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "tammin",
@@ -1141,7 +1250,8 @@
       "news_url": "https://www.tammin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "three-springs",
@@ -1150,7 +1260,8 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "toodyay",
@@ -1158,7 +1269,8 @@
       "news_url": "https://www.toodyay.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "trayning",
@@ -1168,7 +1280,8 @@
       "enabled": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "upper-gascoyne",
@@ -1176,7 +1289,8 @@
       "news_url": "https://www.uppergascoyne.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Gascoyne"
     },
     {
       "id": "victoria-park",
@@ -1186,7 +1300,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Perth metropolitan"
     },
     {
       "id": "victoria-plains",
@@ -1194,7 +1309,8 @@
       "news_url": "https://www.victoriaplains.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "vincent",
@@ -1209,7 +1325,8 @@
       "enabled": true,
       "use_curl": true,
       "impersonate": "chrome124",
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "wagin",
@@ -1217,7 +1334,8 @@
       "news_url": "https://www.wagin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "wandering",
@@ -1225,7 +1343,8 @@
       "news_url": "https://www.wandering.wa.gov.au/news",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "wanneroo",
@@ -1239,7 +1358,8 @@
       "date_selector": ".subtext",
       "link_selector": "self",
       "excerpt_selector": "p:not(.subtext)",
-      "category": "A"
+      "category": "A",
+      "region": "Perth metropolitan"
     },
     {
       "id": "waroona",
@@ -1247,7 +1367,8 @@
       "news_url": "https://www.waroona.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Peel"
     },
     {
       "id": "west-arthur",
@@ -1255,7 +1376,8 @@
       "news_url": "https://www.westarthur.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "westonia",
@@ -1265,7 +1387,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Wheatbelt"
     },
     {
       "id": "wickepin",
@@ -1275,7 +1398,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Wheatbelt"
     },
     {
       "id": "williams",
@@ -1283,7 +1407,8 @@
       "news_url": "https://www.williams.wa.gov.au/news/?c=2",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "wiluna",
@@ -1291,7 +1416,8 @@
       "news_url": "https://www.wiluna.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Goldfields-Esperance"
     },
     {
       "id": "wongan-ballidu",
@@ -1299,7 +1425,8 @@
       "news_url": "https://www.wongan.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "woodanilling",
@@ -1307,7 +1434,8 @@
       "news_url": "https://www.woodanilling.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Great Southern"
     },
     {
       "id": "wyalkatchem",
@@ -1317,7 +1445,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Wheatbelt"
     },
     {
       "id": "wyndham-east-kimberley",
@@ -1325,7 +1454,8 @@
       "news_url": "https://www.swek.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Kimberley"
     },
     {
       "id": "yalgoo",
@@ -1335,7 +1465,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Mid West"
     },
     {
       "id": "yilgarn",
@@ -1345,7 +1476,8 @@
       "enabled": true,
       "use_curl": true,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
-      "category": "C"
+      "category": "C",
+      "region": "Wheatbelt"
     },
     {
       "id": "york",
@@ -1353,7 +1485,8 @@
       "news_url": "https://www.york.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "corrigin",
@@ -1361,7 +1494,8 @@
       "news_url": "https://www.corrigin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "kondinin",
@@ -1369,7 +1503,8 @@
       "news_url": "https://www.kondinin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Wheatbelt"
     },
     {
       "id": "murchison",
@@ -1377,7 +1512,8 @@
       "news_url": "https://www.murchison.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": false
+      "use_curl": false,
+      "region": "Mid West"
     },
     {
       "id": "murray",
@@ -1392,7 +1528,8 @@
         "link": "a",
         "excerpt": ".summary"
       },
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "region": "Peel"
     }
   ]
 }

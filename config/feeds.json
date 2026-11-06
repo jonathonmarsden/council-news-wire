@@ -1,0 +1,1665 @@
+{
+  "_comment": "Bluesky custom feeds, one per group of councils. A feed carries every post from the councils listed. 'basis' records the grouping the membership comes from (joint organisation, regional organisation of councils, state planning or development region, or a media market). Names are at most 24 characters and ids at most 15 (used as the feed record key).",
+  "version": 1,
+  "feeds": [
+    {
+      "id": "nsw-sydney",
+      "name": "Greater Sydney",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 33 councils of Greater Sydney, including Bayside, Blacktown, Blue Mountains, Burwood, Camden, Campbelltown, Canada Bay, Canterbury Bankstown, Cumberland, Fairfield, Georges River, Hawkesbury, Hornsby, Hunter's Hill, Inner West, Ku-ring-gai, Lane Cove, Liverpool and more. Relayed…",
+      "council_ids": [
+        "bayside-council",
+        "blacktown-city-council",
+        "blue-mountains-city-council",
+        "burwood-council",
+        "camden-council",
+        "campbelltown-city-council",
+        "city-of-canada-bay",
+        "city-of-canterbury-bankstown",
+        "city-of-parramatta",
+        "city-of-ryde",
+        "city-of-sydney",
+        "city-of-willoughby",
+        "cumberland-city-council",
+        "fairfield-city-council",
+        "georges-river-council",
+        "hawkesbury-city-council",
+        "hornsby-shire-council",
+        "hunters-hill-council",
+        "inner-west-council",
+        "ku-ring-gai-council",
+        "lane-cove-council",
+        "liverpool-city-council",
+        "mosman-council",
+        "north-sydney-council",
+        "northern-beaches-council",
+        "penrith-city-council",
+        "randwick-city-council",
+        "strathfield-council",
+        "sutherland-shire-council",
+        "the-hills-shire-council",
+        "waverley-council",
+        "wollondilly-shire-council",
+        "woollahra-municipal-council"
+      ],
+      "basis": "Greater Sydney (33 councils)"
+    },
+    {
+      "id": "nsw-inner-syd",
+      "name": "Inner Sydney",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 9 councils of Inner Sydney: Bayside, Burwood, Canada Bay, Inner West, Randwick, Strathfield, Sydney, Waverley, Woollahra. Relayed from each council's own news page.",
+      "council_ids": [
+        "bayside-council",
+        "burwood-council",
+        "city-of-canada-bay",
+        "city-of-sydney",
+        "inner-west-council",
+        "randwick-city-council",
+        "strathfield-council",
+        "waverley-council",
+        "woollahra-municipal-council"
+      ],
+      "basis": "Eastern City District (Greater Sydney planning)"
+    },
+    {
+      "id": "nsw-west-syd",
+      "name": "Western Sydney",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 13 councils of Western Sydney: Blacktown, Blue Mountains, Camden, Campbelltown, Canterbury Bankstown, Cumberland, Fairfield, Hawkesbury, Liverpool, Parramatta, Penrith, The Hills, Wollondilly. Relayed from each council's own news page.",
+      "council_ids": [
+        "blacktown-city-council",
+        "blue-mountains-city-council",
+        "camden-council",
+        "campbelltown-city-council",
+        "city-of-canterbury-bankstown",
+        "city-of-parramatta",
+        "cumberland-city-council",
+        "fairfield-city-council",
+        "hawkesbury-city-council",
+        "liverpool-city-council",
+        "penrith-city-council",
+        "the-hills-shire-council",
+        "wollondilly-shire-council"
+      ],
+      "basis": "Greater Western Sydney (WSROC 13-LGA definition)"
+    },
+    {
+      "id": "nsw-syd-growth",
+      "name": "Sydney growth councils",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 7 councils of Sydney growth councils: Blue Mountains, Camden, Campbelltown, Hawkesbury, Liverpool, Penrith, Wollondilly. Relayed from each council's own news page.",
+      "council_ids": [
+        "blue-mountains-city-council",
+        "camden-council",
+        "campbelltown-city-council",
+        "hawkesbury-city-council",
+        "liverpool-city-council",
+        "penrith-city-council",
+        "wollondilly-shire-council"
+      ],
+      "basis": "Outer Western Sydney Alliance (formerly Western Parkland Councils / 'The Parks')"
+    },
+    {
+      "id": "nsw-north-syd",
+      "name": "Northern Sydney",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 8 councils of Northern Sydney: Hornsby, Hunter's Hill, Ku-ring-gai, Lane Cove, Mosman, North Sydney, Ryde, Willoughby. Relayed from each council's own news page.",
+      "council_ids": [
+        "city-of-ryde",
+        "city-of-willoughby",
+        "hornsby-shire-council",
+        "hunters-hill-council",
+        "ku-ring-gai-council",
+        "lane-cove-council",
+        "mosman-council",
+        "north-sydney-council"
+      ],
+      "basis": "Northern Sydney Regional Organisation of Councils (NSROC)"
+    },
+    {
+      "id": "nsw-se-syd",
+      "name": "Southern & Eastern Sydne",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 12 councils of Southern & Eastern Sydne: Bayside, Burwood, Canada Bay, Canterbury Bankstown, Georges River, Inner West, Randwick, Strathfield, Sutherland, Sydney, Waverley, Woollahra. Relayed from each council's own news page.",
+      "council_ids": [
+        "bayside-council",
+        "burwood-council",
+        "city-of-canada-bay",
+        "city-of-canterbury-bankstown",
+        "city-of-sydney",
+        "georges-river-council",
+        "inner-west-council",
+        "randwick-city-council",
+        "strathfield-council",
+        "sutherland-shire-council",
+        "waverley-council",
+        "woollahra-municipal-council"
+      ],
+      "basis": "Southern Sydney Regional Organisation of Councils (SSROC)"
+    },
+    {
+      "id": "nsw-macarthur",
+      "name": "Macarthur",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 3 councils of Macarthur: Camden, Campbelltown, Wollondilly. Relayed from each council's own news page.",
+      "council_ids": [
+        "camden-council",
+        "campbelltown-city-council",
+        "wollondilly-shire-council"
+      ],
+      "basis": "Macarthur"
+    },
+    {
+      "id": "nsw-hunter",
+      "name": "Hunter",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 10 councils of Hunter: Cessnock, Dungog, Lake Macquarie, Maitland, MidCoast, Muswellbrook, Newcastle, Port Stephens, Singleton, Upper Hunter. Relayed from each council's own news page.",
+      "council_ids": [
+        "cessnock-city-council",
+        "city-of-newcastle",
+        "dungog-shire-council",
+        "lake-macquarie-city-council",
+        "maitland-city-council",
+        "midcoast-council",
+        "muswellbrook-shire-council",
+        "port-stephens-council",
+        "singleton-council",
+        "upper-hunter-shire-council"
+      ],
+      "basis": "Hunter Joint Organisation"
+    },
+    {
+      "id": "nsw-newcastle",
+      "name": "Greater Newcastle",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 5 councils of Greater Newcastle: Cessnock, Lake Macquarie, Maitland, Newcastle, Port Stephens. Relayed from each council's own news page.",
+      "council_ids": [
+        "cessnock-city-council",
+        "city-of-newcastle",
+        "lake-macquarie-city-council",
+        "maitland-city-council",
+        "port-stephens-council"
+      ],
+      "basis": "Greater Newcastle"
+    },
+    {
+      "id": "nsw-central-cst",
+      "name": "Central Coast",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from Central Coast Council. Relayed from each council's own news page.",
+      "council_ids": [
+        "central-coast-council"
+      ],
+      "basis": "single council, no shared grouping (open question)"
+    },
+    {
+      "id": "nsw-illawarra",
+      "name": "Illawarra",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 3 councils of Illawarra: Kiama, Shellharbour, Wollongong. Relayed from each council's own news page.",
+      "council_ids": [
+        "kiama-municipal-council",
+        "shellharbour-city-council",
+        "wollongong-city-council"
+      ],
+      "basis": "Illawarra"
+    },
+    {
+      "id": "nsw-south-coast",
+      "name": "NSW South Coast",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 3 councils of NSW South Coast: Bega Valley, Eurobodalla, Shoalhaven. Relayed from each council's own news page.",
+      "council_ids": [
+        "bega-valley-shire-council",
+        "eurobodalla-shire-council",
+        "shoalhaven-city-council"
+      ],
+      "basis": "NSW South Coast"
+    },
+    {
+      "id": "nsw-cbr-region",
+      "name": "Canberra Region NSW",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 10 councils of Canberra Region NSW: Bega Valley, Eurobodalla, Goulburn Mulwaree, Hilltops, Queanbeyan-Palerang, Snowy Monaro, Snowy Valleys, Upper Lachlan, Wingecarribee, Yass Valley. Relayed from each council's own news page.",
+      "council_ids": [
+        "bega-valley-shire-council",
+        "eurobodalla-shire-council",
+        "goulburn-mulwaree-council",
+        "hilltops-council",
+        "queanbeyan-palerang-regional-council",
+        "snowy-monaro-regional-council",
+        "snowy-valleys-council",
+        "upper-lachlan-shire-council",
+        "wingecarribee-shire-council",
+        "yass-valley-council"
+      ],
+      "basis": "Canberra Region Joint Organisation"
+    },
+    {
+      "id": "nsw-mid-north",
+      "name": "Mid North Coast",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 6 councils of Mid North Coast: Bellingen, Coffs Harbour, Kempsey, MidCoast, Nambucca Valley, Port Macquarie-Hastings. Relayed from each council's own news page.",
+      "council_ids": [
+        "bellingen-shire-council",
+        "coffs-harbour-city-council",
+        "kempsey-shire-council",
+        "midcoast-council",
+        "nambucca-valley-council",
+        "port-macquarie-hastings-council"
+      ],
+      "basis": "Mid North Coast"
+    },
+    {
+      "id": "nsw-n-rivers",
+      "name": "Northern Rivers",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 7 councils of Northern Rivers: Ballina, Byron, Clarence Valley, Kyogle, Lismore, Richmond Valley, Tweed. Relayed from each council's own news page.",
+      "council_ids": [
+        "ballina-shire-council",
+        "byron-shire-council",
+        "clarence-valley-council",
+        "kyogle-council",
+        "lismore-city-council",
+        "richmond-valley-council",
+        "tweed-shire-council"
+      ],
+      "basis": "Northern Rivers Joint Organisation"
+    },
+    {
+      "id": "nsw-new-england",
+      "name": "New England North West",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 12 councils of New England North West: Armidale, Glen Innes Severn, Gunnedah, Gwydir, Inverell, Liverpool Plains, Moree Plains, Narrabri, Tamworth, Tenterfield, Uralla, Walcha. Relayed from each council's own news page.",
+      "council_ids": [
+        "armidale-regional-council",
+        "glen-innes-severn-council",
+        "gunnedah-shire-council",
+        "gwydir-shire-council",
+        "inverell-shire-council",
+        "liverpool-plains-shire-council",
+        "moree-plains-shire-council",
+        "narrabri-shire-council",
+        "tamworth-regional-council",
+        "tenterfield-shire-council",
+        "uralla-shire-council",
+        "walcha-council"
+      ],
+      "basis": "New England North West"
+    },
+    {
+      "id": "nsw-central-w",
+      "name": "Central West NSW",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 12 councils of Central West NSW: Bathurst, Blayney, Cabonne, Cowra, Forbes, Lachlan, Lithgow, Mid-Western, Oberon, Orange, Parkes, Weddin. Relayed from each council's own news page.",
+      "council_ids": [
+        "bathurst-regional-council",
+        "blayney-shire-council",
+        "cabonne-council",
+        "cowra-council",
+        "forbes-shire-council",
+        "lachlan-shire-council",
+        "lithgow-city-council",
+        "mid-western-regional-council",
+        "oberon-council",
+        "orange-city-council",
+        "parkes-shire-council",
+        "weddin-shire-council"
+      ],
+      "basis": "Central West"
+    },
+    {
+      "id": "nsw-orana",
+      "name": "Orana & Far North West",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 11 councils of Orana & Far North West: Bogan, Bourke, Brewarrina, Cobar, Coonamble, Dubbo, Gilgandra, Narromine, Walgett, Warren, Warrumbungle. Relayed from each council's own news page.",
+      "council_ids": [
+        "bogan-shire-council",
+        "bourke-shire-council",
+        "brewarrina-shire-council",
+        "cobar-shire-council",
+        "coonamble-shire-council",
+        "dubbo-regional-council",
+        "gilgandra-shire-council",
+        "narromine-shire-council",
+        "walgett-shire-council",
+        "warren-shire-council",
+        "warrumbungle-shire-council"
+      ],
+      "basis": "Western Plains / Orana (Dubbo region)"
+    },
+    {
+      "id": "nsw-riverina",
+      "name": "Riverina",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 15 councils of Riverina: Bland, Carrathool, Coolamon, Cootamundra-Gundagai, Griffith, Hay, Hilltops, Junee, Leeton, Lockhart, Murrumbidgee, Narrandera, Snowy Valleys, Temora, Wagga Wagga. Relayed from each council's own news page.",
+      "council_ids": [
+        "bland-shire-council",
+        "carrathool-shire-council",
+        "coolamon-shire-council",
+        "cootamundra-gundagai-regional-council",
+        "griffith-city-council",
+        "hay-shire-council",
+        "hilltops-council",
+        "junee-shire-council",
+        "leeton-shire-council",
+        "lockhart-shire-council",
+        "murrumbidgee-council",
+        "narrandera-shire-council",
+        "snowy-valleys-council",
+        "temora-shire-council",
+        "wagga-wagga-city-council"
+      ],
+      "basis": "Riverina (broad)"
+    },
+    {
+      "id": "nsw-murray",
+      "name": "The Murray NSW",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 8 councils of The Murray NSW: Albury, Balranald, Berrigan, Edward River, Federation, Greater Hume, Murray River, Wentworth. Relayed from each council's own news page.",
+      "council_ids": [
+        "albury-city-council",
+        "balranald-shire-council",
+        "berrigan-shire-council",
+        "edward-river-council",
+        "federation-council",
+        "greater-hume-council",
+        "murray-river-council",
+        "wentworth-shire-council"
+      ],
+      "basis": "The Murray (NSW side, RDA Murray)"
+    },
+    {
+      "id": "nsw-far-west",
+      "name": "Far West NSW",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 4 councils of Far West NSW: Balranald, Broken Hill, Central Darling, Wentworth. Relayed from each council's own news page.",
+      "council_ids": [
+        "balranald-shire-council",
+        "broken-hill-city-council",
+        "central-darling-shire-council",
+        "wentworth-shire-council"
+      ],
+      "basis": "Far West Joint Organisation (Far South West JO)"
+    },
+    {
+      "id": "albury-wodonga",
+      "name": "Albury-Wodonga",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 4 councils of Albury-Wodonga: Albury, Federation, Greater Hume, Wodonga. Relayed from each council's own news page.",
+      "council_ids": [
+        "albury-city-council",
+        "federation-council",
+        "greater-hume-council",
+        "wodonga"
+      ],
+      "basis": "Albury-Wodonga / The Border"
+    },
+    {
+      "id": "sunraysia",
+      "name": "Sunraysia",
+      "state": "NSW",
+      "kind": "region",
+      "description": "News from the 3 councils of Sunraysia: Balranald, Mildura Rural, Wentworth. Relayed from each council's own news page.",
+      "council_ids": [
+        "balranald-shire-council",
+        "mildura",
+        "wentworth-shire-council"
+      ],
+      "basis": "Sunraysia"
+    },
+    {
+      "id": "act-canberra",
+      "name": "Canberra & surrounds",
+      "state": "ACT",
+      "kind": "region",
+      "description": "News from the 5 councils of Canberra & surrounds: ACT Government, ACT Government, ACT Government, Queanbeyan-Palerang, Yass Valley. Relayed from each council's own news page.",
+      "council_ids": [
+        "act_gov",
+        "act_ministers",
+        "our_canberra",
+        "queanbeyan-palerang-regional-council",
+        "yass-valley-council"
+      ],
+      "basis": "ACT + Queanbeyan-Palerang + Yass Valley (CRJO core)"
+    },
+    {
+      "id": "vic-melbourne",
+      "name": "Greater Melbourne",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 32 councils of Greater Melbourne, including Banyule, Bayside, Boroondara, Brimbank, Cardinia, Casey, Darebin, Frankston, Glen Eira, Greater Dandenong, Hobsons Bay, Hume, Kingston, Knox, Manningham, Maribyrnong, Maroondah, Melbourne, Melton, Merri-bek, Mitchell and more. Relayed…",
+      "council_ids": [
+        "banyule",
+        "bayside",
+        "boroondara",
+        "brimbank",
+        "cardinia",
+        "casey",
+        "darebin",
+        "frankston",
+        "glen-eira",
+        "greater-dandenong",
+        "hobsons-bay",
+        "hume",
+        "kingston",
+        "knox",
+        "manningham",
+        "maribyrnong",
+        "maroondah",
+        "melbourne",
+        "melton",
+        "merri-bek",
+        "mitchell",
+        "monash",
+        "moonee-valley",
+        "mornington-peninsula",
+        "nillumbik",
+        "port-phillip",
+        "stonnington",
+        "whitehorse",
+        "whittlesea",
+        "wyndham",
+        "yarra",
+        "yarra-ranges"
+      ],
+      "basis": "Melbourne's six metropolitan regions"
+    },
+    {
+      "id": "vic-m9",
+      "name": "M9 inner Melbourne",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 9 councils of M9 inner Melbourne: Darebin, Hobsons Bay, Maribyrnong, Melbourne, Merri-bek, Moonee Valley, Port Phillip, Stonnington, Yarra. Relayed from each council's own news page.",
+      "council_ids": [
+        "darebin",
+        "hobsons-bay",
+        "maribyrnong",
+        "melbourne",
+        "merri-bek",
+        "moonee-valley",
+        "port-phillip",
+        "stonnington",
+        "yarra"
+      ],
+      "basis": "M9 (Melbourne 9) inner Melbourne councils"
+    },
+    {
+      "id": "vic-outer-melb",
+      "name": "Melbourne outer councils",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 10 councils of Melbourne outer councils: Cardinia, Casey, Hume, Melton, Mitchell, Mornington Peninsula, Nillumbik, Whittlesea, Wyndham, Yarra Ranges. Relayed from each council's own news page.",
+      "council_ids": [
+        "cardinia",
+        "casey",
+        "hume",
+        "melton",
+        "mitchell",
+        "mornington-peninsula",
+        "nillumbik",
+        "whittlesea",
+        "wyndham",
+        "yarra-ranges"
+      ],
+      "basis": "Outer Melbourne Councils (formerly Interface Councils)"
+    },
+    {
+      "id": "vic-melb-west",
+      "name": "Melbourne's west",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 6 councils of Melbourne's west: Brimbank, Hobsons Bay, Maribyrnong, Melton, Moonee Valley, Wyndham. Relayed from each council's own news page.",
+      "council_ids": [
+        "brimbank",
+        "hobsons-bay",
+        "maribyrnong",
+        "melton",
+        "moonee-valley",
+        "wyndham"
+      ],
+      "basis": "Western Metro region (Melbourne)"
+    },
+    {
+      "id": "vic-melb-north",
+      "name": "Melbourne's north",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 7 councils of Melbourne's north: Banyule, Darebin, Hume, Merri-bek, Mitchell, Nillumbik, Whittlesea. Relayed from each council's own news page.",
+      "council_ids": [
+        "banyule",
+        "darebin",
+        "hume",
+        "merri-bek",
+        "mitchell",
+        "nillumbik",
+        "whittlesea"
+      ],
+      "basis": "Northern Metro region (Melbourne)"
+    },
+    {
+      "id": "vic-melb-east",
+      "name": "Melbourne's east",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 6 councils of Melbourne's east: Knox, Manningham, Maroondah, Monash, Whitehorse, Yarra Ranges. Relayed from each council's own news page.",
+      "council_ids": [
+        "knox",
+        "manningham",
+        "maroondah",
+        "monash",
+        "whitehorse",
+        "yarra-ranges"
+      ],
+      "basis": "Eastern Metro region (Melbourne)"
+    },
+    {
+      "id": "vic-melb-se",
+      "name": "Melbourne's south east",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 8 councils of Melbourne's south east: Cardinia, Casey, Frankston, Greater Dandenong, Kingston, Knox, Monash, Mornington Peninsula. Relayed from each council's own news page.",
+      "council_ids": [
+        "cardinia",
+        "casey",
+        "frankston",
+        "greater-dandenong",
+        "kingston",
+        "knox",
+        "monash",
+        "mornington-peninsula"
+      ],
+      "basis": "Greater South East Melbourne (GSEM, formerly SEM)"
+    },
+    {
+      "id": "vic-melb-ise",
+      "name": "Melbourne inner south-ea",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 4 councils of Melbourne inner south-ea: Bayside, Boroondara, Glen Eira, Stonnington. Relayed from each council's own news page.",
+      "council_ids": [
+        "bayside",
+        "boroondara",
+        "glen-eira",
+        "stonnington"
+      ],
+      "basis": "Inner South-East Metro region (Melbourne)"
+    },
+    {
+      "id": "vic-geelong",
+      "name": "Geelong region (G21)",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 5 councils of Geelong region (G21): Borough of Queenscliffe, Colac Otway, Golden Plains, Greater Geelong, Surf Coast. Relayed from each council's own news page.",
+      "council_ids": [
+        "colac-otway",
+        "golden-plains",
+        "greater-geelong",
+        "queenscliffe",
+        "surf-coast"
+      ],
+      "basis": "G21 Geelong Region Alliance"
+    },
+    {
+      "id": "vic-south-west",
+      "name": "South West Victoria",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 5 councils of South West Victoria: Corangamite, Glenelg, Moyne, Southern Grampians, Warrnambool. Relayed from each council's own news page.",
+      "council_ids": [
+        "corangamite",
+        "glenelg",
+        "moyne",
+        "southern-grampians",
+        "warrnambool"
+      ],
+      "basis": "Great South Coast (Regional Partnership)"
+    },
+    {
+      "id": "vic-great-ocean",
+      "name": "Great Ocean Road",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 5 councils of Great Ocean Road: Colac Otway, Corangamite, Moyne, Surf Coast, Warrnambool. Relayed from each council's own news page.",
+      "council_ids": [
+        "colac-otway",
+        "corangamite",
+        "moyne",
+        "surf-coast",
+        "warrnambool"
+      ],
+      "basis": "Great Ocean Road (tourism region)"
+    },
+    {
+      "id": "vic-ballarat",
+      "name": "Ballarat & Highlands",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 6 councils of Ballarat & Highlands: Ararat Rural, Ballarat, Golden Plains, Hepburn, Moorabool, Pyrenees. Relayed from each council's own news page.",
+      "council_ids": [
+        "ararat",
+        "ballarat",
+        "golden-plains",
+        "hepburn",
+        "moorabool",
+        "pyrenees"
+      ],
+      "basis": "Central Highlands (Regional Partnership)"
+    },
+    {
+      "id": "vic-bendigo",
+      "name": "Bendigo & Loddon",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 6 councils of Bendigo & Loddon: Campaspe, Central Goldfields, Greater Bendigo, Loddon, Macedon Ranges, Mount Alexander. Relayed from each council's own news page.",
+      "council_ids": [
+        "campaspe",
+        "central-goldfields",
+        "greater-bendigo",
+        "loddon",
+        "macedon-ranges",
+        "mount-alexander"
+      ],
+      "basis": "Loddon Campaspe (Regional Partnership)"
+    },
+    {
+      "id": "vic-goulburn",
+      "name": "Goulburn Valley",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 5 councils of Goulburn Valley: Greater Shepparton, Mitchell, Moira, Murrindindi, Strathbogie. Relayed from each council's own news page.",
+      "council_ids": [
+        "greater-shepparton",
+        "mitchell",
+        "moira",
+        "murrindindi",
+        "strathbogie"
+      ],
+      "basis": "Goulburn (Regional Partnership)"
+    },
+    {
+      "id": "vic-north-east",
+      "name": "North East Victoria",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 7 councils of North East Victoria: Alpine, Benalla Rural, Indigo, Mansfield, Towong, Wangaratta Rural, Wodonga. Relayed from each council's own news page.",
+      "council_ids": [
+        "alpine",
+        "benalla",
+        "indigo",
+        "mansfield",
+        "towong",
+        "wangaratta",
+        "wodonga"
+      ],
+      "basis": "Ovens Murray (Regional Partnership)"
+    },
+    {
+      "id": "vic-gippsland",
+      "name": "Gippsland",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 6 councils of Gippsland: Bass Coast, Baw Baw, East Gippsland, Latrobe, South Gippsland, Wellington. Relayed from each council's own news page.",
+      "council_ids": [
+        "bass-coast",
+        "baw-baw",
+        "east-gippsland",
+        "latrobe-vic",
+        "south-gippsland",
+        "wellington"
+      ],
+      "basis": "Gippsland (Regional Partnership)"
+    },
+    {
+      "id": "vic-wimmera",
+      "name": "Wimmera Southern Mallee",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 5 councils of Wimmera Southern Mallee: Hindmarsh, Horsham Rural, Northern Grampians, West Wimmera, Yarriambiack. Relayed from each council's own news page.",
+      "council_ids": [
+        "hindmarsh",
+        "horsham",
+        "northern-grampians",
+        "west-wimmera",
+        "yarriambiack"
+      ],
+      "basis": "Wimmera Southern Mallee (Regional Partnership)"
+    },
+    {
+      "id": "vic-mallee",
+      "name": "Mallee",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 4 councils of Mallee: Buloke, Gannawarra, Mildura Rural, Swan Hill Rural. Relayed from each council's own news page.",
+      "council_ids": [
+        "buloke",
+        "gannawarra",
+        "mildura",
+        "swan-hill"
+      ],
+      "basis": "Mallee (Regional Partnership)"
+    },
+    {
+      "id": "vic-yarra-dand",
+      "name": "Yarra Valley & Dandenong",
+      "state": "VIC",
+      "kind": "region",
+      "description": "News from the 3 councils of Yarra Valley & Dandenong: Cardinia, Nillumbik, Yarra Ranges. Relayed from each council's own news page.",
+      "council_ids": [
+        "cardinia",
+        "nillumbik",
+        "yarra-ranges"
+      ],
+      "basis": "Yarra Valley and Dandenong Ranges (Tourism East)"
+    },
+    {
+      "id": "qld-seq",
+      "name": "South East Queensland",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 12 councils of South East Queensland: Brisbane, Gold Coast, Ipswich, Lockyer Valley, Logan, Moreton Bay, Noosa, Redland, Scenic Rim, Somerset, Sunshine Coast, Toowoomba. Relayed from each council's own news page.",
+      "council_ids": [
+        "brisbane",
+        "gold-coast",
+        "ipswich",
+        "lockyer-valley",
+        "logan",
+        "moreton-bay",
+        "noosa",
+        "redland",
+        "scenic-rim",
+        "somerset",
+        "sunshine-coast",
+        "toowoomba"
+      ],
+      "basis": "South East Queensland (geographic, incl. Gold Coast)"
+    },
+    {
+      "id": "qld-brisbane",
+      "name": "Greater Brisbane",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 8 councils of Greater Brisbane: Brisbane, Ipswich, Lockyer Valley, Logan, Moreton Bay, Redland, Scenic Rim, Somerset. Relayed from each council's own news page.",
+      "council_ids": [
+        "brisbane",
+        "ipswich",
+        "lockyer-valley",
+        "logan",
+        "moreton-bay",
+        "redland",
+        "scenic-rim",
+        "somerset"
+      ],
+      "basis": "Greater Brisbane (ABS GCCSA)"
+    },
+    {
+      "id": "qld-bris-growth",
+      "name": "Brisbane growth councils",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 4 councils of Brisbane growth councils: Ipswich, Logan, Moreton Bay, Redland. Relayed from each council's own news page.",
+      "council_ids": [
+        "ipswich",
+        "logan",
+        "moreton-bay",
+        "redland"
+      ],
+      "basis": "Greater Brisbane outer metro / growth councils"
+    },
+    {
+      "id": "qld-sunshine",
+      "name": "Sunshine Coast & Noosa",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 2 councils of Sunshine Coast & Noosa: Noosa, Sunshine Coast. Relayed from each council's own news page.",
+      "council_ids": [
+        "noosa",
+        "sunshine-coast"
+      ],
+      "basis": "Sunshine Coast and Noosa"
+    },
+    {
+      "id": "qld-darling-dn",
+      "name": "Darling Downs & SW Qld",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 10 councils of Darling Downs & SW Qld: Balonne, Bulloo, Goondiwindi, Maranoa, Murweh, Paroo, Quilpie, Southern Downs, Toowoomba, Western Downs. Relayed from each council's own news page.",
+      "council_ids": [
+        "balonne",
+        "bulloo",
+        "goondiwindi",
+        "maranoa",
+        "murweh",
+        "paroo",
+        "quilpie",
+        "southern-downs",
+        "toowoomba",
+        "western-downs"
+      ],
+      "basis": "Darling Downs and South West Queensland Council of Mayors (DDSWQCoM)"
+    },
+    {
+      "id": "qld-wide-bay",
+      "name": "Wide Bay Burnett",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 6 councils of Wide Bay Burnett: Bundaberg, Cherbourg Aboriginal, Fraser Coast, Gympie, North Burnett, South Burnett. Relayed from each council's own news page.",
+      "council_ids": [
+        "bundaberg",
+        "cherbourg-aboriginal-shire",
+        "fraser-coast",
+        "gympie",
+        "north-burnett",
+        "south-burnett"
+      ],
+      "basis": "Wide Bay Burnett ROC (WBBROC)"
+    },
+    {
+      "id": "qld-central",
+      "name": "Central Queensland",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 6 councils of Central Queensland: Banana, Central Highlands, Gladstone, Livingstone, Rockhampton, Woorabinda Aboriginal. Relayed from each council's own news page.",
+      "council_ids": [
+        "banana",
+        "central-highlands-qld",
+        "gladstone",
+        "livingstone",
+        "rockhampton",
+        "woorabinda"
+      ],
+      "basis": "Central Queensland ROC (CQROC)"
+    },
+    {
+      "id": "qld-mackay",
+      "name": "Mackay-Whitsunday",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 3 councils of Mackay-Whitsunday: Isaac, Mackay, Whitsunday. Relayed from each council's own news page.",
+      "council_ids": [
+        "isaac",
+        "mackay",
+        "whitsunday"
+      ],
+      "basis": "Greater Whitsunday Council of Mayors (formerly MIWROC / Whitsunday ROC)"
+    },
+    {
+      "id": "qld-north",
+      "name": "North Queensland",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 5 councils of North Queensland: Burdekin, Charters Towers, Hinchinbrook, Palm Island Aboriginal, Townsville. Relayed from each council's own news page.",
+      "council_ids": [
+        "burdekin",
+        "charters-towers",
+        "hinchinbrook",
+        "palm-island",
+        "townsville"
+      ],
+      "basis": "North Queensland ROC (NQROC)"
+    },
+    {
+      "id": "qld-far-north",
+      "name": "Far North Queensland",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 11 councils of Far North Queensland: Cairns, Cassowary Coast, Cook, Croydon, Douglas, Etheridge, Hinchinbrook, Hope Vale Aboriginal, Mareeba, Tablelands, Wujal Wujal Aboriginal. Relayed from each council's own news page.",
+      "council_ids": [
+        "cairns",
+        "cassowary-coast",
+        "cook",
+        "croydon",
+        "douglas",
+        "etheridge",
+        "hinchinbrook",
+        "hope-vale",
+        "mareeba",
+        "tablelands",
+        "wujal-wujal"
+      ],
+      "basis": "Far North Queensland ROC (FNQROC)"
+    },
+    {
+      "id": "qld-cape-torres",
+      "name": "Cape York & Torres Strai",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 14 councils of Cape York & Torres Strai, including Aurukun, Cook, Doomadgee Aboriginal, Hope Vale Aboriginal, Kowanyama Aboriginal, Lockhart River Aboriginal, Mapoon Aboriginal, Mornington, Napranum Aboriginal, Northern Peninsula Area, Palm Island Aboriginal, Torres and more.…",
+      "council_ids": [
+        "aurukun",
+        "cook",
+        "doomadgee",
+        "hope-vale",
+        "kowanyama",
+        "lockhart-river",
+        "mapoon",
+        "mornington",
+        "napranum",
+        "northern-peninsula-area",
+        "palm-island",
+        "torres",
+        "torres-strait-island",
+        "wujal-wujal"
+      ],
+      "basis": "Torres and Cape Indigenous Council Alliance (TCICA)"
+    },
+    {
+      "id": "qld-outback",
+      "name": "Outback Queensland",
+      "state": "QLD",
+      "kind": "region",
+      "description": "News from the 22 councils of Outback Queensland: Balonne, Barcaldine, Barcoo, Blackall Tambo, Boulia, Bulloo, Burke, Carpentaria, Cloncurry, Diamantina, Doomadgee Aboriginal, Etheridge, Flinders, Longreach, Maranoa, McKinlay, Mount Isa, Murweh, Paroo, Quilpie, Richmond, Winton. Relayed from each…",
+      "council_ids": [
+        "balonne",
+        "barcaldine",
+        "barcoo",
+        "blackall-tambo",
+        "boulia",
+        "bulloo",
+        "burke",
+        "carpentaria",
+        "cloncurry",
+        "diamantina",
+        "doomadgee",
+        "etheridge",
+        "flinders-qld",
+        "longreach",
+        "maranoa",
+        "mckinlay",
+        "mount-isa",
+        "murweh",
+        "paroo",
+        "quilpie",
+        "richmond",
+        "winton"
+      ],
+      "basis": "Western Queensland Alliance of Councils (WQAC)"
+    },
+    {
+      "id": "sa-adelaide",
+      "name": "Greater Adelaide",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 17 councils of Greater Adelaide: Adelaide, Burnside, Campbelltown, Charles Sturt, Holdfast Bay, Marion, Mitcham, Norwood Payneham & St Peters, Onkaparinga, Playford, Port Adelaide Enfield, Prospect, Salisbury, Tea Tree Gully, Unley, Walkerville, West Torrens. Relayed from each…",
+      "council_ids": [
+        "adelaide",
+        "burnside",
+        "campbelltown-city",
+        "charles-sturt",
+        "holdfast-bay",
+        "marion",
+        "mitcham",
+        "norwood-payneham-&-st-peters",
+        "onkaparinga",
+        "playford",
+        "port-adelaide-enfield",
+        "prospect",
+        "salisbury",
+        "tea-tree-gully",
+        "unley",
+        "walkerville",
+        "west-torrens"
+      ],
+      "basis": "Greater Adelaide metro (17 metropolitan councils)"
+    },
+    {
+      "id": "sa-adl-east",
+      "name": "Eastern Adelaide",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 8 councils of Eastern Adelaide: Adelaide, Burnside, Campbelltown, Norwood Payneham & St Peters, Prospect, Tea Tree Gully, Unley, Walkerville. Relayed from each council's own news page.",
+      "council_ids": [
+        "adelaide",
+        "burnside",
+        "campbelltown-city",
+        "norwood-payneham-&-st-peters",
+        "prospect",
+        "tea-tree-gully",
+        "unley",
+        "walkerville"
+      ],
+      "basis": "Eastern Adelaide (Resilient East)"
+    },
+    {
+      "id": "sa-adl-south",
+      "name": "Southern Adelaide",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 4 councils of Southern Adelaide: Holdfast Bay, Marion, Mitcham, Onkaparinga. Relayed from each council's own news page.",
+      "council_ids": [
+        "holdfast-bay",
+        "marion",
+        "mitcham",
+        "onkaparinga"
+      ],
+      "basis": "Southern Adelaide (Resilient South)"
+    },
+    {
+      "id": "sa-adl-nw",
+      "name": "North & West Adelaide",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 5 councils of North & West Adelaide: Charles Sturt, Playford, Port Adelaide Enfield, Salisbury, West Torrens. Relayed from each council's own news page.",
+      "council_ids": [
+        "charles-sturt",
+        "playford",
+        "port-adelaide-enfield",
+        "salisbury",
+        "west-torrens"
+      ],
+      "basis": "Northern Adelaide (Adapting Northern Adelaide) + Western Adelaide (AdaptWest)"
+    },
+    {
+      "id": "sa-barossa",
+      "name": "Barossa, Gawler & Light",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 4 councils of Barossa, Gawler & Light: Adelaide Plains, Gawler, Light, The Barossa. Relayed from each council's own news page.",
+      "council_ids": [
+        "adelaide-plains",
+        "barossa",
+        "gawler",
+        "light-regional"
+      ],
+      "basis": "Barossa, Gawler, Light and Adelaide Plains"
+    },
+    {
+      "id": "sa-hills-fleur",
+      "name": "Adelaide Hills & Fleurie",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 6 councils of Adelaide Hills & Fleurie: Adelaide Hills, Alexandrina, District of Yankalilla, Kangaroo Island, Mount Barker District, Victor Harbor. Relayed from each council's own news page.",
+      "council_ids": [
+        "adelaide-hills",
+        "alexandrina",
+        "kangaroo-island",
+        "mount-barker-district",
+        "victor-harbor",
+        "yankalilla"
+      ],
+      "basis": "Southern and Hills (SHLGA)"
+    },
+    {
+      "id": "sa-limestone",
+      "name": "Limestone Coast",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 7 councils of Limestone Coast: District of Grant, District of Robe, Kingston District, Mount Gambier, Naracoorte Lucindale, Tatiara District, Wattle Range. Relayed from each council's own news page.",
+      "council_ids": [
+        "grant",
+        "kingston-district",
+        "mount-gambier",
+        "naracoorte-lucindale",
+        "robe",
+        "tatiara-district",
+        "wattle-range"
+      ],
+      "basis": "Limestone Coast"
+    },
+    {
+      "id": "sa-murray-river",
+      "name": "Murraylands & Riverland",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 8 councils of Murraylands & Riverland: Berri Barmera, Coorong District, District of Karoonda East Murray, District of Loxton Waikerie, Mid Murray, Renmark Paringa, Rural Murray Bridge, Southern Mallee District. Relayed from each council's own news page.",
+      "council_ids": [
+        "berri-barmera",
+        "coorong-district",
+        "karoonda-east-murray",
+        "loxton-waikerie",
+        "mid-murray",
+        "murray-bridge",
+        "renmark-paringa",
+        "southern-mallee-district"
+      ],
+      "basis": "Murraylands and Riverland (MRLGA)"
+    },
+    {
+      "id": "sa-eyre",
+      "name": "Eyre Peninsula",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 11 councils of Eyre Peninsula: District of Ceduna, District of Cleve, District of Elliston, District of Franklin Harbour, District of Kimba, District of Streaky Bay, District of Tumby Bay, Lower Eyre, Port Lincoln, Whyalla, Wudinna District. Relayed from each council's own news page.",
+      "council_ids": [
+        "ceduna",
+        "cleve",
+        "elliston",
+        "franklin-harbour",
+        "kimba",
+        "lower-eyre",
+        "port-lincoln",
+        "streaky-bay",
+        "tumby-bay",
+        "whyalla",
+        "wudinna-district"
+      ],
+      "basis": "Eyre Peninsula (EPLGA)"
+    },
+    {
+      "id": "sa-yorke-mid-n",
+      "name": "Yorke & Mid North",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 15 councils of Yorke & Mid North, including Adelaide Plains, Barunga West, Clare and Gilbert Valleys, Copper Coast, District of Mount Remarkable, District of Orroroo Carrieton, District of Peterborough, Light, Northern Areas, Port Pirie, Regional of Goyder and more. Relayed from…",
+      "council_ids": [
+        "adelaide-plains",
+        "barossa",
+        "barunga-west",
+        "clare-and-gilbert-valleys",
+        "copper-coast",
+        "flinders-ranges",
+        "goyder",
+        "light-regional",
+        "mount-remarkable",
+        "northern-areas",
+        "orroroo-carrieton",
+        "peterborough",
+        "port-pirie-regional",
+        "wakefield-regional",
+        "yorke-peninsula"
+      ],
+      "basis": "Legatus Group / Northern and Yorke (Central Local Government Region)"
+    },
+    {
+      "id": "sa-spencer-gulf",
+      "name": "Spencer Gulf Cities",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 3 councils of Spencer Gulf Cities: Port Augusta, Port Pirie, Whyalla. Relayed from each council's own news page.",
+      "council_ids": [
+        "port-augusta-city",
+        "port-pirie-regional",
+        "whyalla"
+      ],
+      "basis": "Spencer Gulf Cities"
+    },
+    {
+      "id": "sa-flinders",
+      "name": "Flinders Ranges & Outbac",
+      "state": "SA",
+      "kind": "region",
+      "description": "News from the 4 councils of Flinders Ranges & Outbac: District of Coober Pedy, Municipal of Roxby Downs, Port Augusta, The Flinders Ranges. Relayed from each council's own news page.",
+      "council_ids": [
+        "coober-pedy",
+        "flinders-ranges",
+        "port-augusta-city",
+        "roxby-downs"
+      ],
+      "basis": "Flinders Ranges and Outback"
+    },
+    {
+      "id": "wa-perth",
+      "name": "Perth",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 29 councils of Perth, including Armadale, Bassendean, Bayswater, Belmont, Cambridge, Canning, Claremont, Cockburn, Cottesloe, East Fremantle, Fremantle, Gosnells, Joondalup, Kalamunda, Kwinana, Melville, Mosman Park, Mundaring, Nedlands, Peppermint Grove, Perth and more. Relayed…",
+      "council_ids": [
+        "armadale",
+        "bassendean",
+        "bayswater",
+        "belmont",
+        "cambridge",
+        "canning",
+        "claremont",
+        "cockburn",
+        "cottesloe",
+        "east-fremantle",
+        "fremantle",
+        "gosnells",
+        "joondalup",
+        "kalamunda",
+        "kwinana",
+        "melville",
+        "mosman-park",
+        "mundaring",
+        "nedlands",
+        "peppermint-grove",
+        "perth",
+        "rockingham",
+        "south-perth",
+        "stirling",
+        "subiaco",
+        "swan",
+        "victoria-park",
+        "vincent",
+        "wanneroo"
+      ],
+      "basis": "Perth metropolitan (WA official region)"
+    },
+    {
+      "id": "wa-inner-perth",
+      "name": "Inner Perth",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 9 councils of Inner Perth: Cambridge, Claremont, Cottesloe, Mosman Park, Nedlands, Peppermint Grove, Perth, Subiaco, Vincent. Relayed from each council's own news page.",
+      "council_ids": [
+        "cambridge",
+        "claremont",
+        "cottesloe",
+        "mosman-park",
+        "nedlands",
+        "peppermint-grove",
+        "perth",
+        "subiaco",
+        "vincent"
+      ],
+      "basis": "WALGA Central Metropolitan Zone"
+    },
+    {
+      "id": "wa-perth-north",
+      "name": "Perth northern suburbs",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 3 councils of Perth northern suburbs: Joondalup, Stirling, Wanneroo. Relayed from each council's own news page.",
+      "council_ids": [
+        "joondalup",
+        "stirling",
+        "wanneroo"
+      ],
+      "basis": "WALGA North Metropolitan Zone"
+    },
+    {
+      "id": "wa-perth-south",
+      "name": "Perth southern suburbs",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 6 councils of Perth southern suburbs: Cockburn, East Fremantle, Fremantle, Kwinana, Melville, Rockingham. Relayed from each council's own news page.",
+      "council_ids": [
+        "cockburn",
+        "east-fremantle",
+        "fremantle",
+        "kwinana",
+        "melville",
+        "rockingham"
+      ],
+      "basis": "WALGA South Metropolitan Zone"
+    },
+    {
+      "id": "wa-perth-se",
+      "name": "Perth south-east suburbs",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 5 councils of Perth south-east suburbs: Armadale, Canning, Gosnells, South Perth, Victoria Park. Relayed from each council's own news page.",
+      "council_ids": [
+        "armadale",
+        "canning",
+        "gosnells",
+        "south-perth",
+        "victoria-park"
+      ],
+      "basis": "WALGA South East Metropolitan Zone"
+    },
+    {
+      "id": "wa-perth-east",
+      "name": "Perth east & hills",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 6 councils of Perth east & hills: Bassendean, Bayswater, Belmont, Kalamunda, Mundaring, Swan. Relayed from each council's own news page.",
+      "council_ids": [
+        "bassendean",
+        "bayswater",
+        "belmont",
+        "kalamunda",
+        "mundaring",
+        "swan"
+      ],
+      "basis": "WALGA East Metropolitan Zone"
+    },
+    {
+      "id": "wa-perth-growth",
+      "name": "Perth growth councils",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 11 councils of Perth growth councils: Armadale, Canning, Cockburn, Gosnells, Kalamunda, Kwinana, Mandurah, Rockingham, Serpentine-Jarrahdale, Swan, Wanneroo. Relayed from each council's own news page.",
+      "council_ids": [
+        "armadale",
+        "canning",
+        "cockburn",
+        "gosnells",
+        "kalamunda",
+        "kwinana",
+        "mandurah",
+        "rockingham",
+        "serpentine-jarrahdale",
+        "swan",
+        "wanneroo"
+      ],
+      "basis": "Perth outer growth councils (GAPP / NGAA)"
+    },
+    {
+      "id": "wa-peel",
+      "name": "Peel",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 5 councils of Peel: Boddington, Mandurah, Murray, Serpentine-Jarrahdale, Waroona. Relayed from each council's own news page.",
+      "council_ids": [
+        "boddington",
+        "mandurah",
+        "murray",
+        "serpentine-jarrahdale",
+        "waroona"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-south-west",
+      "name": "South West WA",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 12 councils of South West WA: Augusta Margaret River, Boyup Brook, Bridgetown-Greenbushes, Bunbury, Busselton, Capel, Collie, Dardanup, Donnybrook-Balingup, Harvey, Manjimup, Nannup. Relayed from each council's own news page.",
+      "council_ids": [
+        "augusta-margaret-river",
+        "boyup-brook",
+        "bridgetown-greenbushes",
+        "bunbury",
+        "busselton",
+        "capel",
+        "collie",
+        "dardanup",
+        "donnybrook-balingup",
+        "harvey",
+        "manjimup",
+        "nannup"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-gt-southern",
+      "name": "Great Southern",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 11 councils of Great Southern: Albany, Broomehill-Tambellup, Cranbrook, Denmark, Gnowangerup, Jerramungup, Katanning, Kent, Kojonup, Plantagenet, Woodanilling. Relayed from each council's own news page.",
+      "council_ids": [
+        "albany",
+        "broomehill-tambellup",
+        "cranbrook",
+        "denmark",
+        "gnowangerup",
+        "jerramungup",
+        "katanning",
+        "kent",
+        "kojonup",
+        "plantagenet",
+        "woodanilling"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-wheatbelt",
+      "name": "Wheatbelt",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 42 councils of Wheatbelt, including Beverley, Brookton, Bruce Rock, Chittering, Corrigin, Cuballing, Cunderdin, Dalwallinu, Dandaragan, Dowerin, Dumbleyung, Gingin, Goomalling, Kellerberrin, Kondinin, Koorda, Kulin, Lake Grace, Merredin, Moora, Mount Marshall and more. Relayed from…",
+      "council_ids": [
+        "beverley",
+        "brookton",
+        "bruce-rock",
+        "chittering",
+        "corrigin",
+        "cuballing",
+        "cunderdin",
+        "dalwallinu",
+        "dandaragan",
+        "dowerin",
+        "dumbleyung",
+        "gingin",
+        "goomalling",
+        "kellerberrin",
+        "kondinin",
+        "koorda",
+        "kulin",
+        "lake-grace",
+        "merredin",
+        "moora",
+        "mount-marshall",
+        "mukinbudin",
+        "narembeen",
+        "narrogin",
+        "northam",
+        "nungarin",
+        "pingelly",
+        "quairading",
+        "tammin",
+        "toodyay",
+        "trayning",
+        "victoria-plains",
+        "wagin",
+        "wandering",
+        "west-arthur",
+        "westonia",
+        "wickepin",
+        "williams",
+        "wongan-ballidu",
+        "wyalkatchem",
+        "yilgarn",
+        "york"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-mid-west",
+      "name": "Mid West WA",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 16 councils of Mid West WA: Carnamah, Chapman Valley, Coorow, Cue, Greater Geraldton, Irwin, Meekatharra, Mingenew, Morawa, Mount Magnet, Murchison, Northampton, Perenjori, Sandstone, Three Springs, Yalgoo. Relayed from each council's own news page.",
+      "council_ids": [
+        "carnamah",
+        "chapman-valley",
+        "coorow",
+        "cue",
+        "greater-geraldton",
+        "irwin",
+        "meekatharra",
+        "mingenew",
+        "morawa",
+        "mount-magnet",
+        "murchison",
+        "northampton",
+        "perenjori",
+        "sandstone",
+        "three-springs",
+        "yalgoo"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-gascoyne",
+      "name": "Gascoyne",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 4 councils of Gascoyne: Carnarvon, Exmouth, Shark Bay, Upper Gascoyne. Relayed from each council's own news page.",
+      "council_ids": [
+        "carnarvon",
+        "exmouth",
+        "shark-bay",
+        "upper-gascoyne"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-goldfields",
+      "name": "Goldfields-Esperance",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 10 councils of Goldfields-Esperance: Coolgardie, Dundas, Esperance, Kalgoorlie-Boulder, Laverton, Leonora, Menzies, Ngaanyatjarraku, Ravensthorpe, Wiluna. Relayed from each council's own news page.",
+      "council_ids": [
+        "coolgardie",
+        "dundas",
+        "esperance",
+        "kalgoorlie-boulder",
+        "laverton",
+        "leonora",
+        "menzies",
+        "ngaanyatjarraku",
+        "ravensthorpe",
+        "wiluna"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-pilbara",
+      "name": "Pilbara",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 4 councils of Pilbara: Ashburton, East Pilbara, Karratha, Port Hedland. Relayed from each council's own news page.",
+      "council_ids": [
+        "ashburton",
+        "east-pilbara",
+        "karratha",
+        "port-hedland"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "wa-kimberley",
+      "name": "Kimberley",
+      "state": "WA",
+      "kind": "region",
+      "description": "News from the 4 councils of Kimberley: Broome, Derby-West Kimberley, Halls Creek, Wyndham-East Kimberley. Relayed from each council's own news page.",
+      "council_ids": [
+        "broome",
+        "derby-west-kimberley",
+        "halls-creek",
+        "wyndham-east-kimberley"
+      ],
+      "basis": "WA regional development region (RDC Act 1993)"
+    },
+    {
+      "id": "tas-hobart",
+      "name": "Greater Hobart",
+      "state": "TAS",
+      "kind": "region",
+      "description": "News from the 7 councils of Greater Hobart: Brighton, Clarence, Derwent Valley, Glenorchy, Hobart, Kingborough, Sorell. Relayed from each council's own news page.",
+      "council_ids": [
+        "brighton",
+        "clarence",
+        "derwent-valley",
+        "glenorchy",
+        "hobart",
+        "kingborough",
+        "sorell"
+      ],
+      "basis": "Greater Hobart (wider urban area)"
+    },
+    {
+      "id": "tas-south",
+      "name": "Southern Tasmania",
+      "state": "TAS",
+      "kind": "region",
+      "description": "News from the 12 councils of Southern Tasmania: Brighton, Central Highlands, Clarence, Derwent Valley, Glamorgan Spring Bay, Glenorchy, Hobart, Huon Valley, Kingborough, Sorell, Southern Midlands, Tasman. Relayed from each council's own news page.",
+      "council_ids": [
+        "brighton",
+        "central-highlands-tas",
+        "clarence",
+        "derwent-valley",
+        "glamorgan-spring-bay",
+        "glenorchy",
+        "hobart",
+        "huon-valley",
+        "kingborough",
+        "sorell",
+        "southern-midlands",
+        "tasman"
+      ],
+      "basis": "Southern Tasmania (former STCA, 12 councils)"
+    },
+    {
+      "id": "tas-north",
+      "name": "Northern Tasmania",
+      "state": "TAS",
+      "kind": "region",
+      "description": "News from the 8 councils of Northern Tasmania: Break O'Day, Dorset, Flinders, George Town, Launceston, Meander Valley, Northern Midlands, West Tamar. Relayed from each council's own news page.",
+      "council_ids": [
+        "break-o-day",
+        "dorset",
+        "flinders-tas",
+        "george-town",
+        "launceston",
+        "meander-valley",
+        "northern-midlands",
+        "west-tamar"
+      ],
+      "basis": "Northern Tasmania (NTDC / Launceston region)"
+    },
+    {
+      "id": "tas-north-west",
+      "name": "North West & West Coast",
+      "state": "TAS",
+      "kind": "region",
+      "description": "News from the 9 councils of North West & West Coast: Burnie, Central Coast, Circular Head, Devonport, Kentish, King Island, Latrobe, Waratah-Wynyard, West Coast. Relayed from each council's own news page.",
+      "council_ids": [
+        "burnie",
+        "central-coast",
+        "circular-head",
+        "devonport",
+        "kentish",
+        "king-island",
+        "latrobe-tas",
+        "waratah-wynyard",
+        "west-coast"
+      ],
+      "basis": "North West and West Coast (Cradle Coast Authority)"
+    },
+    {
+      "id": "nt-darwin",
+      "name": "Greater Darwin",
+      "state": "NT",
+      "kind": "region",
+      "description": "News from the 6 councils of Greater Darwin: Belyuen Community Government, Coomalie Community Government, Darwin, Litchfield, Palmerston, Wagait. Relayed from each council's own news page.",
+      "council_ids": [
+        "belyuen",
+        "coomalie",
+        "darwin",
+        "litchfield",
+        "palmerston",
+        "wagait"
+      ],
+      "basis": "Greater Darwin / TOPROC"
+    },
+    {
+      "id": "nt-regional",
+      "name": "Regional & remote NT",
+      "state": "NT",
+      "kind": "region",
+      "description": "News from the 12 councils of Regional & remote NT: Alice Springs Town, Barkly, Central Desert, East Arnhem, Groote Archipelago, Katherine Town, MacDonnell, Roper Gulf, Tiwi Islands, Victoria Daly, West Arnhem, West Daly. Relayed from each council's own news page.",
+      "council_ids": [
+        "alice_springs",
+        "barkly",
+        "central_desert",
+        "east_arnhem",
+        "groote_archipelago",
+        "katherine",
+        "macdonnell",
+        "roper_gulf",
+        "tiwi_islands",
+        "victoria_daly",
+        "west_arnhem",
+        "west_daly"
+      ],
+      "basis": "all NT councils outside Greater Darwin"
+    }
+  ]
+}

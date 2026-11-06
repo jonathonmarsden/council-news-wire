@@ -20,7 +20,7 @@ from core.promotion import Channel
 # ("79 Victorian councils"). Keeping both avoids "18 the Northern Territory
 # councils", which is what a single field produces.
 STATE_FACTS: Dict[str, Dict[str, str]] = {
-    "NSW": {"name": "New South Wales", "adj": "NSW", "councils": "127",
+    "NSW": {"name": "New South Wales", "adj": "NSW", "councils": "128",
             "handle": "roundupnewsbotnsw.bsky.social"},
     "VIC": {"name": "Victoria", "adj": "Victorian", "councils": "79",
             "handle": "roundupnewsbotvic.bsky.social"},

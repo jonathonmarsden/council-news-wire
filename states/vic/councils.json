@@ -198,8 +198,8 @@
       "title_selector": ".teaser__title",
       "link_selector": ".read-more-overlay-visible",
       "date_selector": ".field--name-node-post-date",
-      "population": 12840,
-      "region": "North West"
+      "population": 77318,
+      "region": "Gippsland"
     },
     {
       "id": "merri-bek",
@@ -702,8 +702,8 @@
       "title_selector": ".list-item-title",
       "link_selector": "a",
       "date_selector": ".published-on",
-      "population": 2595,
-      "region": "Limestone Coast"
+      "population": 158129,
+      "region": "Melbourne South"
     },
     {
       "id": "loddon",

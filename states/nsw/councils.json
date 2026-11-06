@@ -81,8 +81,8 @@
         "date": ".published-on",
         "link": "a"
       },
-      "population": 53810,
-      "region": "Adelaide Metro"
+      "population": 176519,
+      "region": "Greater Sydney"
     },
     {
       "id": "city-of-canada-bay",
@@ -122,8 +122,8 @@
       "link_selector": "h3 a",
       "date_selector": "div.text-base",
       "content_selector": ".wysiwyg",
-      "population": 22335,
-      "region": "North West"
+      "population": 346596,
+      "region": "Central Coast"
     },
     {
       "id": "cessnock-city-council",
@@ -554,12 +554,13 @@
     {
       "id": "the-hills-shire-council",
       "name": "The Hills Shire Council",
-      "news_url": "https://www.thehills.nsw.gov.au/Community/Hills-Shire-News-Community-Magazine",
+      "news_url": "https://www.thehills.nsw.gov.au/News-and-Publications",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
       "population": 187995,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "note": "2026-11-06: was the quarterly community magazine page"
     },
     {
       "id": "tweed-shire-council",
@@ -1086,18 +1087,17 @@
       "id": "hay-shire-council",
       "name": "Hay Shire Council",
       "news_url": "https://www.hay.nsw.gov.au/Inside-Hay-Shire-Council/News-Council-Updates",
-      "scraper": "card_scraper",
-      "enabled": false,
-      "disabled_reason": "No active news page - PDF newsletters only (Jan 2026)",
-      "population": 2865,
+      "scraper": "curl_scraper",
+      "enabled": true,
+      "population": 2884,
       "region": "Western Riverina",
-      "selectors": {
-        "container": ".news-inner",
-        "title": "h4 a",
-        "link": "h4 a",
-        "date": "span"
-      },
-      "use_curl": true
+      "use_curl": true,
+      "item_selector": ".news--list",
+      "title_selector": "h4 a",
+      "link_selector": "h4 a",
+      "date_selector": "p.publish_date",
+      "excerpt_selector": "div.mt-2 p",
+      "note": "2026-11-06: news listing restored (was PDF newsletters only in Jan 2026)"
     },
     {
       "id": "hilltops-council",
