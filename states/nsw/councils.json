@@ -355,11 +355,16 @@
     {
       "id": "mosman-council",
       "name": "Mosman Municipal Council",
-      "news_url": "https://mosman.nsw.gov.au/news",
+      "news_url": "https://mosman.nsw.gov.au/news/council-news",
       "scraper": "card_scraper",
       "enabled": true,
       "population": 31095,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "item_selector": "div.news-items div.news-item",
+      "title_selector": "h3 a",
+      "link_selector": "h3 a",
+      "date_selector": "time.datetime",
+      "excerpt_selector": "div.body"
     },
     {
       "id": "city-of-newcastle",
@@ -799,11 +804,16 @@
     {
       "id": "blayney-shire-council",
       "name": "Blayney Shire Council",
-      "news_url": "https://www.blayney.nsw.gov.au/News",
+      "news_url": "https://www.blayney.nsw.gov.au/news/news-listings/featured-topics-listings",
       "scraper": "card_scraper",
       "enabled": true,
       "population": 7920,
-      "region": "Central West"
+      "region": "Central West",
+      "item_selector": "div.sectionList div.card",
+      "title_selector": "div.card-body h3",
+      "link_selector": "div.card-body a",
+      "date_selector": "p.card-subtitle",
+      "excerpt_selector": "p.card-text"
     },
     {
       "id": "bogan-shire-council",
@@ -826,7 +836,12 @@
       "scraper": "curl_scraper",
       "enabled": true,
       "population": 2660,
-      "region": "Far West"
+      "region": "Far West",
+      "item_selector": "table.tablepress tbody tr",
+      "title_selector": "td.column-2 a",
+      "link_selector": "td.column-2 a",
+      "date_selector": "td.column-1",
+      "limit": 20
     },
     {
       "id": "brewarrina-shire-council",
@@ -850,12 +865,17 @@
     {
       "id": "byron-shire-council",
       "name": "Byron Shire Council",
-      "news_url": "https://www.byron.nsw.gov.au/Council/News",
+      "news_url": "https://www.byron.nsw.gov.au/Council/News/Media-releases",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
       "population": 36355,
-      "region": "North Coast"
+      "region": "North Coast",
+      "item_selector": "div.news-list-container div.list-item-container article",
+      "title_selector": "h2.list-item-title",
+      "link_selector": "a",
+      "date_selector": "p.published-on",
+      "excerpt_selector": "a > p:not(.published-on):not(.tagged-as-list)"
     },
     {
       "id": "cabonne-council",
@@ -917,17 +937,16 @@
     {
       "id": "coonamble-shire-council",
       "name": "Coonamble Shire Council",
-      "news_url": "https://www.coonambleshire.nsw.gov.au/council/news",
+      "news_url": "https://www.coonambleshire.nsw.gov.au/council/media-releases",
       "scraper": "card_scraper",
       "enabled": true,
-      "selectors": {
-        "container": ".news-item",
-        "title": "h3 a",
-        "link": "h3 a",
-        "date": ".date, time"
-      },
       "population": 4000,
-      "region": "Central West"
+      "region": "Central West",
+      "limit": 20,
+      "item_selector": "tr:has(a.literature)",
+      "title_selector": "a.literature",
+      "link_selector": "a.literature",
+      "date_selector": "a.literature"
     },
     {
       "id": "cootamundra-gundagai-regional-council",
@@ -1111,18 +1130,19 @@
     {
       "id": "inverell-shire-council",
       "name": "Inverell Shire Council",
-      "news_url": "https://inverell.nsw.gov.au/council/news/",
-      "scraper": "card_scraper",
+      "news_url": "https://inverell.nsw.gov.au/?s=&post_type=page&orderby=date&order=DESC",
+      "scraper": "curl_scraper",
       "enabled": true,
-      "disabled_reason": "No structured news markup. WP REST /wp/v2/posts returns []; /feed/ near-empty; even a full Playwright render (networkidle) shows only a free-text .news-ticker, not a per-article grid with title/date/link. Needs the ticker's source AJAX endpoint reverse-engineered. Pending.",
       "use_curl": true,
       "population": 17505,
       "region": "New England",
-      "item_selector": "div.mtphr-dnt-tick",
-      "title_selector": "a",
-      "link_selector": "a",
+      "item_selector": "div.hentry.type-page",
+      "title_selector": "h2.entry-title a",
+      "link_selector": "h2.entry-title a",
+      "date_selector": "span.entry-date",
+      "excerpt_selector": "div.entry-summary",
       "impersonate": "chrome124",
-      "disabled_reason_history": "Was disabled: WP API/feed empty, no article grid. Fixed 2026-07-29: scrape the mtphr-dnt news ticker (3 items, no dates)."
+      "disabled_reason_history": "Was disabled: WP API/feed empty, no article grid. Fixed 2026-07-29: scrape the mtphr-dnt news ticker (3 items, no dates). 2026-11-06: ticker items were static links, not news; switched to WP search listing of pages by date (media releases are WP pages)."
     },
     {
       "id": "junee-shire-council",

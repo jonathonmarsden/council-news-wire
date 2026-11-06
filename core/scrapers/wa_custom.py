@@ -205,7 +205,7 @@ class JoondalupScraper(BaseScraper):
 
         payload = {
             "SI": "News",
-            "OB": "",
+            "OB": "ArticleReleaseDate DESC",  # newest first, as the site itself asks
             "Q": "",
             "PS": 12,
             "FS": 12,

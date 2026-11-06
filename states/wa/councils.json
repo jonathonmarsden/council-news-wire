@@ -245,12 +245,17 @@
     {
       "id": "carnamah",
       "name": "Shire of Carnamah",
-      "news_url": "https://www.carnamah.wa.gov.au/news/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.carnamah.wa.gov.au/news/",
+      "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
       "category": "C",
-      "region": "Mid West"
+      "region": "Mid West",
+      "item_selector": "article.options-wrapper",
+      "title_selector": "h2:not(:empty), p.entry-excerpt",
+      "link_selector": "a.options-link",
+      "date_selector": "span.posted-on",
+      "excerpt_selector": "p.entry-excerpt"
     },
     {
       "id": "carnarvon",
@@ -475,8 +480,8 @@
     {
       "id": "dumbleyung",
       "name": "Shire of Dumbleyung",
-      "news_url": "https://www.dumbleyung.wa.gov.au/newsletters",
-      "scraper": "dumbleyung_scraper",
+      "news_url": "https://us11.campaign-archive.com/feed?u=d3f3bc52ba7c60abb453c7a10&id=56e7c77087",
+      "scraper": "rss_scraper",
       "enabled": true,
       "region": "Wheatbelt"
     },
@@ -724,7 +729,7 @@
     {
       "id": "kent",
       "name": "Shire of Kent",
-      "news_url": "https://www.kent.wa.gov.au/feed/",
+      "news_url": "https://www.kent.wa.gov.au/public-notices/feed/",
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "C",
@@ -925,13 +930,14 @@
     {
       "id": "mount-magnet",
       "name": "Shire of Mount Magnet",
-      "news_url": "https://www.mtmagnet.wa.gov.au/newsletters",
+      "news_url": "https://www.mtmagnet.wa.gov.au/public-notices",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
-      "item_selector": "a[href*='sharepoint.com'][href$='.pdf']",
+      "item_selector": "li.accordion-item:first-of-type .accordion-item__description a[href]",
       "title_selector": "self",
       "link_selector": "self",
+      "limit": 6,
       "category": "C",
       "region": "Mid West"
     },
@@ -953,7 +959,7 @@
     {
       "id": "mukinbudin",
       "name": "Shire of Mukinbudin",
-      "news_url": "https://www.mukinbudin.wa.gov.au/news/?c=7",
+      "news_url": "https://www.mukinbudin.wa.gov.au/news/",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,

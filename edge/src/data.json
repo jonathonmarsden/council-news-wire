@@ -1714,7 +1714,7 @@
    "id": "barcoo",
    "name": "Barcoo Shire Council",
    "state": "qld",
-   "news_url": "https://www.barcoo.qld.gov.au/news-and-events/news?format=feed&type=rss"
+   "news_url": "https://www.barcoo.qld.gov.au/News-Events/News"
   },
   "barkly": {
    "id": "barkly",
@@ -1846,7 +1846,7 @@
    "id": "blayney-shire-council",
    "name": "Blayney Shire Council",
    "state": "nsw",
-   "news_url": "https://www.blayney.nsw.gov.au/News"
+   "news_url": "https://www.blayney.nsw.gov.au/news/news-listings/featured-topics-listings"
   },
   "blue-mountains-city-council": {
    "id": "blue-mountains-city-council",
@@ -2020,7 +2020,7 @@
    "id": "byron-shire-council",
    "name": "Byron Shire Council",
    "state": "nsw",
-   "news_url": "https://www.byron.nsw.gov.au/Council/News"
+   "news_url": "https://www.byron.nsw.gov.au/Council/News/Media-releases"
   },
   "cabonne-council": {
    "id": "cabonne-council",
@@ -2086,7 +2086,7 @@
    "id": "carnamah",
    "name": "Shire of Carnamah",
    "state": "wa",
-   "news_url": "https://www.carnamah.wa.gov.au/news/feed/"
+   "news_url": "https://www.carnamah.wa.gov.au/news/"
   },
   "carnarvon": {
    "id": "carnarvon",
@@ -2188,7 +2188,7 @@
    "id": "charters-towers",
    "name": "Charters Towers Regional Council",
    "state": "qld",
-   "news_url": "https://www.charterstowers.qld.gov.au/news"
+   "news_url": "https://www.charterstowers.qld.gov.au/Council/News/Latest-news"
   },
   "cherbourg-aboriginal-shire": {
    "id": "cherbourg-aboriginal-shire",
@@ -2356,7 +2356,7 @@
    "id": "coonamble-shire-council",
    "name": "Coonamble Shire Council",
    "state": "nsw",
-   "news_url": "https://www.coonambleshire.nsw.gov.au/council/news"
+   "news_url": "https://www.coonambleshire.nsw.gov.au/council/media-releases"
   },
   "coorong-district": {
    "id": "coorong-district",
@@ -2542,7 +2542,7 @@
    "id": "dumbleyung",
    "name": "Shire of Dumbleyung",
    "state": "wa",
-   "news_url": "https://www.dumbleyung.wa.gov.au/newsletters"
+   "news_url": "https://us11.campaign-archive.com/feed?u=d3f3bc52ba7c60abb453c7a10&id=56e7c77087"
   },
   "dundas": {
    "id": "dundas",
@@ -2986,7 +2986,7 @@
    "id": "inverell-shire-council",
    "name": "Inverell Shire Council",
    "state": "nsw",
-   "news_url": "https://inverell.nsw.gov.au/council/news/"
+   "news_url": "https://inverell.nsw.gov.au/?s=&post_type=page&orderby=date&order=DESC"
   },
   "ipswich": {
    "id": "ipswich",
@@ -3082,7 +3082,7 @@
    "id": "kent",
    "name": "Shire of Kent",
    "state": "wa",
-   "news_url": "https://www.kent.wa.gov.au/feed/"
+   "news_url": "https://www.kent.wa.gov.au/public-notices/feed/"
   },
   "kentish": {
    "id": "kentish",
@@ -3574,7 +3574,7 @@
    "id": "mosman-council",
    "name": "Mosman Municipal Council",
    "state": "nsw",
-   "news_url": "https://mosman.nsw.gov.au/news"
+   "news_url": "https://mosman.nsw.gov.au/news/council-news"
   },
   "mosman-park": {
    "id": "mosman-park",
@@ -3610,7 +3610,7 @@
    "id": "mount-magnet",
    "name": "Shire of Mount Magnet",
    "state": "wa",
-   "news_url": "https://www.mtmagnet.wa.gov.au/newsletters"
+   "news_url": "https://www.mtmagnet.wa.gov.au/public-notices"
   },
   "mount-marshall": {
    "id": "mount-marshall",
@@ -3634,7 +3634,7 @@
    "id": "mukinbudin",
    "name": "Shire of Mukinbudin",
    "state": "wa",
-   "news_url": "https://www.mukinbudin.wa.gov.au/news/?c=7"
+   "news_url": "https://www.mukinbudin.wa.gov.au/news/"
   },
   "mundaring": {
    "id": "mundaring",

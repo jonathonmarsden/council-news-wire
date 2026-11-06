@@ -49,11 +49,16 @@
     {
       "id": "barcoo",
       "name": "Barcoo Shire Council",
-      "news_url": "https://www.barcoo.qld.gov.au/news-and-events/news?format=feed&type=rss",
-      "scraper": "rss_scraper",
+      "news_url": "https://www.barcoo.qld.gov.au/News-Events/News",
+      "scraper": "curl_scraper",
       "enabled": true,
       "population": 275,
-      "region": "South West Queensland"
+      "region": "South West Queensland",
+      "use_curl": true,
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "blackall-tambo",
@@ -187,12 +192,16 @@
     {
       "id": "charters-towers",
       "name": "Charters Towers Regional Council",
-      "news_url": "https://www.charterstowers.qld.gov.au/news",
+      "news_url": "https://www.charterstowers.qld.gov.au/Council/News/Latest-news",
       "scraper": "curl_scraper",
       "enabled": true,
       "use_curl": true,
       "population": 12465,
-      "region": "North Queensland"
+      "region": "North Queensland",
+      "item_selector": ".list-item-container",
+      "title_selector": ".list-item-title",
+      "link_selector": "a",
+      "date_selector": ".published-on"
     },
     {
       "id": "cherbourg-aboriginal-shire",
