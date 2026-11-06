@@ -28,6 +28,7 @@ const FEEDS: Feed[] = (data as any).feeds;
 const COUNCILS: Record<string, Council> = (data as any).councils;
 const FEED_BY_ID = new Map(FEEDS.map((f) => [f.id, f]));
 const RSS_ITEMS = 50;
+const SKELETON_WINDOW_DAYS = 14;
 const RSS_MAX_AGE = 600; // seconds
 const SITE = "https://lgnews.jonathonmarsden.com";
 
@@ -49,7 +50,7 @@ export default {
           feeds: FEEDS.map((f) => ({ uri: feedUri(env.PUBLISHER_DID, f.id) })),
         });
       }
-      if (path === "/xrpc/app.bsky.feed.getFeedSkeleton") return await skeleton(url, env);
+      if (path === "/xrpc/app.bsky.feed.getFeedSkeleton") return await cached(req, ctx, false, () => skeleton(url, env));
       if (path === "/ingest") return await ingest(req, env);
       if (path === "/edge/health") return await health(env);
       if (path === "/rss" || path.startsWith("/rss/")) {
@@ -81,14 +82,23 @@ async function skeleton(url: URL, env: Env): Promise<Response> {
   const cur = decodeCursor(rawCursor);
   if (rawCursor && !cur) return xrpcError("InvalidRequest", "Malformed cursor");
 
-  const { results } = await env.DB.prepare(
-    `SELECT uri, posted_at FROM posts
-      WHERE uri IS NOT NULL
-        AND council_id IN (SELECT value FROM json_each(?1))
-        AND (?2 IS NULL OR posted_at < ?2 OR (posted_at = ?2 AND uri < ?3))
-      ORDER BY posted_at DESC, uri DESC
-      LIMIT ?4`,
-  ).bind(JSON.stringify(feed.council_ids), cur?.postedAt ?? null, cur?.uri ?? null, limit).all<{ uri: string; posted_at: string }>();
+  // Read only the last SKELETON_WINDOW_DAYS before the cursor (or now) first: a
+  // page of a busy feed is almost always in there, and it reads ~5x fewer rows
+  // than scanning every member council's history. Quiet feeds that don't fill a
+  // page fall back to the unbounded query, which is cheap for them anyway.
+  const anchor = cur ? Date.parse(cur.postedAt) : Date.now();
+  const since = new Date(anchor - SKELETON_WINDOW_DAYS * 86400e3).toISOString().replace(/\.\d{3}Z$/, "Z");
+  const page = (windowed: boolean) => {
+    const where = ["uri IS NOT NULL", "council_id IN (SELECT value FROM json_each(?1))"];
+    const args: unknown[] = [JSON.stringify(feed.council_ids)];
+    if (cur) { where.push(`(posted_at < ?2 OR (posted_at = ?2 AND uri < ?3))`); args.push(cur.postedAt, cur.uri); }
+    if (windowed) { where.push(`posted_at >= ?${args.length + 1}`); args.push(since); }
+    args.push(limit);
+    return env.DB.prepare(`SELECT uri, posted_at FROM posts WHERE ${where.join(" AND ")}
+      ORDER BY posted_at DESC, uri DESC LIMIT ?${args.length}`).bind(...args).all<{ uri: string; posted_at: string }>();
+  };
+  let { results } = await page(true);
+  if (results.length < limit) ({ results } = await page(false));
 
   const last = results.length === limit ? results[results.length - 1] : null;
   return json(
@@ -232,7 +242,12 @@ async function ingest(req: Request, env: Env): Promise<Response> {
 }
 
 async function health(env: Env): Promise<Response> {
-  const row = await env.DB.prepare("SELECT COUNT(*) AS posts, MAX(posted_at) AS newest FROM posts").first<{ posts: number; newest: string | null }>();
+  // Polled by the off-host watchdog, so it must stay cheap: the newest row comes
+  // straight off the posted_at index and MAX(rowid) is O(1). A COUNT(*) would read
+  // every row on every poll. `posts` is the highest row id, an upper bound on rows.
+  const row = await env.DB.prepare(
+    "SELECT (SELECT posted_at FROM posts ORDER BY posted_at DESC LIMIT 1) AS newest, (SELECT MAX(rowid) FROM posts) AS posts",
+  ).first<{ posts: number | null; newest: string | null }>();
   return json({ posts: row?.posts ?? 0, newest: row?.newest ?? null, feeds: FEEDS.length, councils: Object.keys(COUNCILS).length },
     200, { "cache-control": "no-store" });
 }
