@@ -9,9 +9,11 @@ state's region feeds.
 
 Each pack is three kinds of record in the publishing account's repository: a
 reference list (app.bsky.graph.list), its members (app.bsky.graph.listitem)
-and the pack itself (app.bsky.graph.starterpack). Records use fixed keys
-(pack-<state> for the list, <state> for the pack), so running this again
-updates names, descriptions, members and feeds in place.
+and the pack itself (app.bsky.graph.starterpack). Bluesky requires TID record
+keys for lists and packs, so each state gets a fixed, valid TID derived from
+a fixed time and the state's position (see record_key). Running this again
+therefore updates the same records in place, and each pack's share link is
+known in advance: https://bsky.app/starter-pack/<handle>/<pack key>.
 
     FEEDS_HANDLE="lgnews.jonathonmarsden.com" FEEDS_APP_PASSWORD="your-app-password" \\
         python3 scripts/feeds/publish_starter_packs.py           # dry run
@@ -32,6 +34,24 @@ STATE_NAMES = {"nsw": "New South Wales", "vic": "Victoria", "qld": "Queensland",
                "sa": "South Australia", "tas": "Tasmania", "nt": "the Northern Territory",
                "act": "the ACT"}
 NAME_MAX, DESC_MAX = 50, 300
+STATE_ORDER = ["nsw", "vic", "qld", "wa", "sa", "tas", "nt", "act"]
+TID_EPOCH_US = 1793923200 * 1_000_000  # 2026-11-06T00:00:00Z, fixed forever
+B32 = "234567abcdefghijklmnopqrstuvwxyz"
+
+
+def record_key(state: str, kind: str) -> str:
+    """A fixed TID for this state's list ('list') or pack ('pack').
+
+    A TID is 64 bits (top bit 0, 53 bits of microseconds, 10 bits of clock id)
+    written as 13 base32-sortable characters."""
+    micros = TID_EPOCH_US + STATE_ORDER.index(state)
+    clock = {"list": 1, "pack": 2}[kind]
+    n = (micros << 10) | clock
+    return "".join(B32[(n >> (5 * i)) & 31] for i in range(12, -1, -1))
+
+
+def share_link(handle: str, state: str) -> str:
+    return f"https://bsky.app/starter-pack/{handle}/{record_key(state, 'pack')}"
 
 
 def load():
@@ -87,7 +107,7 @@ def main() -> int:
     packs = plan(cfg, feeds)
     if not args.write:
         for st, name, desc, members, feed_ids in packs:
-            print(f"{st}: {name!r}\n  {desc}\n  ({len(desc)} chars) members: {', '.join(members)}\n  feeds: {', '.join(feed_ids)}")
+            print(f"{st}: {name!r}  {share_link('lgnews.jonathonmarsden.com', st)}\n  {desc}\n  ({len(desc)} chars) members: {', '.join(members)}\n  feeds: {', '.join(feed_ids)}")
         print(f"\n{len(packs)} packs. Dry run; add --write to publish.")
         return 0
 
@@ -115,7 +135,8 @@ def main() -> int:
         return getattr(old.value, "created_at", None) if old is not None else None
 
     for st, name, desc, members, feed_ids in packs:
-        list_rkey = f"pack-{st}"
+        list_rkey = record_key(st, "list")
+        pack_rkey = record_key(st, "pack")
         list_uri = f"at://{did}/app.bsky.graph.list/{list_rkey}"
         client.com.atproto.repo.put_record({"repo": did, "collection": "app.bsky.graph.list", "rkey": list_rkey, "record": {
             "$type": "app.bsky.graph.list", "purpose": "app.bsky.graph.defs#referencelist",
@@ -130,11 +151,11 @@ def main() -> int:
             client.com.atproto.repo.delete_record({"repo": did, "collection": "app.bsky.graph.listitem",
                                                    "rkey": have[subject].uri.rsplit("/", 1)[-1]})
 
-        client.com.atproto.repo.put_record({"repo": did, "collection": "app.bsky.graph.starterpack", "rkey": st, "record": {
+        client.com.atproto.repo.put_record({"repo": did, "collection": "app.bsky.graph.starterpack", "rkey": pack_rkey, "record": {
             "$type": "app.bsky.graph.starterpack", "name": name, "description": desc, "list": list_uri,
             "feeds": [{"uri": f"at://{did}/app.bsky.feed.generator/{f}"} for f in feed_ids],
-            "createdAt": created(packs_old.get(st)) or now}})
-        print(f"{'updated' if st in packs_old else 'created'} {name}: https://bsky.app/starter-pack/{handle}/{st}")
+            "createdAt": created(packs_old.get(pack_rkey)) or now}})
+        print(f"{'updated' if pack_rkey in packs_old else 'created'} {name}: {share_link(handle, st)}")
     return 0
 
 
