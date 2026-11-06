@@ -150,11 +150,12 @@
   },
   {
    "id": "nsw-hunter",
-   "name": "Hunter",
+   "name": "Hunter & Central Coast",
    "state": "NSW",
    "kind": "region",
-   "description": "News from the 10 councils of Hunter: Cessnock, Dungog, Lake Macquarie, Maitland, MidCoast, Muswellbrook, Newcastle, Port Stephens, Singleton, Upper Hunter. Relayed from each council's own news page.",
+   "description": "News from the 11 councils of the Hunter and the Central Coast: Central Coast Council, Cessnock, Dungog, Lake Macquarie, Maitland, MidCoast, Muswellbrook, Newcastle, Port Stephens, Singleton, Upper Hunter. Relayed from each council's own news page.",
    "council_ids": [
+    "central-coast-council",
     "cessnock-city-council",
     "city-of-newcastle",
     "dungog-shire-council",
@@ -2134,7 +2135,7 @@
    "id": "central-coast-council",
    "name": "Central Coast Council",
    "state": "nsw",
-   "news_url": "https://www.centralcoast.nsw.gov.au/about-council/council-news/council-news"
+   "news_url": "https://www.centralcoast.nsw.gov.au/about-council/media-releases"
   },
   "central-darling-shire-council": {
    "id": "central-darling-shire-council",
