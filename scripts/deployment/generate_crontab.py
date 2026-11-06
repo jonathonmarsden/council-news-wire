@@ -175,6 +175,11 @@ def get_queue_processor_line() -> str:
 # (overlap would double the posting rate and race the same queue rows).
 3-53/10 * * * * cd /opt/council-news-bot && flock -n /var/lock/cnb-queue.lock flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/cron/process_global_queue.py >> /var/log/council_bot_cron.log 2>&1
 
+# === EDGE SYNC (Every 10 minutes, after the queue) ===
+# Sends newly posted stories to the edge service that serves the Bluesky
+# custom feeds and RSS (edge/). A no-op until EDGE_INGEST_TOKEN is set.
+8-58/10 * * * * cd /opt/council-news-bot && flock -n /var/lock/cnb-edge.lock flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/cron/sync_edge.py >> /var/log/council_bot_cron.log 2>&1
+
 # === MONITORING (quiet-by-default: speak only on problems + one daily digest) ===
 # NOTE: the hourly_briefing was removed — 24 "all normal" heartbeats/day trained
 # us to ignore the channel, which is how the proxy lapse / 85-disable / 82-day

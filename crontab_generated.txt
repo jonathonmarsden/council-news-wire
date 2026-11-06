@@ -1,6 +1,6 @@
 # CRONTAB CONFIGURATION - Council News Bot (staggered once-daily scraping)
 # ========================================================================
-# Generated on: 2026-11-05 14:23:03 by scripts/deployment/generate_crontab.py
+# Generated on: 2026-11-06 14:53:49 by scripts/deployment/generate_crontab.py
 #
 # This is a COMPLETE crontab: scrape slots AND infra lines (posting queue,
 # feed watchdog, alert check, daily digest, cleanup). Install the whole file:
@@ -89,6 +89,11 @@ HOME=/root
 # flock -n: skip the tick entirely if the previous one is still running
 # (overlap would double the posting rate and race the same queue rows).
 3-53/10 * * * * cd /opt/council-news-bot && flock -n /var/lock/cnb-queue.lock flock -s -w 300 /opt/council-news-bot/.ops.lock docker compose run --rm bot python3 scripts/cron/process_global_queue.py >> /var/log/council_bot_cron.log 2>&1
+
+# === EDGE SYNC (Every 10 minutes, after the queue) ===
+# Sends newly posted stories to the edge service that serves the Bluesky
+# custom feeds and RSS (edge/). A no-op until EDGE_INGEST_TOKEN is set.
+8-58/10 * * * * cd /opt/council-news-bot && flock -n /var/lock/cnb-edge.lock flock -s -w 300 /opt/council-news-bot/.ops.lock docker compose run --rm bot python3 scripts/cron/sync_edge.py >> /var/log/council_bot_cron.log 2>&1
 
 # === MONITORING (quiet-by-default: speak only on problems + one daily digest) ===
 # NOTE: the hourly_briefing was removed — 24 "all normal" heartbeats/day trained

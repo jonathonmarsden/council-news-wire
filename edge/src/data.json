@@ -1,0 +1,4804 @@
+{
+ "feeds": [
+  {
+   "id": "nsw-sydney",
+   "name": "Greater Sydney",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 33 councils of Greater Sydney, including Bayside, Blacktown, Blue Mountains, Burwood, Camden, Campbelltown, Canada Bay, Canterbury Bankstown, Cumberland, Fairfield, Georges River, Hawkesbury, Hornsby, Hunter's Hill, Inner West, Ku-ring-gai, Lane Cove, Liverpool and more. Relayed…",
+   "council_ids": [
+    "bayside-council",
+    "blacktown-city-council",
+    "blue-mountains-city-council",
+    "burwood-council",
+    "camden-council",
+    "campbelltown-city-council",
+    "city-of-canada-bay",
+    "city-of-canterbury-bankstown",
+    "city-of-parramatta",
+    "city-of-ryde",
+    "city-of-sydney",
+    "city-of-willoughby",
+    "cumberland-city-council",
+    "fairfield-city-council",
+    "georges-river-council",
+    "hawkesbury-city-council",
+    "hornsby-shire-council",
+    "hunters-hill-council",
+    "inner-west-council",
+    "ku-ring-gai-council",
+    "lane-cove-council",
+    "liverpool-city-council",
+    "mosman-council",
+    "north-sydney-council",
+    "northern-beaches-council",
+    "penrith-city-council",
+    "randwick-city-council",
+    "strathfield-council",
+    "sutherland-shire-council",
+    "the-hills-shire-council",
+    "waverley-council",
+    "wollondilly-shire-council",
+    "woollahra-municipal-council"
+   ]
+  },
+  {
+   "id": "nsw-inner-syd",
+   "name": "Inner Sydney",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 9 councils of Inner Sydney: Bayside, Burwood, Canada Bay, Inner West, Randwick, Strathfield, Sydney, Waverley, Woollahra. Relayed from each council's own news page.",
+   "council_ids": [
+    "bayside-council",
+    "burwood-council",
+    "city-of-canada-bay",
+    "city-of-sydney",
+    "inner-west-council",
+    "randwick-city-council",
+    "strathfield-council",
+    "waverley-council",
+    "woollahra-municipal-council"
+   ]
+  },
+  {
+   "id": "nsw-west-syd",
+   "name": "Western Sydney",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 13 councils of Western Sydney: Blacktown, Blue Mountains, Camden, Campbelltown, Canterbury Bankstown, Cumberland, Fairfield, Hawkesbury, Liverpool, Parramatta, Penrith, The Hills, Wollondilly. Relayed from each council's own news page.",
+   "council_ids": [
+    "blacktown-city-council",
+    "blue-mountains-city-council",
+    "camden-council",
+    "campbelltown-city-council",
+    "city-of-canterbury-bankstown",
+    "city-of-parramatta",
+    "cumberland-city-council",
+    "fairfield-city-council",
+    "hawkesbury-city-council",
+    "liverpool-city-council",
+    "penrith-city-council",
+    "the-hills-shire-council",
+    "wollondilly-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-syd-growth",
+   "name": "Sydney growth councils",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 7 councils of Sydney growth councils: Blue Mountains, Camden, Campbelltown, Hawkesbury, Liverpool, Penrith, Wollondilly. Relayed from each council's own news page.",
+   "council_ids": [
+    "blue-mountains-city-council",
+    "camden-council",
+    "campbelltown-city-council",
+    "hawkesbury-city-council",
+    "liverpool-city-council",
+    "penrith-city-council",
+    "wollondilly-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-north-syd",
+   "name": "Northern Sydney",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 8 councils of Northern Sydney: Hornsby, Hunter's Hill, Ku-ring-gai, Lane Cove, Mosman, North Sydney, Ryde, Willoughby. Relayed from each council's own news page.",
+   "council_ids": [
+    "city-of-ryde",
+    "city-of-willoughby",
+    "hornsby-shire-council",
+    "hunters-hill-council",
+    "ku-ring-gai-council",
+    "lane-cove-council",
+    "mosman-council",
+    "north-sydney-council"
+   ]
+  },
+  {
+   "id": "nsw-se-syd",
+   "name": "Southern & Eastern Sydne",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 12 councils of Southern & Eastern Sydne: Bayside, Burwood, Canada Bay, Canterbury Bankstown, Georges River, Inner West, Randwick, Strathfield, Sutherland, Sydney, Waverley, Woollahra. Relayed from each council's own news page.",
+   "council_ids": [
+    "bayside-council",
+    "burwood-council",
+    "city-of-canada-bay",
+    "city-of-canterbury-bankstown",
+    "city-of-sydney",
+    "georges-river-council",
+    "inner-west-council",
+    "randwick-city-council",
+    "strathfield-council",
+    "sutherland-shire-council",
+    "waverley-council",
+    "woollahra-municipal-council"
+   ]
+  },
+  {
+   "id": "nsw-macarthur",
+   "name": "Macarthur",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 3 councils of Macarthur: Camden, Campbelltown, Wollondilly. Relayed from each council's own news page.",
+   "council_ids": [
+    "camden-council",
+    "campbelltown-city-council",
+    "wollondilly-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-hunter",
+   "name": "Hunter",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 10 councils of Hunter: Cessnock, Dungog, Lake Macquarie, Maitland, MidCoast, Muswellbrook, Newcastle, Port Stephens, Singleton, Upper Hunter. Relayed from each council's own news page.",
+   "council_ids": [
+    "cessnock-city-council",
+    "city-of-newcastle",
+    "dungog-shire-council",
+    "lake-macquarie-city-council",
+    "maitland-city-council",
+    "midcoast-council",
+    "muswellbrook-shire-council",
+    "port-stephens-council",
+    "singleton-council",
+    "upper-hunter-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-newcastle",
+   "name": "Greater Newcastle",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 5 councils of Greater Newcastle: Cessnock, Lake Macquarie, Maitland, Newcastle, Port Stephens. Relayed from each council's own news page.",
+   "council_ids": [
+    "cessnock-city-council",
+    "city-of-newcastle",
+    "lake-macquarie-city-council",
+    "maitland-city-council",
+    "port-stephens-council"
+   ]
+  },
+  {
+   "id": "nsw-central-cst",
+   "name": "Central Coast",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from Central Coast Council. Relayed from each council's own news page.",
+   "council_ids": [
+    "central-coast-council"
+   ]
+  },
+  {
+   "id": "nsw-illawarra",
+   "name": "Illawarra",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 3 councils of Illawarra: Kiama, Shellharbour, Wollongong. Relayed from each council's own news page.",
+   "council_ids": [
+    "kiama-municipal-council",
+    "shellharbour-city-council",
+    "wollongong-city-council"
+   ]
+  },
+  {
+   "id": "nsw-south-coast",
+   "name": "NSW South Coast",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 3 councils of NSW South Coast: Bega Valley, Eurobodalla, Shoalhaven. Relayed from each council's own news page.",
+   "council_ids": [
+    "bega-valley-shire-council",
+    "eurobodalla-shire-council",
+    "shoalhaven-city-council"
+   ]
+  },
+  {
+   "id": "nsw-cbr-region",
+   "name": "Canberra Region NSW",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 10 councils of Canberra Region NSW: Bega Valley, Eurobodalla, Goulburn Mulwaree, Hilltops, Queanbeyan-Palerang, Snowy Monaro, Snowy Valleys, Upper Lachlan, Wingecarribee, Yass Valley. Relayed from each council's own news page.",
+   "council_ids": [
+    "bega-valley-shire-council",
+    "eurobodalla-shire-council",
+    "goulburn-mulwaree-council",
+    "hilltops-council",
+    "queanbeyan-palerang-regional-council",
+    "snowy-monaro-regional-council",
+    "snowy-valleys-council",
+    "upper-lachlan-shire-council",
+    "wingecarribee-shire-council",
+    "yass-valley-council"
+   ]
+  },
+  {
+   "id": "nsw-mid-north",
+   "name": "Mid North Coast",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 6 councils of Mid North Coast: Bellingen, Coffs Harbour, Kempsey, MidCoast, Nambucca Valley, Port Macquarie-Hastings. Relayed from each council's own news page.",
+   "council_ids": [
+    "bellingen-shire-council",
+    "coffs-harbour-city-council",
+    "kempsey-shire-council",
+    "midcoast-council",
+    "nambucca-valley-council",
+    "port-macquarie-hastings-council"
+   ]
+  },
+  {
+   "id": "nsw-n-rivers",
+   "name": "Northern Rivers",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 7 councils of Northern Rivers: Ballina, Byron, Clarence Valley, Kyogle, Lismore, Richmond Valley, Tweed. Relayed from each council's own news page.",
+   "council_ids": [
+    "ballina-shire-council",
+    "byron-shire-council",
+    "clarence-valley-council",
+    "kyogle-council",
+    "lismore-city-council",
+    "richmond-valley-council",
+    "tweed-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-new-england",
+   "name": "New England North West",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 12 councils of New England North West: Armidale, Glen Innes Severn, Gunnedah, Gwydir, Inverell, Liverpool Plains, Moree Plains, Narrabri, Tamworth, Tenterfield, Uralla, Walcha. Relayed from each council's own news page.",
+   "council_ids": [
+    "armidale-regional-council",
+    "glen-innes-severn-council",
+    "gunnedah-shire-council",
+    "gwydir-shire-council",
+    "inverell-shire-council",
+    "liverpool-plains-shire-council",
+    "moree-plains-shire-council",
+    "narrabri-shire-council",
+    "tamworth-regional-council",
+    "tenterfield-shire-council",
+    "uralla-shire-council",
+    "walcha-council"
+   ]
+  },
+  {
+   "id": "nsw-central-w",
+   "name": "Central West NSW",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 12 councils of Central West NSW: Bathurst, Blayney, Cabonne, Cowra, Forbes, Lachlan, Lithgow, Mid-Western, Oberon, Orange, Parkes, Weddin. Relayed from each council's own news page.",
+   "council_ids": [
+    "bathurst-regional-council",
+    "blayney-shire-council",
+    "cabonne-council",
+    "cowra-council",
+    "forbes-shire-council",
+    "lachlan-shire-council",
+    "lithgow-city-council",
+    "mid-western-regional-council",
+    "oberon-council",
+    "orange-city-council",
+    "parkes-shire-council",
+    "weddin-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-orana",
+   "name": "Orana & Far North West",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 11 councils of Orana & Far North West: Bogan, Bourke, Brewarrina, Cobar, Coonamble, Dubbo, Gilgandra, Narromine, Walgett, Warren, Warrumbungle. Relayed from each council's own news page.",
+   "council_ids": [
+    "bogan-shire-council",
+    "bourke-shire-council",
+    "brewarrina-shire-council",
+    "cobar-shire-council",
+    "coonamble-shire-council",
+    "dubbo-regional-council",
+    "gilgandra-shire-council",
+    "narromine-shire-council",
+    "walgett-shire-council",
+    "warren-shire-council",
+    "warrumbungle-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-riverina",
+   "name": "Riverina",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 15 councils of Riverina: Bland, Carrathool, Coolamon, Cootamundra-Gundagai, Griffith, Hay, Hilltops, Junee, Leeton, Lockhart, Murrumbidgee, Narrandera, Snowy Valleys, Temora, Wagga Wagga. Relayed from each council's own news page.",
+   "council_ids": [
+    "bland-shire-council",
+    "carrathool-shire-council",
+    "coolamon-shire-council",
+    "cootamundra-gundagai-regional-council",
+    "griffith-city-council",
+    "hay-shire-council",
+    "hilltops-council",
+    "junee-shire-council",
+    "leeton-shire-council",
+    "lockhart-shire-council",
+    "murrumbidgee-council",
+    "narrandera-shire-council",
+    "snowy-valleys-council",
+    "temora-shire-council",
+    "wagga-wagga-city-council"
+   ]
+  },
+  {
+   "id": "nsw-murray",
+   "name": "The Murray NSW",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 8 councils of The Murray NSW: Albury, Balranald, Berrigan, Edward River, Federation, Greater Hume, Murray River, Wentworth. Relayed from each council's own news page.",
+   "council_ids": [
+    "albury-city-council",
+    "balranald-shire-council",
+    "berrigan-shire-council",
+    "edward-river-council",
+    "federation-council",
+    "greater-hume-council",
+    "murray-river-council",
+    "wentworth-shire-council"
+   ]
+  },
+  {
+   "id": "nsw-far-west",
+   "name": "Far West NSW",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 4 councils of Far West NSW: Balranald, Broken Hill, Central Darling, Wentworth. Relayed from each council's own news page.",
+   "council_ids": [
+    "balranald-shire-council",
+    "broken-hill-city-council",
+    "central-darling-shire-council",
+    "wentworth-shire-council"
+   ]
+  },
+  {
+   "id": "albury-wodonga",
+   "name": "Albury-Wodonga",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 4 councils of Albury-Wodonga: Albury, Federation, Greater Hume, Wodonga. Relayed from each council's own news page.",
+   "council_ids": [
+    "albury-city-council",
+    "federation-council",
+    "greater-hume-council",
+    "wodonga"
+   ]
+  },
+  {
+   "id": "sunraysia",
+   "name": "Sunraysia",
+   "state": "NSW",
+   "kind": "region",
+   "description": "News from the 3 councils of Sunraysia: Balranald, Mildura Rural, Wentworth. Relayed from each council's own news page.",
+   "council_ids": [
+    "balranald-shire-council",
+    "mildura",
+    "wentworth-shire-council"
+   ]
+  },
+  {
+   "id": "act-canberra",
+   "name": "Canberra & surrounds",
+   "state": "ACT",
+   "kind": "region",
+   "description": "News from the 5 councils of Canberra & surrounds: ACT Government, ACT Government, ACT Government, Queanbeyan-Palerang, Yass Valley. Relayed from each council's own news page.",
+   "council_ids": [
+    "act_gov",
+    "act_ministers",
+    "our_canberra",
+    "queanbeyan-palerang-regional-council",
+    "yass-valley-council"
+   ]
+  },
+  {
+   "id": "vic-melbourne",
+   "name": "Greater Melbourne",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 32 councils of Greater Melbourne, including Banyule, Bayside, Boroondara, Brimbank, Cardinia, Casey, Darebin, Frankston, Glen Eira, Greater Dandenong, Hobsons Bay, Hume, Kingston, Knox, Manningham, Maribyrnong, Maroondah, Melbourne, Melton, Merri-bek, Mitchell and more. Relayed…",
+   "council_ids": [
+    "banyule",
+    "bayside",
+    "boroondara",
+    "brimbank",
+    "cardinia",
+    "casey",
+    "darebin",
+    "frankston",
+    "glen-eira",
+    "greater-dandenong",
+    "hobsons-bay",
+    "hume",
+    "kingston",
+    "knox",
+    "manningham",
+    "maribyrnong",
+    "maroondah",
+    "melbourne",
+    "melton",
+    "merri-bek",
+    "mitchell",
+    "monash",
+    "moonee-valley",
+    "mornington-peninsula",
+    "nillumbik",
+    "port-phillip",
+    "stonnington",
+    "whitehorse",
+    "whittlesea",
+    "wyndham",
+    "yarra",
+    "yarra-ranges"
+   ]
+  },
+  {
+   "id": "vic-m9",
+   "name": "M9 inner Melbourne",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 9 councils of M9 inner Melbourne: Darebin, Hobsons Bay, Maribyrnong, Melbourne, Merri-bek, Moonee Valley, Port Phillip, Stonnington, Yarra. Relayed from each council's own news page.",
+   "council_ids": [
+    "darebin",
+    "hobsons-bay",
+    "maribyrnong",
+    "melbourne",
+    "merri-bek",
+    "moonee-valley",
+    "port-phillip",
+    "stonnington",
+    "yarra"
+   ]
+  },
+  {
+   "id": "vic-outer-melb",
+   "name": "Melbourne outer councils",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 10 councils of Melbourne outer councils: Cardinia, Casey, Hume, Melton, Mitchell, Mornington Peninsula, Nillumbik, Whittlesea, Wyndham, Yarra Ranges. Relayed from each council's own news page.",
+   "council_ids": [
+    "cardinia",
+    "casey",
+    "hume",
+    "melton",
+    "mitchell",
+    "mornington-peninsula",
+    "nillumbik",
+    "whittlesea",
+    "wyndham",
+    "yarra-ranges"
+   ]
+  },
+  {
+   "id": "vic-melb-west",
+   "name": "Melbourne's west",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 6 councils of Melbourne's west: Brimbank, Hobsons Bay, Maribyrnong, Melton, Moonee Valley, Wyndham. Relayed from each council's own news page.",
+   "council_ids": [
+    "brimbank",
+    "hobsons-bay",
+    "maribyrnong",
+    "melton",
+    "moonee-valley",
+    "wyndham"
+   ]
+  },
+  {
+   "id": "vic-melb-north",
+   "name": "Melbourne's north",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 7 councils of Melbourne's north: Banyule, Darebin, Hume, Merri-bek, Mitchell, Nillumbik, Whittlesea. Relayed from each council's own news page.",
+   "council_ids": [
+    "banyule",
+    "darebin",
+    "hume",
+    "merri-bek",
+    "mitchell",
+    "nillumbik",
+    "whittlesea"
+   ]
+  },
+  {
+   "id": "vic-melb-east",
+   "name": "Melbourne's east",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 6 councils of Melbourne's east: Knox, Manningham, Maroondah, Monash, Whitehorse, Yarra Ranges. Relayed from each council's own news page.",
+   "council_ids": [
+    "knox",
+    "manningham",
+    "maroondah",
+    "monash",
+    "whitehorse",
+    "yarra-ranges"
+   ]
+  },
+  {
+   "id": "vic-melb-se",
+   "name": "Melbourne's south east",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 8 councils of Melbourne's south east: Cardinia, Casey, Frankston, Greater Dandenong, Kingston, Knox, Monash, Mornington Peninsula. Relayed from each council's own news page.",
+   "council_ids": [
+    "cardinia",
+    "casey",
+    "frankston",
+    "greater-dandenong",
+    "kingston",
+    "knox",
+    "monash",
+    "mornington-peninsula"
+   ]
+  },
+  {
+   "id": "vic-melb-ise",
+   "name": "Melbourne inner south-ea",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 4 councils of Melbourne inner south-ea: Bayside, Boroondara, Glen Eira, Stonnington. Relayed from each council's own news page.",
+   "council_ids": [
+    "bayside",
+    "boroondara",
+    "glen-eira",
+    "stonnington"
+   ]
+  },
+  {
+   "id": "vic-geelong",
+   "name": "Geelong region (G21)",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 5 councils of Geelong region (G21): Borough of Queenscliffe, Colac Otway, Golden Plains, Greater Geelong, Surf Coast. Relayed from each council's own news page.",
+   "council_ids": [
+    "colac-otway",
+    "golden-plains",
+    "greater-geelong",
+    "queenscliffe",
+    "surf-coast"
+   ]
+  },
+  {
+   "id": "vic-south-west",
+   "name": "South West Victoria",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 5 councils of South West Victoria: Corangamite, Glenelg, Moyne, Southern Grampians, Warrnambool. Relayed from each council's own news page.",
+   "council_ids": [
+    "corangamite",
+    "glenelg",
+    "moyne",
+    "southern-grampians",
+    "warrnambool"
+   ]
+  },
+  {
+   "id": "vic-great-ocean",
+   "name": "Great Ocean Road",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 5 councils of Great Ocean Road: Colac Otway, Corangamite, Moyne, Surf Coast, Warrnambool. Relayed from each council's own news page.",
+   "council_ids": [
+    "colac-otway",
+    "corangamite",
+    "moyne",
+    "surf-coast",
+    "warrnambool"
+   ]
+  },
+  {
+   "id": "vic-ballarat",
+   "name": "Ballarat & Highlands",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 6 councils of Ballarat & Highlands: Ararat Rural, Ballarat, Golden Plains, Hepburn, Moorabool, Pyrenees. Relayed from each council's own news page.",
+   "council_ids": [
+    "ararat",
+    "ballarat",
+    "golden-plains",
+    "hepburn",
+    "moorabool",
+    "pyrenees"
+   ]
+  },
+  {
+   "id": "vic-bendigo",
+   "name": "Bendigo & Loddon",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 6 councils of Bendigo & Loddon: Campaspe, Central Goldfields, Greater Bendigo, Loddon, Macedon Ranges, Mount Alexander. Relayed from each council's own news page.",
+   "council_ids": [
+    "campaspe",
+    "central-goldfields",
+    "greater-bendigo",
+    "loddon",
+    "macedon-ranges",
+    "mount-alexander"
+   ]
+  },
+  {
+   "id": "vic-goulburn",
+   "name": "Goulburn Valley",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 5 councils of Goulburn Valley: Greater Shepparton, Mitchell, Moira, Murrindindi, Strathbogie. Relayed from each council's own news page.",
+   "council_ids": [
+    "greater-shepparton",
+    "mitchell",
+    "moira",
+    "murrindindi",
+    "strathbogie"
+   ]
+  },
+  {
+   "id": "vic-north-east",
+   "name": "North East Victoria",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 7 councils of North East Victoria: Alpine, Benalla Rural, Indigo, Mansfield, Towong, Wangaratta Rural, Wodonga. Relayed from each council's own news page.",
+   "council_ids": [
+    "alpine",
+    "benalla",
+    "indigo",
+    "mansfield",
+    "towong",
+    "wangaratta",
+    "wodonga"
+   ]
+  },
+  {
+   "id": "vic-gippsland",
+   "name": "Gippsland",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 6 councils of Gippsland: Bass Coast, Baw Baw, East Gippsland, Latrobe, South Gippsland, Wellington. Relayed from each council's own news page.",
+   "council_ids": [
+    "bass-coast",
+    "baw-baw",
+    "east-gippsland",
+    "latrobe-vic",
+    "south-gippsland",
+    "wellington"
+   ]
+  },
+  {
+   "id": "vic-wimmera",
+   "name": "Wimmera Southern Mallee",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 5 councils of Wimmera Southern Mallee: Hindmarsh, Horsham Rural, Northern Grampians, West Wimmera, Yarriambiack. Relayed from each council's own news page.",
+   "council_ids": [
+    "hindmarsh",
+    "horsham",
+    "northern-grampians",
+    "west-wimmera",
+    "yarriambiack"
+   ]
+  },
+  {
+   "id": "vic-mallee",
+   "name": "Mallee",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 4 councils of Mallee: Buloke, Gannawarra, Mildura Rural, Swan Hill Rural. Relayed from each council's own news page.",
+   "council_ids": [
+    "buloke",
+    "gannawarra",
+    "mildura",
+    "swan-hill"
+   ]
+  },
+  {
+   "id": "vic-yarra-dand",
+   "name": "Yarra Valley & Dandenong",
+   "state": "VIC",
+   "kind": "region",
+   "description": "News from the 3 councils of Yarra Valley & Dandenong: Cardinia, Nillumbik, Yarra Ranges. Relayed from each council's own news page.",
+   "council_ids": [
+    "cardinia",
+    "nillumbik",
+    "yarra-ranges"
+   ]
+  },
+  {
+   "id": "qld-seq",
+   "name": "South East Queensland",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 12 councils of South East Queensland: Brisbane, Gold Coast, Ipswich, Lockyer Valley, Logan, Moreton Bay, Noosa, Redland, Scenic Rim, Somerset, Sunshine Coast, Toowoomba. Relayed from each council's own news page.",
+   "council_ids": [
+    "brisbane",
+    "gold-coast",
+    "ipswich",
+    "lockyer-valley",
+    "logan",
+    "moreton-bay",
+    "noosa",
+    "redland",
+    "scenic-rim",
+    "somerset",
+    "sunshine-coast",
+    "toowoomba"
+   ]
+  },
+  {
+   "id": "qld-brisbane",
+   "name": "Greater Brisbane",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 8 councils of Greater Brisbane: Brisbane, Ipswich, Lockyer Valley, Logan, Moreton Bay, Redland, Scenic Rim, Somerset. Relayed from each council's own news page.",
+   "council_ids": [
+    "brisbane",
+    "ipswich",
+    "lockyer-valley",
+    "logan",
+    "moreton-bay",
+    "redland",
+    "scenic-rim",
+    "somerset"
+   ]
+  },
+  {
+   "id": "qld-bris-growth",
+   "name": "Brisbane growth councils",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 4 councils of Brisbane growth councils: Ipswich, Logan, Moreton Bay, Redland. Relayed from each council's own news page.",
+   "council_ids": [
+    "ipswich",
+    "logan",
+    "moreton-bay",
+    "redland"
+   ]
+  },
+  {
+   "id": "qld-sunshine",
+   "name": "Sunshine Coast & Noosa",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 2 councils of Sunshine Coast & Noosa: Noosa, Sunshine Coast. Relayed from each council's own news page.",
+   "council_ids": [
+    "noosa",
+    "sunshine-coast"
+   ]
+  },
+  {
+   "id": "qld-darling-dn",
+   "name": "Darling Downs & SW Qld",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 10 councils of Darling Downs & SW Qld: Balonne, Bulloo, Goondiwindi, Maranoa, Murweh, Paroo, Quilpie, Southern Downs, Toowoomba, Western Downs. Relayed from each council's own news page.",
+   "council_ids": [
+    "balonne",
+    "bulloo",
+    "goondiwindi",
+    "maranoa",
+    "murweh",
+    "paroo",
+    "quilpie",
+    "southern-downs",
+    "toowoomba",
+    "western-downs"
+   ]
+  },
+  {
+   "id": "qld-wide-bay",
+   "name": "Wide Bay Burnett",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 6 councils of Wide Bay Burnett: Bundaberg, Cherbourg Aboriginal, Fraser Coast, Gympie, North Burnett, South Burnett. Relayed from each council's own news page.",
+   "council_ids": [
+    "bundaberg",
+    "cherbourg-aboriginal-shire",
+    "fraser-coast",
+    "gympie",
+    "north-burnett",
+    "south-burnett"
+   ]
+  },
+  {
+   "id": "qld-central",
+   "name": "Central Queensland",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 6 councils of Central Queensland: Banana, Central Highlands, Gladstone, Livingstone, Rockhampton, Woorabinda Aboriginal. Relayed from each council's own news page.",
+   "council_ids": [
+    "banana",
+    "central-highlands-qld",
+    "gladstone",
+    "livingstone",
+    "rockhampton",
+    "woorabinda"
+   ]
+  },
+  {
+   "id": "qld-mackay",
+   "name": "Mackay-Whitsunday",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 3 councils of Mackay-Whitsunday: Isaac, Mackay, Whitsunday. Relayed from each council's own news page.",
+   "council_ids": [
+    "isaac",
+    "mackay",
+    "whitsunday"
+   ]
+  },
+  {
+   "id": "qld-north",
+   "name": "North Queensland",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 5 councils of North Queensland: Burdekin, Charters Towers, Hinchinbrook, Palm Island Aboriginal, Townsville. Relayed from each council's own news page.",
+   "council_ids": [
+    "burdekin",
+    "charters-towers",
+    "hinchinbrook",
+    "palm-island",
+    "townsville"
+   ]
+  },
+  {
+   "id": "qld-far-north",
+   "name": "Far North Queensland",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 11 councils of Far North Queensland: Cairns, Cassowary Coast, Cook, Croydon, Douglas, Etheridge, Hinchinbrook, Hope Vale Aboriginal, Mareeba, Tablelands, Wujal Wujal Aboriginal. Relayed from each council's own news page.",
+   "council_ids": [
+    "cairns",
+    "cassowary-coast",
+    "cook",
+    "croydon",
+    "douglas",
+    "etheridge",
+    "hinchinbrook",
+    "hope-vale",
+    "mareeba",
+    "tablelands",
+    "wujal-wujal"
+   ]
+  },
+  {
+   "id": "qld-cape-torres",
+   "name": "Cape York & Torres Strai",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 14 councils of Cape York & Torres Strai, including Aurukun, Cook, Doomadgee Aboriginal, Hope Vale Aboriginal, Kowanyama Aboriginal, Lockhart River Aboriginal, Mapoon Aboriginal, Mornington, Napranum Aboriginal, Northern Peninsula Area, Palm Island Aboriginal, Torres and more.…",
+   "council_ids": [
+    "aurukun",
+    "cook",
+    "doomadgee",
+    "hope-vale",
+    "kowanyama",
+    "lockhart-river",
+    "mapoon",
+    "mornington",
+    "napranum",
+    "northern-peninsula-area",
+    "palm-island",
+    "torres",
+    "torres-strait-island",
+    "wujal-wujal"
+   ]
+  },
+  {
+   "id": "qld-outback",
+   "name": "Outback Queensland",
+   "state": "QLD",
+   "kind": "region",
+   "description": "News from the 22 councils of Outback Queensland: Balonne, Barcaldine, Barcoo, Blackall Tambo, Boulia, Bulloo, Burke, Carpentaria, Cloncurry, Diamantina, Doomadgee Aboriginal, Etheridge, Flinders, Longreach, Maranoa, McKinlay, Mount Isa, Murweh, Paroo, Quilpie, Richmond, Winton. Relayed from each…",
+   "council_ids": [
+    "balonne",
+    "barcaldine",
+    "barcoo",
+    "blackall-tambo",
+    "boulia",
+    "bulloo",
+    "burke",
+    "carpentaria",
+    "cloncurry",
+    "diamantina",
+    "doomadgee",
+    "etheridge",
+    "flinders-qld",
+    "longreach",
+    "maranoa",
+    "mckinlay",
+    "mount-isa",
+    "murweh",
+    "paroo",
+    "quilpie",
+    "richmond",
+    "winton"
+   ]
+  },
+  {
+   "id": "sa-adelaide",
+   "name": "Greater Adelaide",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 17 councils of Greater Adelaide: Adelaide, Burnside, Campbelltown, Charles Sturt, Holdfast Bay, Marion, Mitcham, Norwood Payneham & St Peters, Onkaparinga, Playford, Port Adelaide Enfield, Prospect, Salisbury, Tea Tree Gully, Unley, Walkerville, West Torrens. Relayed from each…",
+   "council_ids": [
+    "adelaide",
+    "burnside",
+    "campbelltown-city",
+    "charles-sturt",
+    "holdfast-bay",
+    "marion",
+    "mitcham",
+    "norwood-payneham-&-st-peters",
+    "onkaparinga",
+    "playford",
+    "port-adelaide-enfield",
+    "prospect",
+    "salisbury",
+    "tea-tree-gully",
+    "unley",
+    "walkerville",
+    "west-torrens"
+   ]
+  },
+  {
+   "id": "sa-adl-east",
+   "name": "Eastern Adelaide",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 8 councils of Eastern Adelaide: Adelaide, Burnside, Campbelltown, Norwood Payneham & St Peters, Prospect, Tea Tree Gully, Unley, Walkerville. Relayed from each council's own news page.",
+   "council_ids": [
+    "adelaide",
+    "burnside",
+    "campbelltown-city",
+    "norwood-payneham-&-st-peters",
+    "prospect",
+    "tea-tree-gully",
+    "unley",
+    "walkerville"
+   ]
+  },
+  {
+   "id": "sa-adl-south",
+   "name": "Southern Adelaide",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 4 councils of Southern Adelaide: Holdfast Bay, Marion, Mitcham, Onkaparinga. Relayed from each council's own news page.",
+   "council_ids": [
+    "holdfast-bay",
+    "marion",
+    "mitcham",
+    "onkaparinga"
+   ]
+  },
+  {
+   "id": "sa-adl-nw",
+   "name": "North & West Adelaide",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 5 councils of North & West Adelaide: Charles Sturt, Playford, Port Adelaide Enfield, Salisbury, West Torrens. Relayed from each council's own news page.",
+   "council_ids": [
+    "charles-sturt",
+    "playford",
+    "port-adelaide-enfield",
+    "salisbury",
+    "west-torrens"
+   ]
+  },
+  {
+   "id": "sa-barossa",
+   "name": "Barossa, Gawler & Light",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 4 councils of Barossa, Gawler & Light: Adelaide Plains, Gawler, Light, The Barossa. Relayed from each council's own news page.",
+   "council_ids": [
+    "adelaide-plains",
+    "barossa",
+    "gawler",
+    "light-regional"
+   ]
+  },
+  {
+   "id": "sa-hills-fleur",
+   "name": "Adelaide Hills & Fleurie",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 6 councils of Adelaide Hills & Fleurie: Adelaide Hills, Alexandrina, District of Yankalilla, Kangaroo Island, Mount Barker District, Victor Harbor. Relayed from each council's own news page.",
+   "council_ids": [
+    "adelaide-hills",
+    "alexandrina",
+    "kangaroo-island",
+    "mount-barker-district",
+    "victor-harbor",
+    "yankalilla"
+   ]
+  },
+  {
+   "id": "sa-limestone",
+   "name": "Limestone Coast",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 7 councils of Limestone Coast: District of Grant, District of Robe, Kingston District, Mount Gambier, Naracoorte Lucindale, Tatiara District, Wattle Range. Relayed from each council's own news page.",
+   "council_ids": [
+    "grant",
+    "kingston-district",
+    "mount-gambier",
+    "naracoorte-lucindale",
+    "robe",
+    "tatiara-district",
+    "wattle-range"
+   ]
+  },
+  {
+   "id": "sa-murray-river",
+   "name": "Murraylands & Riverland",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 8 councils of Murraylands & Riverland: Berri Barmera, Coorong District, District of Karoonda East Murray, District of Loxton Waikerie, Mid Murray, Renmark Paringa, Rural Murray Bridge, Southern Mallee District. Relayed from each council's own news page.",
+   "council_ids": [
+    "berri-barmera",
+    "coorong-district",
+    "karoonda-east-murray",
+    "loxton-waikerie",
+    "mid-murray",
+    "murray-bridge",
+    "renmark-paringa",
+    "southern-mallee-district"
+   ]
+  },
+  {
+   "id": "sa-eyre",
+   "name": "Eyre Peninsula",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 11 councils of Eyre Peninsula: District of Ceduna, District of Cleve, District of Elliston, District of Franklin Harbour, District of Kimba, District of Streaky Bay, District of Tumby Bay, Lower Eyre, Port Lincoln, Whyalla, Wudinna District. Relayed from each council's own news page.",
+   "council_ids": [
+    "ceduna",
+    "cleve",
+    "elliston",
+    "franklin-harbour",
+    "kimba",
+    "lower-eyre",
+    "port-lincoln",
+    "streaky-bay",
+    "tumby-bay",
+    "whyalla",
+    "wudinna-district"
+   ]
+  },
+  {
+   "id": "sa-yorke-mid-n",
+   "name": "Yorke & Mid North",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 15 councils of Yorke & Mid North, including Adelaide Plains, Barunga West, Clare and Gilbert Valleys, Copper Coast, District of Mount Remarkable, District of Orroroo Carrieton, District of Peterborough, Light, Northern Areas, Port Pirie, Regional of Goyder and more. Relayed from…",
+   "council_ids": [
+    "adelaide-plains",
+    "barossa",
+    "barunga-west",
+    "clare-and-gilbert-valleys",
+    "copper-coast",
+    "flinders-ranges",
+    "goyder",
+    "light-regional",
+    "mount-remarkable",
+    "northern-areas",
+    "orroroo-carrieton",
+    "peterborough",
+    "port-pirie-regional",
+    "wakefield-regional",
+    "yorke-peninsula"
+   ]
+  },
+  {
+   "id": "sa-spencer-gulf",
+   "name": "Spencer Gulf Cities",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 3 councils of Spencer Gulf Cities: Port Augusta, Port Pirie, Whyalla. Relayed from each council's own news page.",
+   "council_ids": [
+    "port-augusta-city",
+    "port-pirie-regional",
+    "whyalla"
+   ]
+  },
+  {
+   "id": "sa-flinders",
+   "name": "Flinders Ranges & Outbac",
+   "state": "SA",
+   "kind": "region",
+   "description": "News from the 4 councils of Flinders Ranges & Outbac: District of Coober Pedy, Municipal of Roxby Downs, Port Augusta, The Flinders Ranges. Relayed from each council's own news page.",
+   "council_ids": [
+    "coober-pedy",
+    "flinders-ranges",
+    "port-augusta-city",
+    "roxby-downs"
+   ]
+  },
+  {
+   "id": "wa-perth",
+   "name": "Perth",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 29 councils of Perth, including Armadale, Bassendean, Bayswater, Belmont, Cambridge, Canning, Claremont, Cockburn, Cottesloe, East Fremantle, Fremantle, Gosnells, Joondalup, Kalamunda, Kwinana, Melville, Mosman Park, Mundaring, Nedlands, Peppermint Grove, Perth and more. Relayed…",
+   "council_ids": [
+    "armadale",
+    "bassendean",
+    "bayswater",
+    "belmont",
+    "cambridge",
+    "canning",
+    "claremont",
+    "cockburn",
+    "cottesloe",
+    "east-fremantle",
+    "fremantle",
+    "gosnells",
+    "joondalup",
+    "kalamunda",
+    "kwinana",
+    "melville",
+    "mosman-park",
+    "mundaring",
+    "nedlands",
+    "peppermint-grove",
+    "perth",
+    "rockingham",
+    "south-perth",
+    "stirling",
+    "subiaco",
+    "swan",
+    "victoria-park",
+    "vincent",
+    "wanneroo"
+   ]
+  },
+  {
+   "id": "wa-inner-perth",
+   "name": "Inner Perth",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 9 councils of Inner Perth: Cambridge, Claremont, Cottesloe, Mosman Park, Nedlands, Peppermint Grove, Perth, Subiaco, Vincent. Relayed from each council's own news page.",
+   "council_ids": [
+    "cambridge",
+    "claremont",
+    "cottesloe",
+    "mosman-park",
+    "nedlands",
+    "peppermint-grove",
+    "perth",
+    "subiaco",
+    "vincent"
+   ]
+  },
+  {
+   "id": "wa-perth-north",
+   "name": "Perth northern suburbs",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 3 councils of Perth northern suburbs: Joondalup, Stirling, Wanneroo. Relayed from each council's own news page.",
+   "council_ids": [
+    "joondalup",
+    "stirling",
+    "wanneroo"
+   ]
+  },
+  {
+   "id": "wa-perth-south",
+   "name": "Perth southern suburbs",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 6 councils of Perth southern suburbs: Cockburn, East Fremantle, Fremantle, Kwinana, Melville, Rockingham. Relayed from each council's own news page.",
+   "council_ids": [
+    "cockburn",
+    "east-fremantle",
+    "fremantle",
+    "kwinana",
+    "melville",
+    "rockingham"
+   ]
+  },
+  {
+   "id": "wa-perth-se",
+   "name": "Perth south-east suburbs",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 5 councils of Perth south-east suburbs: Armadale, Canning, Gosnells, South Perth, Victoria Park. Relayed from each council's own news page.",
+   "council_ids": [
+    "armadale",
+    "canning",
+    "gosnells",
+    "south-perth",
+    "victoria-park"
+   ]
+  },
+  {
+   "id": "wa-perth-east",
+   "name": "Perth east & hills",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 6 councils of Perth east & hills: Bassendean, Bayswater, Belmont, Kalamunda, Mundaring, Swan. Relayed from each council's own news page.",
+   "council_ids": [
+    "bassendean",
+    "bayswater",
+    "belmont",
+    "kalamunda",
+    "mundaring",
+    "swan"
+   ]
+  },
+  {
+   "id": "wa-perth-growth",
+   "name": "Perth growth councils",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 11 councils of Perth growth councils: Armadale, Canning, Cockburn, Gosnells, Kalamunda, Kwinana, Mandurah, Rockingham, Serpentine-Jarrahdale, Swan, Wanneroo. Relayed from each council's own news page.",
+   "council_ids": [
+    "armadale",
+    "canning",
+    "cockburn",
+    "gosnells",
+    "kalamunda",
+    "kwinana",
+    "mandurah",
+    "rockingham",
+    "serpentine-jarrahdale",
+    "swan",
+    "wanneroo"
+   ]
+  },
+  {
+   "id": "wa-peel",
+   "name": "Peel",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 5 councils of Peel: Boddington, Mandurah, Murray, Serpentine-Jarrahdale, Waroona. Relayed from each council's own news page.",
+   "council_ids": [
+    "boddington",
+    "mandurah",
+    "murray",
+    "serpentine-jarrahdale",
+    "waroona"
+   ]
+  },
+  {
+   "id": "wa-south-west",
+   "name": "South West WA",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 12 councils of South West WA: Augusta Margaret River, Boyup Brook, Bridgetown-Greenbushes, Bunbury, Busselton, Capel, Collie, Dardanup, Donnybrook-Balingup, Harvey, Manjimup, Nannup. Relayed from each council's own news page.",
+   "council_ids": [
+    "augusta-margaret-river",
+    "boyup-brook",
+    "bridgetown-greenbushes",
+    "bunbury",
+    "busselton",
+    "capel",
+    "collie",
+    "dardanup",
+    "donnybrook-balingup",
+    "harvey",
+    "manjimup",
+    "nannup"
+   ]
+  },
+  {
+   "id": "wa-gt-southern",
+   "name": "Great Southern",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 11 councils of Great Southern: Albany, Broomehill-Tambellup, Cranbrook, Denmark, Gnowangerup, Jerramungup, Katanning, Kent, Kojonup, Plantagenet, Woodanilling. Relayed from each council's own news page.",
+   "council_ids": [
+    "albany",
+    "broomehill-tambellup",
+    "cranbrook",
+    "denmark",
+    "gnowangerup",
+    "jerramungup",
+    "katanning",
+    "kent",
+    "kojonup",
+    "plantagenet",
+    "woodanilling"
+   ]
+  },
+  {
+   "id": "wa-wheatbelt",
+   "name": "Wheatbelt",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 42 councils of Wheatbelt, including Beverley, Brookton, Bruce Rock, Chittering, Corrigin, Cuballing, Cunderdin, Dalwallinu, Dandaragan, Dowerin, Dumbleyung, Gingin, Goomalling, Kellerberrin, Kondinin, Koorda, Kulin, Lake Grace, Merredin, Moora, Mount Marshall and more. Relayed from…",
+   "council_ids": [
+    "beverley",
+    "brookton",
+    "bruce-rock",
+    "chittering",
+    "corrigin",
+    "cuballing",
+    "cunderdin",
+    "dalwallinu",
+    "dandaragan",
+    "dowerin",
+    "dumbleyung",
+    "gingin",
+    "goomalling",
+    "kellerberrin",
+    "kondinin",
+    "koorda",
+    "kulin",
+    "lake-grace",
+    "merredin",
+    "moora",
+    "mount-marshall",
+    "mukinbudin",
+    "narembeen",
+    "narrogin",
+    "northam",
+    "nungarin",
+    "pingelly",
+    "quairading",
+    "tammin",
+    "toodyay",
+    "trayning",
+    "victoria-plains",
+    "wagin",
+    "wandering",
+    "west-arthur",
+    "westonia",
+    "wickepin",
+    "williams",
+    "wongan-ballidu",
+    "wyalkatchem",
+    "yilgarn",
+    "york"
+   ]
+  },
+  {
+   "id": "wa-mid-west",
+   "name": "Mid West WA",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 16 councils of Mid West WA: Carnamah, Chapman Valley, Coorow, Cue, Greater Geraldton, Irwin, Meekatharra, Mingenew, Morawa, Mount Magnet, Murchison, Northampton, Perenjori, Sandstone, Three Springs, Yalgoo. Relayed from each council's own news page.",
+   "council_ids": [
+    "carnamah",
+    "chapman-valley",
+    "coorow",
+    "cue",
+    "greater-geraldton",
+    "irwin",
+    "meekatharra",
+    "mingenew",
+    "morawa",
+    "mount-magnet",
+    "murchison",
+    "northampton",
+    "perenjori",
+    "sandstone",
+    "three-springs",
+    "yalgoo"
+   ]
+  },
+  {
+   "id": "wa-gascoyne",
+   "name": "Gascoyne",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 4 councils of Gascoyne: Carnarvon, Exmouth, Shark Bay, Upper Gascoyne. Relayed from each council's own news page.",
+   "council_ids": [
+    "carnarvon",
+    "exmouth",
+    "shark-bay",
+    "upper-gascoyne"
+   ]
+  },
+  {
+   "id": "wa-goldfields",
+   "name": "Goldfields-Esperance",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 10 councils of Goldfields-Esperance: Coolgardie, Dundas, Esperance, Kalgoorlie-Boulder, Laverton, Leonora, Menzies, Ngaanyatjarraku, Ravensthorpe, Wiluna. Relayed from each council's own news page.",
+   "council_ids": [
+    "coolgardie",
+    "dundas",
+    "esperance",
+    "kalgoorlie-boulder",
+    "laverton",
+    "leonora",
+    "menzies",
+    "ngaanyatjarraku",
+    "ravensthorpe",
+    "wiluna"
+   ]
+  },
+  {
+   "id": "wa-pilbara",
+   "name": "Pilbara",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 4 councils of Pilbara: Ashburton, East Pilbara, Karratha, Port Hedland. Relayed from each council's own news page.",
+   "council_ids": [
+    "ashburton",
+    "east-pilbara",
+    "karratha",
+    "port-hedland"
+   ]
+  },
+  {
+   "id": "wa-kimberley",
+   "name": "Kimberley",
+   "state": "WA",
+   "kind": "region",
+   "description": "News from the 4 councils of Kimberley: Broome, Derby-West Kimberley, Halls Creek, Wyndham-East Kimberley. Relayed from each council's own news page.",
+   "council_ids": [
+    "broome",
+    "derby-west-kimberley",
+    "halls-creek",
+    "wyndham-east-kimberley"
+   ]
+  },
+  {
+   "id": "tas-hobart",
+   "name": "Greater Hobart",
+   "state": "TAS",
+   "kind": "region",
+   "description": "News from the 7 councils of Greater Hobart: Brighton, Clarence, Derwent Valley, Glenorchy, Hobart, Kingborough, Sorell. Relayed from each council's own news page.",
+   "council_ids": [
+    "brighton",
+    "clarence",
+    "derwent-valley",
+    "glenorchy",
+    "hobart",
+    "kingborough",
+    "sorell"
+   ]
+  },
+  {
+   "id": "tas-south",
+   "name": "Southern Tasmania",
+   "state": "TAS",
+   "kind": "region",
+   "description": "News from the 12 councils of Southern Tasmania: Brighton, Central Highlands, Clarence, Derwent Valley, Glamorgan Spring Bay, Glenorchy, Hobart, Huon Valley, Kingborough, Sorell, Southern Midlands, Tasman. Relayed from each council's own news page.",
+   "council_ids": [
+    "brighton",
+    "central-highlands-tas",
+    "clarence",
+    "derwent-valley",
+    "glamorgan-spring-bay",
+    "glenorchy",
+    "hobart",
+    "huon-valley",
+    "kingborough",
+    "sorell",
+    "southern-midlands",
+    "tasman"
+   ]
+  },
+  {
+   "id": "tas-north",
+   "name": "Northern Tasmania",
+   "state": "TAS",
+   "kind": "region",
+   "description": "News from the 8 councils of Northern Tasmania: Break O'Day, Dorset, Flinders, George Town, Launceston, Meander Valley, Northern Midlands, West Tamar. Relayed from each council's own news page.",
+   "council_ids": [
+    "break-o-day",
+    "dorset",
+    "flinders-tas",
+    "george-town",
+    "launceston",
+    "meander-valley",
+    "northern-midlands",
+    "west-tamar"
+   ]
+  },
+  {
+   "id": "tas-north-west",
+   "name": "North West & West Coast",
+   "state": "TAS",
+   "kind": "region",
+   "description": "News from the 9 councils of North West & West Coast: Burnie, Central Coast, Circular Head, Devonport, Kentish, King Island, Latrobe, Waratah-Wynyard, West Coast. Relayed from each council's own news page.",
+   "council_ids": [
+    "burnie",
+    "central-coast",
+    "circular-head",
+    "devonport",
+    "kentish",
+    "king-island",
+    "latrobe-tas",
+    "waratah-wynyard",
+    "west-coast"
+   ]
+  },
+  {
+   "id": "nt-darwin",
+   "name": "Greater Darwin",
+   "state": "NT",
+   "kind": "region",
+   "description": "News from the 6 councils of Greater Darwin: Belyuen Community Government, Coomalie Community Government, Darwin, Litchfield, Palmerston, Wagait. Relayed from each council's own news page.",
+   "council_ids": [
+    "belyuen",
+    "coomalie",
+    "darwin",
+    "litchfield",
+    "palmerston",
+    "wagait"
+   ]
+  },
+  {
+   "id": "nt-regional",
+   "name": "Regional & remote NT",
+   "state": "NT",
+   "kind": "region",
+   "description": "News from the 12 councils of Regional & remote NT: Alice Springs Town, Barkly, Central Desert, East Arnhem, Groote Archipelago, Katherine Town, MacDonnell, Roper Gulf, Tiwi Islands, Victoria Daly, West Arnhem, West Daly. Relayed from each council's own news page.",
+   "council_ids": [
+    "alice_springs",
+    "barkly",
+    "central_desert",
+    "east_arnhem",
+    "groote_archipelago",
+    "katherine",
+    "macdonnell",
+    "roper_gulf",
+    "tiwi_islands",
+    "victoria_daly",
+    "west_arnhem",
+    "west_daly"
+   ]
+  }
+ ],
+ "councils": {
+  "act_gov": {
+   "id": "act_gov",
+   "name": "ACT Government",
+   "state": "act",
+   "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_directorate_media_releases_rss"
+  },
+  "act_ministers": {
+   "id": "act_ministers",
+   "name": "ACT Government",
+   "state": "act",
+   "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_minister_media_releases_rss"
+  },
+  "adelaide": {
+   "id": "adelaide",
+   "name": "City of Adelaide",
+   "state": "sa",
+   "news_url": "https://www.cityofadelaide.com.au/news"
+  },
+  "adelaide-hills": {
+   "id": "adelaide-hills",
+   "name": "Adelaide Hills Council",
+   "state": "sa",
+   "news_url": "https://www.ahc.sa.gov.au/community/latest-news"
+  },
+  "adelaide-plains": {
+   "id": "adelaide-plains",
+   "name": "Adelaide Plains Council",
+   "state": "sa",
+   "news_url": "https://www.apc.sa.gov.au/home/latest-news"
+  },
+  "albany": {
+   "id": "albany",
+   "name": "City of Albany",
+   "state": "wa",
+   "news_url": "https://www.albany.wa.gov.au/news/"
+  },
+  "albury-city-council": {
+   "id": "albury-city-council",
+   "name": "Albury City Council",
+   "state": "nsw",
+   "news_url": "https://www.alburycity.nsw.gov.au/news"
+  },
+  "alexandrina": {
+   "id": "alexandrina",
+   "name": "Alexandrina Council",
+   "state": "sa",
+   "news_url": "https://www.alexandrina.sa.gov.au/discover/latest-news"
+  },
+  "alice_springs": {
+   "id": "alice_springs",
+   "name": "Alice Springs Town Council",
+   "state": "nt",
+   "news_url": "https://www.alicesprings.nt.gov.au/news"
+  },
+  "alpine": {
+   "id": "alpine",
+   "name": "Alpine Shire Council",
+   "state": "vic",
+   "news_url": "https://www.alpineshire.vic.gov.au/news"
+  },
+  "ararat": {
+   "id": "ararat",
+   "name": "Ararat Rural City Council",
+   "state": "vic",
+   "news_url": "https://www.ararat.vic.gov.au/news/"
+  },
+  "armadale": {
+   "id": "armadale",
+   "name": "City of Armadale",
+   "state": "wa",
+   "news_url": "https://api.my.armadale.wa.gov.au/content/mediaRelease?preview=false&skip=0&limit=100&paginate=true"
+  },
+  "armidale-regional-council": {
+   "id": "armidale-regional-council",
+   "name": "Armidale Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.armidale.nsw.gov.au/News-articles"
+  },
+  "ashburton": {
+   "id": "ashburton",
+   "name": "Shire of Ashburton",
+   "state": "wa",
+   "news_url": "https://www.ashburton.wa.gov.au/news/"
+  },
+  "augusta-margaret-river": {
+   "id": "augusta-margaret-river",
+   "name": "Shire of Augusta Margaret River",
+   "state": "wa",
+   "news_url": "https://www.amrshire.wa.gov.au/shire-and-council/news"
+  },
+  "aurukun": {
+   "id": "aurukun",
+   "name": "Aurukun Shire Council",
+   "state": "qld",
+   "news_url": "https://www.aurukun.qld.gov.au/feed/"
+  },
+  "ballarat": {
+   "id": "ballarat",
+   "name": "Ballarat City Council",
+   "state": "vic",
+   "news_url": "https://www.ballarat.vic.gov.au/news"
+  },
+  "ballina-shire-council": {
+   "id": "ballina-shire-council",
+   "name": "Ballina Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.ballina.nsw.gov.au/News"
+  },
+  "balonne": {
+   "id": "balonne",
+   "name": "Balonne Shire Council",
+   "state": "qld",
+   "news_url": "https://www.balonne.qld.gov.au/About-Council/Publications-Media/News"
+  },
+  "balranald-shire-council": {
+   "id": "balranald-shire-council",
+   "name": "Balranald Shire Council",
+   "state": "nsw",
+   "news_url": "https://balranald.nsw.gov.au/community/community-announcements/"
+  },
+  "banana": {
+   "id": "banana",
+   "name": "Banana Shire Council",
+   "state": "qld",
+   "news_url": "https://www.banana.qld.gov.au/About-Council/Publication-Scheme-Publications-and-Documents/Latest-News"
+  },
+  "banyule": {
+   "id": "banyule",
+   "name": "Banyule City Council",
+   "state": "vic",
+   "news_url": "https://www.banyule.vic.gov.au/About-us/More-in-about-us/News"
+  },
+  "barcaldine": {
+   "id": "barcaldine",
+   "name": "Barcaldine Regional Council",
+   "state": "qld",
+   "news_url": "https://www.barcaldinerc.qld.gov.au/Our-Council/Media-Releases-Public-Notices"
+  },
+  "barcoo": {
+   "id": "barcoo",
+   "name": "Barcoo Shire Council",
+   "state": "qld",
+   "news_url": "https://www.barcoo.qld.gov.au/news-and-events/news?format=feed&type=rss"
+  },
+  "barkly": {
+   "id": "barkly",
+   "name": "Barkly Regional Council",
+   "state": "nt",
+   "news_url": "https://www.barkly.nt.gov.au/feed/rss2"
+  },
+  "barossa": {
+   "id": "barossa",
+   "name": "The Barossa Council",
+   "state": "sa",
+   "news_url": "https://www.barossa.sa.gov.au/community-and-wellbeing/news-and-media/latest-news"
+  },
+  "barunga-west": {
+   "id": "barunga-west",
+   "name": "Barunga West Council",
+   "state": "sa",
+   "news_url": "https://www.barungawest.sa.gov.au/community-information/latest-news"
+  },
+  "bass-coast": {
+   "id": "bass-coast",
+   "name": "Bass Coast Shire Council",
+   "state": "vic",
+   "news_url": "https://www.basscoast.vic.gov.au/about-council/news-listing"
+  },
+  "bassendean": {
+   "id": "bassendean",
+   "name": "Town of Bassendean",
+   "state": "wa",
+   "news_url": "https://www.bassendean.wa.gov.au/news/"
+  },
+  "bathurst-regional-council": {
+   "id": "bathurst-regional-council",
+   "name": "Bathurst Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.bathurst.nsw.gov.au/Council/News-Media"
+  },
+  "baw-baw": {
+   "id": "baw-baw",
+   "name": "Baw Baw Shire Council",
+   "state": "vic",
+   "news_url": "https://www.bawbawshire.vic.gov.au/Latest-News"
+  },
+  "bayside": {
+   "id": "bayside",
+   "name": "Bayside City Council",
+   "state": "vic",
+   "news_url": "https://www.bayside.vic.gov.au/news"
+  },
+  "bayside-council": {
+   "id": "bayside-council",
+   "name": "Bayside Council",
+   "state": "nsw",
+   "news_url": "https://www.bayside.nsw.gov.au/your-council/latest-news"
+  },
+  "bayswater": {
+   "id": "bayswater",
+   "name": "City of Bayswater",
+   "state": "wa",
+   "news_url": "https://www.bayswater.wa.gov.au/city-and-council/news"
+  },
+  "bega-valley-shire-council": {
+   "id": "bega-valley-shire-council",
+   "name": "Bega Valley Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.begavalley.nsw.gov.au/News-and-Events/News"
+  },
+  "bellingen-shire-council": {
+   "id": "bellingen-shire-council",
+   "name": "Bellingen Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Communications-Engagement-and-Media"
+  },
+  "belmont": {
+   "id": "belmont",
+   "name": "City of Belmont",
+   "state": "wa",
+   "news_url": "https://www.belmont.wa.gov.au/api/search/search"
+  },
+  "belyuen": {
+   "id": "belyuen",
+   "name": "Belyuen Community Government Council",
+   "state": "nt",
+   "news_url": "https://www.belyuen.nt.gov.au/rss.xml"
+  },
+  "benalla": {
+   "id": "benalla",
+   "name": "Benalla Rural City Council",
+   "state": "vic",
+   "news_url": "https://www.benalla.vic.gov.au/latest-news/"
+  },
+  "berri-barmera": {
+   "id": "berri-barmera",
+   "name": "Berri Barmera Council",
+   "state": "sa",
+   "news_url": "https://www.berribarmera.sa.gov.au/your-council/latest-news"
+  },
+  "berrigan-shire-council": {
+   "id": "berrigan-shire-council",
+   "name": "Berrigan Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.berriganshire.nsw.gov.au/News-and-Media"
+  },
+  "beverley": {
+   "id": "beverley",
+   "name": "Shire of Beverley",
+   "state": "wa",
+   "news_url": "https://www.beverley.wa.gov.au/news/"
+  },
+  "blackall-tambo": {
+   "id": "blackall-tambo",
+   "name": "Blackall Tambo Regional Council",
+   "state": "qld",
+   "news_url": "https://www.btrc.qld.gov.au/Our-Council/News-and-Events/News-Public-Notices"
+  },
+  "blacktown-city-council": {
+   "id": "blacktown-city-council",
+   "name": "Blacktown City Council",
+   "state": "nsw",
+   "news_url": "https://www.blacktown.nsw.gov.au/News-Media"
+  },
+  "bland-shire-council": {
+   "id": "bland-shire-council",
+   "name": "Bland Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.blandshire.nsw.gov.au/Council/Latest-News"
+  },
+  "blayney-shire-council": {
+   "id": "blayney-shire-council",
+   "name": "Blayney Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.blayney.nsw.gov.au/News"
+  },
+  "blue-mountains-city-council": {
+   "id": "blue-mountains-city-council",
+   "name": "Blue Mountains City Council",
+   "state": "nsw",
+   "news_url": "https://www.bmcc.nsw.gov.au/media-centre"
+  },
+  "boddington": {
+   "id": "boddington",
+   "name": "Shire of Boddington",
+   "state": "wa",
+   "news_url": "https://www.boddington.wa.gov.au/news/"
+  },
+  "bogan-shire-council": {
+   "id": "bogan-shire-council",
+   "name": "Bogan Shire Council",
+   "state": "nsw",
+   "news_url": "https://bogan.nsw.gov.au/your-council/public-notices/latest-news"
+  },
+  "boroondara": {
+   "id": "boroondara",
+   "name": "Boroondara City Council",
+   "state": "vic",
+   "news_url": "https://www.boroondara.vic.gov.au/about-council/news-and-media/boroondara-news"
+  },
+  "boulia": {
+   "id": "boulia",
+   "name": "Boulia Shire Council",
+   "state": "qld",
+   "news_url": "https://www.boulia.qld.gov.au/News-articles"
+  },
+  "bourke-shire-council": {
+   "id": "bourke-shire-council",
+   "name": "Bourke Shire Council",
+   "state": "nsw",
+   "news_url": "https://bourke.nsw.gov.au/council/media-release/"
+  },
+  "boyup-brook": {
+   "id": "boyup-brook",
+   "name": "Shire of Boyup Brook",
+   "state": "wa",
+   "news_url": "https://www.boyupbrook.wa.gov.au/news/"
+  },
+  "break-o-day": {
+   "id": "break-o-day",
+   "name": "Break O'Day Council",
+   "state": "tas",
+   "news_url": "https://www.bodc.tas.gov.au/community/news-events/"
+  },
+  "brewarrina-shire-council": {
+   "id": "brewarrina-shire-council",
+   "name": "Brewarrina Shire Council",
+   "state": "nsw",
+   "news_url": "https://brewarrina.nsw.gov.au/feed/"
+  },
+  "bridgetown-greenbushes": {
+   "id": "bridgetown-greenbushes",
+   "name": "Shire of Bridgetown-Greenbushes",
+   "state": "wa",
+   "news_url": "https://www.bridgetown.wa.gov.au/news/"
+  },
+  "brighton": {
+   "id": "brighton",
+   "name": "Brighton Council",
+   "state": "tas",
+   "news_url": "https://brightoncommunitynews.com.au/feed/"
+  },
+  "brimbank": {
+   "id": "brimbank",
+   "name": "Brimbank City Council",
+   "state": "vic",
+   "news_url": "https://www.brimbank.vic.gov.au/news-and-events/media-releases"
+  },
+  "brisbane": {
+   "id": "brisbane",
+   "name": "Brisbane City Council",
+   "state": "qld",
+   "news_url": "https://www.brisbane.qld.gov.au/about-council/news-and-community-updates/community-service-announcements"
+  },
+  "broken-hill-city-council": {
+   "id": "broken-hill-city-council",
+   "name": "Broken Hill City Council",
+   "state": "nsw",
+   "news_url": "https://www.brokenhill.nsw.gov.au/Community/News-articles"
+  },
+  "brookton": {
+   "id": "brookton",
+   "name": "Shire of Brookton",
+   "state": "wa",
+   "news_url": "https://www.brookton.wa.gov.au/news/"
+  },
+  "broome": {
+   "id": "broome",
+   "name": "Shire of Broome",
+   "state": "wa",
+   "news_url": "https://www.broome.wa.gov.au/Home/Tabs/Latest-news"
+  },
+  "broomehill-tambellup": {
+   "id": "broomehill-tambellup",
+   "name": "Shire of Broomehill-Tambellup",
+   "state": "wa",
+   "news_url": "https://www.shirebt.wa.gov.au/news/"
+  },
+  "bruce-rock": {
+   "id": "bruce-rock",
+   "name": "Shire of Bruce Rock",
+   "state": "wa",
+   "news_url": "https://www.brucerock.wa.gov.au/news/"
+  },
+  "bulloo": {
+   "id": "bulloo",
+   "name": "Bulloo Shire Council",
+   "state": "qld",
+   "news_url": "https://www.bulloo.qld.gov.au/About-Council/Council-Publications/Council-News"
+  },
+  "buloke": {
+   "id": "buloke",
+   "name": "Buloke Shire Council",
+   "state": "vic",
+   "news_url": "https://www.buloke.vic.gov.au/news-and-consultation"
+  },
+  "bunbury": {
+   "id": "bunbury",
+   "name": "City of Bunbury",
+   "state": "wa",
+   "news_url": "https://www.bunbury.wa.gov.au/news"
+  },
+  "bundaberg": {
+   "id": "bundaberg",
+   "name": "Bundaberg Regional Council",
+   "state": "qld",
+   "news_url": "https://www.brcnow.bundaberg.qld.gov.au/feed/"
+  },
+  "burdekin": {
+   "id": "burdekin",
+   "name": "Burdekin Shire Council",
+   "state": "qld",
+   "news_url": "https://www.burdekin.qld.gov.au/latest-news"
+  },
+  "burke": {
+   "id": "burke",
+   "name": "Burke Shire Council",
+   "state": "qld",
+   "news_url": "https://www.burke.qld.gov.au/News"
+  },
+  "burnie": {
+   "id": "burnie",
+   "name": "Burnie City Council",
+   "state": "tas",
+   "news_url": "https://www.burnie.tas.gov.au/Council/News"
+  },
+  "burnside": {
+   "id": "burnside",
+   "name": "City of Burnside",
+   "state": "sa",
+   "news_url": "https://www.burnside.sa.gov.au/Latest-News"
+  },
+  "burwood-council": {
+   "id": "burwood-council",
+   "name": "Burwood Council",
+   "state": "nsw",
+   "news_url": "https://www.burwood.nsw.gov.au/Our-Council/News-and-Media/News-Stories"
+  },
+  "busselton": {
+   "id": "busselton",
+   "name": "City of Busselton",
+   "state": "wa",
+   "news_url": "https://www.busselton.wa.gov.au/news/?c=17"
+  },
+  "byron-shire-council": {
+   "id": "byron-shire-council",
+   "name": "Byron Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.byron.nsw.gov.au/Council/News"
+  },
+  "cabonne-council": {
+   "id": "cabonne-council",
+   "name": "Cabonne Council",
+   "state": "nsw",
+   "news_url": "https://www.cabonne.nsw.gov.au/News"
+  },
+  "cairns": {
+   "id": "cairns",
+   "name": "Cairns Regional Council",
+   "state": "qld",
+   "news_url": "https://www.cairns.qld.gov.au/council/news-notices/media-releases"
+  },
+  "cambridge": {
+   "id": "cambridge",
+   "name": "Town of Cambridge",
+   "state": "wa",
+   "news_url": "https://www.cambridge.wa.gov.au/About/News/Latest-News"
+  },
+  "camden-council": {
+   "id": "camden-council",
+   "name": "Camden Council",
+   "state": "nsw",
+   "news_url": "https://www.camden.nsw.gov.au/media-centre/latest-news/"
+  },
+  "campaspe": {
+   "id": "campaspe",
+   "name": "Campaspe Shire Council",
+   "state": "vic",
+   "news_url": "https://www.campaspe.vic.gov.au/Our-council/News-media/Latest-news"
+  },
+  "campbelltown-city": {
+   "id": "campbelltown-city",
+   "name": "Campbelltown City Council",
+   "state": "sa",
+   "news_url": "https://www.campbelltown.sa.gov.au/council/news-and-media/latest-news"
+  },
+  "campbelltown-city-council": {
+   "id": "campbelltown-city-council",
+   "name": "Campbelltown City Council",
+   "state": "nsw",
+   "news_url": "https://www.campbelltown.nsw.gov.au/News"
+  },
+  "canning": {
+   "id": "canning",
+   "name": "City of Canning",
+   "state": "wa",
+   "news_url": "https://www.canning.wa.gov.au/news"
+  },
+  "capel": {
+   "id": "capel",
+   "name": "Shire of Capel",
+   "state": "wa",
+   "news_url": "https://www.capel.wa.gov.au/news/"
+  },
+  "cardinia": {
+   "id": "cardinia",
+   "name": "Cardinia Shire Council",
+   "state": "vic",
+   "news_url": "https://www.cardinia.vic.gov.au/news"
+  },
+  "carnamah": {
+   "id": "carnamah",
+   "name": "Shire of Carnamah",
+   "state": "wa",
+   "news_url": "https://www.carnamah.wa.gov.au/news/feed/"
+  },
+  "carnarvon": {
+   "id": "carnarvon",
+   "name": "Shire of Carnarvon",
+   "state": "wa",
+   "news_url": "https://www.carnarvon.wa.gov.au/news/"
+  },
+  "carpentaria": {
+   "id": "carpentaria",
+   "name": "Carpentaria Shire Council",
+   "state": "qld",
+   "news_url": "https://www.carpentaria.qld.gov.au/Council/Public-Notices"
+  },
+  "carrathool-shire-council": {
+   "id": "carrathool-shire-council",
+   "name": "Carrathool Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.carrathool.nsw.gov.au/Council/News"
+  },
+  "casey": {
+   "id": "casey",
+   "name": "Casey City Council",
+   "state": "vic",
+   "news_url": "https://www.casey.vic.gov.au/news"
+  },
+  "cassowary-coast": {
+   "id": "cassowary-coast",
+   "name": "Cassowary Coast Regional Council",
+   "state": "qld",
+   "news_url": "https://www.cassowarycoast.qld.gov.au/Our-Council/Publications/Council-News"
+  },
+  "ceduna": {
+   "id": "ceduna",
+   "name": "District Council of Ceduna",
+   "state": "sa",
+   "news_url": "https://www.ceduna.sa.gov.au/notice-board/community-news"
+  },
+  "central-coast": {
+   "id": "central-coast",
+   "name": "Central Coast Council",
+   "state": "tas",
+   "news_url": "https://www.centralcoast.tas.gov.au/feed/"
+  },
+  "central-coast-council": {
+   "id": "central-coast-council",
+   "name": "Central Coast Council",
+   "state": "nsw",
+   "news_url": "https://www.centralcoast.nsw.gov.au/about-council/council-news/council-news"
+  },
+  "central-darling-shire-council": {
+   "id": "central-darling-shire-council",
+   "name": "Central Darling Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.centraldarling.nsw.gov.au/News-articles"
+  },
+  "central-goldfields": {
+   "id": "central-goldfields",
+   "name": "Central Goldfields Shire Council",
+   "state": "vic",
+   "news_url": "https://www.centralgoldfields.vic.gov.au/Council/News-Media"
+  },
+  "central-highlands-qld": {
+   "id": "central-highlands-qld",
+   "name": "Central Highlands Regional Council",
+   "state": "qld",
+   "news_url": "https://chrc.qld.gov.au/council/news/"
+  },
+  "central-highlands-tas": {
+   "id": "central-highlands-tas",
+   "name": "Central Highlands Council",
+   "state": "tas",
+   "news_url": "https://centralhighlands.tas.gov.au/news"
+  },
+  "central_desert": {
+   "id": "central_desert",
+   "name": "Central Desert Regional Council",
+   "state": "nt",
+   "news_url": "https://www.centraldesert.nt.gov.au/our-publications/news"
+  },
+  "cessnock-city-council": {
+   "id": "cessnock-city-council",
+   "name": "Cessnock City Council",
+   "state": "nsw",
+   "news_url": "https://www.cessnock.nsw.gov.au/News/News"
+  },
+  "chapman-valley": {
+   "id": "chapman-valley",
+   "name": "Shire of Chapman Valley",
+   "state": "wa",
+   "news_url": "https://www.chapmanvalley.wa.gov.au/news/"
+  },
+  "charles-sturt": {
+   "id": "charles-sturt",
+   "name": "City of Charles Sturt",
+   "state": "sa",
+   "news_url": "https://www.charlessturt.sa.gov.au/council/news-and-media/latest-news"
+  },
+  "charters-towers": {
+   "id": "charters-towers",
+   "name": "Charters Towers Regional Council",
+   "state": "qld",
+   "news_url": "https://www.charterstowers.qld.gov.au/news"
+  },
+  "cherbourg-aboriginal-shire": {
+   "id": "cherbourg-aboriginal-shire",
+   "name": "Cherbourg Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://cherbourg.qld.gov.au/news-events/"
+  },
+  "chittering": {
+   "id": "chittering",
+   "name": "Shire of Chittering",
+   "state": "wa",
+   "news_url": "https://www.chittering.wa.gov.au/news/"
+  },
+  "circular-head": {
+   "id": "circular-head",
+   "name": "Circular Head Council",
+   "state": "tas",
+   "news_url": "https://www.circularhead.tas.gov.au/our-council/news/latest-news"
+  },
+  "city-of-canada-bay": {
+   "id": "city-of-canada-bay",
+   "name": "City of Canada Bay Council",
+   "state": "nsw",
+   "news_url": "https://www.canadabay.nsw.gov.au/news"
+  },
+  "city-of-canterbury-bankstown": {
+   "id": "city-of-canterbury-bankstown",
+   "name": "City of Canterbury Bankstown",
+   "state": "nsw",
+   "news_url": "https://www.cbcity.nsw.gov.au/your-council/media-centre"
+  },
+  "city-of-newcastle": {
+   "id": "city-of-newcastle",
+   "name": "City of Newcastle",
+   "state": "nsw",
+   "news_url": "https://newcastle.nsw.gov.au/about-us/news-and-updates/latest-news"
+  },
+  "city-of-parramatta": {
+   "id": "city-of-parramatta",
+   "name": "City of Parramatta Council",
+   "state": "nsw",
+   "news_url": "https://www.cityofparramatta.nsw.gov.au/about-parramatta/news"
+  },
+  "city-of-ryde": {
+   "id": "city-of-ryde",
+   "name": "City of Ryde",
+   "state": "nsw",
+   "news_url": "https://www.ryde.nsw.gov.au/Council/Media-Centre/News-and-Public-Notices"
+  },
+  "city-of-sydney": {
+   "id": "city-of-sydney",
+   "name": "City of Sydney",
+   "state": "nsw",
+   "news_url": "https://news.cityofsydney.nsw.gov.au/media-releases"
+  },
+  "city-of-willoughby": {
+   "id": "city-of-willoughby",
+   "name": "Willoughby City Council",
+   "state": "nsw",
+   "news_url": "https://www.willoughby.nsw.gov.au/Council/News-and-media"
+  },
+  "clare-and-gilbert-valleys": {
+   "id": "clare-and-gilbert-valleys",
+   "name": "Clare and Gilbert Valleys Council",
+   "state": "sa",
+   "news_url": "https://www.claregilbertvalleys.sa.gov.au/community-information/latest-news"
+  },
+  "claremont": {
+   "id": "claremont",
+   "name": "Town of Claremont",
+   "state": "wa",
+   "news_url": "https://www.claremont.wa.gov.au/council/news/"
+  },
+  "clarence": {
+   "id": "clarence",
+   "name": "Clarence City Council",
+   "state": "tas",
+   "news_url": "https://www.ccc.tas.gov.au/latest-news/"
+  },
+  "clarence-valley-council": {
+   "id": "clarence-valley-council",
+   "name": "Clarence Valley Council",
+   "state": "nsw",
+   "news_url": "https://www.clarence.nsw.gov.au/Business-and-infrastructure/Doing-business-in-the-Clarence-Valley/Industry-Business-Newsletters"
+  },
+  "cleve": {
+   "id": "cleve",
+   "name": "District Council of Cleve",
+   "state": "sa",
+   "news_url": "https://www.cleve.sa.gov.au/community/latest-news"
+  },
+  "cloncurry": {
+   "id": "cloncurry",
+   "name": "Cloncurry Shire Council",
+   "state": "qld",
+   "news_url": "https://www.cloncurry.qld.gov.au/News-articles"
+  },
+  "cobar-shire-council": {
+   "id": "cobar-shire-council",
+   "name": "Cobar Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.cobar.nsw.gov.au/feed/"
+  },
+  "cockburn": {
+   "id": "cockburn",
+   "name": "City of Cockburn",
+   "state": "wa",
+   "news_url": "https://www.cockburn.wa.gov.au/City-and-Council/Events-and-News/News-From-The-City"
+  },
+  "cocos-keeling-islands": {
+   "id": "cocos-keeling-islands",
+   "name": "Shire of Cocos (Keeling) Islands",
+   "state": "wa",
+   "news_url": "https://www.shire.cc/en/latest-news.feed?type=rss"
+  },
+  "coffs-harbour-city-council": {
+   "id": "coffs-harbour-city-council",
+   "name": "Coffs Harbour City Council",
+   "state": "nsw",
+   "news_url": "https://www.coffsharbour.nsw.gov.au/Your-Council/Newsroom/Media-Releases"
+  },
+  "colac-otway": {
+   "id": "colac-otway",
+   "name": "Colac Otway Shire Council",
+   "state": "vic",
+   "news_url": "https://www.colacotway.vic.gov.au/News-media"
+  },
+  "collie": {
+   "id": "collie",
+   "name": "Shire of Collie",
+   "state": "wa",
+   "news_url": "https://www.collie.wa.gov.au/news-events/"
+  },
+  "coober-pedy": {
+   "id": "coober-pedy",
+   "name": "District Council of Coober Pedy",
+   "state": "sa",
+   "news_url": "https://www.cooberpedy.sa.gov.au/latest-news-events/latest-news"
+  },
+  "cook": {
+   "id": "cook",
+   "name": "Cook Shire Council",
+   "state": "qld",
+   "news_url": "https://www.cook.qld.gov.au/feed/"
+  },
+  "coolamon-shire-council": {
+   "id": "coolamon-shire-council",
+   "name": "Coolamon Shire Council",
+   "state": "nsw",
+   "news_url": "https://coolamon.nsw.gov.au/news?format=rss"
+  },
+  "coolgardie": {
+   "id": "coolgardie",
+   "name": "Shire of Coolgardie",
+   "state": "wa",
+   "news_url": "https://www.coolgardie.wa.gov.au/news/"
+  },
+  "coomalie": {
+   "id": "coomalie",
+   "name": "Coomalie Community Government Council",
+   "state": "nt",
+   "news_url": "https://coomalie.nt.gov.au/news"
+  },
+  "coonamble-shire-council": {
+   "id": "coonamble-shire-council",
+   "name": "Coonamble Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.coonambleshire.nsw.gov.au/council/news"
+  },
+  "coorong-district": {
+   "id": "coorong-district",
+   "name": "Coorong District Council",
+   "state": "sa",
+   "news_url": "https://www.coorong.sa.gov.au/stay-informed/news"
+  },
+  "coorow": {
+   "id": "coorow",
+   "name": "Shire of Coorow",
+   "state": "wa",
+   "news_url": "https://coorow.wa.gov.au/news/rss/"
+  },
+  "cootamundra-gundagai-regional-council": {
+   "id": "cootamundra-gundagai-regional-council",
+   "name": "Cootamundra-Gundagai Council",
+   "state": "nsw",
+   "news_url": "https://www.cgrc.nsw.gov.au/feed/"
+  },
+  "copper-coast": {
+   "id": "copper-coast",
+   "name": "Copper Coast Council",
+   "state": "sa",
+   "news_url": "https://www.coppercoast.sa.gov.au/noticeboard/latest-news"
+  },
+  "corangamite": {
+   "id": "corangamite",
+   "name": "Corangamite Shire Council",
+   "state": "vic",
+   "news_url": "https://www.corangamite.vic.gov.au/Council/News-and-Media/Latest-News"
+  },
+  "corrigin": {
+   "id": "corrigin",
+   "name": "Shire of Corrigin",
+   "state": "wa",
+   "news_url": "https://www.corrigin.wa.gov.au/news/"
+  },
+  "cottesloe": {
+   "id": "cottesloe",
+   "name": "Town of Cottesloe",
+   "state": "wa",
+   "news_url": "https://www.cottesloe.wa.gov.au/news/"
+  },
+  "cowra-council": {
+   "id": "cowra-council",
+   "name": "Cowra Council",
+   "state": "nsw",
+   "news_url": "https://www.cowracouncil.com.au/News/Latest-News-and-Media-Releases"
+  },
+  "cranbrook": {
+   "id": "cranbrook",
+   "name": "Shire of Cranbrook",
+   "state": "wa",
+   "news_url": "https://www.cranbrook.wa.gov.au/news/"
+  },
+  "croydon": {
+   "id": "croydon",
+   "name": "Croydon Shire Council",
+   "state": "qld",
+   "news_url": "https://www.croydon.qld.gov.au/News-articles"
+  },
+  "cuballing": {
+   "id": "cuballing",
+   "name": "Shire of Cuballing",
+   "state": "wa",
+   "news_url": "https://www.cuballing.wa.gov.au/news/"
+  },
+  "cue": {
+   "id": "cue",
+   "name": "Shire of Cue",
+   "state": "wa",
+   "news_url": "https://www.cue.wa.gov.au/news/"
+  },
+  "cumberland-city-council": {
+   "id": "cumberland-city-council",
+   "name": "Cumberland City Council",
+   "state": "nsw",
+   "news_url": "https://www.cumberland.nsw.gov.au/media-releases"
+  },
+  "cunderdin": {
+   "id": "cunderdin",
+   "name": "Shire of Cunderdin",
+   "state": "wa",
+   "news_url": "https://www.cunderdin.wa.gov.au/news/"
+  },
+  "dalwallinu": {
+   "id": "dalwallinu",
+   "name": "Shire of Dalwallinu",
+   "state": "wa",
+   "news_url": "https://www.dalwallinu.wa.gov.au/news/"
+  },
+  "dandaragan": {
+   "id": "dandaragan",
+   "name": "Shire of Dandaragan",
+   "state": "wa",
+   "news_url": "https://www.dandaragan.wa.gov.au/news/"
+  },
+  "dardanup": {
+   "id": "dardanup",
+   "name": "Shire of Dardanup",
+   "state": "wa",
+   "news_url": "https://www.dardanup.wa.gov.au/news/"
+  },
+  "darebin": {
+   "id": "darebin",
+   "name": "Darebin City Council",
+   "state": "vic",
+   "news_url": "https://www.darebin.vic.gov.au/About-council/News-and-Media/Latest-news"
+  },
+  "darwin": {
+   "id": "darwin",
+   "name": "City of Darwin",
+   "state": "nt",
+   "news_url": "https://www.darwin.nt.gov.au/news"
+  },
+  "denmark": {
+   "id": "denmark",
+   "name": "Shire of Denmark",
+   "state": "wa",
+   "news_url": "https://www.denmark.wa.gov.au/news/rss/"
+  },
+  "derby-west-kimberley": {
+   "id": "derby-west-kimberley",
+   "name": "Shire of Derby-West Kimberley",
+   "state": "wa",
+   "news_url": "https://www.sdwk.wa.gov.au/news/"
+  },
+  "derwent-valley": {
+   "id": "derwent-valley",
+   "name": "Derwent Valley Council",
+   "state": "tas",
+   "news_url": "https://www.derwentvalley.tas.gov.au/home/latest-news"
+  },
+  "devonport": {
+   "id": "devonport",
+   "name": "Devonport City Council",
+   "state": "tas",
+   "news_url": "https://www.devonport.tas.gov.au/feed/"
+  },
+  "diamantina": {
+   "id": "diamantina",
+   "name": "Diamantina Shire Council",
+   "state": "qld",
+   "news_url": "https://www.diamantina.qld.gov.au/News/Latest-News"
+  },
+  "donnybrook-balingup": {
+   "id": "donnybrook-balingup",
+   "name": "Shire of Donnybrook-Balingup",
+   "state": "wa",
+   "news_url": "https://www.donnybrook-balingup.wa.gov.au/news/"
+  },
+  "doomadgee": {
+   "id": "doomadgee",
+   "name": "Doomadgee Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.doomadgee.qld.gov.au/feed/"
+  },
+  "dorset": {
+   "id": "dorset",
+   "name": "Dorset Council",
+   "state": "tas",
+   "news_url": "https://www.dorset.tas.gov.au/news"
+  },
+  "douglas": {
+   "id": "douglas",
+   "name": "Douglas Shire Council",
+   "state": "qld",
+   "news_url": "https://douglas.qld.gov.au/feed/"
+  },
+  "dowerin": {
+   "id": "dowerin",
+   "name": "Shire of Dowerin",
+   "state": "wa",
+   "news_url": "https://www.dowerin.wa.gov.au/news/"
+  },
+  "dubbo-regional-council": {
+   "id": "dubbo-regional-council",
+   "name": "Dubbo Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.dubbo.nsw.gov.au/news-and-media/news-and-resources/council-news"
+  },
+  "dumbleyung": {
+   "id": "dumbleyung",
+   "name": "Shire of Dumbleyung",
+   "state": "wa",
+   "news_url": "https://www.dumbleyung.wa.gov.au/newsletters"
+  },
+  "dundas": {
+   "id": "dundas",
+   "name": "Shire of Dundas",
+   "state": "wa",
+   "news_url": "https://www.dundas.wa.gov.au/news/"
+  },
+  "dungog-shire-council": {
+   "id": "dungog-shire-council",
+   "name": "Dungog Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.dungog.nsw.gov.au/News"
+  },
+  "east-fremantle": {
+   "id": "east-fremantle",
+   "name": "Town of East Fremantle",
+   "state": "wa",
+   "news_url": "https://www.eastfremantle.wa.gov.au/news/"
+  },
+  "east-gippsland": {
+   "id": "east-gippsland",
+   "name": "East Gippsland Shire Council",
+   "state": "vic",
+   "news_url": "https://www.eastgippsland.vic.gov.au/our-council/media-releases"
+  },
+  "east-pilbara": {
+   "id": "east-pilbara",
+   "name": "Shire of East Pilbara",
+   "state": "wa",
+   "news_url": "https://www.eastpilbara.wa.gov.au/news/"
+  },
+  "east_arnhem": {
+   "id": "east_arnhem",
+   "name": "East Arnhem Regional Council",
+   "state": "nt",
+   "news_url": "https://eastarnhem.nt.gov.au/news-and-events"
+  },
+  "edward-river-council": {
+   "id": "edward-river-council",
+   "name": "Edward River Council",
+   "state": "nsw",
+   "news_url": "https://www.edwardriver.nsw.gov.au/Council/News/Media-Releases"
+  },
+  "elliston": {
+   "id": "elliston",
+   "name": "District Council of Elliston",
+   "state": "sa",
+   "news_url": "https://www.elliston.sa.gov.au/community-information/latest-news"
+  },
+  "esperance": {
+   "id": "esperance",
+   "name": "Shire of Esperance",
+   "state": "wa",
+   "news_url": "https://www.esperance.wa.gov.au/news/"
+  },
+  "etheridge": {
+   "id": "etheridge",
+   "name": "Etheridge Shire Council",
+   "state": "qld",
+   "news_url": "https://www.etheridge.qld.gov.au/Home/Tabs/News"
+  },
+  "eurobodalla-shire-council": {
+   "id": "eurobodalla-shire-council",
+   "name": "Eurobodalla Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.esc.nsw.gov.au/news-and-events/latest-news"
+  },
+  "exmouth": {
+   "id": "exmouth",
+   "name": "Shire of Exmouth",
+   "state": "wa",
+   "news_url": "https://www.exmouth.wa.gov.au/news/?c=2"
+  },
+  "fairfield-city-council": {
+   "id": "fairfield-city-council",
+   "name": "Fairfield City Council",
+   "state": "nsw",
+   "news_url": "https://www.fairfieldcity.nsw.gov.au/News"
+  },
+  "federation-council": {
+   "id": "federation-council",
+   "name": "Federation Council",
+   "state": "nsw",
+   "news_url": "https://www.federationcouncil.nsw.gov.au/Council/News-Media"
+  },
+  "flinders-qld": {
+   "id": "flinders-qld",
+   "name": "Flinders Shire Council",
+   "state": "qld",
+   "news_url": "https://www.flinders.qld.gov.au/Your-Council/Latest-News"
+  },
+  "flinders-ranges": {
+   "id": "flinders-ranges",
+   "name": "The Flinders Ranges Council",
+   "state": "sa",
+   "news_url": "https://www.frc.sa.gov.au/community/latest-news"
+  },
+  "flinders-tas": {
+   "id": "flinders-tas",
+   "name": "Flinders Council",
+   "state": "tas",
+   "news_url": "https://www.flinders.tas.gov.au/community-noticeboard/"
+  },
+  "forbes-shire-council": {
+   "id": "forbes-shire-council",
+   "name": "Forbes Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.forbes.nsw.gov.au/News"
+  },
+  "franklin-harbour": {
+   "id": "franklin-harbour",
+   "name": "District Council of Franklin Harbour",
+   "state": "sa",
+   "news_url": "https://www.franklinharbour.sa.gov.au/community/latest-news"
+  },
+  "frankston": {
+   "id": "frankston",
+   "name": "Frankston City Council",
+   "state": "vic",
+   "news_url": "https://www.frankston.vic.gov.au/Your_Council/Media_and_Publications/Latest_News"
+  },
+  "fraser-coast": {
+   "id": "fraser-coast",
+   "name": "Fraser Coast Regional Council",
+   "state": "qld",
+   "news_url": "https://www.frasercoast.qld.gov.au/media-releases"
+  },
+  "fremantle": {
+   "id": "fremantle",
+   "name": "City of Fremantle",
+   "state": "wa",
+   "news_url": "https://www.fremantle.wa.gov.au/feed"
+  },
+  "gannawarra": {
+   "id": "gannawarra",
+   "name": "Gannawarra Shire Council",
+   "state": "vic",
+   "news_url": "https://www.gannawarra.vic.gov.au/News-Media"
+  },
+  "gawler": {
+   "id": "gawler",
+   "name": "Town of Gawler",
+   "state": "sa",
+   "news_url": "https://www.gawler.sa.gov.au/about-gawler/latest-news"
+  },
+  "george-town": {
+   "id": "george-town",
+   "name": "George Town Council",
+   "state": "tas",
+   "news_url": "https://georgetown.tas.gov.au/news"
+  },
+  "georges-river-council": {
+   "id": "georges-river-council",
+   "name": "Georges River Council",
+   "state": "nsw",
+   "news_url": "https://www.georgesriver.nsw.gov.au/Council/Media?rss=News"
+  },
+  "gilgandra-shire-council": {
+   "id": "gilgandra-shire-council",
+   "name": "Gilgandra Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.gilgandra.nsw.gov.au/Stay-Connected/News/Media-Releases"
+  },
+  "gingin": {
+   "id": "gingin",
+   "name": "Shire of Gingin",
+   "state": "wa",
+   "news_url": "https://www.gingin.wa.gov.au/news/"
+  },
+  "gladstone": {
+   "id": "gladstone",
+   "name": "Gladstone Regional Council",
+   "state": "qld",
+   "news_url": "https://www.gladstone.qld.gov.au/news/category/all"
+  },
+  "glamorgan-spring-bay": {
+   "id": "glamorgan-spring-bay",
+   "name": "Glamorgan Spring Bay Council",
+   "state": "tas",
+   "news_url": "https://gsbc.tas.gov.au/council/news-media/"
+  },
+  "glen-eira": {
+   "id": "glen-eira",
+   "name": "Glen Eira City Council",
+   "state": "vic",
+   "news_url": "https://www.gleneira.vic.gov.au/about-council/news/latest-news"
+  },
+  "glen-innes-severn-council": {
+   "id": "glen-innes-severn-council",
+   "name": "Glen Innes Severn Council",
+   "state": "nsw",
+   "news_url": "https://www.gisc.nsw.gov.au/News-Media"
+  },
+  "glenelg": {
+   "id": "glenelg",
+   "name": "Glenelg Shire Council",
+   "state": "vic",
+   "news_url": "https://www.glenelg.vic.gov.au/News-and-Media-Releases"
+  },
+  "glenorchy": {
+   "id": "glenorchy",
+   "name": "Glenorchy City Council",
+   "state": "tas",
+   "news_url": "https://www.gcc.tas.gov.au/feed/"
+  },
+  "gnowangerup": {
+   "id": "gnowangerup",
+   "name": "Shire of Gnowangerup",
+   "state": "wa",
+   "news_url": "https://www.gnowangerup.wa.gov.au/news/"
+  },
+  "gold-coast": {
+   "id": "gold-coast",
+   "name": "City of Gold Coast",
+   "state": "qld",
+   "news_url": "https://www.goldcoast.qld.gov.au/Council/City-news"
+  },
+  "golden-plains": {
+   "id": "golden-plains",
+   "name": "Golden Plains Shire Council",
+   "state": "vic",
+   "news_url": "https://www.goldenplains.vic.gov.au/news"
+  },
+  "goomalling": {
+   "id": "goomalling",
+   "name": "Shire of Goomalling",
+   "state": "wa",
+   "news_url": "https://www.goomalling.wa.gov.au/news/"
+  },
+  "goondiwindi": {
+   "id": "goondiwindi",
+   "name": "Goondiwindi Regional Council",
+   "state": "qld",
+   "news_url": "https://www.grc.qld.gov.au/News-and-Community/News/Council-News"
+  },
+  "gosnells": {
+   "id": "gosnells",
+   "name": "City of Gosnells",
+   "state": "wa",
+   "news_url": "https://www.gosnells.wa.gov.au/Your-Council/About-Your-City/News"
+  },
+  "goulburn-mulwaree-council": {
+   "id": "goulburn-mulwaree-council",
+   "name": "Goulburn Mulwaree Council",
+   "state": "nsw",
+   "news_url": "https://www.goulburn.nsw.gov.au/News-Articles"
+  },
+  "goyder": {
+   "id": "goyder",
+   "name": "Regional Council of Goyder",
+   "state": "sa",
+   "news_url": "https://www.goyder.sa.gov.au/community/latest-news"
+  },
+  "grant": {
+   "id": "grant",
+   "name": "District Council of Grant",
+   "state": "sa",
+   "news_url": "https://www.dcgrant.sa.gov.au/council/latest-news"
+  },
+  "greater-bendigo": {
+   "id": "greater-bendigo",
+   "name": "Greater Bendigo City Council",
+   "state": "vic",
+   "news_url": "https://www.bendigo.vic.gov.au/About/Media-Releases"
+  },
+  "greater-dandenong": {
+   "id": "greater-dandenong",
+   "name": "Greater Dandenong City Council",
+   "state": "vic",
+   "news_url": "https://www.greaterdandenong.vic.gov.au/news"
+  },
+  "greater-geelong": {
+   "id": "greater-geelong",
+   "name": "Greater Geelong City Council",
+   "state": "vic",
+   "news_url": "https://www.geelongcity.vic.gov.au/whats-happening/news-and-updates"
+  },
+  "greater-geraldton": {
+   "id": "greater-geraldton",
+   "name": "City of Greater Geraldton",
+   "state": "wa",
+   "news_url": "https://www.cgg.wa.gov.au/news/"
+  },
+  "greater-hume-council": {
+   "id": "greater-hume-council",
+   "name": "Greater Hume Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.greaterhume.nsw.gov.au/Newsroom/Current-News"
+  },
+  "greater-shepparton": {
+   "id": "greater-shepparton",
+   "name": "Greater Shepparton City Council",
+   "state": "vic",
+   "news_url": "https://greatershepparton.com.au/whats-happening/news"
+  },
+  "griffith-city-council": {
+   "id": "griffith-city-council",
+   "name": "Griffith City Council",
+   "state": "nsw",
+   "news_url": "https://www.griffith.nsw.gov.au/News/News"
+  },
+  "groote_archipelago": {
+   "id": "groote_archipelago",
+   "name": "Groote Archipelago Regional Council",
+   "state": "nt",
+   "news_url": "https://groote.nt.gov.au/feed/rss2"
+  },
+  "gunnedah-shire-council": {
+   "id": "gunnedah-shire-council",
+   "name": "Gunnedah Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.gunnedah.nsw.gov.au/News-articles"
+  },
+  "gwydir-shire-council": {
+   "id": "gwydir-shire-council",
+   "name": "Gwydir Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.gwydir.nsw.gov.au/Council/Shire-News"
+  },
+  "gympie": {
+   "id": "gympie",
+   "name": "Gympie Regional Council",
+   "state": "qld",
+   "news_url": "https://www.gympie.qld.gov.au/Council/News-and-Notices/Latest-News"
+  },
+  "halls-creek": {
+   "id": "halls-creek",
+   "name": "Shire of Halls Creek",
+   "state": "wa",
+   "news_url": "https://www.hallscreek.wa.gov.au/council/sohc-news"
+  },
+  "harvey": {
+   "id": "harvey",
+   "name": "Shire of Harvey",
+   "state": "wa",
+   "news_url": "https://www.harvey.wa.gov.au/wp-json/aw/v1/post"
+  },
+  "hawkesbury-city-council": {
+   "id": "hawkesbury-city-council",
+   "name": "Hawkesbury City Council",
+   "state": "nsw",
+   "news_url": "https://www.hawkesbury.nsw.gov.au/your-council/council-news/media-releases"
+  },
+  "hay-shire-council": {
+   "id": "hay-shire-council",
+   "name": "Hay Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.hay.nsw.gov.au/Inside-Hay-Shire-Council/News-Council-Updates"
+  },
+  "hepburn": {
+   "id": "hepburn",
+   "name": "Hepburn Shire Council",
+   "state": "vic",
+   "news_url": "https://www.hepburn.vic.gov.au/Council/News/Latest-news"
+  },
+  "hilltops-council": {
+   "id": "hilltops-council",
+   "name": "Hilltops Council",
+   "state": "nsw",
+   "news_url": "https://www.hilltops.nsw.gov.au/feed/"
+  },
+  "hinchinbrook": {
+   "id": "hinchinbrook",
+   "name": "Hinchinbrook Shire Council",
+   "state": "qld",
+   "news_url": "https://www.hinchinbrook.qld.gov.au/Our-Council/Latest-News"
+  },
+  "hindmarsh": {
+   "id": "hindmarsh",
+   "name": "Hindmarsh Shire Council",
+   "state": "vic",
+   "news_url": "https://www.hindmarsh.vic.gov.au/Council/News-and-Media/Latest-News"
+  },
+  "hobart": {
+   "id": "hobart",
+   "name": "Hobart City Council",
+   "state": "tas",
+   "news_url": "https://www.hobartcity.com.au/Council/News-publications-and-announcements/Media-releases"
+  },
+  "hobsons-bay": {
+   "id": "hobsons-bay",
+   "name": "Hobsons Bay City Council",
+   "state": "vic",
+   "news_url": "https://www.hobsonsbay.vic.gov.au/News-Media"
+  },
+  "holdfast-bay": {
+   "id": "holdfast-bay",
+   "name": "City of Holdfast Bay",
+   "state": "sa",
+   "news_url": "https://www.holdfast.sa.gov.au/news"
+  },
+  "hope-vale": {
+   "id": "hope-vale",
+   "name": "Hope Vale Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.hopevale.qld.gov.au/Council/News-and-Notices/Latest-News"
+  },
+  "hornsby-shire-council": {
+   "id": "hornsby-shire-council",
+   "name": "Hornsby Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.hornsby.nsw.gov.au/Council/Noticeboard/Latest-news"
+  },
+  "horsham": {
+   "id": "horsham",
+   "name": "Horsham Rural City Council",
+   "state": "vic",
+   "news_url": "https://www.hrcc.vic.gov.au/Our-Council/News-and-Media/Latest-News"
+  },
+  "hume": {
+   "id": "hume",
+   "name": "Hume City Council",
+   "state": "vic",
+   "news_url": "https://www.hume.vic.gov.au/Residents/Things-to-See-and-Do/Latest-News/Media-Releases"
+  },
+  "hunters-hill-council": {
+   "id": "hunters-hill-council",
+   "name": "Hunter's Hill Council",
+   "state": "nsw",
+   "news_url": "https://www.huntershill.nsw.gov.au/news/"
+  },
+  "huon-valley": {
+   "id": "huon-valley",
+   "name": "Huon Valley Council",
+   "state": "tas",
+   "news_url": "https://www.huonvalley.tas.gov.au/news-and-media/"
+  },
+  "indigo": {
+   "id": "indigo",
+   "name": "Indigo Shire Council",
+   "state": "vic",
+   "news_url": "https://www.indigoshire.vic.gov.au/Council/Latest-news"
+  },
+  "inner-west-council": {
+   "id": "inner-west-council",
+   "name": "Inner West Council",
+   "state": "nsw",
+   "news_url": "https://www.innerwest.nsw.gov.au/news"
+  },
+  "inverell-shire-council": {
+   "id": "inverell-shire-council",
+   "name": "Inverell Shire Council",
+   "state": "nsw",
+   "news_url": "https://inverell.nsw.gov.au/council/news/"
+  },
+  "ipswich": {
+   "id": "ipswich",
+   "name": "Ipswich City Council",
+   "state": "qld",
+   "news_url": "https://www.ipswich.qld.gov.au/About-Council/Media-and-Publications/News"
+  },
+  "irwin": {
+   "id": "irwin",
+   "name": "Shire of Irwin",
+   "state": "wa",
+   "news_url": "https://irwin.wa.gov.au/news/"
+  },
+  "isaac": {
+   "id": "isaac",
+   "name": "Isaac Regional Council",
+   "state": "qld",
+   "news_url": "https://www.isaac.qld.gov.au/news"
+  },
+  "jerramungup": {
+   "id": "jerramungup",
+   "name": "Shire of Jerramungup",
+   "state": "wa",
+   "news_url": "https://www.jerramungup.wa.gov.au/news/"
+  },
+  "joondalup": {
+   "id": "joondalup",
+   "name": "City of Joondalup",
+   "state": "wa",
+   "news_url": "https://www.joondalup.wa.gov.au/city-and-council/latest-news-updates"
+  },
+  "junee-shire-council": {
+   "id": "junee-shire-council",
+   "name": "Junee Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.junee.nsw.gov.au/feed/"
+  },
+  "kalamunda": {
+   "id": "kalamunda",
+   "name": "City of Kalamunda",
+   "state": "wa",
+   "news_url": "https://www.kalamunda.wa.gov.au/our-city/news-announcements/media-releases"
+  },
+  "kalgoorlie-boulder": {
+   "id": "kalgoorlie-boulder",
+   "name": "City of Kalgoorlie-Boulder",
+   "state": "wa",
+   "news_url": "https://www.ckb.wa.gov.au/news/"
+  },
+  "kangaroo-island": {
+   "id": "kangaroo-island",
+   "name": "Kangaroo Island Council",
+   "state": "sa",
+   "news_url": "https://www.kangarooisland.sa.gov.au/notice-board/news-and-notices/latest-news"
+  },
+  "karoonda-east-murray": {
+   "id": "karoonda-east-murray",
+   "name": "District Council of Karoonda East Murray",
+   "state": "sa",
+   "news_url": "https://www.dckem.sa.gov.au/community/latest-news"
+  },
+  "karratha": {
+   "id": "karratha",
+   "name": "City of Karratha",
+   "state": "wa",
+   "news_url": "https://www.karratha.wa.gov.au/council/news/latest-news"
+  },
+  "katanning": {
+   "id": "katanning",
+   "name": "Shire of Katanning",
+   "state": "wa",
+   "news_url": "https://www.katanning.wa.gov.au/news/"
+  },
+  "katherine": {
+   "id": "katherine",
+   "name": "Katherine Town Council",
+   "state": "nt",
+   "news_url": "https://www.katherine.nt.gov.au/news"
+  },
+  "kellerberrin": {
+   "id": "kellerberrin",
+   "name": "Shire of Kellerberrin",
+   "state": "wa",
+   "news_url": "https://www.kellerberrin.wa.gov.au/news"
+  },
+  "kempsey-shire-council": {
+   "id": "kempsey-shire-council",
+   "name": "Kempsey Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.kempsey.nsw.gov.au/Your-Council/Council-news-public-notices/Council-news-updates"
+  },
+  "kent": {
+   "id": "kent",
+   "name": "Shire of Kent",
+   "state": "wa",
+   "news_url": "https://www.kent.wa.gov.au/feed/"
+  },
+  "kentish": {
+   "id": "kentish",
+   "name": "Kentish Council",
+   "state": "tas",
+   "news_url": "https://www.kentish.tas.gov.au/council/latest-news"
+  },
+  "kiama-municipal-council": {
+   "id": "kiama-municipal-council",
+   "name": "Kiama Municipal Council",
+   "state": "nsw",
+   "news_url": "https://www.kiama.nsw.gov.au/News"
+  },
+  "kimba": {
+   "id": "kimba",
+   "name": "District Council of Kimba",
+   "state": "sa",
+   "news_url": "https://www.kimba.sa.gov.au/community/latest-news"
+  },
+  "king-island": {
+   "id": "king-island",
+   "name": "King Island Council",
+   "state": "tas",
+   "news_url": "https://kingisland.tas.gov.au/news/"
+  },
+  "kingborough": {
+   "id": "kingborough",
+   "name": "Kingborough Council",
+   "state": "tas",
+   "news_url": "https://www.kingborough.tas.gov.au/news-media/news/"
+  },
+  "kingston": {
+   "id": "kingston",
+   "name": "Kingston City Council",
+   "state": "vic",
+   "news_url": "https://www.kingston.vic.gov.au/council/news/latest-news"
+  },
+  "kingston-district": {
+   "id": "kingston-district",
+   "name": "Kingston District Council",
+   "state": "sa",
+   "news_url": "https://www.kingstondc.sa.gov.au/our-council/public-consultation/latest-news"
+  },
+  "knox": {
+   "id": "knox",
+   "name": "Knox City Council",
+   "state": "vic",
+   "news_url": "https://www.knox.vic.gov.au/whats-happening/news"
+  },
+  "kojonup": {
+   "id": "kojonup",
+   "name": "Shire of Kojonup",
+   "state": "wa",
+   "news_url": "https://www.kojonup.wa.gov.au/news/"
+  },
+  "kondinin": {
+   "id": "kondinin",
+   "name": "Shire of Kondinin",
+   "state": "wa",
+   "news_url": "https://www.kondinin.wa.gov.au/news/"
+  },
+  "koorda": {
+   "id": "koorda",
+   "name": "Shire of Koorda",
+   "state": "wa",
+   "news_url": "https://www.koorda.wa.gov.au/news/"
+  },
+  "kowanyama": {
+   "id": "kowanyama",
+   "name": "Kowanyama Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.kowanyama.qld.gov.au/feed/"
+  },
+  "ku-ring-gai-council": {
+   "id": "ku-ring-gai-council",
+   "name": "Ku-ring-gai Council",
+   "state": "nsw",
+   "news_url": "https://www.krg.nsw.gov.au/Council/News-and-media/Latest-news"
+  },
+  "kulin": {
+   "id": "kulin",
+   "name": "Shire of Kulin",
+   "state": "wa",
+   "news_url": "https://www.kulin.wa.gov.au/news/"
+  },
+  "kwinana": {
+   "id": "kwinana",
+   "name": "City of Kwinana",
+   "state": "wa",
+   "news_url": "https://www.kwinana.wa.gov.au/council/news"
+  },
+  "kyogle-council": {
+   "id": "kyogle-council",
+   "name": "Kyogle Council",
+   "state": "nsw",
+   "news_url": "https://www.kyogle.nsw.gov.au/latest-news"
+  },
+  "lachlan-shire-council": {
+   "id": "lachlan-shire-council",
+   "name": "Lachlan Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.lachlan.nsw.gov.au/News-articles"
+  },
+  "lake-grace": {
+   "id": "lake-grace",
+   "name": "Shire of Lake Grace",
+   "state": "wa",
+   "news_url": "https://www.lakegrace.wa.gov.au/news/"
+  },
+  "lake-macquarie-city-council": {
+   "id": "lake-macquarie-city-council",
+   "name": "Lake Macquarie City Council",
+   "state": "nsw",
+   "news_url": "https://www.lakemac.com.au/News-articles"
+  },
+  "lane-cove-council": {
+   "id": "lane-cove-council",
+   "name": "Lane Cove Council",
+   "state": "nsw",
+   "news_url": "https://www.lanecove.nsw.gov.au/News"
+  },
+  "latrobe-tas": {
+   "id": "latrobe-tas",
+   "name": "Latrobe Council",
+   "state": "tas",
+   "news_url": "https://www.latrobe.tas.gov.au/notice-board/latest-news"
+  },
+  "latrobe-vic": {
+   "id": "latrobe-vic",
+   "name": "Latrobe City Council",
+   "state": "vic",
+   "news_url": "https://www.latrobe.vic.gov.au/Council/Media_and_Publications/Latest_News"
+  },
+  "launceston": {
+   "id": "launceston",
+   "name": "Launceston City Council",
+   "state": "tas",
+   "news_url": "https://www.launceston.tas.gov.au/News-Media"
+  },
+  "laverton": {
+   "id": "laverton",
+   "name": "Shire of Laverton",
+   "state": "wa",
+   "news_url": "https://laverton.wa.gov.au/wp-json/wp/v2/posts?per_page=20&_envelope=true"
+  },
+  "leeton-shire-council": {
+   "id": "leeton-shire-council",
+   "name": "Leeton Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.leeton.nsw.gov.au/Your-Council/Council-News/Media-Releases"
+  },
+  "leonora": {
+   "id": "leonora",
+   "name": "Shire of Leonora",
+   "state": "wa",
+   "news_url": "https://www.leonora.wa.gov.au/news/"
+  },
+  "light-regional": {
+   "id": "light-regional",
+   "name": "Light Regional Council",
+   "state": "sa",
+   "news_url": "https://www.light.sa.gov.au/yourcouncil/latest-news"
+  },
+  "lismore-city-council": {
+   "id": "lismore-city-council",
+   "name": "Lismore City Council",
+   "state": "nsw",
+   "news_url": "https://www.lismore.nsw.gov.au/Council/News-projects/Latest-news"
+  },
+  "litchfield": {
+   "id": "litchfield",
+   "name": "Litchfield Council",
+   "state": "nt",
+   "news_url": "https://www.litchfield.nt.gov.au/news"
+  },
+  "lithgow-city-council": {
+   "id": "lithgow-city-council",
+   "name": "Lithgow City Council",
+   "state": "nsw",
+   "news_url": "https://council.lithgow.com/news/"
+  },
+  "liverpool-city-council": {
+   "id": "liverpool-city-council",
+   "name": "Liverpool City Council",
+   "state": "nsw",
+   "news_url": "https://www.liverpool.nsw.gov.au/council/Media"
+  },
+  "liverpool-plains-shire-council": {
+   "id": "liverpool-plains-shire-council",
+   "name": "Liverpool Plains Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.liverpoolplains.nsw.gov.au/News"
+  },
+  "livingstone": {
+   "id": "livingstone",
+   "name": "Livingstone Shire Council",
+   "state": "qld",
+   "news_url": "https://www.livingstone.qld.gov.au/Your-Council/Publications-and-Media/Media-Releases"
+  },
+  "lockhart-river": {
+   "id": "lockhart-river",
+   "name": "Lockhart River Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://lockhart.qld.gov.au/waanta-newsletters"
+  },
+  "lockhart-shire-council": {
+   "id": "lockhart-shire-council",
+   "name": "Lockhart Shire Council",
+   "state": "nsw",
+   "news_url": "https://lockhart.nsw.gov.au/council/lockhart-shire-newsletters/"
+  },
+  "lockyer-valley": {
+   "id": "lockyer-valley",
+   "name": "Lockyer Valley Regional Council",
+   "state": "qld",
+   "news_url": "https://www.lockyervalley.qld.gov.au/our-council/news"
+  },
+  "loddon": {
+   "id": "loddon",
+   "name": "Loddon Shire Council",
+   "state": "vic",
+   "news_url": "https://www.loddon.vic.gov.au/News-and-public-notices/News-articles"
+  },
+  "logan": {
+   "id": "logan",
+   "name": "City of Logan",
+   "state": "qld",
+   "news_url": "https://www.logan.qld.gov.au/about-council/media-releases"
+  },
+  "longreach": {
+   "id": "longreach",
+   "name": "Longreach Regional Council",
+   "state": "qld",
+   "news_url": "https://www.longreach.qld.gov.au/About-Council/Latest-News"
+  },
+  "lower-eyre": {
+   "id": "lower-eyre",
+   "name": "Lower Eyre Council",
+   "state": "sa",
+   "news_url": "https://www.lowereyrepeninsula.sa.gov.au/community-information/latest-news"
+  },
+  "loxton-waikerie": {
+   "id": "loxton-waikerie",
+   "name": "District Council of Loxton Waikerie",
+   "state": "sa",
+   "news_url": "https://www.lwdc.sa.gov.au/notice-board/latest-news"
+  },
+  "macdonnell": {
+   "id": "macdonnell",
+   "name": "MacDonnell Regional Council",
+   "state": "nt",
+   "news_url": "https://www.macdonnell.nt.gov.au/news"
+  },
+  "macedon-ranges": {
+   "id": "macedon-ranges",
+   "name": "Macedon Ranges Shire Council",
+   "state": "vic",
+   "news_url": "https://www.mrsc.vic.gov.au/About-Council/News/Latest-News"
+  },
+  "mackay": {
+   "id": "mackay",
+   "name": "Mackay Regional Council",
+   "state": "qld",
+   "news_url": "https://www.mackay.qld.gov.au/about_council/news_and_media/media_releases"
+  },
+  "maitland-city-council": {
+   "id": "maitland-city-council",
+   "name": "Maitland City Council",
+   "state": "nsw",
+   "news_url": "https://www.maitland.nsw.gov.au/news"
+  },
+  "mandurah": {
+   "id": "mandurah",
+   "name": "City of Mandurah",
+   "state": "wa",
+   "news_url": "https://www.mandurah.wa.gov.au/our-council/news-and-public-notices"
+  },
+  "manjimup": {
+   "id": "manjimup",
+   "name": "Shire of Manjimup",
+   "state": "wa",
+   "news_url": "https://www.manjimup.wa.gov.au/our-shire/news"
+  },
+  "manningham": {
+   "id": "manningham",
+   "name": "Manningham City Council",
+   "state": "vic",
+   "news_url": "https://www.manningham.vic.gov.au/media-releases"
+  },
+  "mansfield": {
+   "id": "mansfield",
+   "name": "Mansfield Shire Council",
+   "state": "vic",
+   "news_url": "https://www.mansfield.vic.gov.au/community/news"
+  },
+  "mapoon": {
+   "id": "mapoon",
+   "name": "Mapoon Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.mapoon.qld.gov.au/News"
+  },
+  "maranoa": {
+   "id": "maranoa",
+   "name": "Maranoa Regional Council",
+   "state": "qld",
+   "news_url": "https://www.maranoa.qld.gov.au/About-Council/Publications-and-Media/Latest-Council-News"
+  },
+  "mareeba": {
+   "id": "mareeba",
+   "name": "Mareeba Shire Council",
+   "state": "qld",
+   "news_url": "https://msc.qld.gov.au/council/news/"
+  },
+  "maribyrnong": {
+   "id": "maribyrnong",
+   "name": "Maribyrnong City Council",
+   "state": "vic",
+   "news_url": "https://www.maribyrnong.vic.gov.au/News"
+  },
+  "marion": {
+   "id": "marion",
+   "name": "City of Marion",
+   "state": "sa",
+   "news_url": "https://www.marion.sa.gov.au/about-council/news"
+  },
+  "maroondah": {
+   "id": "maroondah",
+   "name": "Maroondah City Council",
+   "state": "vic",
+   "news_url": "https://www.maroondah.vic.gov.au/About-Council/News/Maroondah-news"
+  },
+  "mckinlay": {
+   "id": "mckinlay",
+   "name": "McKinlay Shire Council",
+   "state": "qld",
+   "news_url": "https://www.mckinlay.qld.gov.au/News/Media-releases"
+  },
+  "meander-valley": {
+   "id": "meander-valley",
+   "name": "Meander Valley Council",
+   "state": "tas",
+   "news_url": "https://www.meander.tas.gov.au/latest-news"
+  },
+  "meekatharra": {
+   "id": "meekatharra",
+   "name": "Shire of Meekatharra",
+   "state": "wa",
+   "news_url": "https://www.meekashire.wa.gov.au/news/"
+  },
+  "melbourne": {
+   "id": "melbourne",
+   "name": "Melbourne City Council",
+   "state": "vic",
+   "news_url": "https://www.melbourne.vic.gov.au/melbourne-news"
+  },
+  "melton": {
+   "id": "melton",
+   "name": "Melton City Council",
+   "state": "vic",
+   "news_url": "https://www.melton.vic.gov.au/News-Media"
+  },
+  "melville": {
+   "id": "melville",
+   "name": "City of Melville",
+   "state": "wa",
+   "news_url": "https://www.melvillecity.com.au/our-city/news/latest-news"
+  },
+  "menzies": {
+   "id": "menzies",
+   "name": "Shire of Menzies",
+   "state": "wa",
+   "news_url": "https://www.menzies.wa.gov.au/news/"
+  },
+  "merredin": {
+   "id": "merredin",
+   "name": "Shire of Merredin",
+   "state": "wa",
+   "news_url": "https://www.merredin.wa.gov.au/news/"
+  },
+  "merri-bek": {
+   "id": "merri-bek",
+   "name": "Merri-bek City Council",
+   "state": "vic",
+   "news_url": "https://www.merri-bek.vic.gov.au/my-council/news-and-publications/news/"
+  },
+  "mid-murray": {
+   "id": "mid-murray",
+   "name": "Mid Murray Council",
+   "state": "sa",
+   "news_url": "https://www.mid-murray.sa.gov.au/council/latest-news"
+  },
+  "mid-western-regional-council": {
+   "id": "mid-western-regional-council",
+   "name": "Mid-Western Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.midwestern.nsw.gov.au/Council/Media-and-news/Latest-news"
+  },
+  "midcoast-council": {
+   "id": "midcoast-council",
+   "name": "MidCoast Council",
+   "state": "nsw",
+   "news_url": "https://www.midcoast.nsw.gov.au/Your-Council/Our-news/News-releases"
+  },
+  "mildura": {
+   "id": "mildura",
+   "name": "Mildura Rural City Council",
+   "state": "vic",
+   "news_url": "https://www.mildura.vic.gov.au/Latest-News"
+  },
+  "mingenew": {
+   "id": "mingenew",
+   "name": "Shire of Mingenew",
+   "state": "wa",
+   "news_url": "https://mingenew.wa.gov.au/latest-news/"
+  },
+  "mitcham": {
+   "id": "mitcham",
+   "name": "City of Mitcham",
+   "state": "sa",
+   "news_url": "https://www.mitchamcouncil.sa.gov.au/connect-with-us/latest-news"
+  },
+  "mitchell": {
+   "id": "mitchell",
+   "name": "Mitchell Shire Council",
+   "state": "vic",
+   "news_url": "https://www.mitchellshire.vic.gov.au//feeds/news.rss"
+  },
+  "moira": {
+   "id": "moira",
+   "name": "Moira Shire Council",
+   "state": "vic",
+   "news_url": "https://www.moira.vic.gov.au/Our-Council/News-and-information/Media-releases"
+  },
+  "monash": {
+   "id": "monash",
+   "name": "Monash City Council",
+   "state": "vic",
+   "news_url": "https://www.monash.vic.gov.au/About-Us/News"
+  },
+  "moonee-valley": {
+   "id": "moonee-valley",
+   "name": "Moonee Valley City Council",
+   "state": "vic",
+   "news_url": "https://mvcc.vic.gov.au/rss"
+  },
+  "moora": {
+   "id": "moora",
+   "name": "Shire of Moora",
+   "state": "wa",
+   "news_url": "https://www.moora.wa.gov.au/news/"
+  },
+  "moorabool": {
+   "id": "moorabool",
+   "name": "Moorabool Shire Council",
+   "state": "vic",
+   "news_url": "https://www.moorabool.vic.gov.au/news"
+  },
+  "morawa": {
+   "id": "morawa",
+   "name": "Shire of Morawa",
+   "state": "wa",
+   "news_url": "https://www.morawa.wa.gov.au/news/"
+  },
+  "moree-plains-shire-council": {
+   "id": "moree-plains-shire-council",
+   "name": "Moree Plains Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.mpsc.nsw.gov.au/hot-topics/media-releases"
+  },
+  "moreton-bay": {
+   "id": "moreton-bay",
+   "name": "City of Moreton Bay",
+   "state": "qld",
+   "news_url": "https://www.moretonbay.qld.gov.au/News/Media"
+  },
+  "mornington": {
+   "id": "mornington",
+   "name": "Mornington Shire Council",
+   "state": "qld",
+   "news_url": "https://www.mornington.qld.gov.au/feed/"
+  },
+  "mornington-peninsula": {
+   "id": "mornington-peninsula",
+   "name": "Mornington Peninsula Shire Council",
+   "state": "vic",
+   "news_url": "https://www.mornpen.vic.gov.au/About-Us/News-Media-Publications/News-and-Media-Releases"
+  },
+  "mosman-council": {
+   "id": "mosman-council",
+   "name": "Mosman Municipal Council",
+   "state": "nsw",
+   "news_url": "https://mosman.nsw.gov.au/news"
+  },
+  "mosman-park": {
+   "id": "mosman-park",
+   "name": "Town of Mosman Park",
+   "state": "wa",
+   "news_url": "https://www.mosmanpark.wa.gov.au/council/council/news-2/"
+  },
+  "mount-alexander": {
+   "id": "mount-alexander",
+   "name": "Mount Alexander Shire Council",
+   "state": "vic",
+   "news_url": "http://www.mountalexander.vic.gov.au/News"
+  },
+  "mount-barker-district": {
+   "id": "mount-barker-district",
+   "name": "Mount Barker District Council",
+   "state": "sa",
+   "news_url": "https://www.mountbarker.sa.gov.au/council/news/newsletter"
+  },
+  "mount-gambier": {
+   "id": "mount-gambier",
+   "name": "City of Mount Gambier",
+   "state": "sa",
+   "news_url": "https://www.mountgambier.sa.gov.au/news"
+  },
+  "mount-isa": {
+   "id": "mount-isa",
+   "name": "Mount Isa City Council",
+   "state": "qld",
+   "news_url": "https://www.mountisa.qld.gov.au/Latest-News"
+  },
+  "mount-magnet": {
+   "id": "mount-magnet",
+   "name": "Shire of Mount Magnet",
+   "state": "wa",
+   "news_url": "https://www.mtmagnet.wa.gov.au/newsletters"
+  },
+  "mount-marshall": {
+   "id": "mount-marshall",
+   "name": "Shire of Mount Marshall",
+   "state": "wa",
+   "news_url": "https://mtmarshall.wa.gov.au/council-the-shire/shire-news/"
+  },
+  "mount-remarkable": {
+   "id": "mount-remarkable",
+   "name": "District Council of Mount Remarkable",
+   "state": "sa",
+   "news_url": "https://www.mtr.sa.gov.au/noticeboard/latest-news"
+  },
+  "moyne": {
+   "id": "moyne",
+   "name": "Moyne Shire Council",
+   "state": "vic",
+   "news_url": "https://www.moyne.vic.gov.au/News-Media"
+  },
+  "mukinbudin": {
+   "id": "mukinbudin",
+   "name": "Shire of Mukinbudin",
+   "state": "wa",
+   "news_url": "https://www.mukinbudin.wa.gov.au/news/?c=7"
+  },
+  "mundaring": {
+   "id": "mundaring",
+   "name": "Shire of Mundaring",
+   "state": "wa",
+   "news_url": "https://www.mundaring.wa.gov.au/news/"
+  },
+  "murchison": {
+   "id": "murchison",
+   "name": "Shire of Murchison",
+   "state": "wa",
+   "news_url": "https://www.murchison.wa.gov.au/news/"
+  },
+  "murray": {
+   "id": "murray",
+   "name": "Shire of Murray",
+   "state": "wa",
+   "news_url": "https://www.murray.wa.gov.au/"
+  },
+  "murray-bridge": {
+   "id": "murray-bridge",
+   "name": "Rural City of Murray Bridge",
+   "state": "sa",
+   "news_url": "https://www.murraybridge.sa.gov.au/council/latest-news"
+  },
+  "murray-river-council": {
+   "id": "murray-river-council",
+   "name": "Murray River Council",
+   "state": "nsw",
+   "news_url": "https://www.murrayriver.nsw.gov.au/Council/News/Media-releases"
+  },
+  "murrindindi": {
+   "id": "murrindindi",
+   "name": "Murrindindi Shire Council",
+   "state": "vic",
+   "news_url": "https://www.murrindindi.vic.gov.au/News-Media"
+  },
+  "murrumbidgee-council": {
+   "id": "murrumbidgee-council",
+   "name": "Murrumbidgee Council",
+   "state": "nsw",
+   "news_url": "https://www.murrumbidgee.nsw.gov.au/News-notices/News-articles-Mayoral-Messages"
+  },
+  "murweh": {
+   "id": "murweh",
+   "name": "Murweh Shire Council",
+   "state": "qld",
+   "news_url": "https://www.murweh.qld.gov.au/News"
+  },
+  "muswellbrook-shire-council": {
+   "id": "muswellbrook-shire-council",
+   "name": "Muswellbrook Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.muswellbrook.nsw.gov.au/latest-news/"
+  },
+  "nambucca-valley-council": {
+   "id": "nambucca-valley-council",
+   "name": "Nambucca Valley Council",
+   "state": "nsw",
+   "news_url": "https://www.nambucca.nsw.gov.au/News-articles"
+  },
+  "nannup": {
+   "id": "nannup",
+   "name": "Shire of Nannup",
+   "state": "wa",
+   "news_url": "https://www.nannup.wa.gov.au/news/"
+  },
+  "napranum": {
+   "id": "napranum",
+   "name": "Napranum Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.napranum.qld.gov.au/feed/"
+  },
+  "naracoorte-lucindale": {
+   "id": "naracoorte-lucindale",
+   "name": "Naracoorte Lucindale Council",
+   "state": "sa",
+   "news_url": "https://www.naracoortelucindale.sa.gov.au/newsroom"
+  },
+  "narembeen": {
+   "id": "narembeen",
+   "name": "Shire of Narembeen",
+   "state": "wa",
+   "news_url": "https://www.narembeen.wa.gov.au/news/"
+  },
+  "narrabri-shire-council": {
+   "id": "narrabri-shire-council",
+   "name": "Narrabri Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.narrabri.nsw.gov.au/News"
+  },
+  "narrandera-shire-council": {
+   "id": "narrandera-shire-council",
+   "name": "Narrandera Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.narrandera.nsw.gov.au/Council/News-and-media/Media-releases"
+  },
+  "narrogin": {
+   "id": "narrogin",
+   "name": "Shire of Narrogin",
+   "state": "wa",
+   "news_url": "https://www.narrogin.wa.gov.au/news/"
+  },
+  "narromine-shire-council": {
+   "id": "narromine-shire-council",
+   "name": "Narromine Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.narromine.nsw.gov.au/council/media-releases"
+  },
+  "nedlands": {
+   "id": "nedlands",
+   "name": "City of Nedlands",
+   "state": "wa",
+   "news_url": "https://www.nedlands.wa.gov.au/news/"
+  },
+  "ngaanyatjarraku": {
+   "id": "ngaanyatjarraku",
+   "name": "Shire of Ngaanyatjarraku",
+   "state": "wa",
+   "news_url": "https://www.ngaanyatjarraku.wa.gov.au/news/"
+  },
+  "nillumbik": {
+   "id": "nillumbik",
+   "name": "Nillumbik Shire Council",
+   "state": "vic",
+   "news_url": "https://www.nillumbik.vic.gov.au/Council/Council-news-and-publications/Latest-news"
+  },
+  "noosa": {
+   "id": "noosa",
+   "name": "Noosa Shire Council",
+   "state": "qld",
+   "news_url": "https://www.noosa.qld.gov.au/About-Council/News-and-publications/Media-releases"
+  },
+  "north-burnett": {
+   "id": "north-burnett",
+   "name": "North Burnett Regional Council",
+   "state": "qld",
+   "news_url": "https://www.northburnett.qld.gov.au/news/"
+  },
+  "north-sydney-council": {
+   "id": "north-sydney-council",
+   "name": "North Sydney Council",
+   "state": "nsw",
+   "news_url": "https://www.northsydney.nsw.gov.au/news"
+  },
+  "northam": {
+   "id": "northam",
+   "name": "Shire of Northam",
+   "state": "wa",
+   "news_url": "https://www.northam.wa.gov.au/news/"
+  },
+  "northampton": {
+   "id": "northampton",
+   "name": "Shire of Northampton",
+   "state": "wa",
+   "news_url": "https://www.northampton.wa.gov.au/news/"
+  },
+  "northern-areas": {
+   "id": "northern-areas",
+   "name": "Northern Areas Council",
+   "state": "sa",
+   "news_url": "https://www.nacouncil.sa.gov.au/latest-news"
+  },
+  "northern-beaches-council": {
+   "id": "northern-beaches-council",
+   "name": "Northern Beaches Council",
+   "state": "nsw",
+   "news_url": "https://www.northernbeaches.nsw.gov.au/council/news/latest-news"
+  },
+  "northern-grampians": {
+   "id": "northern-grampians",
+   "name": "Northern Grampians Shire Council",
+   "state": "vic",
+   "news_url": "https://www.ngshire.vic.gov.au/Latest-News"
+  },
+  "northern-midlands": {
+   "id": "northern-midlands",
+   "name": "Northern Midlands Council",
+   "state": "tas",
+   "news_url": "https://northernmidlands.tas.gov.au/"
+  },
+  "northern-peninsula-area": {
+   "id": "northern-peninsula-area",
+   "name": "Northern Peninsula Area Regional Council",
+   "state": "qld",
+   "news_url": "https://www.nparc.qld.gov.au/Our-council/Public-notice"
+  },
+  "norwood-payneham-&-st-peters": {
+   "id": "norwood-payneham-&-st-peters",
+   "name": "City of Norwood Payneham & St Peters",
+   "state": "sa",
+   "news_url": "https://lookeast.npsp.sa.gov.au/council-updates"
+  },
+  "nungarin": {
+   "id": "nungarin",
+   "name": "Shire of Nungarin",
+   "state": "wa",
+   "news_url": "https://www.nungarin.wa.gov.au/news/"
+  },
+  "oberon-council": {
+   "id": "oberon-council",
+   "name": "Oberon Council",
+   "state": "nsw",
+   "news_url": "https://www.oberon.nsw.gov.au/News-articles"
+  },
+  "onkaparinga": {
+   "id": "onkaparinga",
+   "name": "City of Onkaparinga",
+   "state": "sa",
+   "news_url": "https://www.onkaparingacity.com/Council/News-articles"
+  },
+  "orange-city-council": {
+   "id": "orange-city-council",
+   "name": "Orange City Council",
+   "state": "nsw",
+   "news_url": "https://www.orange.nsw.gov.au/feed/"
+  },
+  "orroroo-carrieton": {
+   "id": "orroroo-carrieton",
+   "name": "District Council of Orroroo Carrieton",
+   "state": "sa",
+   "news_url": "https://www.orroroo.sa.gov.au/community/latest-news"
+  },
+  "our_canberra": {
+   "id": "our_canberra",
+   "name": "ACT Government",
+   "state": "act",
+   "news_url": "https://www.act.gov.au/our-canberra/rss"
+  },
+  "palm-island": {
+   "id": "palm-island",
+   "name": "Palm Island Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.palmcouncil.qld.gov.au/News-articles"
+  },
+  "palmerston": {
+   "id": "palmerston",
+   "name": "City of Palmerston",
+   "state": "nt",
+   "news_url": "https://palmerston.nt.gov.au/news"
+  },
+  "parkes-shire-council": {
+   "id": "parkes-shire-council",
+   "name": "Parkes Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.parkes.nsw.gov.au/Council/News-media-and-projects/Community-News"
+  },
+  "paroo": {
+   "id": "paroo",
+   "name": "Paroo Shire Council",
+   "state": "qld",
+   "news_url": "https://www.paroo.qld.gov.au/News-and-Events/News"
+  },
+  "penrith-city-council": {
+   "id": "penrith-city-council",
+   "name": "Penrith City Council",
+   "state": "nsw",
+   "news_url": "https://www.penrithcity.nsw.gov.au/news"
+  },
+  "peppermint-grove": {
+   "id": "peppermint-grove",
+   "name": "Shire of Peppermint Grove",
+   "state": "wa",
+   "news_url": "https://www.peppermintgrove.wa.gov.au/news/"
+  },
+  "perenjori": {
+   "id": "perenjori",
+   "name": "Shire of Perenjori",
+   "state": "wa",
+   "news_url": "https://www.perenjori.wa.gov.au/news/"
+  },
+  "perth": {
+   "id": "perth",
+   "name": "City of Perth",
+   "state": "wa",
+   "news_url": "https://perth.wa.gov.au/news-and-updates"
+  },
+  "peterborough": {
+   "id": "peterborough",
+   "name": "District Council of Peterborough",
+   "state": "sa",
+   "news_url": "https://www.peterborough.sa.gov.au/district-info/latest-news"
+  },
+  "pingelly": {
+   "id": "pingelly",
+   "name": "Shire of Pingelly",
+   "state": "wa",
+   "news_url": "https://www.pingelly.wa.gov.au/news/"
+  },
+  "plantagenet": {
+   "id": "plantagenet",
+   "name": "Shire of Plantagenet",
+   "state": "wa",
+   "news_url": "https://www.plantagenet.wa.gov.au/news/"
+  },
+  "playford": {
+   "id": "playford",
+   "name": "City of Playford",
+   "state": "sa",
+   "news_url": "https://www.playford.sa.gov.au/explore/playford-news"
+  },
+  "port-adelaide-enfield": {
+   "id": "port-adelaide-enfield",
+   "name": "City of Port Adelaide Enfield",
+   "state": "sa",
+   "news_url": "https://www.cityofpae.sa.gov.au/connect/news"
+  },
+  "port-augusta-city": {
+   "id": "port-augusta-city",
+   "name": "Port Augusta City Council",
+   "state": "sa",
+   "news_url": "https://www.portaugusta.sa.gov.au/news-and-events/latest-news"
+  },
+  "port-hedland": {
+   "id": "port-hedland",
+   "name": "Town of Port Hedland",
+   "state": "wa",
+   "news_url": "https://www.porthedland.wa.gov.au/news/general"
+  },
+  "port-lincoln": {
+   "id": "port-lincoln",
+   "name": "City of Port Lincoln",
+   "state": "sa",
+   "news_url": "https://www.portlincoln.sa.gov.au/notice-board/latest-news"
+  },
+  "port-macquarie-hastings-council": {
+   "id": "port-macquarie-hastings-council",
+   "name": "Port Macquarie-Hastings Council",
+   "state": "nsw",
+   "news_url": "https://www.pmhc.nsw.gov.au/Your-Council/News-Notices/News-articles"
+  },
+  "port-phillip": {
+   "id": "port-phillip",
+   "name": "Port Phillip City Council",
+   "state": "vic",
+   "news_url": "https://www.portphillip.vic.gov.au/about-the-council/news-and-media"
+  },
+  "port-pirie-regional": {
+   "id": "port-pirie-regional",
+   "name": "Port Pirie Regional Council",
+   "state": "sa",
+   "news_url": "https://www.pirie.sa.gov.au/noticeboard/latest-news"
+  },
+  "port-stephens-council": {
+   "id": "port-stephens-council",
+   "name": "Port Stephens Council",
+   "state": "nsw",
+   "news_url": "https://www.portstephens.nsw.gov.au/council/news"
+  },
+  "prospect": {
+   "id": "prospect",
+   "name": "City of Prospect",
+   "state": "sa",
+   "news_url": "https://www.prospect.sa.gov.au/council/news-and-media"
+  },
+  "pyrenees": {
+   "id": "pyrenees",
+   "name": "Pyrenees Shire Council",
+   "state": "vic",
+   "news_url": "https://www.pyrenees.vic.gov.au/About-Pyrenees-Shire-Council/News-Media"
+  },
+  "quairading": {
+   "id": "quairading",
+   "name": "Shire of Quairading",
+   "state": "wa",
+   "news_url": "https://www.quairading.wa.gov.au/my-council/news-publications/"
+  },
+  "queanbeyan-palerang-regional-council": {
+   "id": "queanbeyan-palerang-regional-council",
+   "name": "Queanbeyan-Palerang Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.qprc.nsw.gov.au/News-Media"
+  },
+  "queenscliffe": {
+   "id": "queenscliffe",
+   "name": "Borough of Queenscliffe",
+   "state": "vic",
+   "news_url": "https://www.queenscliffe.vic.gov.au/Your-Council/News-and-projects/Latest-news"
+  },
+  "quilpie": {
+   "id": "quilpie",
+   "name": "Quilpie Shire Council",
+   "state": "qld",
+   "news_url": "https://quilpie.qld.gov.au/feed/"
+  },
+  "randwick-city-council": {
+   "id": "randwick-city-council",
+   "name": "Randwick City Council",
+   "state": "nsw",
+   "news_url": "https://www.randwick.nsw.gov.au/about-us/news/latest-news"
+  },
+  "ravensthorpe": {
+   "id": "ravensthorpe",
+   "name": "Shire of Ravensthorpe",
+   "state": "wa",
+   "news_url": "https://www.ravensthorpe.wa.gov.au/news/"
+  },
+  "redland": {
+   "id": "redland",
+   "name": "Redland City Council",
+   "state": "qld",
+   "news_url": "https://www.redlandscoasttoday.com.au/feed/"
+  },
+  "renmark-paringa": {
+   "id": "renmark-paringa",
+   "name": "Renmark Paringa Council",
+   "state": "sa",
+   "news_url": "https://www.renmarkparinga.sa.gov.au/noticeboard/latest-news"
+  },
+  "richmond": {
+   "id": "richmond",
+   "name": "Richmond Shire Council",
+   "state": "qld",
+   "news_url": "https://www.richmond.qld.gov.au/monthly-newsletters"
+  },
+  "richmond-valley-council": {
+   "id": "richmond-valley-council",
+   "name": "Richmond Valley Council",
+   "state": "nsw",
+   "news_url": "https://richmondvalley.nsw.gov.au/News"
+  },
+  "robe": {
+   "id": "robe",
+   "name": "District Council of Robe",
+   "state": "sa",
+   "news_url": "https://www.robe.sa.gov.au/community/latest-news"
+  },
+  "rockhampton": {
+   "id": "rockhampton",
+   "name": "Rockhampton Regional Council",
+   "state": "qld",
+   "news_url": "https://www.rockhamptonregion.qld.gov.au/AboutCouncil/News-and-announcements/Latest-News"
+  },
+  "rockingham": {
+   "id": "rockingham",
+   "name": "City of Rockingham",
+   "state": "wa",
+   "news_url": "https://www.rockingham.wa.gov.au/your-city/news"
+  },
+  "roper_gulf": {
+   "id": "roper_gulf",
+   "name": "Roper Gulf Regional Council",
+   "state": "nt",
+   "news_url": "https://www.ropergulf.nt.gov.au/our-council/news"
+  },
+  "roxby-downs": {
+   "id": "roxby-downs",
+   "name": "Municipal Council of Roxby Downs",
+   "state": "sa",
+   "news_url": "https://www.roxbydowns.sa.gov.au/council/latest-news"
+  },
+  "salisbury": {
+   "id": "salisbury",
+   "name": "City of Salisbury",
+   "state": "sa",
+   "news_url": "https://www.salisbury.sa.gov.au/council/news-media-and-publications/latest-news"
+  },
+  "sandstone": {
+   "id": "sandstone",
+   "name": "Shire of Sandstone",
+   "state": "wa",
+   "news_url": "https://www.sandstone.wa.gov.au/community/news"
+  },
+  "scenic-rim": {
+   "id": "scenic-rim",
+   "name": "Scenic Rim Regional Council",
+   "state": "qld",
+   "news_url": "https://www.scenicrim.qld.gov.au/our-council/connect-with-council/news-and-announcements"
+  },
+  "serpentine-jarrahdale": {
+   "id": "serpentine-jarrahdale",
+   "name": "Shire of Serpentine-Jarrahdale",
+   "state": "wa",
+   "news_url": "https://www.sjshire.wa.gov.au/news/"
+  },
+  "shark-bay": {
+   "id": "shark-bay",
+   "name": "Shire of Shark Bay",
+   "state": "wa",
+   "news_url": "https://www.sharkbay.wa.gov.au/news/"
+  },
+  "shellharbour-city-council": {
+   "id": "shellharbour-city-council",
+   "name": "Shellharbour City Council",
+   "state": "nsw",
+   "news_url": "https://www.shellharbour.nsw.gov.au/council/news-and-publications/media-releases"
+  },
+  "shoalhaven-city-council": {
+   "id": "shoalhaven-city-council",
+   "name": "Shoalhaven City Council",
+   "state": "nsw",
+   "news_url": "https://www.shoalhaven.nsw.gov.au/News-and-feedback/News"
+  },
+  "singleton-council": {
+   "id": "singleton-council",
+   "name": "Singleton Council",
+   "state": "nsw",
+   "news_url": "https://www.singleton.nsw.gov.au/News"
+  },
+  "snowy-monaro-regional-council": {
+   "id": "snowy-monaro-regional-council",
+   "name": "Snowy Monaro Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.snowymonaro.nsw.gov.au/News-and-Media/News-articles"
+  },
+  "snowy-valleys-council": {
+   "id": "snowy-valleys-council",
+   "name": "Snowy Valleys Council",
+   "state": "nsw",
+   "news_url": "https://www.snowyvalleys.nsw.gov.au/News-Media"
+  },
+  "somerset": {
+   "id": "somerset",
+   "name": "Somerset Regional Council",
+   "state": "qld",
+   "news_url": "https://www.somerset.qld.gov.au/News"
+  },
+  "sorell": {
+   "id": "sorell",
+   "name": "Sorell Council",
+   "state": "tas",
+   "news_url": "https://www.sorell.tas.gov.au/news"
+  },
+  "south-burnett": {
+   "id": "south-burnett",
+   "name": "South Burnett Regional Council",
+   "state": "qld",
+   "news_url": "https://www.southburnett.qld.gov.au/News"
+  },
+  "south-gippsland": {
+   "id": "south-gippsland",
+   "name": "South Gippsland Shire Council",
+   "state": "vic",
+   "news_url": "https://www.southgippsland.vic.gov.au/rss/news"
+  },
+  "south-perth": {
+   "id": "south-perth",
+   "name": "City of South Perth",
+   "state": "wa",
+   "news_url": "https://www.southperth.wa.gov.au/about-us/news-and-publications/news-and-public-notices"
+  },
+  "southern-downs": {
+   "id": "southern-downs",
+   "name": "Southern Downs Regional Council",
+   "state": "qld",
+   "news_url": "https://www.sdrc.qld.gov.au/council/news-notices/latest-news"
+  },
+  "southern-grampians": {
+   "id": "southern-grampians",
+   "name": "Southern Grampians Shire Council",
+   "state": "vic",
+   "news_url": "https://www.sthgrampians.vic.gov.au/Home/Latest-News/Media-Releases"
+  },
+  "southern-mallee-district": {
+   "id": "southern-mallee-district",
+   "name": "Southern Mallee District Council",
+   "state": "sa",
+   "news_url": "https://www.southernmallee.sa.gov.au/community/latest-news"
+  },
+  "southern-midlands": {
+   "id": "southern-midlands",
+   "name": "Southern Midlands Council",
+   "state": "tas",
+   "news_url": "https://www.southernmidlands.tas.gov.au/news"
+  },
+  "stirling": {
+   "id": "stirling",
+   "name": "City of Stirling",
+   "state": "wa",
+   "news_url": "https://www.stirling.wa.gov.au/city-and-council/news"
+  },
+  "stonnington": {
+   "id": "stonnington",
+   "name": "Stonnington City Council",
+   "state": "vic",
+   "news_url": "https://www.stonnington.vic.gov.au/News-and-notices"
+  },
+  "strathbogie": {
+   "id": "strathbogie",
+   "name": "Strathbogie Shire Council",
+   "state": "vic",
+   "news_url": "https://www.strathbogie.vic.gov.au/latest-news/"
+  },
+  "strathfield-council": {
+   "id": "strathfield-council",
+   "name": "Strathfield Council",
+   "state": "nsw",
+   "news_url": "https://www.strathfield.nsw.gov.au/Council/News/Media-Releases"
+  },
+  "streaky-bay": {
+   "id": "streaky-bay",
+   "name": "District Council of Streaky Bay",
+   "state": "sa",
+   "news_url": "https://www.streakybay.sa.gov.au/your-council/latest-news"
+  },
+  "subiaco": {
+   "id": "subiaco",
+   "name": "City of Subiaco",
+   "state": "wa",
+   "news_url": "https://www.subiaco.wa.gov.au/umbraco/delivery/api/v2/content?fetch=children%3Acc4a106d-3a72-4fdf-84d7-cd928dd455fb&skip=0&take=12&sort=createDate%3Adesc"
+  },
+  "sunshine-coast": {
+   "id": "sunshine-coast",
+   "name": "Sunshine Coast Regional Council",
+   "state": "qld",
+   "news_url": "https://www.sunshinecoast.qld.gov.au/news"
+  },
+  "surf-coast": {
+   "id": "surf-coast",
+   "name": "Surf Coast Shire Council",
+   "state": "vic",
+   "news_url": "https://www.surfcoast.vic.gov.au/About-us/News-and-media/Latest-news"
+  },
+  "sutherland-shire-council": {
+   "id": "sutherland-shire-council",
+   "name": "Sutherland Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.sutherlandshire.nsw.gov.au/your-council/news-and-publications/council-news"
+  },
+  "swan": {
+   "id": "swan",
+   "name": "City of Swan",
+   "state": "wa",
+   "news_url": "https://www.swan.wa.gov.au/city-and-council/news-and-media/news"
+  },
+  "swan-hill": {
+   "id": "swan-hill",
+   "name": "Swan Hill Rural City Council",
+   "state": "vic",
+   "news_url": "https://www.swanhill.vic.gov.au/Our-Council/News-and-publications/News-and-public-notices"
+  },
+  "tablelands": {
+   "id": "tablelands",
+   "name": "Tablelands Regional Council",
+   "state": "qld",
+   "news_url": "https://www.trc.qld.gov.au/feed/"
+  },
+  "tammin": {
+   "id": "tammin",
+   "name": "Shire of Tammin",
+   "state": "wa",
+   "news_url": "https://www.tammin.wa.gov.au/news/"
+  },
+  "tamworth-regional-council": {
+   "id": "tamworth-regional-council",
+   "name": "Tamworth Regional Council",
+   "state": "nsw",
+   "news_url": "https://www.tamworth.nsw.gov.au/about/news/latest-news"
+  },
+  "tasman": {
+   "id": "tasman",
+   "name": "Tasman Council",
+   "state": "tas",
+   "news_url": "https://www.tasman.tas.gov.au/feed/"
+  },
+  "tatiara-district": {
+   "id": "tatiara-district",
+   "name": "Tatiara District Council",
+   "state": "sa",
+   "news_url": "https://www.tatiara.sa.gov.au/community-information/latest-news"
+  },
+  "tea-tree-gully": {
+   "id": "tea-tree-gully",
+   "name": "City of Tea Tree Gully",
+   "state": "sa",
+   "news_url": "https://www.teatreegully.sa.gov.au/news"
+  },
+  "temora-shire-council": {
+   "id": "temora-shire-council",
+   "name": "Temora Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.temora.nsw.gov.au/Home/Tabs/News"
+  },
+  "tenterfield-shire-council": {
+   "id": "tenterfield-shire-council",
+   "name": "Tenterfield Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.tenterfield.nsw.gov.au/news-events/media-releases"
+  },
+  "the-hills-shire-council": {
+   "id": "the-hills-shire-council",
+   "name": "The Hills Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.thehills.nsw.gov.au/News-and-Publications"
+  },
+  "three-springs": {
+   "id": "three-springs",
+   "name": "Shire of Three Springs",
+   "state": "wa",
+   "news_url": "https://www.threesprings.wa.gov.au/index.php/our-council/news-archive?format=feed&type=rss"
+  },
+  "tiwi_islands": {
+   "id": "tiwi_islands",
+   "name": "Tiwi Islands Regional Council",
+   "state": "nt",
+   "news_url": "https://www.tiwiislands.nt.gov.au/news"
+  },
+  "toodyay": {
+   "id": "toodyay",
+   "name": "Shire of Toodyay",
+   "state": "wa",
+   "news_url": "https://www.toodyay.wa.gov.au/news/"
+  },
+  "toowoomba": {
+   "id": "toowoomba",
+   "name": "Toowoomba Regional Council",
+   "state": "qld",
+   "news_url": "https://www.tr.qld.gov.au/Council/News-and-public-notices/Media-releases"
+  },
+  "torres": {
+   "id": "torres",
+   "name": "Torres Shire Council",
+   "state": "qld",
+   "news_url": "https://www.torres.qld.gov.au/Council/Media-Release"
+  },
+  "torres-strait-island": {
+   "id": "torres-strait-island",
+   "name": "Torres Strait Island Regional Council",
+   "state": "qld",
+   "news_url": "https://tsirc.qld.gov.au/news/"
+  },
+  "townsville": {
+   "id": "townsville",
+   "name": "Townsville City Council",
+   "state": "qld",
+   "news_url": "https://www.townsville.qld.gov.au/about-council/news-and-publications/media-releases?collection=tcc~sp-tcc-corporate-media-releases&profile=media-releases"
+  },
+  "towong": {
+   "id": "towong",
+   "name": "Towong Shire Council",
+   "state": "vic",
+   "news_url": "https://www.towong.vic.gov.au/1-council/news-and-media/media-releases"
+  },
+  "trayning": {
+   "id": "trayning",
+   "name": "Shire of Trayning",
+   "state": "wa",
+   "news_url": "https://www.trayning.wa.gov.au/news/"
+  },
+  "tumby-bay": {
+   "id": "tumby-bay",
+   "name": "District Council of Tumby Bay",
+   "state": "sa",
+   "news_url": "https://www.tumbybay.sa.gov.au/community/latest-news"
+  },
+  "tweed-shire-council": {
+   "id": "tweed-shire-council",
+   "name": "Tweed Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.tweed.nsw.gov.au/council/news-updates/latest-news"
+  },
+  "unley": {
+   "id": "unley",
+   "name": "City of Unley",
+   "state": "sa",
+   "news_url": "https://www.unley.sa.gov.au/News-articles"
+  },
+  "upper-gascoyne": {
+   "id": "upper-gascoyne",
+   "name": "Shire of Upper Gascoyne",
+   "state": "wa",
+   "news_url": "https://www.uppergascoyne.wa.gov.au/news/"
+  },
+  "upper-hunter-shire-council": {
+   "id": "upper-hunter-shire-council",
+   "name": "Upper Hunter Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.upperhunter.nsw.gov.au/News"
+  },
+  "upper-lachlan-shire-council": {
+   "id": "upper-lachlan-shire-council",
+   "name": "Upper Lachlan Shire Council",
+   "state": "nsw",
+   "news_url": "https://upperlachlan.nsw.gov.au/latest-news/"
+  },
+  "uralla-shire-council": {
+   "id": "uralla-shire-council",
+   "name": "Uralla Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.uralla.nsw.gov.au/Your-Council/Read-the-latest-Council-information/Media-Releases"
+  },
+  "victor-harbor": {
+   "id": "victor-harbor",
+   "name": "City of Victor Harbor",
+   "state": "sa",
+   "news_url": "https://www.victor.sa.gov.au/notice-board/the-latest/latest-news"
+  },
+  "victoria-park": {
+   "id": "victoria-park",
+   "name": "Town of Victoria Park",
+   "state": "wa",
+   "news_url": "https://www.victoriapark.wa.gov.au/news/"
+  },
+  "victoria-plains": {
+   "id": "victoria-plains",
+   "name": "Shire of Victoria Plains",
+   "state": "wa",
+   "news_url": "https://www.victoriaplains.wa.gov.au/news/"
+  },
+  "victoria_daly": {
+   "id": "victoria_daly",
+   "name": "Victoria Daly Regional Council",
+   "state": "nt",
+   "news_url": "https://www.victoriadaly.nt.gov.au/feed/"
+  },
+  "vincent": {
+   "id": "vincent",
+   "name": "City of Vincent",
+   "state": "wa",
+   "news_url": "https://www.vincent.wa.gov.au/news"
+  },
+  "wagait": {
+   "id": "wagait",
+   "name": "Wagait Shire Council",
+   "state": "nt",
+   "news_url": "https://wagait.nt.gov.au/feed/"
+  },
+  "wagga-wagga-city-council": {
+   "id": "wagga-wagga-city-council",
+   "name": "Wagga Wagga City Council",
+   "state": "nsw",
+   "news_url": "https://news.wagga.nsw.gov.au/news-articles"
+  },
+  "wagin": {
+   "id": "wagin",
+   "name": "Shire of Wagin",
+   "state": "wa",
+   "news_url": "https://www.wagin.wa.gov.au/news/"
+  },
+  "wakefield-regional": {
+   "id": "wakefield-regional",
+   "name": "Wakefield Regional Council",
+   "state": "sa",
+   "news_url": "https://www.wrc.sa.gov.au/our-community/latest-news/latest-updates"
+  },
+  "walcha-council": {
+   "id": "walcha-council",
+   "name": "Walcha Council",
+   "state": "nsw",
+   "news_url": "https://walcha.nsw.gov.au/feed/"
+  },
+  "walgett-shire-council": {
+   "id": "walgett-shire-council",
+   "name": "Walgett Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.walgett.nsw.gov.au/published/snapshot.json"
+  },
+  "walkerville": {
+   "id": "walkerville",
+   "name": "Town of Walkerville",
+   "state": "sa",
+   "news_url": "https://www.walkerville.sa.gov.au/community/latest-news"
+  },
+  "wandering": {
+   "id": "wandering",
+   "name": "Shire of Wandering",
+   "state": "wa",
+   "news_url": "https://www.wandering.wa.gov.au/news"
+  },
+  "wangaratta": {
+   "id": "wangaratta",
+   "name": "Wangaratta Rural City Council",
+   "state": "vic",
+   "news_url": "https://www.wangaratta.vic.gov.au/News-articles"
+  },
+  "wanneroo": {
+   "id": "wanneroo",
+   "name": "City of Wanneroo",
+   "state": "wa",
+   "news_url": "https://www.wanneroo.wa.gov.au/news"
+  },
+  "waratah-wynyard": {
+   "id": "waratah-wynyard",
+   "name": "Waratah-Wynyard Council",
+   "state": "tas",
+   "news_url": "https://www.warwyn.tas.gov.au/feed/"
+  },
+  "waroona": {
+   "id": "waroona",
+   "name": "Shire of Waroona",
+   "state": "wa",
+   "news_url": "https://www.waroona.wa.gov.au/news/"
+  },
+  "warren-shire-council": {
+   "id": "warren-shire-council",
+   "name": "Warren Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.warren.nsw.gov.au/council/media-releases"
+  },
+  "warrnambool": {
+   "id": "warrnambool",
+   "name": "Warrnambool City Council",
+   "state": "vic",
+   "news_url": "https://www.warrnambool.vic.gov.au/news"
+  },
+  "warrumbungle-shire-council": {
+   "id": "warrumbungle-shire-council",
+   "name": "Warrumbungle Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.warrumbungle.nsw.gov.au/News-articles"
+  },
+  "wattle-range": {
+   "id": "wattle-range",
+   "name": "Wattle Range Council",
+   "state": "sa",
+   "news_url": "https://www.wattlerange.sa.gov.au/our-council/news-and-media/latest-news"
+  },
+  "waverley-council": {
+   "id": "waverley-council",
+   "name": "Waverley Council",
+   "state": "nsw",
+   "news_url": "https://www.waverley.nsw.gov.au/top/news_and_media/council_news"
+  },
+  "weddin-shire-council": {
+   "id": "weddin-shire-council",
+   "name": "Weddin Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.weddin.nsw.gov.au/News"
+  },
+  "wellington": {
+   "id": "wellington",
+   "name": "Wellington Shire Council",
+   "state": "vic",
+   "news_url": "https://www.wellington.vic.gov.au/council/media-releases"
+  },
+  "wentworth-shire-council": {
+   "id": "wentworth-shire-council",
+   "name": "Wentworth Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.wentworth.nsw.gov.au/feed/"
+  },
+  "west-arthur": {
+   "id": "west-arthur",
+   "name": "Shire of West Arthur",
+   "state": "wa",
+   "news_url": "https://www.westarthur.wa.gov.au/news/"
+  },
+  "west-coast": {
+   "id": "west-coast",
+   "name": "West Coast Council",
+   "state": "tas",
+   "news_url": "https://www.westcoast.tas.gov.au/feed/"
+  },
+  "west-tamar": {
+   "id": "west-tamar",
+   "name": "West Tamar Council",
+   "state": "tas",
+   "news_url": "https://www.wtc.tas.gov.au/"
+  },
+  "west-torrens": {
+   "id": "west-torrens",
+   "name": "City of West Torrens",
+   "state": "sa",
+   "news_url": "https://www.westtorrens.sa.gov.au/news"
+  },
+  "west-wimmera": {
+   "id": "west-wimmera",
+   "name": "West Wimmera Shire Council",
+   "state": "vic",
+   "news_url": "https://www.westwimmera.vic.gov.au/Council/News-and-media/Latest-News"
+  },
+  "west_arnhem": {
+   "id": "west_arnhem",
+   "name": "West Arnhem Regional Council",
+   "state": "nt",
+   "news_url": "https://www.westarnhem.nt.gov.au/news"
+  },
+  "west_daly": {
+   "id": "west_daly",
+   "name": "West Daly Regional Council",
+   "state": "nt",
+   "news_url": "https://www.westdaly.nt.gov.au/feed/rss2"
+  },
+  "western-downs": {
+   "id": "western-downs",
+   "name": "Western Downs Regional Council",
+   "state": "qld",
+   "news_url": "https://www.wdrc.qld.gov.au/Council/News-Public-Updates/News"
+  },
+  "westonia": {
+   "id": "westonia",
+   "name": "Shire of Westonia",
+   "state": "wa",
+   "news_url": "https://www.westonia.wa.gov.au/news/"
+  },
+  "whitehorse": {
+   "id": "whitehorse",
+   "name": "Whitehorse City Council",
+   "state": "vic",
+   "news_url": "https://www.whitehorse.vic.gov.au/news-and-media"
+  },
+  "whitsunday": {
+   "id": "whitsunday",
+   "name": "Whitsunday Regional Council",
+   "state": "qld",
+   "news_url": "https://www.whitsundayrc.qld.gov.au/Our-Council/Publications-and-Media/Latest-News"
+  },
+  "whittlesea": {
+   "id": "whittlesea",
+   "name": "Whittlesea City Council",
+   "state": "vic",
+   "news_url": "https://www.whittlesea.vic.gov.au/About-us/News/Latest-news"
+  },
+  "whyalla": {
+   "id": "whyalla",
+   "name": "City of Whyalla",
+   "state": "sa",
+   "news_url": "https://www.whyalla.sa.gov.au/our-city/news-and-events/latest-news"
+  },
+  "wickepin": {
+   "id": "wickepin",
+   "name": "Shire of Wickepin",
+   "state": "wa",
+   "news_url": "https://www.wickepin.wa.gov.au/news/"
+  },
+  "williams": {
+   "id": "williams",
+   "name": "Shire of Williams",
+   "state": "wa",
+   "news_url": "https://www.williams.wa.gov.au/news/?c=2"
+  },
+  "wiluna": {
+   "id": "wiluna",
+   "name": "Shire of Wiluna",
+   "state": "wa",
+   "news_url": "https://www.wiluna.wa.gov.au/news/"
+  },
+  "wingecarribee-shire-council": {
+   "id": "wingecarribee-shire-council",
+   "name": "Wingecarribee Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.wsc.nsw.gov.au/News/News-Articles"
+  },
+  "winton": {
+   "id": "winton",
+   "name": "Winton Shire Council",
+   "state": "qld",
+   "news_url": "https://www.winton.qld.gov.au/News/Latest-News"
+  },
+  "wodonga": {
+   "id": "wodonga",
+   "name": "Wodonga City Council",
+   "state": "vic",
+   "news_url": "https://www.wodonga.vic.gov.au/Newsroom/Archive"
+  },
+  "wollondilly-shire-council": {
+   "id": "wollondilly-shire-council",
+   "name": "Wollondilly Shire Council",
+   "state": "nsw",
+   "news_url": "https://www.wollondilly.nsw.gov.au/home/latest-news"
+  },
+  "wollongong-city-council": {
+   "id": "wollongong-city-council",
+   "name": "Wollongong City Council",
+   "state": "nsw",
+   "news_url": "https://www.wollongong.nsw.gov.au/council/news"
+  },
+  "wongan-ballidu": {
+   "id": "wongan-ballidu",
+   "name": "Shire of Wongan-Ballidu",
+   "state": "wa",
+   "news_url": "https://www.wongan.wa.gov.au/news/"
+  },
+  "woodanilling": {
+   "id": "woodanilling",
+   "name": "Shire of Woodanilling",
+   "state": "wa",
+   "news_url": "https://www.woodanilling.wa.gov.au/news/"
+  },
+  "woollahra-municipal-council": {
+   "id": "woollahra-municipal-council",
+   "name": "Woollahra Municipal Council",
+   "state": "nsw",
+   "news_url": "https://www.woollahra.nsw.gov.au/News/Latest-news"
+  },
+  "woorabinda": {
+   "id": "woorabinda",
+   "name": "Woorabinda Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.woorabinda.qld.gov.au/News-and-Updates/Council-News"
+  },
+  "wudinna-district": {
+   "id": "wudinna-district",
+   "name": "Wudinna District Council",
+   "state": "sa",
+   "news_url": "https://www.wudinna.sa.gov.au/community/latest-news"
+  },
+  "wujal-wujal": {
+   "id": "wujal-wujal",
+   "name": "Wujal Wujal Aboriginal Shire Council",
+   "state": "qld",
+   "news_url": "https://www.wujalwujalcouncil.qld.gov.au/Council/News-and-Notices"
+  },
+  "wyalkatchem": {
+   "id": "wyalkatchem",
+   "name": "Shire of Wyalkatchem",
+   "state": "wa",
+   "news_url": "https://www.wyalkatchem.wa.gov.au/news/"
+  },
+  "wyndham": {
+   "id": "wyndham",
+   "name": "Wyndham City Council",
+   "state": "vic",
+   "news_url": "https://www.wyndham.vic.gov.au/news?service-area=All&media-release=1"
+  },
+  "wyndham-east-kimberley": {
+   "id": "wyndham-east-kimberley",
+   "name": "Shire of Wyndham-East Kimberley",
+   "state": "wa",
+   "news_url": "https://www.swek.wa.gov.au/news/"
+  },
+  "yalgoo": {
+   "id": "yalgoo",
+   "name": "Shire of Yalgoo",
+   "state": "wa",
+   "news_url": "https://www.yalgoo.wa.gov.au/news/"
+  },
+  "yankalilla": {
+   "id": "yankalilla",
+   "name": "District Council of Yankalilla",
+   "state": "sa",
+   "news_url": "https://www.yankalilla.sa.gov.au/news-and-events/latest-news"
+  },
+  "yarra": {
+   "id": "yarra",
+   "name": "Yarra City Council",
+   "state": "vic",
+   "news_url": "https://www.yarracity.vic.gov.au/news"
+  },
+  "yarra-ranges": {
+   "id": "yarra-ranges",
+   "name": "Yarra Ranges Shire Council",
+   "state": "vic",
+   "news_url": "https://www.yarraranges.vic.gov.au/Council/Latest-news"
+  },
+  "yarriambiack": {
+   "id": "yarriambiack",
+   "name": "Yarriambiack Shire Council",
+   "state": "vic",
+   "news_url": "https://www.yarriambiack.vic.gov.au/Engage-With-Us/Council-News"
+  },
+  "yass-valley-council": {
+   "id": "yass-valley-council",
+   "name": "Yass Valley Council",
+   "state": "nsw",
+   "news_url": "https://www.yassvalley.nsw.gov.au/News-articles"
+  },
+  "yilgarn": {
+   "id": "yilgarn",
+   "name": "Shire of Yilgarn",
+   "state": "wa",
+   "news_url": "https://www.yilgarn.wa.gov.au/news/"
+  },
+  "york": {
+   "id": "york",
+   "name": "Shire of York",
+   "state": "wa",
+   "news_url": "https://www.york.wa.gov.au/news/"
+  },
+  "yorke-peninsula": {
+   "id": "yorke-peninsula",
+   "name": "Yorke Peninsula Council",
+   "state": "sa",
+   "news_url": "https://yorke.sa.gov.au/news"
+  }
+ }
+}

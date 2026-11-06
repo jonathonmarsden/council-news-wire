@@ -150,3 +150,15 @@ jobs:
       run: |
         # Check for common markdown issues
         grep -r "TODO\|FIXME\|XXX" docs/ && echo "⚠️  Found TODO comments" || echo "✅ No TODO comments"
+
+  edge:
+    # The edge service (Bluesky feeds + RSS). Its logic tests import nothing
+    # outside Node, so no npm install is needed.
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+    - name: Edge logic tests
+      run: cd edge && node --test test/*.test.ts
