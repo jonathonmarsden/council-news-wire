@@ -1,0 +1,14 @@
+{
+  "_comment": "One Bluesky starter pack per state, published from the feeds account by scripts/feeds/publish_starter_packs.py. A national 'follow everything' pack would put ~140 posts a day into a newcomer's timeline, so packs are per state: the state account, the podcast, the feeds account, and the three region feeds most people in that state will want (Bluesky allows three feeds per pack).",
+  "accounts": ["lgnewsrounduppod.bsky.social", "lgnews.jonathonmarsden.com"],
+  "packs": [
+    {"state": "nsw", "name": "NSW council news", "adj": "NSW", "feeds": ["nsw-sydney", "nsw-west-syd", "nsw-hunter"]},
+    {"state": "vic", "name": "Victorian council news", "adj": "Victorian", "feeds": ["vic-melbourne", "vic-m9", "vic-geelong"]},
+    {"state": "qld", "name": "Queensland council news", "adj": "Queensland", "feeds": ["qld-seq", "qld-brisbane", "qld-north"]},
+    {"state": "wa", "name": "WA council news", "adj": "WA", "feeds": ["wa-perth", "wa-south-west", "wa-pilbara"]},
+    {"state": "sa", "name": "SA council news", "adj": "SA", "feeds": ["sa-adelaide", "sa-hills-fleur", "sa-limestone"]},
+    {"state": "tas", "name": "Tasmanian council news", "adj": "Tasmanian", "feeds": ["tas-hobart", "tas-north", "tas-north-west"]},
+    {"state": "nt", "name": "NT council news", "adj": "NT", "feeds": ["nt-darwin", "nt-regional"]},
+    {"state": "act", "name": "ACT council news", "adj": "ACT", "feeds": ["act-canberra", "nsw-cbr-region"]}
+  ]
+}

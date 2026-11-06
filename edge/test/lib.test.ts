@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   cleanPost, decodeCursor, didDocument, encodeCursor, feedIdFromUri, itemDate, renderOpml, renderRss, xmlEscape,
-  type Post,
+  type Post, wantsFeedPage, renderFeedPage,
 } from "../src/lib.ts";
 
 const DID = "did:plc:publisher";
@@ -74,4 +74,22 @@ test("ingest accepts a well-formed post and refuses bad ones", () => {
   assert.equal(cleanPost({ ...post(), posted_at: "yesterday" }), null);
   assert.equal(cleanPost({ ...post(), uri: "not-at" })?.uri, null);
   assert.equal(cleanPost(null), null);
+});
+
+test("feed page only for browser navigations", () => {
+  const h = (o: Record<string, string>) => ({ get: (k: string) => o[k] ?? null });
+  assert.equal(wantsFeedPage(h({ "sec-fetch-dest": "document", "sec-fetch-mode": "navigate" }), null), true);
+  assert.equal(wantsFeedPage(h({ accept: "text/html,application/xhtml+xml" }), null), false); // reader faking a browser Accept
+  assert.equal(wantsFeedPage(h({ "sec-fetch-dest": "empty", "sec-fetch-mode": "cors" }), null), false);
+  assert.equal(wantsFeedPage(h({}), "html"), true);
+  assert.equal(wantsFeedPage(h({ "sec-fetch-dest": "document", "sec-fetch-mode": "navigate" }), "rss"), false);
+});
+
+test("feed page escapes content and links readers to the feed", () => {
+  const html = renderFeedPage({ title: "A & B news", description: "d", link: "https://x", selfUrl: "https://h/rss/a.xml" },
+    [{ url: "https://c/1?a=1&b=2", uri: null, council_id: "c", council_name: "C <Council>", state: "vic", title: "<b>hi</b>",
+       excerpt: null, published_at: null, posted_at: "2026-11-01T00:00:00Z" }], "https://site");
+  assert.ok(html.includes("A &amp; B news") && html.includes("&lt;b&gt;hi&lt;/b&gt;") && html.includes("C &lt;Council&gt;"));
+  assert.ok(html.includes("add_feed=https%3A%2F%2Fh%2Frss%2Fa.xml"));
+  assert.ok(!html.includes("<b>hi</b>"));
 });

@@ -13,7 +13,7 @@ import data from "./data.json";
 import { SCHEMA } from "./schema";
 import {
   type Feed, type Post, STATES, STATE_NAMES, clampLimit, cleanPost, decodeCursor,
-  didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss,
+  didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage,
 } from "./lib";
 
 type Council = { id: string; name: string; state: string; news_url: string };
@@ -54,7 +54,12 @@ export default {
       if (path === "/edge/health") return await health(env);
       if (path === "/rss" || path.startsWith("/rss/")) {
         if (req.method !== "GET" && req.method !== "HEAD") return new Response("method not allowed", { status: 405 });
-        return await cached(req, ctx, () => rss(url, env));
+        const page = wantsFeedPage(req.headers, url.searchParams.get("view"));
+        const res = await cached(req, ctx, page, () => rss(url, env, page));
+        // Browsers get a readable page, readers get RSS, from the same address.
+        const out = new Response(res.body, res);
+        out.headers.set("vary", "Sec-Fetch-Dest, Sec-Fetch-Mode");
+        return out;
       }
       return new Response("not found", { status: 404 });
     } catch (e: any) {
@@ -94,7 +99,7 @@ async function skeleton(url: URL, env: Env): Promise<Response> {
 
 // ---- RSS -------------------------------------------------------------------
 
-async function rss(url: URL, env: Env): Promise<Response> {
+async function rss(url: URL, env: Env, page = false): Promise<Response> {
   const path = url.pathname.replace(/\/+$/, "");
   const self = `https://${env.HOSTNAME}${path}`;
   if (path === "/rss" ) return index(env);
@@ -124,6 +129,11 @@ async function rss(url: URL, env: Env): Promise<Response> {
        FROM posts ${where} ORDER BY posted_at DESC LIMIT ${RSS_ITEMS}`,
   );
   const { results } = await (arg === null ? stmt : stmt.bind(arg)).all<Post>();
+  if (page) {
+    return new Response(renderFeedPage({ ...ch, selfUrl: self }, results.slice(0, 20), SITE), {
+      headers: { "content-type": "text/html; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` },
+    });
+  }
   return new Response(renderRss({ ...ch, selfUrl: self }, results), {
     headers: { "content-type": "application/rss+xml; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` },
   });
@@ -158,14 +168,19 @@ function index(env: Env): Response {
 <body><h1>RSS feeds</h1>
 <p>News from Australian councils, relayed from each council's own news page. Every item links to the council's original story.
 Subscribe to <a href="/rss/all.xml">all of Australia</a>, a state, a region or a single council, or import
-<a href="/rss/feeds.opml">every feed</a> into your reader at once.</p>${sections}
+<a href="/rss/feeds.opml">every feed</a> into your reader at once.</p>
+<p>New to RSS? Open any feed below: it shows the latest stories and how to add it to a feed reader, Outlook, Teams or Slack.</p>${sections}
 <p><a href="${SITE}">Back to the news site</a></p></body></html>`;
   return new Response(html, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` } });
 }
 
-async function cached(req: Request, ctx: ExecutionContext, make: () => Promise<Response> | Response): Promise<Response> {
+async function cached(req: Request, ctx: ExecutionContext, page: boolean, make: () => Promise<Response> | Response): Promise<Response> {
   const cache = (caches as any).default as Cache;
-  const key = new Request(new URL(req.url).toString(), { method: "GET" });
+  // The readable page and the RSS share a URL, so they need separate cache keys.
+  const k = new URL(req.url);
+  k.searchParams.delete("view");
+  if (page) k.searchParams.set("__page", "1");
+  const key = new Request(k.toString(), { method: "GET" });
   const hit = await cache.match(key);
   if (hit) return hit;
   const res = await make();

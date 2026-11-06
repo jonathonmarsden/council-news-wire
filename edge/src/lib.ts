@@ -166,3 +166,71 @@ export function cleanPost(x: any): Post | null {
     published_at: published_at && ISO.test(published_at) ? published_at : null,
   };
 }
+
+// ---- Readable feed page (for people who open a feed in a browser) ----------
+
+/** True when a person is opening the address in a browser tab. Browsers mark
+ *  page navigations with Sec-Fetch-Dest: document; feed readers fetch from
+ *  their own servers and never send it, so they keep getting RSS. ?view=html
+ *  and ?view=rss force either. */
+export function wantsFeedPage(headers: { get(name: string): string | null }, view: string | null): boolean {
+  if (view === "html") return true;
+  if (view === "rss") return false;
+  return headers.get("sec-fetch-dest") === "document" && headers.get("sec-fetch-mode") === "navigate";
+}
+
+export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Date = new Date()): string {
+  const enc = encodeURIComponent(ch.selfUrl);
+  const fmt = (d: Date) => d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "Australia/Sydney" });
+  const items = posts.map((p) => `
+      <li><a class="t" href="${xmlEscape(p.url)}">${xmlEscape(p.title)}</a>
+        <div class="m">${xmlEscape(p.council_name)} · ${fmt(itemDate(p, now))}</div>
+        ${p.excerpt ? `<p>${xmlEscape(p.excerpt.length > 220 ? p.excerpt.slice(0, 217).trimEnd() + "…" : p.excerpt)}</p>` : ""}</li>`).join("");
+  return `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${xmlEscape(ch.title)} · RSS feed</title>
+<meta name="description" content="${xmlEscape(ch.description)}">
+<link rel="alternate" type="application/rss+xml" title="${xmlEscape(ch.title)}" href="${xmlEscape(ch.selfUrl)}">
+<style>
+:root{--bg:#f7f4ef;--surface:#fff;--border:#e5ded3;--text:#141414;--text-2:#4a4a4a;--text-3:#7a766f;--accent:#c0711f;--h:Georgia,'Times New Roman',serif}
+@media(prefers-color-scheme:dark){:root{--bg:#0e0d0b;--surface:#1a1814;--border:#302c25;--text:#eeece8;--text-2:#a8a59f;--text-3:#8a867f;--accent:#e8902f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif}
+a{color:var(--accent)}main{max-width:46rem;margin:0 auto;padding:1.5rem 1rem 3rem}
+.top{font-family:var(--h);font-weight:700;color:var(--accent);text-decoration:none}
+h1{font-family:var(--h);font-size:1.7rem;line-height:1.2;margin:1rem 0 .3rem}.lead{color:var(--text-2);margin:0 0 1.25rem}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.75rem}
+.box h2{font-family:var(--h);font-size:1.05rem;margin:0 0 .35rem}.box p{margin:.2rem 0 .8rem;color:var(--text-2);font-size:.92rem}
+.row{display:flex;gap:.5rem;flex-wrap:wrap}.row input{flex:1 1 16rem;min-width:0;font:inherit;font-size:.85rem;padding:.45rem .55rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)}
+.btn{display:inline-block;font:inherit;font-size:.88rem;font-weight:600;padding:.45rem .8rem;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;text-decoration:none;cursor:pointer}
+.btn.alt{background:transparent;color:var(--accent)}.apps{margin-top:.7rem}
+details{margin-top:.8rem;font-size:.9rem;color:var(--text-2)}summary{cursor:pointer;color:var(--text)}details li{margin:.35rem 0}
+ol{list-style:none;padding:0;margin:0}ol li{padding:.85rem 0;border-top:1px solid var(--border)}
+.t{font-family:var(--h);font-size:1.05rem;font-weight:700;text-decoration:none;color:var(--text)}.t:hover{color:var(--accent)}
+.m{font-size:.8rem;color:var(--text-3);margin-top:.15rem}ol p{margin:.35rem 0 0;font-size:.92rem;color:var(--text-2)}
+footer{margin-top:2rem;font-size:.85rem;color:var(--text-3)}
+</style></head><body><main>
+<a class="top" href="${xmlEscape(site)}">Local Government News</a>
+<h1>${xmlEscape(ch.title)}</h1>
+<p class="lead">${xmlEscape(ch.description)}</p>
+<section class="box" aria-labelledby="sub">
+  <h2 id="sub">Get these stories automatically</h2>
+  <p>This page is an RSS feed. Add its address to a feed reader, or to Outlook, Teams or Slack, and new stories arrive as councils publish them. No account with us, no tracking.</p>
+  <div class="row"><input id="u" value="${xmlEscape(ch.selfUrl)}" readonly aria-label="Feed address" onclick="this.select()">
+    <button class="btn" id="c" type="button">Copy address</button></div>
+  <div class="row apps"><a class="btn alt" href="https://feedly.com/i/subscription/feed%2F${enc}">Add to Feedly</a>
+    <a class="btn alt" href="https://www.inoreader.com/?add_feed=${enc}">Add to Inoreader</a></div>
+  <details><summary>Other ways to follow</summary><ul>
+    <li><b>Any feed reader</b> (NetNewsWire, Reeder, Feeder and others): add a new feed and paste the address.</li>
+    <li><b>Microsoft Teams:</b> in the channel, open Workflows and choose “Post to a channel when an RSS feed is updated”, then paste the address.</li>
+    <li><b>Slack:</b> type <code>/feed subscribe</code> followed by the address in the channel.</li>
+    <li><b>Outlook (classic, Windows):</b> right-click RSS Subscriptions, choose Add a New RSS Feed, and paste the address.</li>
+    <li><b>Email:</b> an RSS-to-email service will send you each new story.</li>
+  </ul></details>
+</section>
+<h2 style="font-family:var(--h);font-size:1.15rem">Latest stories</h2>
+<ol>${items || "<li>No stories in the last few months.</li>"}</ol>
+<footer><a href="/rss/">All RSS feeds</a> · <a href="${xmlEscape(site)}">Back to the news site</a></footer>
+</main>
+<script>document.getElementById("c").onclick=function(){var b=this,i=document.getElementById("u");(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).then(function(){b.textContent="Copied"},function(){i.select();document.execCommand("copy");b.textContent="Copied"})}</script>
+</body></html>
+`;
+}
