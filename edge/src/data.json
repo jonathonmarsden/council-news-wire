@@ -411,7 +411,7 @@
    "name": "Canberra & surrounds",
    "state": "ACT",
    "kind": "region",
-   "description": "News from the 5 councils of Canberra & surrounds: ACT Government, ACT Government, ACT Government, Queanbeyan-Palerang, Yass Valley. Relayed from each council's own news page.",
+   "description": "News from the ACT Government and the neighbouring Queanbeyan-Palerang and Yass Valley councils. Relayed from each one's own news page.",
    "council_ids": [
     "act_gov",
     "act_ministers",

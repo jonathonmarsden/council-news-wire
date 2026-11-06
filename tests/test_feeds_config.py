@@ -64,3 +64,12 @@ def test_every_wa_council_has_a_region():
     missing = [cid for cid, c in COUNCILS.items()
                if c["_state"] == "wa" and c.get("enabled", True) and not c.get("region")]
     assert not missing, missing
+
+
+def test_descriptions_do_not_repeat_a_name():
+    # The ACT has several news sources with the same name; listing each one
+    # made the Canberra feed read "ACT Government, ACT Government, ...".
+    for f in FEEDS:
+        parts = [p.strip() for p in re.split(r"[:,.]| and ", f["description"]) if p.strip()]
+        dupes = {p for p in parts if parts.count(p) > 1}
+        assert not dupes, (f["id"], dupes)
