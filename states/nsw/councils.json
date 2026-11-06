@@ -114,13 +114,13 @@
     {
       "id": "central-coast-council",
       "name": "Central Coast Council",
-      "news_url": "https://www.centralcoast.nsw.gov.au/about-council/council-news/council-news",
+      "news_url": "https://www.centralcoast.nsw.gov.au/about-council/media-releases",
       "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "li.flex.h-full",
-      "title_selector": "h3 a",
-      "link_selector": "h3 a",
-      "date_selector": "div.text-base",
+      "title_selector": "a.text-2xl",
+      "link_selector": "a.text-2xl",
+      "date_selector": "div.leading-tight",
       "content_selector": ".wysiwyg",
       "population": 346596,
       "region": "Central Coast"
