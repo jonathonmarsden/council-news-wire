@@ -46,7 +46,7 @@ council-news-bot/
 ├── tests/                         # pytest tests (mix of unit + live integration)
 ├── alembic/                       # DB migrations
 ├── docs/                          # Operational docs, hashtags_map.json
-├── .github/workflows/             # CI/CD: test.yml, deploy.yml, rollback.yml, ops_monitoring.yml
+├── .github/workflows/             # CI: test.yml (tests + lint), feed_health.yml (daily off-site feed check)
 ├── docker-compose.yml             # bot + PostgreSQL 15
 ├── Dockerfile                     # Playwright + Python 3.10
 └── requirements.txt

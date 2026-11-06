@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 """
-Feed watchdog — the output-side health check.
+Feed watchdog: is each feed still carrying a broad spread of councils?
 
-The bot's circuit breaker and briefings track "did the scraper run", but the
-ground-truth signal is "what actually got published to BlueSky". Nothing watched
-that automatically, which is why the proxy lapse, the ~April-16 mass auto-disable
-(85 councils), and the 82-day ACT outage all went unnoticed for weeks-to-months.
+Reads the public Bluesky feeds and alerts to DISCORD_WEBHOOK_ALERTS when far
+fewer distinct councils appear in a state's recent posts than the state has
+enabled. That catches a quiet mass failure that does not stop a feed outright,
+which a "when was the last post" check cannot see.
 
-This script, run on a schedule (every few hours), checks the BlueSky feeds
-directly and alerts to Discord (DISCORD_WEBHOOK_ALERTS) when output looks wrong:
+Staleness ("this feed has stopped posting") is no longer checked here. The
+off-host watchdog checks every feed every 15 minutes, still works when this
+host is down, and uses per-state limits that ignore weekends. The wall-clock
+limits that used to live here fired on most Sundays.
 
-  1. STALE FEED      — a state feed's latest post is older than --stale-hours.
-  2. THIN COVERAGE   — far fewer distinct councils represented in the recent
-                       window than the state has enabled (catches a quiet
-                       mass-failure that doesn't fully stop a feed).
-
-It is read-only (public BlueSky API + local config only) and degrades gracefully
-when Discord isn't configured — it just prints. Pair it with the deeper
-scripts/maintenance/triage_coverage.py for on-demand per-council diagnosis.
+Reports changes only: a state is reported when its coverage drops below the
+floor and again when it recovers, not on every run. What was last reported is
+kept in the monitor_state table. A feed that cannot be read is printed but not
+alerted on; one timeout used to produce an alert.
 
 Usage:
     python3 scripts/monitoring/feed_watchdog.py
-    python3 scripts/monitoring/feed_watchdog.py --stale-hours 24 --coverage-floor 0.25
+    python3 scripts/monitoring/feed_watchdog.py --coverage-floor 0.25 --dry-run
 """
 import argparse
 import json
@@ -42,19 +40,12 @@ HANDLES = {
     "NT": "roundupnewsbotnt.bsky.social", "ACT": "roundupnewsbotact.bsky.social",
 }
 API = "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed"
-# Low-volume states are legitimately quiet for longer (few councils, slow
-# weekends) — a flat 24h threshold re-alerts every 4h and trains channel
-# blindness, which is what quiet-by-default was meant to fix.
-# ACT is one source (ACT gov media feed) that legitimately goes quiet for
-# weeks (verified July 2026: 8+ days with zero releases) — 7-day threshold.
-STALE_HOURS_OVERRIDE = {"TAS": 48.0, "NT": 48.0, "ACT": 168.0}
-# Re-alerting an UNCHANGED problem set is suppressed for this long.
-COOLDOWN_FILE = ROOT / "logs" / ".watchdog_last_alert"
-COOLDOWN_HOURS = 24.0
 SUFFIXES = ["regional council", "shire council", "city council", "municipal council",
             "district council", "town council", "aboriginal shire", "council", "shire",
             "city of", "the ", "regional"]
-RED = 15158332  # Discord embed colour for alerts
+RED = 15158332  # Discord embed colours
+GREEN = 3066993
+STATE_KEY = "feed_watchdog"
 
 
 def norm(s):
@@ -86,114 +77,81 @@ def pull(handle, rounds):
     return posts, None
 
 
-def check(stale_hours, coverage_floor, depth):
-    now = datetime.now(timezone.utc)
-    problems = []
+def check(coverage_floor, depth):
+    """(findings, lines): thin-coverage findings by stable key, and a report."""
+    findings = {}
     lines = []
     for st, handle in HANDLES.items():
         councils = [c for c in json.load(open(ROOT / f"states/{st.lower()}/councils.json"))["councils"]
                     if c.get("enabled")]
         posts, err = pull(handle, depth)
         if err or not posts:
-            problems.append(f"**{st}**: feed error / no posts ({err or 'empty'})")
-            lines.append(f"{st}: ERROR {err or 'empty'}")
+            lines.append(f"{st}: could not read feed ({err or 'empty'})")
             continue
 
         latest = max(p["post"].get("indexedAt", "") for p in posts)
-        try:
-            age_h = (now - datetime.fromisoformat(latest.replace("Z", "+00:00"))).total_seconds() / 3600
-        except Exception:
-            age_h = None
-
         text = " ".join(norm(p["post"]["record"].get("text", "")) for p in posts)
         seen = sum(1 for c in councils
                    if (len(norm(c["name"])) > 6 and norm(c["name"]) in text)
                    or (len(shortkey(c["name"])) >= 5 and shortkey(c["name"]) in text))
         coverage = seen / len(councils) if councils else 0
 
-        flags = []
-        st_stale = STALE_HOURS_OVERRIDE.get(st, stale_hours)
-        if age_h is not None and age_h > st_stale:
-            flags.append(f"STALE {age_h:.0f}h")
-            problems.append(f"**{st}**: stale — last post {age_h:.0f}h ago (>{st_stale:.0f}h)")
-        # Coverage floor only meaningful for multi-council states.
-        if len(councils) >= 10 and coverage < coverage_floor:
-            flags.append(f"THIN {coverage:.0%}")
-            problems.append(f"**{st}**: thin coverage — {seen}/{len(councils)} councils "
-                            f"in last {len(posts)} posts ({coverage:.0%} < {coverage_floor:.0%})")
-        lines.append(f"{st}: {seen}/{len(councils)} councils, latest "
-                     f"{(latest[:16] if latest else '?')}"
-                     + (f"  [{', '.join(flags)}]" if flags else "  ok"))
-    return problems, lines
+        thin = len(councils) >= 10 and coverage < coverage_floor  # only for multi-council states
+        if thin:
+            findings[f"thin:{st}"] = {
+                "msg": (f"{st}: only {seen} of {len(councils)} councils appear in the last "
+                        f"{len(posts)} posts ({coverage:.0%}, floor {coverage_floor:.0%})"),
+                "ok": f"{st}: coverage back to {seen} of {len(councils)} councils ({coverage:.0%})",
+            }
+        lines.append(f"{st}: {seen}/{len(councils)} councils, latest {latest[:16] or '?'}"
+                     + ("  [THIN]" if thin else "  ok"))
+    return findings, lines
+
+
+def build_message(opened, cleared, now):
+    if not opened and not cleared:
+        return None
+    body = [f"⚠️ {f['msg']}" for _, f in sorted(opened.items())]
+    body += [f"✅ {f['ok']}" for _, f in sorted(cleared.items())]
+    return {
+        "title": "Feed watchdog: council coverage dropped" if opened else "Feed watchdog: coverage recovered",
+        "description": "\n".join(body)[:4000],
+        "color": RED if opened else GREEN,
+        "timestamp": now.isoformat(),
+    }
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stale-hours", type=float, default=24.0,
-                    help="alert if a feed's latest post is older than this (default 24)")
     ap.add_argument("--coverage-floor", type=float, default=0.20,
                     help="alert if represented-council fraction drops below this (default 0.20)")
     ap.add_argument("--depth", type=int, default=6, help="feed pages to pull (x100 posts)")
+    ap.add_argument("--dry-run", action="store_true", help="print only: send nothing, save nothing")
     args = ap.parse_args()
 
-    problems, lines = check(args.stale_hours, args.coverage_floor, args.depth)
-
-    print("Feed watchdog —", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"))
+    now = datetime.now(timezone.utc)
+    findings, lines = check(args.coverage_floor, args.depth)
+    print("Feed watchdog", now.strftime("%Y-%m-%d %H:%M UTC"))
     for ln in lines:
         print("  " + ln)
+    if args.dry_run:
+        return
 
-    if problems:
-        body = "\n".join(f"• {p}" for p in problems)
-        print("\nALERT:\n" + body)
-        if _in_cooldown(problems):
-            print("(unchanged problem set — Discord re-alert suppressed by cooldown)")
-        else:
-            try:
-                from discord_logger import send_discord_embed, DISCORD_WEBHOOK_ALERTS
-                send_discord_embed(DISCORD_WEBHOOK_ALERTS, {
-                    "title": "🚨 Feed watchdog: output looks wrong",
-                    "description": body[:4000],
-                    "color": RED,
-                    "timestamp": datetime.utcnow().isoformat(),
-                })
-                _record_alert(problems)
-            except Exception as e:
-                print(f"(Discord alert not sent: {e})")
-        sys.exit(1)
-
-    _clear_cooldown()
-    print("\n✅ All feeds fresh and representative.")
-    sys.exit(0)
-
-
-def _problems_hash(problems):
-    import hashlib
-    return hashlib.md5("\n".join(sorted(problems)).encode()).hexdigest()
-
-
-def _in_cooldown(problems) -> bool:
-    try:
-        state = json.loads(COOLDOWN_FILE.read_text())
-        age_h = time.time() / 3600 - state["ts_hours"]
-        return state["hash"] == _problems_hash(problems) and age_h < COOLDOWN_HOURS
-    except Exception:
-        return False
-
-
-def _record_alert(problems) -> None:
-    try:
-        COOLDOWN_FILE.parent.mkdir(parents=True, exist_ok=True)
-        COOLDOWN_FILE.write_text(json.dumps(
-            {"hash": _problems_hash(problems), "ts_hours": time.time() / 3600}))
-    except Exception as e:
-        print(f"(cooldown state not written: {e})")
-
-
-def _clear_cooldown() -> None:
-    try:
-        COOLDOWN_FILE.unlink()
-    except Exception:
-        pass
+    from core.database import Database
+    from core.monitor_state import load_state, save_state, diff_findings
+    db = Database()
+    saved = load_state(db, STATE_KEY)
+    opened, cleared = diff_findings((saved or {}).get("findings", {}), findings)
+    embed = build_message(opened, cleared, now)
+    if embed:
+        from discord_logger import send_discord_embed, DISCORD_WEBHOOK_ALERTS
+        if not send_discord_embed(DISCORD_WEBHOOK_ALERTS, embed):
+            print("Discord did not accept the alert; state not saved, will retry next run.")
+            sys.exit(1)
+        print("Sent: " + embed["title"])
+    if embed or saved is None:
+        save_state(db, STATE_KEY, {"findings": findings, "at": now.isoformat()})
+    sys.exit(1 if findings else 0)
 
 
 def _crash_alert(exc: Exception) -> None:

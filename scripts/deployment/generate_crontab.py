@@ -178,22 +178,23 @@ def get_queue_processor_line() -> str:
 # === MONITORING (quiet-by-default: speak only on problems + one daily digest) ===
 # NOTE: the hourly_briefing was removed — 24 "all normal" heartbeats/day trained
 # us to ignore the channel, which is how the proxy lapse / 85-disable / 82-day
-# ACT outage slipped past. Health is now: watchdog + alert_check (alert ONLY on
-# real problems) + one daily digest of deltas.
+# ACT outage slipped past. The two alert monitors below report CHANGES only (a
+# problem when it opens and when it clears, remembered in monitor_state), and
+# feed staleness is left to the off-host watchdog, which survives this host.
 
-# Feed watchdog (every 4h) — watches OUTPUT (BlueSky). Alerts to
-# DISCORD_WEBHOOK_ALERTS on stale feed (>24h) or dropped council coverage.
+# Feed watchdog (every 4h) — watches OUTPUT (BlueSky) for council coverage
+# dropping on a feed. Alerts to DISCORD_WEBHOOK_ALERTS on change only.
 17 */4 * * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/monitoring/feed_watchdog.py >> /var/log/council_bot_cron.log 2>&1
 
-# Alert check (every 6h) — watches INTERNAL STATE (DB). Alerts on circuit-breaker
-# trips, zero-post states, missed scrape runs, proxy/auth failures, and
-# empty-run councils. Silent when healthy.
+# Alert check (every 6h) — watches INTERNAL STATE (DB): councils switched off
+# by the breaker, missed scrape runs, proxy/auth failures, a stalled queue.
+# Alerts on change only; silent while nothing changes.
 43 */6 * * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/monitoring/alert_check.py >> /var/log/council_bot_cron.log 2>&1
 
-# Daily digest (21:11 UTC = ~07:11 AEST) — the one informational message/day.
+# Daily digest (21:11 UTC = 08:11 AEDT, 07:11 AEST) — the one informational message/day.
 11 21 * * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/monitoring/daily_briefing.py >> /var/log/council_bot_cron.log 2>&1
 
-# Weekly coverage ledger (Mon 21:31 UTC = ~08:31 AEDT) — every council sorted
+# Weekly coverage ledger (Mon 21:31 UTC = Tue 08:31 AEDT) — every council sorted
 # by OUTPUT into posting / quiet / overdue / stale-only / broken, and the honest
 # coverage number. The breaker and briefings say "did the scraper run"; this
 # says "did the reader get news" (City of Sydney was "healthy" for months).

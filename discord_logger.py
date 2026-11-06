@@ -174,20 +174,22 @@ def log_generic_report(title: str, description: str, color: int = 3447003) -> No
     send_discord_embed(DISCORD_WEBHOOK_LOGS, embed)
 
 
-def send_discord_embed(webhook_url: Optional[str], embed_dict: Dict, username: str = "Roundup News Bot") -> None:
+def send_discord_embed(webhook_url: Optional[str], embed_dict: Dict, username: str = "Roundup News Bot") -> bool:
+    """Send one embed. True only if Discord accepted it, so a caller that
+    remembers what it reported can retry next run instead of losing it."""
     if not webhook_url:
         print("Discord webhook URL not configured; skipping log")
-        return
+        return False
 
     data = {
         "embeds": [embed_dict],
         "username": username,
     }
 
-    _send_webhook(webhook_url, data)
+    return _send_webhook(webhook_url, data)
 
 
-def _send_webhook(url: str, data: Dict) -> None:
+def _send_webhook(url: str, data: Dict) -> bool:
     max_attempts = 3
     backoff = 1
 
@@ -204,10 +206,10 @@ def _send_webhook(url: str, data: Dict) -> None:
                 backoff *= 2
                 continue
             print("Discord webhook failed after retries (network error)")
-            return
+            return False
 
         if resp.status_code in (200, 204):
-            return
+            return True
 
         if resp.status_code == 429:
             retry_after = resp.headers.get("Retry-After")
@@ -222,10 +224,11 @@ def _send_webhook(url: str, data: Dict) -> None:
                 continue
             print("Discord webhook failed after retries (rate limited)")
             print("Response:", resp.status_code, resp.text[:1000])
-            return
+            return False
 
         print(f"Discord webhook returned HTTP {resp.status_code}: {resp.text[:1000]}")
-        return
+        return False
+    return False
 
 
 def _sleep(seconds: int) -> None:

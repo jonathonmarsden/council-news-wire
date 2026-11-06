@@ -91,3 +91,13 @@ class RunSummary(Base):
     articles_posted: Mapped[int] = mapped_column(Integer, default=0)
     errors_count: Mapped[int] = mapped_column(Integer, default=0)
     warnings_count: Mapped[int] = mapped_column(Integer, default=0)
+
+class MonitorState(Base):
+    """What each monitor last reported, so it can report changes instead of
+    repeating the same condition every run. One row per monitor; the value is
+    the monitor's own JSON (for alert_check: the open findings by key)."""
+    __tablename__ = "monitor_state"
+
+    key: Mapped[str] = mapped_column(String, primary_key=True)
+    value: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

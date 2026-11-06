@@ -53,19 +53,22 @@ This repository has automated CI/CD workflows for safe, reliable deployments.
 
 ---
 
-### 4. **Ops Monitoring** (Scheduled Daily)
-**Trigger:** Daily at 21:00 UTC (~8am AEDT)  
-**Purpose:** Daily health checks and backups  
-**What it does:**
-1. Runs daily briefing (scraper stats)
-2. Generates health report (broken scrapers)
-3. Backs up PostgreSQL database (14-day retention)
-4. Sends Discord alerts if any step fails
-5. Sends success notification if all pass
+### 4. **Feed Health** (Scheduled Daily)
+**Trigger:** Daily at 21:00 UTC (~8am AEDT)
+**Purpose:** Off-site check that the eight feeds and the website are alive
+**What it does:** Runs `scripts/monitoring/check_feed_health.py` on a GitHub
+runner. If a feed is stale or the site is down, the run fails and GitHub emails
+the repository owner. It is deliberately independent of the production host
+and of Discord.
 
-**Location:** `.github/workflows/ops_monitoring.yml`
+Production health alerts (feeds going quiet, the host going down) come from a
+separate off-host watchdog that checks every 15 minutes; the on-host monitors
+are listed in `crontab_generated.txt`. Backups are taken on the production
+host, not by a workflow (see `docs/operations/RESTORE.md`).
 
-**Manual run:** Go to Actions → "Ops Monitoring" → "Run workflow"
+**Location:** `.github/workflows/feed_health.yml`
+
+**Manual run:** Go to Actions → "Feed Health" → "Run workflow"
 
 ---
 
