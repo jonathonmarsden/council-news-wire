@@ -91,5 +91,8 @@ test("feed page escapes content and links readers to the feed", () => {
        excerpt: null, published_at: null, posted_at: "2026-11-01T00:00:00Z" }], "https://site");
   assert.ok(html.includes("A &amp; B news") && html.includes("&lt;b&gt;hi&lt;/b&gt;") && html.includes("C &lt;Council&gt;"));
   assert.ok(html.includes("add_feed=https%3A%2F%2Fh%2Frss%2Fa.xml"));
+  // Email routes for people who live in their inbox: Microsoft 365 at work, any mailbox at home.
+  assert.ok(html.includes("make.powerautomate.com/templates/details/"));
+  assert.ok(html.includes("feedrabbit.com/subscriptions/new?url=https%3A%2F%2Fh%2Frss%2Fa.xml"));
   assert.ok(!html.includes("<b>hi</b>"));
 });

@@ -181,6 +181,7 @@ h1{font-family:var(--h);font-size:1.7rem;line-height:1.2;margin:1rem 0 .3rem}.le
 .row{display:flex;gap:.5rem;flex-wrap:wrap}.row input{flex:1 1 16rem;min-width:0;font:inherit;font-size:.85rem;padding:.45rem .55rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)}
 .btn{display:inline-block;font:inherit;font-size:.88rem;font-weight:600;padding:.45rem .8rem;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;text-decoration:none;cursor:pointer}
 .btn.alt{background:transparent;color:var(--accent)}.apps{margin-top:.7rem}
+.ways{padding-left:1.1rem;margin:.9rem 0 0;font-size:.92rem;color:var(--text-2)}.ways li{margin:.55rem 0}.ways b{color:var(--text)}.ways .apps{margin-top:.5rem}
 details{margin-top:.8rem;font-size:.9rem;color:var(--text-2)}summary{cursor:pointer;color:var(--text)}details li{margin:.35rem 0}
 ol{list-style:none;padding:0;margin:0}ol li{padding:.85rem 0;border-top:1px solid var(--border)}
 .t{font-family:var(--h);font-size:1.05rem;font-weight:700;text-decoration:none;color:var(--text)}.t:hover{color:var(--accent)}
@@ -205,6 +206,10 @@ export function wantsFeedPage(headers: { get(name: string): string | null }, vie
   return headers.get("sec-fetch-dest") === "document" && headers.get("sec-fetch-mode") === "navigate";
 }
 
+// Microsoft's Power Automate template that emails each new item of an RSS
+// feed to the signed-in Microsoft 365 user.
+const PA_RSS_EMAIL = "https://make.powerautomate.com/templates/details/abd158fa332542ea89f822a590a75a9c";
+
 export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Date = new Date()): string {
   const enc = encodeURIComponent(ch.selfUrl);
   const fmt = (d: Date) => d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "Australia/Sydney" });
@@ -222,17 +227,22 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
 <p class="lead">${xmlEscape(ch.description)}</p>
 <section class="box" aria-labelledby="sub">
   <h2 id="sub">Get these stories automatically</h2>
-  <p>This page is an RSS feed. Add its address to a feed reader, or to Outlook, Teams or Slack, and new stories arrive as councils publish them. No account with us, no tracking.</p>
+  <p>Copy the feed address, then pick the place you already read. New stories arrive as councils publish them. No account with us, no tracking.</p>
   <div class="row"><input id="u" value="${xmlEscape(ch.selfUrl)}" readonly aria-label="Feed address" onclick="this.select()">
     <button class="btn" id="c" type="button">Copy address</button></div>
-  <div class="row apps"><a class="btn alt" href="https://feedly.com/i/subscription/feed%2F${enc}">Add to Feedly</a>
-    <a class="btn alt" href="https://www.inoreader.com/?add_feed=${enc}">Add to Inoreader</a></div>
-  <details><summary>Other ways to follow</summary><ul>
-    <li><b>Any feed reader</b> (NetNewsWire, Reeder, Feeder and others): add a new feed and paste the address.</li>
-    <li><b>Microsoft Teams:</b> in the channel, open Workflows and choose “Post to a channel when an RSS feed is updated”, then paste the address.</li>
+  <ul class="ways">
+    <li><b>Email at work (Microsoft 365):</b> open Microsoft's <a href="${PA_RSS_EMAIL}">RSS feed to send e-mail</a> template, sign in with your work account and paste the address. Each new story lands in your Outlook inbox. Some organisations need IT to allow Power Automate first.</li>
+    <li><b>A Teams channel:</b> in the channel, open Workflows, choose “Post to a channel when an RSS feed is updated” and paste the address.</li>
+    <li><b>Email anywhere (Gmail, iCloud, Outlook.com and others):</b> <a href="https://feedrabbit.com/subscriptions/new?url=${enc}">Feedrabbit</a> emails you each new story and has a free plan. It is a separate service with its own terms.</li>
+    <li><b>A feed reader:</b> on iPhone or Mac, NetNewsWire is free; on the web, use the buttons below.
+      <div class="row apps"><a class="btn alt" href="https://feedly.com/i/subscription/feed%2F${enc}">Add to Feedly</a>
+      <a class="btn alt" href="https://www.inoreader.com/?add_feed=${enc}">Add to Inoreader</a></div></li>
+  </ul>
+  <details><summary>More ways to follow</summary><ul>
     <li><b>Slack:</b> type <code>/feed subscribe</code> followed by the address in the channel.</li>
-    <li><b>Outlook (classic, Windows):</b> right-click RSS Subscriptions, choose Add a New RSS Feed, and paste the address.</li>
-    <li><b>Email:</b> an RSS-to-email service will send you each new story.</li>
+    <li><b>Outlook (classic, Windows):</b> right-click RSS Subscriptions, choose Add a New RSS Feed, and paste the address. The new Outlook does not read feeds; use the email option above instead.</li>
+    <li><b>Media monitoring tools:</b> most accept an RSS address as a source.</li>
+    <li><b>Any other feed reader</b> (Reeder, Feeder, Thunderbird and others): add a new feed and paste the address.</li>
   </ul></details>
 </section>
 <h2 style="font-family:var(--h);font-size:1.15rem">Latest stories</h2>
