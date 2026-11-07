@@ -181,7 +181,7 @@ function index(env: Env): Response {
 <h1>RSS feeds</h1>
 <p class="lead">News from every Australian council, relayed from each council's own news page. Every item links to the original story.</p>
 <section class="box"><h2>New to RSS?</h2>
-<p>Open any feed below: it shows the latest stories and how to add it to a feed reader, Outlook, Teams or Slack. Or subscribe to <a href="/rss/all.xml">all of Australia</a>, or import <a href="/rss/feeds.opml">every feed</a> into your reader at once.</p></section>
+<p>Open any feed below: it shows the latest stories and how to get them by email, in Teams or Slack, or in a feed reader. Or subscribe to <a href="/rss/all.xml">all of Australia</a>, or import <a href="/rss/feeds.opml">every feed</a> into your reader at once.</p></section>
 ${sections}
 <footer><a href="${SITE}">Back to the news site</a></footer>
 </main></body></html>`;
