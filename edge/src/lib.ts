@@ -183,9 +183,21 @@ h1{font-family:var(--h);font-size:1.7rem;line-height:1.2;margin:1rem 0 .3rem}.le
 .btn.alt{background:transparent;color:var(--accent)}.apps{margin-top:.7rem}
 .ways{padding-left:1.1rem;margin:.9rem 0 0;font-size:.92rem;color:var(--text-2)}.ways li{margin:.55rem 0}.ways b{color:var(--text)}.ways .apps{margin-top:.5rem}
 details{margin-top:.8rem;font-size:.9rem;color:var(--text-2)}summary{cursor:pointer;color:var(--text)}details li{margin:.35rem 0}
-ol{list-style:none;padding:0;margin:0}ol li{padding:.85rem 0;border-top:1px solid var(--border)}
-.t{font-family:var(--h);font-size:1.05rem;font-weight:700;text-decoration:none;color:var(--text)}.t:hover{color:var(--accent)}
-.m{font-size:.8rem;color:var(--text-3);margin-top:.15rem}ol p{margin:.35rem 0 0;font-size:.92rem;color:var(--text-2)}
+[hidden]{display:none!important}
+.keep{font-size:.88rem;color:var(--text-2);margin:-.5rem 0 1.1rem}.keep .btn{margin-left:.3rem;padding:.2rem .6rem;font-size:.8rem}
+details.box{margin-top:0;font-size:1rem;color:inherit}details.box>summary{list-style:none;cursor:pointer}details.box>summary::-webkit-details-marker{display:none}
+details.box>summary h2{display:inline;margin:0}details.box>summary::after{content:"Show";float:right;font-size:.8rem;color:var(--accent);font-weight:600}details.box[open]>summary::after{content:"Hide"}
+details.box[open]>summary{margin-bottom:.35rem}
+.latest{font-family:var(--h);font-size:1.15rem;margin:0 0 .6rem}.since{font-size:.85rem;color:var(--text-3);margin:-.3rem 0 .7rem}
+.cards{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.85rem}
+.card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sc,var(--accent));border-radius:6px;padding:.9rem 1.15rem .75rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.ch{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em;font-size:.78rem;color:var(--text-3);line-height:1.3}
+.cn{font-family:var(--h);font-weight:700;font-size:.9rem;color:var(--text)}
+.new{display:none;margin-left:.2rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:var(--accent);border-radius:999px;padding:.05rem .5rem}.is-new .new{display:inline-block}
+.hl{display:block;margin-top:.5rem;font-family:var(--h);font-size:1.15rem;font-weight:700;line-height:1.3;color:var(--sc,var(--accent));text-decoration:none;text-wrap:balance}.hl:hover{text-decoration:underline}
+.ex{margin:.45rem 0 0;font-family:var(--h);font-size:.95rem;line-height:1.55;color:var(--text-2)}
+.cf{margin-top:.65rem;padding-top:.55rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-size:.76rem}.cf a{color:var(--text-3);text-decoration:none}.cf a:hover{color:var(--accent)}
+@media(prefers-color-scheme:dark){.hl{color:color-mix(in srgb,var(--sc,var(--accent)) 45%,#fff)}}
 footer{margin-top:2rem;font-size:.85rem;color:var(--text-3)}
 
 .st{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-bottom:1rem}
@@ -210,23 +222,101 @@ export function wantsFeedPage(headers: { get(name: string): string | null }, vie
 // feed to the signed-in Microsoft 365 user.
 const PA_RSS_EMAIL = "https://make.powerautomate.com/templates/details/abd158fa332542ea89f822a590a75a9c";
 
+// Each state's colour on lgnews.jonathonmarsden.com, used for the card edge.
+export const STATE_COLORS: Record<string, string> = {
+  nsw: "#2a6b98", vic: "#2a4a6f", qld: "#8a1d30", sa: "#b33829",
+  wa: "#b07520", tas: "#24663a", nt: "#b05828", act: "#2a5f92",
+};
+
+/** The bsky.app address of a post, from its at:// uri. */
+export function bskyWebUrl(uri: string | null): string | null {
+  const m = uri ? /^at:\/\/(did:[a-z]+:[A-Za-z0-9._:-]+)\/app\.bsky\.feed\.post\/([A-Za-z0-9]+)$/.exec(uri) : null;
+  return m ? `https://bsky.app/profile/${m[1]}/post/${m[2]}` : null;
+}
+
+/** Name for a home-screen icon: "Greater Sydney council news" -> "Greater Sydney",
+ *  "Wollongong City Council news" -> "Wollongong City Council". Case matters:
+ *  group feeds say "council news", council names end in "Council". */
+export function shortName(title: string): string {
+  return title.replace(/ council news$/, "").replace(/ news$/, "").trim() || title;
+}
+
+/** Web app manifest, so a feed page can be added to a phone's home screen
+ *  and open straight to that feed. */
+export function renderManifest(ch: Channel): string {
+  const path = new URL(ch.selfUrl).pathname;
+  return JSON.stringify({
+    id: path,
+    name: ch.title,
+    short_name: shortName(ch.title),
+    description: ch.description,
+    start_url: `${path}?view=html`,
+    scope: path,
+    display: "standalone",
+    background_color: "#f7f4ef",
+    theme_color: "#df842b",
+    icons: [
+      { src: "/rss/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/rss/icon-512.png", sizes: "512x512", type: "image/png" },
+      { src: "/rss/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+    ],
+  });
+}
+
+// In-page script: relative times, "New since your last visit" (remembered only
+// in this browser), the sign-up box folded away for returning visitors, and an
+// Install button where the browser offers one. Every storage call is guarded:
+// private windows and blocked storage just skip the extras.
+const FEED_PAGE_JS = `(function(){
+var d=document,k="lgn-seen:"+location.pathname,last=null,top="";
+try{last=localStorage.getItem(k)}catch(e){}
+var cards=d.querySelectorAll(".card"),n=0;
+cards.forEach(function(c){var a=c.getAttribute("data-at");if(a>top)top=a;
+  if(last&&a>last){c.classList.add("is-new");n++}
+  var t=c.querySelector("time"),s=(Date.now()-Date.parse(t.getAttribute("datetime")))/1000;
+  if(s>=0&&s<604800){t.title=t.textContent;t.textContent=s<3600?Math.max(1,Math.round(s/60))+" min ago":s<86400?Math.round(s/3600)+" h ago":Math.round(s/86400)+" d ago"}});
+if(last){var b=d.getElementById("subbox");if(b)b.open=false;
+  var w=d.getElementById("since");if(w){w.textContent=n?n+(n==1?" new story":" new stories")+" since your last visit":"Nothing new since your last visit";w.hidden=false}}
+try{if(top)localStorage.setItem(k,top)}catch(e){}
+var ev,ib=d.getElementById("install");
+addEventListener("beforeinstallprompt",function(e){e.preventDefault();ev=e;ib.hidden=false});
+ib.onclick=function(){if(ev){ev.prompt();ev=null;ib.hidden=true}};
+d.getElementById("c").onclick=function(){var b=this,i=d.getElementById("u");(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).then(function(){b.textContent="Copied"},function(){i.select();d.execCommand("copy");b.textContent="Copied"})};
+})()`;
+
 export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Date = new Date()): string {
   const enc = encodeURIComponent(ch.selfUrl);
   const fmt = (d: Date) => d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "Australia/Sydney" });
-  const items = posts.map((p) => `
-      <li><a class="t" href="${xmlEscape(p.url)}">${xmlEscape(p.title)}</a>
-        <div class="m">${xmlEscape(p.council_name)} · ${fmt(itemDate(p, now))}</div>
-        ${p.excerpt ? `<p>${xmlEscape(p.excerpt.length > 220 ? p.excerpt.slice(0, 217).trimEnd() + "…" : p.excerpt)}</p>` : ""}</li>`).join("");
+  const host = (u: string) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return "council site"; } };
+  const cards = posts.map((p) => {
+    const d = itemDate(p, now);
+    const bsky = bskyWebUrl(p.uri);
+    const ex = p.excerpt ? (p.excerpt.length > 260 ? p.excerpt.slice(0, 257).trimEnd() + "…" : p.excerpt) : "";
+    return `
+      <li class="card" style="--sc:${STATE_COLORS[p.state] ?? "var(--accent)"}" data-at="${xmlEscape(p.posted_at)}">
+        <div class="ch"><span class="cn">${xmlEscape(p.council_name)}</span><span class="dot">·</span><time datetime="${d.toISOString()}">${fmt(d)}</time><span class="new">New</span></div>
+        <a class="hl" href="${xmlEscape(p.url)}">${xmlEscape(p.title)}</a>
+        ${ex ? `<p class="ex">${xmlEscape(ex)}</p>` : ""}
+        <div class="cf"><a href="${xmlEscape(p.url)}">Read on ${xmlEscape(host(p.url))}</a>${bsky ? `<a href="${bsky}">View on Bluesky</a>` : ""}</div>
+      </li>`;
+  }).join("");
+  const manifest = `${ch.selfUrl}?view=manifest`;
   return `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${xmlEscape(ch.title)} · RSS feed</title>
+<title>${xmlEscape(ch.title)} · Local Government News</title>
 <meta name="description" content="${xmlEscape(ch.description)}">
 <link rel="alternate" type="application/rss+xml" title="${xmlEscape(ch.title)}" href="${xmlEscape(ch.selfUrl)}">
+<link rel="manifest" href="${xmlEscape(manifest)}">
+<link rel="icon" href="/rss/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/rss/icon-180.png">
+<meta name="apple-mobile-web-app-title" content="${xmlEscape(shortName(ch.title))}">
+<meta name="theme-color" content="#df842b">
 <style>${PAGE_CSS}</style></head><body><main>
 <a class="top" href="${xmlEscape(site)}">Local Government News</a>
 <h1>${xmlEscape(ch.title)}</h1>
 <p class="lead">${xmlEscape(ch.description)}</p>
-<section class="box" aria-labelledby="sub">
-  <h2 id="sub">Get these stories automatically</h2>
+<p class="keep">Check back any time: bookmark this page, or add it to your phone's home screen (on iPhone tap Share, then Add to Home Screen; on Android open the ⋮ menu). <button class="btn alt" id="install" type="button" hidden>Install</button></p>
+<details class="box" id="subbox" open>
+  <summary><h2 id="sub">Get these stories sent to you</h2></summary>
   <p>Copy the feed address, then pick the place you already read. New stories arrive as councils publish them. No account with us, no tracking.</p>
   <div class="row"><input id="u" value="${xmlEscape(ch.selfUrl)}" readonly aria-label="Feed address" onclick="this.select()">
     <button class="btn" id="c" type="button">Copy address</button></div>
@@ -244,12 +334,13 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
     <li><b>Media monitoring tools:</b> most accept an RSS address as a source.</li>
     <li><b>Any other feed reader</b> (Reeder, Feeder, Thunderbird and others): add a new feed and paste the address.</li>
   </ul></details>
-</section>
-<h2 style="font-family:var(--h);font-size:1.15rem">Latest stories</h2>
-<ol>${items || "<li>No stories in the last few months.</li>"}</ol>
+</details>
+<h2 class="latest">Latest stories</h2>
+<p class="since" id="since" hidden></p>
+<ol class="cards">${cards || "<li>No stories in the last few months.</li>"}</ol>
 <footer><a href="/rss/">All RSS feeds</a> · <a href="${xmlEscape(site)}">Back to the news site</a></footer>
 </main>
-<script>document.getElementById("c").onclick=function(){var b=this,i=document.getElementById("u");(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).then(function(){b.textContent="Copied"},function(){i.select();document.execCommand("copy");b.textContent="Copied"})}</script>
+<script>${FEED_PAGE_JS}</script>
 </body></html>
 `;
 }

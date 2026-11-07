@@ -13,8 +13,9 @@ import data from "./data.json";
 import { SCHEMA } from "./schema";
 import {
   type Feed, type Post, STATES, STATE_NAMES, clampLimit, cleanPost, decodeCursor,
-  didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage, PAGE_CSS,
+  didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage, renderManifest, PAGE_CSS,
 } from "./lib";
+import { ICON_SVG, ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
 
 type Council = { id: string; name: string; state: string; news_url: string };
 type Env = {
@@ -55,6 +56,9 @@ export default {
       if (path === "/edge/health") return await health(env);
       if (path === "/rss" || path.startsWith("/rss/")) {
         if (req.method !== "GET" && req.method !== "HEAD") return new Response("method not allowed", { status: 405 });
+        const icon = iconResponse(path);
+        if (icon) return icon;
+        if (url.searchParams.get("view") === "manifest") return manifest(url, env);
         const page = wantsFeedPage(req.headers, url.searchParams.get("view"));
         const res = await cached(req, ctx, page, () => rss(url, env, page));
         // Browsers get a readable page, readers get RSS, from the same address.
@@ -109,12 +113,10 @@ async function skeleton(url: URL, env: Env): Promise<Response> {
 
 // ---- RSS -------------------------------------------------------------------
 
-async function rss(url: URL, env: Env, page = false): Promise<Response> {
-  const path = url.pathname.replace(/\/+$/, "");
-  const self = `https://${env.HOSTNAME}${path}`;
-  if (path === "/rss" ) return index(env);
-  if (path === "/rss/feeds.opml") return opml(env);
+type Resolved = { ch: { title: string; description: string; link: string }; where: string; arg: string | null };
 
+/** Which feed an /rss/... address names, and how to select its posts. */
+function resolveChannel(path: string): Resolved | null {
   let m: RegExpExecArray | null;
   let where = "", arg: string | null = null, ch: { title: string; description: string; link: string } | null = null;
   if (path === "/rss/all.xml") {
@@ -132,7 +134,17 @@ async function rss(url: URL, env: Env, page = false): Promise<Response> {
     where = "WHERE council_id IN (SELECT value FROM json_each(?1))"; arg = JSON.stringify(f.council_ids);
     ch = { title: `${f.name} council news`, description: f.description, link: SITE };
   }
-  if (!ch) return new Response("not found", { status: 404 });
+  return ch ? { ch, where, arg } : null;
+}
+
+async function rss(url: URL, env: Env, page = false): Promise<Response> {
+  const path = url.pathname.replace(/\/+$/, "");
+  const self = `https://${env.HOSTNAME}${path}`;
+  if (path === "/rss" ) return index(env);
+  if (path === "/rss/feeds.opml") return opml(env);
+  const r = resolveChannel(path);
+  if (!r) return new Response("not found", { status: 404 });
+  const { ch, where, arg } = r;
 
   const stmt = env.DB.prepare(
     `SELECT url, uri, council_id, council_name, state, title, excerpt, published_at, posted_at
@@ -176,6 +188,7 @@ function index(env: Env): Response {
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RSS feeds · Local Government News</title>
 <meta name="description" content="RSS feeds for every Australian council, region and state.">
+<link rel="icon" href="/rss/icon.svg" type="image/svg+xml">
 <style>${PAGE_CSS}</style></head><body><main>
 <a class="top" href="${SITE}">Local Government News</a>
 <h1>RSS feeds</h1>
@@ -200,6 +213,30 @@ async function cached(req: Request, ctx: ExecutionContext, page: boolean, make: 
   const res = await make();
   if (res.ok) ctx.waitUntil(cache.put(key, res.clone()));
   return res;
+}
+
+// ---- Home-screen support for feed pages -----------------------------------
+
+function manifest(url: URL, env: Env): Response {
+  const path = url.pathname.replace(/\/+$/, "");
+  const r = resolveChannel(path);
+  if (!r) return new Response("not found", { status: 404 });
+  return new Response(renderManifest({ ...r.ch, selfUrl: `https://${env.HOSTNAME}${path}` }), {
+    headers: { "content-type": "application/manifest+json; charset=utf-8", "cache-control": "public, max-age=86400" },
+  });
+}
+
+const PNG: Record<string, string> = {
+  "/rss/icon-180.png": ICON_180_PNG, "/rss/icon-192.png": ICON_192_PNG, "/rss/icon-512.png": ICON_512_PNG,
+};
+
+function iconResponse(path: string): Response | null {
+  const headers = { "cache-control": "public, max-age=604800" };
+  if (path === "/rss/icon.svg") return new Response(ICON_SVG, { headers: { ...headers, "content-type": "image/svg+xml" } });
+  const b64 = PNG[path];
+  if (!b64) return null;
+  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  return new Response(bytes, { headers: { ...headers, "content-type": "image/png" } });
 }
 
 // ---- Ingest (from the bot) ------------------------------------------------
