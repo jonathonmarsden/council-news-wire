@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   cleanPost, decodeCursor, didDocument, encodeCursor, feedIdFromUri, itemDate, renderOpml, renderRss, xmlEscape,
-  type Post, wantsFeedPage, renderFeedPage,
+  type Post, wantsFeedPage, renderFeedPage, renderManifest, bskyWebUrl, shortName,
 } from "../src/lib.ts";
 
 const DID = "did:plc:publisher";
@@ -95,4 +95,34 @@ test("feed page escapes content and links readers to the feed", () => {
   assert.ok(html.includes("make.powerautomate.com/templates/details/"));
   assert.ok(html.includes("feedrabbit.com/subscriptions/new?url=https%3A%2F%2Fh%2Frss%2Fa.xml"));
   assert.ok(!html.includes("<b>hi</b>"));
+});
+
+test("feed page shows each story as a card with its council, links and state colour", () => {
+  const html = renderFeedPage({ title: "Greater Sydney council news", description: "d", link: "https://x", selfUrl: "https://h/rss/nsw-sydney.xml" },
+    [post({ state: "nsw", url: "https://www.council.example/news/a", uri: "at://did:plc:bot/app.bsky.feed.post/3abc" })], "https://site");
+  assert.ok(html.includes('class="card" style="--sc:#2a6b98"'));
+  assert.ok(html.includes('data-at="2026-11-05T02:00:00Z"'));
+  assert.ok(html.includes("Read on council.example"));
+  assert.ok(html.includes("https://bsky.app/profile/did:plc:bot/post/3abc"));
+  // Home-screen support: a manifest for this feed, an icon and a name that fits under it.
+  assert.ok(html.includes('rel="manifest" href="https://h/rss/nsw-sydney.xml?view=manifest"'));
+  assert.ok(html.includes('rel="apple-touch-icon" href="/rss/icon-180.png"'));
+  assert.ok(html.includes('content="Greater Sydney"'));
+});
+
+test("posts never sent to Bluesky get no Bluesky link", () => {
+  const html = renderFeedPage({ title: "t", description: "d", link: "https://x", selfUrl: "https://h/rss/a.xml" }, [post({ uri: null })], "https://site");
+  assert.ok(!html.includes("View on Bluesky"));
+  assert.equal(bskyWebUrl("at://did:plc:x/app.bsky.feed.like/1"), null);
+  assert.equal(bskyWebUrl("javascript:alert(1)"), null);
+});
+
+test("manifest opens the feed page it was added from", () => {
+  const m = JSON.parse(renderManifest({ title: "Hunter & Central Coast council news", description: "d", link: "https://x", selfUrl: "https://h/rss/nsw-hunter.xml" }));
+  assert.equal(m.start_url, "/rss/nsw-hunter.xml?view=html");
+  assert.equal(m.scope, "/rss/nsw-hunter.xml");
+  assert.equal(m.short_name, "Hunter & Central Coast");
+  assert.equal(m.display, "standalone");
+  assert.ok(m.icons.some((i: any) => i.sizes === "512x512"));
+  assert.equal(shortName("Wollongong City Council news"), "Wollongong City Council");
 });
