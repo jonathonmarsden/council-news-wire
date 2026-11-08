@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   cleanPost, decodeCursor, didDocument, encodeCursor, feedIdFromUri, itemDate, renderOpml, renderRss, xmlEscape,
   type Post, wantsFeedPage, renderFeedPage, renderManifest, bskyWebUrl, shortName,
+  classifyClient, viewerDid, hashId,
 } from "../src/lib.ts";
 
 const DID = "did:plc:publisher";
@@ -125,4 +126,39 @@ test("manifest opens the feed page it was added from", () => {
   assert.equal(m.display, "standalone");
   assert.ok(m.icons.some((i: any) => i.sizes === "512x512"));
   assert.equal(shortName("Wollongong City Council news"), "Wollongong City Council");
+});
+
+test("clients are classed coarsely, with reader subscriber counts", () => {
+  assert.deepEqual(classifyClient("Feedly/1.0 (+http://www.feedly.com/fetcher.html; 12 subscribers)"), { client: "reader:feedly", subscribers: 12 });
+  assert.deepEqual(classifyClient("Inoreader/1.0 (+http://www.inoreader.com/feed-fetcher; 1 subscribers; )"), { client: "reader:inoreader", subscribers: 1 });
+  assert.equal(classifyClient("NetNewsWire (RSS Reader; https://netnewswire.com/)").client, "reader:netnewswire");
+  assert.equal(classifyClient("BskyAppView").client, "bsky-appview");
+  assert.equal(classifyClient("Protoverse/1.0 (+https://protoverse.app/about)").client, "indexer");
+  assert.equal(classifyClient("Mozilla/5.0 (compatible; ElevenlabsCrawler/1.0; +https://elevenlabs.io/docs/bots)").client, "bot");
+  assert.equal(classifyClient("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-webindexer/1.1)").client, "bot");
+  assert.equal(classifyClient("facebookexternalhit/1.1").client, "bot");
+  assert.equal(classifyClient("curl/8.7.1").client, "bot");
+  assert.equal(classifyClient("Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 Version/27.2 Mobile Safari/604.1").client, "browser");
+  assert.equal(classifyClient("lgnews-livetest").client, "test");
+  assert.equal(classifyClient("").client, "blank");
+  assert.equal(classifyClient(null).client, "blank");
+});
+
+test("viewer DID comes from the service token's issuer, or nothing", () => {
+  const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const jwt = (o: object) => `Bearer ${b64({ alg: "ES256K" })}.${b64(o)}.c2ln`;
+  assert.equal(viewerDid(jwt({ iss: "did:plc:abc123", aud: "did:web:h" })), "did:plc:abc123");
+  assert.equal(viewerDid(jwt({ iss: "did:plc:abc123#atproto" })), "did:plc:abc123");
+  assert.equal(viewerDid(jwt({ iss: "https://evil" })), null);
+  assert.equal(viewerDid(jwt({})), null);
+  assert.equal(viewerDid("Bearer not-a-jwt"), null);
+  assert.equal(viewerDid(null), null);
+});
+
+test("hash ids are stable per key and differ across keys", async () => {
+  const a = await hashId("k1", "did:plc:abc");
+  assert.match(a, /^[0-9a-f]{16}$/);
+  assert.equal(a, await hashId("k1", "did:plc:abc"));
+  assert.notEqual(a, await hashId("k2", "did:plc:abc"));
+  assert.notEqual(a, await hashId("k1", "did:plc:abd"));
 });

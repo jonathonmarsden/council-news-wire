@@ -14,6 +14,7 @@ import { SCHEMA } from "./schema";
 import {
   type Feed, type Post, STATES, STATE_NAMES, clampLimit, cleanPost, decodeCursor,
   didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage, renderManifest, PAGE_CSS,
+  classifyClient, hashId, viewerDid,
 } from "./lib";
 import { ICON_SVG, ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
 
@@ -23,6 +24,7 @@ type Env = {
   HOSTNAME: string; // e.g. lgnews.jonathonmarsden.com
   PUBLISHER_DID: string; // DID of the account that publishes the feed records
   INGEST_TOKEN: string; // shared with the bot; secret
+  USAGE?: AnalyticsEngineDataset; // anonymous usage counts (see recordUsage)
 };
 
 const FEEDS: Feed[] = (data as any).feeds;
@@ -51,7 +53,10 @@ export default {
           feeds: FEEDS.map((f) => ({ uri: feedUri(env.PUBLISHER_DID, f.id) })),
         });
       }
-      if (path === "/xrpc/app.bsky.feed.getFeedSkeleton") return await cached(req, ctx, false, () => skeleton(url, env));
+      if (path === "/xrpc/app.bsky.feed.getFeedSkeleton") {
+        ctx.waitUntil(recordUsage(req, url, env, "feed"));
+        return await cached(req, ctx, false, () => skeleton(url, env));
+      }
       if (path === "/ingest") return await ingest(req, env);
       if (path === "/edge/health") return await health(env);
       if (path === "/rss" || path.startsWith("/rss/")) {
@@ -60,6 +65,7 @@ export default {
         if (icon) return icon;
         if (url.searchParams.get("view") === "manifest") return manifest(url, env);
         const page = wantsFeedPage(req.headers, url.searchParams.get("view"));
+        ctx.waitUntil(recordUsage(req, url, env, page ? "page" : "rss"));
         const res = await cached(req, ctx, page, () => rss(url, env, page));
         // Browsers get a readable page, readers get RSS, from the same address.
         const out = new Response(res.body, res);
@@ -213,6 +219,46 @@ async function cached(req: Request, ctx: ExecutionContext, page: boolean, make: 
   const res = await make();
   if (res.ok) ctx.waitUntil(cache.put(key, res.clone()));
   return res;
+}
+
+// ---- Usage counts ----------------------------------------------------------
+// One Analytics Engine data point per feed or RSS request, written after the
+// response so it never slows or breaks one. Recorded before the cache, so cached
+// answers are counted too. Fields (query with the Analytics Engine SQL API):
+//   index1  kind: feed (Bluesky), rss (reader), page (browser view of a feed)
+//   blob1   which feed: a feed id, or an /rss/... path; "unknown" for anything else
+//   blob2   client class (classifyClient): bsky-appview, reader:feedly, bot, ...
+//   blob3   viewer id: for Bluesky, a keyed hash of the signed-in account, stable
+//           over time; for RSS, a keyed hash of address + user agent + UTC day,
+//           so it counts distinct visitors per day but cannot follow anyone
+//           across days. Empty when there is nothing to hash.
+//   blob4   "1" for the first page of a feed (an open), "0" for a scroll
+//   double1 subscriber count the reader reports, e.g. Feedly's "12 subscribers"
+
+async function recordUsage(req: Request, url: URL, env: Env, kind: "feed" | "rss" | "page"): Promise<void> {
+  if (!env.USAGE) return;
+  try {
+    const ua = req.headers.get("user-agent");
+    const { client, subscribers } = classifyClient(ua);
+    const key = env.INGEST_TOKEN ? `usage:${env.INGEST_TOKEN}` : "";
+    let target = "unknown", viewer = "", first = "1";
+    if (kind === "feed") {
+      target = feedIdFromUri(url.searchParams.get("feed") || "", env.PUBLISHER_DID) ?? "unknown";
+      if (!FEED_BY_ID.has(target)) target = "unknown";
+      const did = viewerDid(req.headers.get("authorization"));
+      if (did && key) viewer = await hashId(key, `did|${did}`);
+      first = url.searchParams.get("cursor") ? "0" : "1";
+    } else {
+      const path = url.pathname.replace(/\/+$/, "") || "/rss";
+      if (path === "/rss" || path === "/rss/feeds.opml" || resolveChannel(path)) target = path;
+      const ip = req.headers.get("cf-connecting-ip") || "";
+      const day = new Date().toISOString().slice(0, 10);
+      if (ip && key) viewer = await hashId(key, `rss|${day}|${ip}|${ua || ""}`);
+    }
+    env.USAGE.writeDataPoint({ indexes: [kind], blobs: [target, client, viewer, first], doubles: [subscribers] });
+  } catch (e: any) {
+    console.error("usage", e?.stack || e);
+  }
 }
 
 // ---- Home-screen support for feed pages -----------------------------------

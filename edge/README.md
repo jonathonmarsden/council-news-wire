@@ -36,6 +36,24 @@ static site.
 | `/ingest` | Where the bot sends new stories (bearer token) |
 | `/edge/health` | Row count and newest story, for monitoring |
 
+## Usage counts
+
+Each feed and RSS request writes one anonymous data point to the Analytics
+Engine dataset `council_news_edge_usage`, so we can see which feeds people
+read. It is written after the response and never delays or fails a request.
+
+Stored per request: which feed, a coarse client class (Bluesky, a named feed
+reader, browser, bot), the subscriber count a reader reports, whether it was
+the first page, and a keyed hash. For Bluesky the hash is of the signed-in
+account asking for the feed, so readers can be counted over time without
+being identified. For RSS it is of address, user agent and day, so visitors
+can be counted per day but not followed across days. No IP address, account
+or user agent string is stored. Analytics Engine keeps data for three months.
+
+Query it with the [SQL API](https://developers.cloudflare.com/analytics/analytics-engine/sql-api/)
+using a token with Account Analytics Read; `recordUsage` in `src/index.ts`
+lists the fields.
+
 ## Data
 
 `src/data.json` is a snapshot of the feeds and the enabled councils, because

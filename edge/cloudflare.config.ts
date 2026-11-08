@@ -19,6 +19,8 @@ export default defineConfig({
       // the environment when deploying: PUBLISHER_DID=did:plc:... cf deploy
       PUBLISHER_DID: bindings.text(process.env.PUBLISHER_DID ?? ""),
       INGEST_TOKEN: bindings.secret(),
+      // Anonymous usage counts per feed (see recordUsage in src/index.ts).
+      USAGE: bindings.analyticsEngineDataset({ name: "council_news_edge_usage" }),
     },
     triggers: [
       route("/.well-known/did.json"),

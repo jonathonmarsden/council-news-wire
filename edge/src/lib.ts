@@ -344,3 +344,57 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
 </body></html>
 `;
 }
+
+// ---- Usage counts ----------------------------------------------------------
+// One anonymous data point per feed or RSS request, so we can tell which feeds
+// people read. No IP address, account or user agent string is stored: only a
+// coarse client class and a keyed hash that cannot be reversed.
+
+const READERS: [RegExp, string][] = [
+  [/feedly/i, "feedly"], [/inoreader/i, "inoreader"], [/netnewswire/i, "netnewswire"],
+  [/feedbin/i, "feedbin"], [/newsblur/i, "newsblur"], [/old ?reader/i, "theoldreader"],
+  [/miniflux/i, "miniflux"], [/freshrss/i, "freshrss"], [/tiny tiny rss|tt-rss/i, "ttrss"],
+  [/reeder/i, "reeder"], [/feeder/i, "feeder"], [/feedspot/i, "feedspot"], [/blogtrottr/i, "blogtrottr"],
+  [/zapier/i, "zapier"], [/ifttt/i, "ifttt"], [/slack/i, "slack"], [/microsoft|teams|outlook|power ?automate/i, "microsoft"],
+  [/thunderbird/i, "thunderbird"], [/feedburner|feedfetcher|feed-fetcher|rss reader|podcast/i, "reader-other"],
+];
+const BOT = /bot\b|bot\/|crawl|spider|externalhit|meta-|elevenlabs|shapbot|indexer|scrap|python|curl|wget|go-http|node-fetch|axios|okhttp|java\/|httpclient|headless|nginx/i;
+const INDEXER = /protoverse|skyfeed/i;
+
+export type Client = { client: string; subscribers: number };
+
+/** A coarse, privacy-safe class for whoever made the request. */
+export function classifyClient(ua: string | null): Client {
+  const u = (ua || "").trim();
+  const subs = /(\d+)\s+subscribers?/i.exec(u);
+  const subscribers = subs ? Math.min(Number(subs[1]), 1_000_000) : 0;
+  if (!u) return { client: "blank", subscribers };
+  if (/^lgnews-/i.test(u)) return { client: "test", subscribers };
+  if (/bskyappview/i.test(u)) return { client: "bsky-appview", subscribers };
+  if (INDEXER.test(u)) return { client: "indexer", subscribers };
+  for (const [re, name] of READERS) if (re.test(u)) return { client: `reader:${name}`, subscribers };
+  if (BOT.test(u)) return { client: "bot", subscribers };
+  if (/^mozilla\//i.test(u)) return { client: "browser", subscribers };
+  return { client: "other", subscribers };
+}
+
+/** The Bluesky account asking for a feed, from the service token Bluesky sends
+ *  when a signed-in person opens it. Unverified: good enough for counting, never
+ *  used for anything else. */
+export function viewerDid(authorization: string | null): string | null {
+  const m = /^Bearer\s+[\w-]+\.([\w-]+)\.[\w-]*$/.exec(authorization || "");
+  if (!m) return null;
+  try {
+    const b64 = m[1].replace(/-/g, "+").replace(/_/g, "/");
+    const iss = JSON.parse(atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4)))?.iss;
+    return typeof iss === "string" && /^did:[a-z]+:[\w.:%-]{1,200}(#.*)?$/.test(iss) ? iss.split("#")[0] : null;
+  } catch { return null; }
+}
+
+/** Keyed hash, truncated: equal inputs give equal ids, but the input cannot be
+ *  recovered without the key. */
+export async function hashId(key: string, text: string): Promise<string> {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(key), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = new Uint8Array(await crypto.subtle.sign("HMAC", k, new TextEncoder().encode(text)));
+  return Array.from(sig.slice(0, 8), (b) => b.toString(16).padStart(2, "0")).join("");
+}
