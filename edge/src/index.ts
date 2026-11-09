@@ -14,7 +14,7 @@ import { SCHEMA } from "./schema";
 import {
   type Feed, type Post, STATES, STATE_NAMES, clampLimit, cleanPost, decodeCursor,
   didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage, renderManifest, PAGE_CSS,
-  classifyClient, hashId, viewerDid,
+  classifyClient, hashId, viewerDid, cacheKey,
 } from "./lib";
 import { ICON_SVG, ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
 
@@ -209,11 +209,9 @@ ${sections}
 
 async function cached(req: Request, ctx: ExecutionContext, page: boolean, make: () => Promise<Response> | Response): Promise<Response> {
   const cache = (caches as any).default as Cache;
-  // The readable page and the RSS share a URL, so they need separate cache keys.
-  const k = new URL(req.url);
-  k.searchParams.delete("view");
-  if (page) k.searchParams.set("__page", "1");
-  const key = new Request(k.toString(), { method: "GET" });
+  // Only the parameters that change the answer go into the key (see cacheKey):
+  // the readable page and the RSS share a URL, so the page gets its own key.
+  const key = new Request(cacheKey(new URL(req.url), page), { method: "GET" });
   const hit = await cache.match(key);
   if (hit) return hit;
   const res = await make();

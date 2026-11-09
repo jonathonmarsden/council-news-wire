@@ -70,6 +70,24 @@ export function clampLimit(raw: string | null, dflt = 30, max = 100): number {
   return Math.min(Math.floor(n), max);
 }
 
+/** The edge cache key for a request: the path plus only the parameters that
+ *  change the answer. Anything else in the query string is dropped, so adding
+ *  made-up parameters cannot skip the cache and force a database read. */
+export function cacheKey(url: URL, page: boolean): string {
+  const path = url.pathname.replace(/\/+$/, "") || "/";
+  const keep = new URLSearchParams();
+  if (path === "/xrpc/app.bsky.feed.getFeedSkeleton") {
+    const feed = url.searchParams.get("feed");
+    const cursor = url.searchParams.get("cursor");
+    if (feed) keep.set("feed", feed);
+    if (cursor) keep.set("cursor", cursor);
+    keep.set("limit", String(clampLimit(url.searchParams.get("limit"))));
+  }
+  if (page) keep.set("__page", "1");
+  const q = keep.toString();
+  return `${url.origin}${path}${q ? `?${q}` : ""}`;
+}
+
 // ---- RSS -------------------------------------------------------------------
 
 const XML_ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" };

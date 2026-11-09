@@ -93,7 +93,9 @@ jobs:
         if [ -z "$PATTERN" ]; then echo "::warning::METADATA_DENY_PATTERN not set; skipped"; exit 0; fi
         fail=0
         for c in $(git rev-list "$BASE..$HEAD"); do
-          if git log -1 --format='%an <%ae>%n%cn <%ce>%n%B' "$c" | grep -qiE "$PATTERN"; then
+          # Names, not email addresses: the owner's own address is on the list
+          # (to keep it out of files) and would otherwise match every commit.
+          if git log -1 --format='%an%n%cn%n%B' "$c" | grep -qiE "$PATTERN"; then
             echo "::error::commit $c: message or author matches the deny pattern"; fail=1
           fi
         done

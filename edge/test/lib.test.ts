@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
   cleanPost, decodeCursor, didDocument, encodeCursor, feedIdFromUri, itemDate, renderOpml, renderRss, xmlEscape,
   type Post, wantsFeedPage, renderFeedPage, renderManifest, bskyWebUrl, shortName,
-  classifyClient, viewerDid, hashId,
+  classifyClient, viewerDid, hashId, cacheKey,
 } from "../src/lib.ts";
 
 const DID = "did:plc:publisher";
@@ -161,4 +161,39 @@ test("hash ids are stable per key and differ across keys", async () => {
   assert.equal(a, await hashId("k1", "did:plc:abc"));
   assert.notEqual(a, await hashId("k2", "did:plc:abc"));
   assert.notEqual(a, await hashId("k1", "did:plc:abd"));
+});
+
+test("cache keys ignore made-up parameters, so they cannot force database reads", () => {
+  const u = (s: string) => new URL(`https://h.example${s}`);
+  const base = cacheKey(u("/rss/vic-m9.xml"), false);
+  assert.equal(cacheKey(u("/rss/vic-m9.xml?x=1"), false), base);
+  assert.equal(cacheKey(u("/rss/vic-m9.xml?x=2&y=3"), false), base);
+  assert.equal(cacheKey(u("/rss/vic-m9.xml/"), false), base);
+  assert.notEqual(cacheKey(u("/rss/vic-m9.xml"), true), base); // readable page kept apart
+  assert.equal(cacheKey(u("/rss/vic-m9.xml?view=html"), true), cacheKey(u("/rss/vic-m9.xml"), true));
+  const sk = "/xrpc/app.bsky.feed.getFeedSkeleton?feed=at://did:plc:p/app.bsky.feed.generator/vic-m9";
+  assert.equal(cacheKey(u(sk + "&junk=1"), false), cacheKey(u(sk), false));
+  assert.equal(cacheKey(u(sk + "&limit=500"), false), cacheKey(u(sk + "&limit=100"), false)); // clamped
+  assert.equal(cacheKey(u(sk + "&limit=0"), false), cacheKey(u(sk), false)); // default 30
+  assert.notEqual(cacheKey(u(sk + "&cursor=abc"), false), cacheKey(u(sk), false)); // pages differ
+});
+
+test("hostile story content cannot inject markup or scripts into feed pages or RSS", () => {
+  assert.equal(cleanPost({ ...post({}), url: "javascript:alert(1)" }), null);
+  assert.equal(cleanPost({ ...post({}), url: "data:text/html,<script>alert(1)</script>" }), null);
+  assert.equal(cleanPost({ ...post({}), url: " https://x" }), null);
+  const evil = post({
+    title: `<script>alert(1)</script>"><img src=x onerror=alert(2)>`,
+    excerpt: `</p><script>alert(3)</script>`,
+    council_name: `<b onmouseover=alert(4)>Council</b>`,
+    url: `https://council.example/a?q="><script>alert(5)</script>`,
+    uri: `javascript:alert(6)`,
+  });
+  const html = renderFeedPage({ title: "t", description: "d", link: "https://x", selfUrl: "https://h/rss/a.xml" }, [evil], "https://site");
+  const body = html.slice(0, html.lastIndexOf("<script>"));
+  // Live tags or script links would be dangerous; the same words as escaped text are not.
+  assert.ok(!/<script>alert|<img|<b onmouseover|href="\s*javascript:/i.test(body), "feed page body contains live markup");
+  assert.ok(body.includes("&lt;script&gt;alert(1)&lt;/script&gt;"));
+  const xml = renderRss({ title: "t", description: "d", link: "https://x", selfUrl: "https://h/rss/a.xml" }, [evil]);
+  assert.ok(!/<script>|<img|<b onmouseover/i.test(xml), "RSS contains live markup");
 });
