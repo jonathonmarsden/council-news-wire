@@ -217,14 +217,14 @@ python scripts/maintenance/health_check.py
 
 ## Deployment
 
-Production runs on **home-server the container** (unprivileged Debian LXC, Docker Compose, 4GB/2vCPU). Access: `ssh <admin-user>@<private network-host>` (hypervisor host, private network) then `bash`. App at `/opt/council-news-bot`, secrets at `/root/secrets/.env`.
+Production runs with Docker Compose on a single Linux host. The app lives at `/opt/council-news-bot`; secrets are kept outside the checkout and are readable only by root.
 
-**Deploys are pull-based**: merging to master is deploying. `/usr/local/bin/council-bot-pull-deploy` (cron, every 10 min on the CT) fast-forwards to origin/master, rebuilds, and swaps containers under the ops lock. There is no push-deploy; GitHub runners cannot reach the LAN.
+**Deploys are pull-based**: merging to master is deploying. A cron job on the host (every 10 min) fast-forwards to origin/master, rebuilds, and swaps containers under the ops lock. There is no push-deploy: GitHub runners cannot reach the host.
 
-Backups: daily in-container `pg_dump` (`/etc/cron.daily/council-bot-backup` → `/root/backups/`, 14-day retention) plus nightly hypervisor `vzdump` of the whole CT (7 daily + 4 weekly). Restore: `docs/operations/RESTORE.md`. Rollback: `pct rollback 104 <snapshot>` or `git revert` + let pull-deploy converge.
+Backups: a daily `pg_dump` with 14-day retention, plus nightly snapshots of the whole host. Restore: `docs/operations/RESTORE.md`. Rollback: `git revert` and let pull-deploy converge, or restore a snapshot.
 
 ```bash
-# Docker rebuild (inside the container)
+# Docker rebuild (on the production host)
 docker compose up -d --build
 ```
 

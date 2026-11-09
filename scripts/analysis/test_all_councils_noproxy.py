@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-All-councils proxy-free scrape test — the home-server / proxy-weaning rehearsal.
+All-councils proxy-free scrape test — the proxy-weaning rehearsal.
 
 Scrapes every enabled council with NO proxy (bypass_proxy forced, rotating
 proxy stripped), using the current working-tree scraper code. Run it from a
-residential IP to rehearse the post-proxy world (home IP ≈ home-server).
+residential IP to rehearse the post-proxy world (a residential IP
+approximates production).
 
 Failures get a rescue pass:
   - councils not using curl_cffi  -> retry with use_curl + chrome124

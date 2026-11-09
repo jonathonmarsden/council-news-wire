@@ -75,6 +75,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Rejects pull requests whose commit messages, commit authors, title, body
+    # or added lines match a deny pattern kept in the METADATA_DENY_PATTERN
+    # secret (so the list itself is never published). Matches are reported
+    # by location only.
+    - name: Check commit metadata
+      if: github.event_name == 'pull_request'
+      env:
+        PATTERN: ${{ secrets.METADATA_DENY_PATTERN }}
+        BASE: ${{ github.event.pull_request.base.sha }}
+        HEAD: ${{ github.event.pull_request.head.sha }}
+        PR_TEXT: ${{ github.event.pull_request.title }} ${{ github.event.pull_request.body }}
+      run: |
+        if [ -z "$PATTERN" ]; then echo "::warning::METADATA_DENY_PATTERN not set; skipped"; exit 0; fi
+        fail=0
+        for c in $(git rev-list "$BASE..$HEAD"); do
+          if git log -1 --format='%an <%ae>%n%cn <%ce>%n%B' "$c" | grep -qiE "$PATTERN"; then
+            echo "::error::commit $c: message or author matches the deny pattern"; fail=1
+          fi
+        done
+        if printf '%s' "$PR_TEXT" | grep -qiE "$PATTERN"; then echo "::error::PR title or body matches the deny pattern"; fail=1; fi
+        n=$(git diff "$BASE...$HEAD" | grep -E '^\+' | grep -v '^+++' | grep -ciE "$PATTERN" || true)
+        if [ "$n" != "0" ]; then echo "::error::$n added line(s) match the deny pattern"; fail=1; fi
+        exit $fail
     
     - name: Set up Python
       uses: actions/setup-python@v4
