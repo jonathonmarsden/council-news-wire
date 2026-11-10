@@ -44,11 +44,15 @@ read. It is written after the response and never delays or fails a request.
 
 Stored per request: which feed, a coarse client class (Bluesky, a named feed
 reader, browser, bot), the subscriber count a reader reports, whether it was
-the first page, and a keyed hash. For Bluesky the hash is of the signed-in
-account asking for the feed, so readers can be counted over time without
-being identified. For RSS it is of address, user agent and day, so visitors
-can be counted per day but not followed across days. No IP address, account
-or user agent string is stored. Analytics Engine keeps data for three months.
+the first page, and a keyed hash that includes the day. For Bluesky the hash
+is of the signed-in account asking for the feed and the day; for RSS it is of
+address, user agent and day. So people can be counted within a day but not
+followed from one day to the next, and a day's hashes can't be matched against
+the public follower lists on another day. No IP address, account or user agent
+string is stored. Analytics Engine keeps data for three months.
+
+(Until 10 Nov 2026 the Bluesky hash had no day in it, which made it a lasting
+pseudonymous ID. Those points expire by Feb 2027.)
 
 Query it with the [SQL API](https://developers.cloudflare.com/analytics/analytics-engine/sql-api/)
 using a token with Account Analytics Read; `recordUsage` in `src/index.ts`

@@ -240,17 +240,19 @@ async function recordUsage(req: Request, url: URL, env: Env, kind: "feed" | "rss
     const { client, subscribers } = classifyClient(ua);
     const key = env.INGEST_TOKEN ? `usage:${env.INGEST_TOKEN}` : "";
     let target = "unknown", viewer = "", first = "1";
+    // Every viewer hash includes the UTC day, so a person can be counted
+    // within a day but never followed from one day to the next.
+    const day = new Date().toISOString().slice(0, 10);
     if (kind === "feed") {
       target = feedIdFromUri(url.searchParams.get("feed") || "", env.PUBLISHER_DID) ?? "unknown";
       if (!FEED_BY_ID.has(target)) target = "unknown";
       const did = viewerDid(req.headers.get("authorization"));
-      if (did && key) viewer = await hashId(key, `did|${did}`);
+      if (did && key) viewer = await hashId(key, `did|${day}|${did}`);
       first = url.searchParams.get("cursor") ? "0" : "1";
     } else {
       const path = url.pathname.replace(/\/+$/, "") || "/rss";
       if (path === "/rss" || path === "/rss/feeds.opml" || resolveChannel(path)) target = path;
       const ip = req.headers.get("cf-connecting-ip") || "";
-      const day = new Date().toISOString().slice(0, 10);
       if (ip && key) viewer = await hashId(key, `rss|${day}|${ip}|${ua || ""}`);
     }
     env.USAGE.writeDataPoint({ indexes: [kind], blobs: [target, client, viewer, first], doubles: [subscribers] });
