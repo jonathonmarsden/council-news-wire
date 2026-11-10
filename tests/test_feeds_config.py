@@ -15,6 +15,7 @@ FEEDS = json.loads((ROOT / "config/feeds.json").read_text(encoding="utf-8"))["fe
 # Councils deliberately in no region feed, with the reason.
 NO_FEED = {
     "cocos-keeling-islands": "no region; an Indian Ocean Territory",
+    "christmas-island": "no region; an Indian Ocean Territory",
 }
 
 

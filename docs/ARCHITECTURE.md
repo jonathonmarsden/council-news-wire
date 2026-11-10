@@ -1,7 +1,7 @@
 # Council News Bot Architecture
 
 ## Overview
-The Council News Bot is a scalable system designed to scrape news from Australian local government websites and publish updates to social media (BlueSky). It currently supports **8/8 States & Territories** (VIC, NSW, QLD, TAS, SA, NT, ACT, WA), with a design ready to scale to all ~540 councils across Australia.
+The Council News Bot is a scalable system designed to scrape news from Australian local government websites and publish updates to social media (BlueSky). It currently supports **8/8 States & Territories** (VIC, NSW, QLD, TAS, SA, NT, ACT, WA), covering 536 of Australia's 538 councils plus the ACT Government.
 
 ## System Architecture
 

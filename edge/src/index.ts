@@ -189,7 +189,7 @@ function index(env: Env): Response {
   const sections = STATES.map((st) => `
 <section class="st"><h2>${esc(STATE_NAMES[st])}</h2>
   <ul class="chips">${chip(`/rss/state/${st}.xml`, `All of ${STATE_NAMES[st]}`, "all")}${byState(st).map((f) => chip(`/rss/${f.id}.xml`, f.name)).join("")}</ul>
-  <details><summary>Each council (${councils(st).length})</summary><ul class="cl">${councils(st).map((c) => `<li><a href="/rss/council/${encodeURIComponent(c.id)}.xml">${esc(c.name)}</a></li>`).join("")}</ul></details>
+  <details><summary>${st === "act" ? "Each source" : "Each council"} (${councils(st).length})</summary><ul class="cl">${councils(st).map((c) => `<li><a href="/rss/council/${encodeURIComponent(c.id)}.xml">${esc(c.name)}</a></li>`).join("")}</ul></details>
 </section>`).join("");
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RSS feeds · Local Government News</title>

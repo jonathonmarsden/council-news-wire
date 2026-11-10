@@ -2,7 +2,7 @@
   "councils": [
     {
       "id": "act_gov",
-      "name": "ACT Government",
+      "name": "ACT Government - department releases",
       "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_directorate_media_releases_rss",
       "scraper": "rss_scraper",
       "enabled": true,
@@ -10,7 +10,7 @@
     },
     {
       "id": "act_ministers",
-      "name": "ACT Government",
+      "name": "ACT Government - ministers' releases",
       "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_minister_media_releases_rss",
       "scraper": "rss_scraper",
       "enabled": true,
@@ -18,7 +18,7 @@
     },
     {
       "id": "our_canberra",
-      "name": "ACT Government",
+      "name": "Our Canberra (ACT Government)",
       "news_url": "https://www.act.gov.au/our-canberra/rss",
       "scraper": "rss_scraper",
       "enabled": true,

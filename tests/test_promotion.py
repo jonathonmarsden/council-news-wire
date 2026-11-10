@@ -275,3 +275,15 @@ def test_the_two_national_channels_speak_differently():
     human_copy = {compose(human, "ADMIN", occ) for occ in range(4)}
     bot_copy = {compose(bots, account_for(bots, occ), occ) for occ in range(4)}
     assert not (human_copy & bot_copy), "the two national voices overlap"
+
+
+def test_national_count_excludes_act_sources():
+    """The ACT has no councils; its three entries are ACT Government sources."""
+    from core.promotion_copy import NATIONAL_COUNCILS
+    expected = sum(int(f["councils"]) for s, f in STATE_FACTS.items() if s != "ACT")
+    assert NATIONAL_COUNCILS == expected
+    for channel in CHANNELS:
+        for occ in range(8):
+            text = compose(channel, account_for(channel, occ), occ)
+            assert "538" not in text
+            assert "ACT councils" not in text

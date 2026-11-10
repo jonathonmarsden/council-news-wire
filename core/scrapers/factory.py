@@ -25,6 +25,7 @@ def get_scraper_registry() -> Dict[str, type]:
     """
     from .custom import AspNetScraper
     from .catalyst import CatalystScraper
+    from .sitemap import SitemapScraper
     from .spark_json import SparkNewsListingScraper
     from .wa_custom import WannerooScraper, PerthScraper, ClaremontScraper, JoondalupScraper, BelmontScraper, DumbleyungScraper
     return {
@@ -50,6 +51,7 @@ def get_scraper_registry() -> Dict[str, type]:
         'card_scraper': CardScraper,
         'curl_scraper': CardScraper,  # curl_scraper is just CardScraper with use_curl=True
         'rss_scraper': RSSScraper,
+        'sitemap_scraper': SitemapScraper,
         'json_scraper': JsonScraper,
         'alyka_scraper': AlykaScraper,
         'browser_scraper': BrowserScraper,

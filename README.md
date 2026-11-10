@@ -29,7 +29,7 @@ It is the companion data service to
 [LG News Roundup](https://lgnewsroundup.com), Chris Eddy's local government
 podcast, sponsored by the Victorian Local Governance Association.
 
-**Coverage:** 534 of Australia's 537 local government areas.
+**Coverage:** 536 of Australia's 538 councils (the ALGA count), plus the ACT Government, which has no councils. Not covered: Pormpuraaw and Yarrabah, which publish nothing that can be collected.
 
 ## How it works
 

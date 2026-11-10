@@ -1536,6 +1536,17 @@
       },
       "fetch_date_from_article": true,
       "region": "Peel"
+    },
+    {
+      "id": "christmas-island",
+      "name": "Shire of Christmas Island",
+      "news_url": "https://www.shire.gov.cx/dynamic-public-notices-1_p_f17e79f6_b4c9_494f_833d_5402c31f6efb_0_5000-sitemap.xml",
+      "scraper": "sitemap_scraper",
+      "url_contains": "/public-notices-1/",
+      "enabled": true,
+      "category": "C",
+      "region": "Indian Ocean Territories (no RDC)",
+      "note": "2026-11-10: Wix site renders notices client-side; read from its public-notices sitemap"
     }
   ]
 }

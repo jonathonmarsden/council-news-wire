@@ -1575,13 +1575,13 @@
  "councils": {
   "act_gov": {
    "id": "act_gov",
-   "name": "ACT Government",
+   "name": "ACT Government - department releases",
    "state": "act",
    "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_directorate_media_releases_rss"
   },
   "act_ministers": {
    "id": "act_ministers",
-   "name": "ACT Government",
+   "name": "ACT Government - ministers' releases",
    "state": "act",
    "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_minister_media_releases_rss"
   },
@@ -2202,6 +2202,12 @@
    "name": "Shire of Chittering",
    "state": "wa",
    "news_url": "https://www.chittering.wa.gov.au/news/"
+  },
+  "christmas-island": {
+   "id": "christmas-island",
+   "name": "Shire of Christmas Island",
+   "state": "wa",
+   "news_url": "https://www.shire.gov.cx/dynamic-public-notices-1_p_f17e79f6_b4c9_494f_833d_5402c31f6efb_0_5000-sitemap.xml"
   },
   "circular-head": {
    "id": "circular-head",
@@ -3861,7 +3867,7 @@
   },
   "our_canberra": {
    "id": "our_canberra",
-   "name": "ACT Government",
+   "name": "Our Canberra (ACT Government)",
    "state": "act",
    "news_url": "https://www.act.gov.au/our-canberra/rss"
   },
