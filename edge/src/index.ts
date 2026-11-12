@@ -17,7 +17,7 @@ import {
   classifyClient, hashId, viewerDid, cacheKey,
 } from "./lib";
 import { legacyRedirect } from "./lib";
-import { ICON_SVG, ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
+import { ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
 
 type Council = { id: string; name: string; state: string; news_url: string };
 type Env = {
@@ -219,7 +219,7 @@ function index(env: Env): Response {
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RSS feeds · Council News Wire</title>
 <meta name="description" content="RSS feeds for every Australian council, region and state.">
-<link rel="icon" href="/rss/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/rss/icon-192.png" type="image/png">
 <style>${PAGE_CSS}</style></head><body><main>
 <a class="top" href="${SITE}">Council News Wire</a>
 <h1>RSS feeds</h1>
@@ -303,7 +303,6 @@ const PNG: Record<string, string> = {
 
 function iconResponse(path: string): Response | null {
   const headers = { "cache-control": "public, max-age=604800" };
-  if (path === "/rss/icon.svg") return new Response(ICON_SVG, { headers: { ...headers, "content-type": "image/svg+xml" } });
   const b64 = PNG[path];
   if (!b64) return null;
   const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
