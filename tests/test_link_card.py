@@ -11,6 +11,14 @@ import pytest
 
 from core import link_card
 
+_REAL_PUBLIC_CHECK = link_card._public_http_url
+
+
+@pytest.fixture(autouse=True)
+def _no_dns(monkeypatch):
+    """Tests use made-up hosts; treat them as public unless a test says otherwise."""
+    monkeypatch.setattr(link_card, "_public_http_url", lambda url: True)
+
 
 # ---- title cleaning -------------------------------------------------------
 
@@ -251,3 +259,26 @@ def test_unreadable_bytes_are_treated_as_acceptable():
     doubt rather than being dropped."""
     from core.link_card import _too_small_to_render
     assert _too_small_to_render(b"not an image") is False
+
+
+# --- Refusing internal addresses (security review, Nov 2026) ---------------
+
+def test_internal_and_non_http_urls_refused():
+    for url in ["http://127.0.0.1/x.jpg", "http://192.168.1.10/snap.jpg", "http://10.0.0.5/",
+                "http://169.254.169.254/latest/meta-data/", f"http://{link_card._CGNAT[1]}/", "http://[::1]/",
+                "file:///etc/passwd", "ftp://example.com/x", "http:///nohost"]:
+        assert _REAL_PUBLIC_CHECK(url) is False, url
+
+
+def test_redirect_to_internal_address_is_not_followed(monkeypatch):
+    calls = []
+
+    class Resp:
+        status_code = 302
+        headers = {"location": "http://192.168.1.10/camera.jpg"}
+        content = b""
+
+    monkeypatch.setattr(link_card, "_public_http_url", lambda u: not u.startswith("http://192.168."))
+    monkeypatch.setattr(link_card._requests, "get", lambda url, **k: calls.append(url) or Resp())
+    assert link_card._safe_get("https://council.example/story", 1000) is None
+    assert calls == ["https://council.example/story"]

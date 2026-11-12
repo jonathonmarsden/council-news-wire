@@ -115,7 +115,7 @@ The crawler reads only your public news listing and links back to you. Full
 details of what it requests and how often are published at
 <https://councilnewswire.au/bot.html>. If you would like it to use an
 RSS feed or API instead, or have any question, email
-**hello@jonathonmarsden.com** and it will be actioned promptly.
+**hello@councilnewswire.au** and it will be actioned promptly.
 
 ## Licence and contact
 
@@ -123,4 +123,4 @@ Apache-2.0 — see [LICENSE](LICENSE).
 
 Built and maintained by Jonathon Marsden — software developer, former Mayor,
 and postgraduate cyber security student. Contact:
-**hello@jonathonmarsden.com**
+**hello@councilnewswire.au**

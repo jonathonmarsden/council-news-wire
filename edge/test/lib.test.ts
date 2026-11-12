@@ -28,8 +28,12 @@ test("feed ids come only from this publisher's feed records", () => {
 });
 
 test("cursors round-trip and reject junk", () => {
-  const c = encodeCursor("2026-11-05T02:00:00Z", "at://x/app.bsky.feed.post/1");
-  assert.deepEqual(decodeCursor(c), { postedAt: "2026-11-05T02:00:00Z", uri: "at://x/app.bsky.feed.post/1" });
+  const uri = "at://did:plc:aiyxlymlkghpdpswqggi735t/app.bsky.feed.post/3n23dsppmko2g";
+  const c = encodeCursor("2026-11-05T02:00:00Z", uri);
+  assert.deepEqual(decodeCursor(c), { postedAt: "2026-11-05T02:00:00Z", uri });
+  // Invalid dates and made-up URIs are refused rather than queried.
+  assert.equal(decodeCursor(`2026-01-01Tzz::${uri}`), null);
+  assert.equal(decodeCursor("2026-11-05T02:00:00Z::at://x/app.bsky.feed.post/1"), null);
   assert.equal(decodeCursor("nonsense"), null);
   assert.equal(decodeCursor("2026-11-05T02:00:00Z::https://not-an-at-uri"), null);
   assert.equal(decodeCursor(null), null);
