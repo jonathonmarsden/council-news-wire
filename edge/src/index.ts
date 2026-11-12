@@ -16,12 +16,18 @@ import {
   didDocument, encodeCursor, feedIdFromUri, feedUri, renderOpml, renderRss, wantsFeedPage, renderFeedPage, renderManifest, PAGE_CSS,
   classifyClient, hashId, viewerDid, cacheKey,
 } from "./lib";
+import { legacyRedirect } from "./lib";
 import { ICON_SVG, ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
 
 type Council = { id: string; name: string; state: string; news_url: string };
 type Env = {
   DB: D1Database;
-  HOSTNAME: string; // e.g. lgnews.jonathonmarsden.com
+  // The Bluesky feed service lives at did:web:FEED_HOST forever: the 89 feed
+  // records point there, so it must never change. PUBLIC_HOST is where people
+  // read the site and RSS; when it differs, FEED_HOST redirects everything
+  // except the feed service, the bot's /ingest and /edge to PUBLIC_HOST.
+  FEED_HOST: string; // lgnews.jonathonmarsden.com
+  PUBLIC_HOST: string; // e.g. councilnewswire.au
   PUBLISHER_DID: string; // DID of the account that publishes the feed records
   INGEST_TOKEN: string; // shared with the bot; secret
   USAGE?: AnalyticsEngineDataset; // anonymous usage counts (see recordUsage)
@@ -33,7 +39,6 @@ const FEED_BY_ID = new Map(FEEDS.map((f) => [f.id, f]));
 const RSS_ITEMS = 50;
 const SKELETON_WINDOW_DAYS = 14;
 const RSS_MAX_AGE = 600; // seconds
-const SITE = "https://lgnews.jonathonmarsden.com";
 
 const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -46,10 +51,12 @@ export default {
     const url = new URL(req.url);
     const path = url.pathname;
     try {
-      if (path === "/.well-known/did.json") return json(didDocument(env.HOSTNAME));
+      const moved = legacyRedirect(url, req.method, env.FEED_HOST, env.PUBLIC_HOST);
+      if (moved) return Response.redirect(moved, 301);
+      if (path === "/.well-known/did.json") return json(didDocument(env.FEED_HOST));
       if (path === "/xrpc/app.bsky.feed.describeFeedGenerator") {
         return json({
-          did: `did:web:${env.HOSTNAME}`,
+          did: `did:web:${env.FEED_HOST}`,
           feeds: FEEDS.map((f) => ({ uri: feedUri(env.PUBLISHER_DID, f.id) })),
         });
       }
@@ -122,7 +129,7 @@ async function skeleton(url: URL, env: Env): Promise<Response> {
 type Resolved = { ch: { title: string; description: string; link: string }; where: string; arg: string | null };
 
 /** Which feed an /rss/... address names, and how to select its posts. */
-function resolveChannel(path: string): Resolved | null {
+function resolveChannel(path: string, SITE: string): Resolved | null {
   let m: RegExpExecArray | null;
   let where = "", arg: string | null = null, ch: { title: string; description: string; link: string } | null = null;
   if (path === "/rss/all.xml") {
@@ -144,11 +151,12 @@ function resolveChannel(path: string): Resolved | null {
 }
 
 async function rss(url: URL, env: Env, page = false): Promise<Response> {
+  const SITE = `https://${env.PUBLIC_HOST}`;
   const path = url.pathname.replace(/\/+$/, "");
-  const self = `https://${env.HOSTNAME}${path}`;
+  const self = `https://${env.PUBLIC_HOST}${path}`;
   if (path === "/rss" ) return index(env);
   if (path === "/rss/feeds.opml") return opml(env);
-  const r = resolveChannel(path);
+  const r = resolveChannel(path, `https://${env.PUBLIC_HOST}`);
   if (!r) return new Response("not found", { status: 404 });
   const { ch, where, arg } = r;
 
@@ -168,7 +176,7 @@ async function rss(url: URL, env: Env, page = false): Promise<Response> {
 }
 
 function opml(env: Env): Response {
-  const base = `https://${env.HOSTNAME}/rss`;
+  const base = `https://${env.PUBLIC_HOST}/rss`;
   const entries = [
     { title: "All of Australia", xmlUrl: `${base}/all.xml`, group: "Australia" },
     ...STATES.map((s) => ({ title: STATE_NAMES[s], xmlUrl: `${base}/state/${s}.xml`, group: "States and territories" })),
@@ -182,6 +190,7 @@ function opml(env: Env): Response {
 }
 
 function index(env: Env): Response {
+  const SITE = `https://${env.PUBLIC_HOST}`;
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
   const chip = (href: string, text: string, cls = "") => `<li><a${cls ? ` class="${cls}"` : ""} href="${href}">${esc(text)}</a></li>`;
   const byState = (st: string) => FEEDS.filter((f) => f.state.toLowerCase() === st);
@@ -251,7 +260,7 @@ async function recordUsage(req: Request, url: URL, env: Env, kind: "feed" | "rss
       first = url.searchParams.get("cursor") ? "0" : "1";
     } else {
       const path = url.pathname.replace(/\/+$/, "") || "/rss";
-      if (path === "/rss" || path === "/rss/feeds.opml" || resolveChannel(path)) target = path;
+      if (path === "/rss" || path === "/rss/feeds.opml" || resolveChannel(path, `https://${env.PUBLIC_HOST}`)) target = path;
       const ip = req.headers.get("cf-connecting-ip") || "";
       if (ip && key) viewer = await hashId(key, `rss|${day}|${ip}|${ua || ""}`);
     }
@@ -265,9 +274,9 @@ async function recordUsage(req: Request, url: URL, env: Env, kind: "feed" | "rss
 
 function manifest(url: URL, env: Env): Response {
   const path = url.pathname.replace(/\/+$/, "");
-  const r = resolveChannel(path);
+  const r = resolveChannel(path, `https://${env.PUBLIC_HOST}`);
   if (!r) return new Response("not found", { status: 404 });
-  return new Response(renderManifest({ ...r.ch, selfUrl: `https://${env.HOSTNAME}${path}` }), {
+  return new Response(renderManifest({ ...r.ch, selfUrl: `https://${env.PUBLIC_HOST}${path}` }), {
     headers: { "content-type": "application/manifest+json; charset=utf-8", "cache-control": "public, max-age=86400" },
   });
 }

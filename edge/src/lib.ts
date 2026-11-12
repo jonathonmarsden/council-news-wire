@@ -416,3 +416,18 @@ export async function hashId(key: string, text: string): Promise<string> {
   const sig = new Uint8Array(await crypto.subtle.sign("HMAC", k, new TextEncoder().encode(text)));
   return Array.from(sig.slice(0, 8), (b) => b.toString(16).padStart(2, "0")).join("");
 }
+
+
+/** Where an old-host request should go once the public site has moved, or null.
+ *
+ * FEED_HOST keeps serving what machines depend on: the Bluesky feed service
+ * (did.json and /xrpc), the bot's /ingest and /edge. Everything people read
+ * (the site and RSS) moves to PUBLIC_HOST, path and query intact. Only GET and
+ * HEAD are redirected: a redirected POST would silently lose its body. */
+export function legacyRedirect(url: URL, method: string, feedHost: string, publicHost: string): string | null {
+  if (!publicHost || publicHost === feedHost || url.hostname !== feedHost) return null;
+  if (method !== "GET" && method !== "HEAD") return null;
+  const p = url.pathname;
+  if (p === "/.well-known/did.json" || p.startsWith("/xrpc/") || p === "/ingest" || p.startsWith("/edge/")) return null;
+  return `https://${publicHost}${p}${url.search}`;
+}

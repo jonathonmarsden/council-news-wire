@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
   cleanPost, decodeCursor, didDocument, encodeCursor, feedIdFromUri, itemDate, renderOpml, renderRss, xmlEscape,
   type Post, wantsFeedPage, renderFeedPage, renderManifest, bskyWebUrl, shortName,
-  classifyClient, viewerDid, hashId, cacheKey,
+  classifyClient, viewerDid, hashId, cacheKey, legacyRedirect,
 } from "../src/lib.ts";
 
 const DID = "did:plc:publisher";
@@ -196,4 +196,25 @@ test("hostile story content cannot inject markup or scripts into feed pages or R
   assert.ok(body.includes("&lt;script&gt;alert(1)&lt;/script&gt;"));
   const xml = renderRss({ title: "t", description: "d", link: "https://x", selfUrl: "https://h/rss/a.xml" }, [evil]);
   assert.ok(!/<script>|<img|<b onmouseover/i.test(xml), "RSS contains live markup");
+});
+
+test("legacyRedirect: nothing moves while the hosts are the same", () => {
+  const u = new URL("https://lgnews.jonathonmarsden.com/rss/state/vic.xml");
+  assert.equal(legacyRedirect(u, "GET", "lgnews.jonathonmarsden.com", "lgnews.jonathonmarsden.com"), null);
+});
+
+test("legacyRedirect: site and RSS move, path and query intact", () => {
+  const F = "lgnews.jonathonmarsden.com", P = "councilnewswire.au";
+  assert.equal(legacyRedirect(new URL(`https://${F}/rss/state/vic.xml?x=1`), "GET", F, P), `https://${P}/rss/state/vic.xml?x=1`);
+  assert.equal(legacyRedirect(new URL(`https://${F}/`), "HEAD", F, P), `https://${P}/`);
+  assert.equal(legacyRedirect(new URL(`https://${F}/vic`), "GET", F, P), `https://${P}/vic`);
+});
+
+test("legacyRedirect: the feed service, ingest, health and POSTs stay put", () => {
+  const F = "lgnews.jonathonmarsden.com", P = "councilnewswire.au";
+  for (const path of ["/.well-known/did.json", "/xrpc/app.bsky.feed.getFeedSkeleton", "/ingest", "/edge/health"]) {
+    assert.equal(legacyRedirect(new URL(`https://${F}${path}`), "GET", F, P), null, path);
+  }
+  assert.equal(legacyRedirect(new URL(`https://${F}/rss`), "POST", F, P), null);
+  assert.equal(legacyRedirect(new URL(`https://${P}/rss`), "GET", F, P), null); // already on the new host
 });
