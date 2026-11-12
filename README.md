@@ -9,7 +9,7 @@ state and territory.
 
 [![Tests](https://github.com/jonathonmarsden/council-news-wire/actions/workflows/test.yml/badge.svg)](https://github.com/jonathonmarsden/council-news-wire/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)](requirements.txt)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](requirements.txt)
 
 ---
 

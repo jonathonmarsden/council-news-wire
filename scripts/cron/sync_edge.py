@@ -4,8 +4,8 @@
 The edge keeps its own copy of what the bot has published, so feeds and RSS
 keep serving when this host is down. This script sends it every story posted
 since the last successful sync (with an hour of overlap; the edge upserts by
-URL, so repeats are harmless), and asks it to drop stories older than
-PRUNE_DAYS.
+URL, so repeats are harmless). When PRUNE_DAYS is set it also asks the edge to
+drop older stories; it is 0 (keep everything) since the move to Workers Paid.
 
 Silent no-op until EDGE_INGEST_TOKEN is set, so it can be scheduled before
 the edge service exists. The last sync time is kept in monitor_state.
@@ -31,7 +31,22 @@ sys.path.insert(0, str(ROOT))
 STATE_KEY = "edge_sync"
 DEFAULT_URL = "https://councilnewswire.au/ingest"
 FIRST_SYNC_DAYS = 90
-PRUNE_DAYS = 120
+# 0 keeps every story: the edge holds the full archive (Workers Paid since
+# 12 Nov 2026, so D1 storage and writes are no longer the constraint). Set a
+# number of days to prune again; each council's latest stories are always kept.
+PRUNE_DAYS = 0
+# Pruning scans the whole edge table (it keeps each council's latest stories
+# however old), so it runs once a day, on the first sync of this UTC hour
+# (16:00 UTC is 2-3am in eastern Australia), not every ten minutes.
+PRUNE_HOUR_UTC = 16
+# D1's free plan allows 100,000 row writes a day, and every story written also
+# counts once per index (about 4 writes per story). A manual --since resend
+# larger than this needs --allow-large, and should be spread over days.
+MAX_MANUAL_ROWS = 10_000
+
+
+def prune_due(now: datetime) -> bool:
+    return now.hour == PRUNE_HOUR_UTC and now.minute < 10
 OVERLAP = timedelta(hours=1)
 BATCH = 400
 AU = ZoneInfo("Australia/Sydney")
@@ -92,6 +107,8 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--dump", type=Path)
     ap.add_argument("--since", help="resend everything posted since this date (YYYY-MM-DD)")
+    ap.add_argument("--allow-large", action="store_true",
+                    help=f"allow a --since resend of more than {MAX_MANUAL_ROWS} stories (D1 write budget)")
     args = ap.parse_args()
 
     token = os.environ.get("EDGE_INGEST_TOKEN", "")
@@ -120,6 +137,10 @@ def main() -> int:
                 .order_by(Article.posted_at).all())
         payload = [p for p in (to_payload(a, names) for a in rows) if p]
 
+    if args.since and len(payload) > MAX_MANUAL_ROWS and not args.allow_large:
+        print(f"Refusing to resend {len(payload)} stories: about {len(payload) * 4} D1 row writes against a "
+              f"100,000/day free limit. Use a later --since, or --allow-large if you mean it.")
+        return 2
     prune_before = iso_utc(now - timedelta(days=PRUNE_DAYS))
     print(f"Edge sync {now:%Y-%m-%d %H:%M} UTC: {len(payload)} stories posted since {since:%Y-%m-%d %H:%M}")
     if args.dump:
@@ -133,9 +154,9 @@ def main() -> int:
     first = True
     for chunk in batches(payload) if payload else [[]]:
         body = {"posts": chunk}
-        if first:
+        if first and PRUNE_DAYS and prune_due(now):
             body["prune_before"] = prune_before
-            first = False
+        first = False
         out = send(url, token, body)
         accepted += out.get("accepted", 0)
         rejected += out.get("rejected", 0)
