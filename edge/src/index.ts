@@ -201,11 +201,11 @@ function index(env: Env): Response {
   <details><summary>${st === "act" ? "Each source" : "Each council"} (${councils(st).length})</summary><ul class="cl">${councils(st).map((c) => `<li><a href="/rss/council/${encodeURIComponent(c.id)}.xml">${esc(c.name)}</a></li>`).join("")}</ul></details>
 </section>`).join("");
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RSS feeds · Local Government News</title>
+<title>RSS feeds · Council News Wire</title>
 <meta name="description" content="RSS feeds for every Australian council, region and state.">
 <link rel="icon" href="/rss/icon.svg" type="image/svg+xml">
 <style>${PAGE_CSS}</style></head><body><main>
-<a class="top" href="${SITE}">Local Government News</a>
+<a class="top" href="${SITE}">Council News Wire</a>
 <h1>RSS feeds</h1>
 <p class="lead">News from every Australian council, relayed from each council's own news page. Every item links to the original story.</p>
 <section class="box"><h2>New to RSS?</h2>

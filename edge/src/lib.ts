@@ -320,7 +320,7 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
   }).join("");
   const manifest = `${ch.selfUrl}?view=manifest`;
   return `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${xmlEscape(ch.title)} · Local Government News</title>
+<title>${xmlEscape(ch.title)} · Council News Wire</title>
 <meta name="description" content="${xmlEscape(ch.description)}">
 <link rel="alternate" type="application/rss+xml" title="${xmlEscape(ch.title)}" href="${xmlEscape(ch.selfUrl)}">
 <link rel="manifest" href="${xmlEscape(manifest)}">
@@ -329,7 +329,7 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
 <meta name="apple-mobile-web-app-title" content="${xmlEscape(shortName(ch.title))}">
 <meta name="theme-color" content="#df842b">
 <style>${PAGE_CSS}</style></head><body><main>
-<a class="top" href="${xmlEscape(site)}">Local Government News</a>
+<a class="top" href="${xmlEscape(site)}">Council News Wire</a>
 <h1>${xmlEscape(ch.title)}</h1>
 <p class="lead">${xmlEscape(ch.description)}</p>
 <p class="keep">Check back any time: bookmark this page, or add it to your phone's home screen (on iPhone tap Share, then Add to Home Screen; on Android open the ⋮ menu). <button class="btn alt" id="install" type="button" hidden>Install</button></p>
