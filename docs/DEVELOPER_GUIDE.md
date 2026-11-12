@@ -41,7 +41,7 @@ council-news-bot/
 │   └── hashtags_map.json          # Canonical council hashtags (also at docs/hashtags_map.json)
 ├── scripts/
 │   ├── cron/process_global_queue.py  # Posts from DB queue every 10 min (run by cron)
-│   ├── deployment/                   # deploy.sh, generate_crontab.py, rollback scripts
+│   ├── deployment/                   # generate_crontab.py and related scripts
 │   └── maintenance/                  # health_check.py, diagnose_failures.py, etc.
 ├── tests/                         # pytest tests (mix of unit + live integration)
 ├── alembic/                       # DB migrations
