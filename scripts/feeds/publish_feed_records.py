@@ -25,7 +25,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 COLLECTION = "app.bsky.feed.generator"
-DEFAULT_SERVICE_DID = "did:web:lgnews.jonathonmarsden.com"
+DEFAULT_SERVICE_DID = "did:web:councilnewswire.au"
 
 
 def records(service_did: str, created_at: str):

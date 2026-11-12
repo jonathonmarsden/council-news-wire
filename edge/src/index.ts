@@ -53,10 +53,14 @@ export default {
     try {
       const moved = legacyRedirect(url, req.method, env.FEED_HOST, env.PUBLIC_HOST);
       if (moved) return Response.redirect(moved, 301);
-      if (path === "/.well-known/did.json") return json(didDocument(env.FEED_HOST));
+      // The feed service answers as did:web:<host asked for>, on either host,
+      // so the feed records can move from the old host to the new one with
+      // both working throughout.
+      const svcHost = url.hostname === env.FEED_HOST ? env.FEED_HOST : env.PUBLIC_HOST;
+      if (path === "/.well-known/did.json") return json(didDocument(svcHost));
       if (path === "/xrpc/app.bsky.feed.describeFeedGenerator") {
         return json({
-          did: `did:web:${env.FEED_HOST}`,
+          did: `did:web:${svcHost}`,
           feeds: FEEDS.map((f) => ({ uri: feedUri(env.PUBLISHER_DID, f.id) })),
         });
       }

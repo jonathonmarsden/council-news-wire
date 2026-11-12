@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 STATE_KEY = "edge_sync"
-DEFAULT_URL = "https://lgnews.jonathonmarsden.com/ingest"
+DEFAULT_URL = "https://councilnewswire.au/ingest"
 FIRST_SYNC_DAYS = 90
 PRUNE_DAYS = 120
 OVERLAP = timedelta(hours=1)

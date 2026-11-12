@@ -1,13 +1,14 @@
 // Cloudflare configuration for the edge service (cf CLI; see README.md).
 //
 // Two hostnames:
-// - FEED_HOST serves the Bluesky feed service (did:web:FEED_HOST, which all 89
-//   feed records point at, so it must never change), the bot's /ingest and
+// - PUBLIC_HOST (councilnewswire.au) serves everything: the site and RSS, the
+//   Bluesky feed service as did:web:councilnewswire.au, the bot's /ingest and
 //   /edge/health.
-// - PUBLIC_HOST is where people read the site and RSS.
-// While they are the same, the Worker answers only its own paths and every
-// other path still goes to the static site's origin. Once PUBLIC_HOST moves,
-// FEED_HOST also gets a catch-all route that redirects the site and RSS there.
+// - FEED_HOST (lgnews.jonathonmarsden.com) is the old host. It still answers
+//   the feed service (as did:web:lgnews.jonathonmarsden.com, for feed records
+//   or caches that haven't moved), /ingest and /edge, and 301-redirects
+//   everything else to PUBLIC_HOST. Once nothing calls it, it can become a
+//   pure redirect.
 import { bindings, defineConfig, triggers } from "cf/config";
 
 const FEED_HOST = "lgnews.jonathonmarsden.com";
@@ -42,7 +43,8 @@ export default defineConfig({
       feed("/ingest"),
       feed("/edge/*"),
       ...(moved
-        ? [feed("/*"), pub("/rss"), pub("/rss/*"), pub("/edge/*")]
+        ? [feed("/*"), pub("/.well-known/did.json"), pub("/xrpc/app.bsky.feed.*"), pub("/ingest"),
+           pub("/rss"), pub("/rss/*"), pub("/edge/*")]
         : [feed("/rss"), feed("/rss/*")]),
     ],
   },

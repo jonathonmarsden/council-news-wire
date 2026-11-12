@@ -1,6 +1,6 @@
 # CRONTAB CONFIGURATION - Council News Bot (staggered once-daily scraping)
 # ========================================================================
-# Generated on: 2026-11-12 11:54:11 by scripts/deployment/generate_crontab.py
+# Generated on: 2026-11-12 12:24:39 by scripts/deployment/generate_crontab.py
 #
 # This is a COMPLETE crontab: scrape slots AND infra lines (posting queue,
 # feed watchdog, alert check, daily digest, cleanup). Install the whole file:
