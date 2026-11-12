@@ -15,7 +15,7 @@ real.
 ## Scope
 
 In scope: this repository's code and configuration, the published site at
-`lgnews.jonathonmarsden.com`, and the crawler's behaviour toward council
+`councilnewswire.au`, and the crawler's behaviour toward council
 websites.
 
 Out of scope: the council websites themselves, Bluesky/AT Protocol
@@ -46,7 +46,7 @@ The service is deliberately built with a small attack surface:
 The collector fetches each council's public news listing roughly once per day
 and identifies itself where councils have asked it to. Details, including
 request volumes and how to allow or block it, are published at
-<https://lgnews.jonathonmarsden.com/bot.html>.
+<https://councilnewswire.au/bot.html>.
 
 If you administer a council website and have a concern about the crawler,
 email the address above and it will be actioned promptly.

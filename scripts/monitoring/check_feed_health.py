@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 STATES = ["vic", "nsw", "qld", "sa", "wa", "tas", "nt", "act"]
 HANDLE = "roundupnewsbot{}.bsky.social"
 APPVIEW = "https://public.api.bsky.app/xrpc"
-WEBSITE = "https://lgnews.jonathonmarsden.com/"
+WEBSITE = "https://councilnewswire.au/"
 TIMEOUT = 15
 
 # Feeds publish at very different rates, so one staleness threshold cannot fit

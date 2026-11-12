@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SITE = "lgnews.jonathonmarsden.com"
+SITE = "councilnewswire.au"
 STATE_NAMES = {"nsw": "New South Wales", "vic": "Victoria", "qld": "Queensland", "wa": "Western Australia",
                "sa": "South Australia", "tas": "Tasmania", "nt": "the Northern Territory",
                "act": "the ACT"}

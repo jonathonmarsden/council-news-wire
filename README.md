@@ -4,8 +4,8 @@ Collects publicly published news from every Australian local council and
 republishes it as attributed links on eight public Bluesky feeds — one per
 state and territory.
 
-**Live feeds, all in one place:** <https://lgnews.jonathonmarsden.com>
-**About the crawler:** <https://lgnews.jonathonmarsden.com/bot.html>
+**Live feeds, all in one place:** <https://councilnewswire.au>
+**About the crawler:** <https://councilnewswire.au/bot.html>
 
 [![Tests](https://github.com/jonathonmarsden/council-news-bot/actions/workflows/test.yml/badge.svg)](https://github.com/jonathonmarsden/council-news-bot/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
@@ -113,7 +113,7 @@ still detected. See [docs/](docs/) for runbooks.
 
 The crawler reads only your public news listing and links back to you. Full
 details of what it requests and how often are published at
-<https://lgnews.jonathonmarsden.com/bot.html>. If you would like it to use an
+<https://councilnewswire.au/bot.html>. If you would like it to use an
 RSS feed or API instead, or have any question, email
 **hello@jonathonmarsden.com** and it will be actioned promptly.
 

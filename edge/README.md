@@ -19,8 +19,12 @@ until it is back.
 
 ## Paths
 
-All on `lgnews.jonathonmarsden.com`; every other path on that host is the
-static site.
+The public site and RSS are on `councilnewswire.au`; every other path on that
+host is the static site. The Bluesky feed service (`/.well-known/did.json`,
+`/xrpc/...`), the bot's `/ingest` and `/edge/*` stay on
+`lgnews.jonathonmarsden.com` for good, because all 89 feed records point at
+`did:web:lgnews.jonathonmarsden.com`. Every other request to that old host is
+301-redirected to the same path on `councilnewswire.au` (see `legacyRedirect`).
 
 | Path | What |
 |---|---|

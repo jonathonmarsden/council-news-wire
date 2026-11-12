@@ -41,7 +41,7 @@ STATE_FACTS: Dict[str, Dict[str, str]] = {
             "handle": "roundupnewsbotact.bsky.social"},
 }
 
-SITE = "https://lgnews.jonathonmarsden.com/"
+SITE = "https://councilnewswire.au/"
 
 # Councils across the states and the NT; the ACT Government is named separately.
 NATIONAL_COUNCILS = sum(int(f["councils"]) for k, f in STATE_FACTS.items() if k != "ACT")

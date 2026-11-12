@@ -12,8 +12,8 @@ import { bindings, defineConfig, triggers } from "cf/config";
 
 const FEED_HOST = "lgnews.jonathonmarsden.com";
 const FEED_ZONE = "jonathonmarsden.com";
-const PUBLIC_HOST = "lgnews.jonathonmarsden.com"; // becomes councilnewswire.au at cutover
-const PUBLIC_ZONE = "jonathonmarsden.com"; // becomes councilnewswire.au at cutover
+const PUBLIC_HOST = "councilnewswire.au";
+const PUBLIC_ZONE = "councilnewswire.au";
 const moved = PUBLIC_HOST !== FEED_HOST;
 
 const on = (host: string, zone: string) => (path: string) => triggers.fetch({ pattern: `${host}${path}`, zone });
