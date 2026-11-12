@@ -1265,7 +1265,8 @@
       "population": 13585,
       "region": "North West",
       "use_curl": false,
-      "user_agent": "LGNewsRoundupBot/1.0 (+https://councilnewswire.au/bot.html)"
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)",
+      "user_agent_note": "Exact string Moree Plains was asked to allow through its firewall (Jul 2026). Do not change it: an exact-match rule would start blocking us. The old URL redirects to the current crawler page."
     },
     {
       "id": "murray-river-council",
