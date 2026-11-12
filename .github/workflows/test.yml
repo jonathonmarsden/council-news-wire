@@ -8,13 +8,10 @@ on:
 
 jobs:
   test:
-    # Pinned: ubuntu-latest moved to 26.04, which has no Python 3.9, and
-    # test (3.9) is a required check. Production runs 3.10 (Playwright jammy
-    # image); drop 3.9 from the matrix and the ruleset together, then unpin.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ['3.10', '3.11', '3.12']
     
     services:
       postgres:
@@ -31,10 +28,10 @@ jobs:
           - 5432:5432
 
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
@@ -68,7 +65,7 @@ jobs:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/council_news_test
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         file: ./coverage.xml
         flags: unittests
@@ -77,7 +74,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0
 
@@ -108,7 +105,7 @@ jobs:
         exit $fail
     
     - name: Set up Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: '3.10'
     
@@ -135,10 +132,10 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     
     - name: Set up Python
-      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: '3.10'
     
@@ -154,13 +151,13 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
     
     - name: Build Docker image
-      uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
       with:
         context: .
         push: false
@@ -169,7 +166,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     
     - name: Check documentation exists
       run: |
@@ -187,7 +184,7 @@ jobs:
     # outside Node, so no npm install is needed.
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
       with:
         node-version: '24'
