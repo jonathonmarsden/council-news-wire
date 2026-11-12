@@ -60,7 +60,10 @@ export function decodeCursor(cursor: string | null): { postedAt: string; uri: st
   if (i <= 0) return null;
   const postedAt = cursor.slice(0, i);
   const uri = cursor.slice(i + 2);
-  if (!/^\d{4}-\d{2}-\d{2}T/.test(postedAt) || !uri.startsWith("at://")) return null;
+  // A real cursor is a valid timestamp plus a post URI from one of the bots.
+  // Anything else is refused, so made-up cursors can't each cost a database read.
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(postedAt) || Number.isNaN(Date.parse(postedAt))) return null;
+  if (!/^at:\/\/did:plc:[a-z0-9]{24}\/app\.bsky\.feed\.post\/[a-z0-9]{13}$/.test(uri)) return null;
   return { postedAt, uri };
 }
 

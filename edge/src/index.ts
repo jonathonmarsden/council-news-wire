@@ -40,6 +40,16 @@ const RSS_ITEMS = 50;
 const SKELETON_WINDOW_DAYS = 14;
 const RSS_MAX_AGE = 600; // seconds
 
+// Headers for the HTML pages (the RSS index and readable feed pages). They are
+// static and escaped, so this is hardening: no framing, no MIME sniffing, and no
+// scripts beyond the page's own small inline one.
+const PAGE_HEADERS = {
+  "content-type": "text/html; charset=utf-8",
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "content-security-policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: https:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+};
+
 const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
     status, headers: { "content-type": "application/json; charset=utf-8", ...extra },
@@ -171,7 +181,7 @@ async function rss(url: URL, env: Env, page = false): Promise<Response> {
   const { results } = await (arg === null ? stmt : stmt.bind(arg)).all<Post>();
   if (page) {
     return new Response(renderFeedPage({ ...ch, selfUrl: self }, results.slice(0, 20), SITE), {
-      headers: { "content-type": "text/html; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` },
+      headers: { ...PAGE_HEADERS, "cache-control": `public, max-age=${RSS_MAX_AGE}` },
     });
   }
   return new Response(renderRss({ ...ch, selfUrl: self }, results), {
@@ -217,7 +227,7 @@ function index(env: Env): Response {
 ${sections}
 <footer><a href="${SITE}">Back to the news site</a></footer>
 </main></body></html>`;
-  return new Response(html, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": `public, max-age=${RSS_MAX_AGE}` } });
+  return new Response(html, { headers: { ...PAGE_HEADERS, "cache-control": `public, max-age=${RSS_MAX_AGE}` } });
 }
 
 async function cached(req: Request, ctx: ExecutionContext, page: boolean, make: () => Promise<Response> | Response): Promise<Response> {
@@ -309,8 +319,11 @@ function sameToken(a: string, b: string): boolean {
 
 async function ingest(req: Request, env: Env): Promise<Response> {
   if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
+  // Refuse outright if no token is configured, rather than relying on how an
+  // empty "Bearer " compares.
+  if (!env.INGEST_TOKEN) return new Response("forbidden", { status: 403 });
   const auth = req.headers.get("authorization") || "";
-  if (!sameToken(auth, `Bearer ${env.INGEST_TOKEN || ""}`)) return new Response("forbidden", { status: 403 });
+  if (!sameToken(auth, `Bearer ${env.INGEST_TOKEN}`)) return new Response("forbidden", { status: 403 });
   let body: any;
   try { body = await req.json(); } catch { return json({ error: "bad json" }, 400); }
   const raw: any[] = Array.isArray(body?.posts) ? body.posts : [];

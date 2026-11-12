@@ -11,7 +11,9 @@ A link card must never make a post worse than the plain-text version.
 """
 from __future__ import annotations
 
+import ipaddress
 import re
+import socket
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
@@ -27,6 +29,8 @@ from bs4 import BeautifulSoup
 from core.utils import repair_entities
 
 FETCH_TIMEOUT = 20
+MAX_REDIRECTS = 5
+MAX_PAGE_BYTES = 5_000_000
 MAX_IMAGE_BYTES = 900_000  # Bluesky blob limit is ~1MB; stay safely under
 
 # Bluesky renders a card thumbnail at roughly 1200x630 (1.91:1). An image much
@@ -76,6 +80,54 @@ def clean_title(raw: str) -> str:
     return cleaned if len(cleaned) >= 8 else raw.strip()
 
 
+def _public_http_url(url: str) -> bool:
+    """True only for http(s) URLs whose host resolves solely to public addresses.
+
+    Council pages choose the article and og:image URLs, so a compromised or
+    hostile page could point the bot at an address inside the network it runs
+    on (a router, a camera, a metadata service). Those are refused: private,
+    loopback, link-local, carrier-grade NAT, multicast and reserved ranges.
+    """
+    try:
+        parts = urlparse(url)
+    except ValueError:
+        return False
+    if parts.scheme not in ("http", "https") or not parts.hostname:
+        return False
+    try:
+        infos = socket.getaddrinfo(parts.hostname, parts.port or (443 if parts.scheme == "https" else 80),
+                                   proto=socket.IPPROTO_TCP)
+    except (socket.gaierror, UnicodeError, ValueError):
+        return False
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0].split("%")[0])
+        if (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast
+                or ip.is_reserved or ip.is_unspecified or ip in ipaddress.ip_network("100.64.0.0/10")):
+            return False
+    return bool(infos)
+
+
+def _safe_get(url: str, max_bytes: int):
+    """GET `url`, following redirects by hand so every hop is checked by
+    _public_http_url. Returns the response, or None if refused, failed or
+    larger than `max_bytes`."""
+    for _ in range(MAX_REDIRECTS + 1):
+        if not _public_http_url(url):
+            return None
+        try:
+            resp = _requests.get(url, timeout=FETCH_TIMEOUT, allow_redirects=False, **_IMPERSONATE)
+        except Exception:
+            return None
+        if resp.status_code in (301, 302, 303, 307, 308) and resp.headers.get("location"):
+            url = urljoin(url, resp.headers["location"])
+            continue
+        declared = resp.headers.get("content-length")
+        if (declared and declared.isdigit() and int(declared) > max_bytes) or len(resp.content) > max_bytes:
+            return None
+        return resp
+    return None
+
+
 def fetch_card_data(url: str) -> Optional[dict]:
     """Fetch OG data for `url`. Returns a dict or None if unusable.
 
@@ -83,11 +135,8 @@ def fetch_card_data(url: str) -> Optional[dict]:
     an error page (4xx/5xx), or there is no usable title. An absent image is
     fine - a card with title+description is still worth showing.
     """
-    try:
-        resp = _requests.get(url, timeout=FETCH_TIMEOUT, **_IMPERSONATE)
-    except Exception:
-        return None
-    if resp.status_code >= 400:
+    resp = _safe_get(url, MAX_PAGE_BYTES)
+    if resp is None or resp.status_code >= 400:
         return None
 
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -108,11 +157,8 @@ def fetch_card_data(url: str) -> Optional[dict]:
 
 
 def _download_image(url: str) -> Optional[bytes]:
-    try:
-        resp = _requests.get(url, timeout=FETCH_TIMEOUT, **_IMPERSONATE)
-    except Exception:
-        return None
-    if resp.status_code >= 400:
+    resp = _safe_get(url, MAX_IMAGE_BYTES)
+    if resp is None or resp.status_code >= 400:
         return None
     data = resp.content
     ctype = resp.headers.get("content-type", "")

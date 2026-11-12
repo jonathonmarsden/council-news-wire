@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report security issues privately to **hello@jonathonmarsden.com**.
+Please report security issues privately to **hello@councilnewswire.au**.
 
 Include what you found, how to reproduce it, and any impact you can see. You
 will get an acknowledgement within 72 hours and an assessment within seven

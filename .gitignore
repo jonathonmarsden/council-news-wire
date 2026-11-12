@@ -88,3 +88,4 @@ wa_selector_report.json
 # Debug artefacts (never commit scraped page dumps)
 _debug_logs/
 _debug_archive/
+crontab_generated.txt
