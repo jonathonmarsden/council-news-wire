@@ -32,6 +32,14 @@ STATE_KEY = "edge_sync"
 DEFAULT_URL = "https://councilnewswire.au/ingest"
 FIRST_SYNC_DAYS = 90
 PRUNE_DAYS = 120
+# Pruning scans the whole edge table (it keeps each council's latest stories
+# however old), so it runs once a day, on the first sync of this UTC hour
+# (16:00 UTC is 2-3am in eastern Australia), not every ten minutes.
+PRUNE_HOUR_UTC = 16
+
+
+def prune_due(now: datetime) -> bool:
+    return now.hour == PRUNE_HOUR_UTC and now.minute < 10
 OVERLAP = timedelta(hours=1)
 BATCH = 400
 AU = ZoneInfo("Australia/Sydney")
@@ -133,9 +141,9 @@ def main() -> int:
     first = True
     for chunk in batches(payload) if payload else [[]]:
         body = {"posts": chunk}
-        if first:
+        if first and prune_due(now):
             body["prune_before"] = prune_before
-            first = False
+        first = False
         out = send(url, token, body)
         accepted += out.get("accepted", 0)
         rejected += out.get("rejected", 0)

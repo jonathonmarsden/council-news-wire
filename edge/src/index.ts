@@ -38,6 +38,7 @@ const COUNCILS: Record<string, Council> = (data as any).councils;
 const FEED_BY_ID = new Map(FEEDS.map((f) => [f.id, f]));
 const RSS_ITEMS = 50;
 const SKELETON_WINDOW_DAYS = 14;
+const KEEP_PER_COUNCIL = 20; // stories kept per council however old (see ingest pruning)
 const RSS_MAX_AGE = 600; // seconds
 
 // Headers for the HTML pages (the RSS index and readable feed pages). They are
@@ -341,7 +342,13 @@ async function ingest(req: Request, env: Env): Promise<Response> {
   ).bind(p.url, p.uri, p.council_id, p.council_name, p.state, p.title, p.excerpt, p.published_at, p.posted_at)));
   let pruned = 0;
   if (typeof body?.prune_before === "string" && /^\d{4}-\d{2}-\d{2}T/.test(body.prune_before)) {
-    stmts.push(env.DB.prepare("DELETE FROM posts WHERE posted_at < ?1").bind(body.prune_before));
+    // Old stories go, except each council's latest KEEP_PER_COUNCIL, so a council
+    // that publishes rarely still has a non-empty RSS feed.
+    stmts.push(env.DB.prepare(
+      `DELETE FROM posts WHERE posted_at < ?1 AND rowid NOT IN (
+         SELECT rowid FROM (SELECT rowid, ROW_NUMBER() OVER (PARTITION BY council_id ORDER BY posted_at DESC) AS rn FROM posts)
+         WHERE rn <= ${KEEP_PER_COUNCIL})`,
+    ).bind(body.prune_before));
   }
   {
     const out = await env.DB.batch(stmts);
