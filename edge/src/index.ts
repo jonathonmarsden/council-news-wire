@@ -38,6 +38,7 @@ const COUNCILS: Record<string, Council> = (data as any).councils;
 const FEED_BY_ID = new Map(FEEDS.map((f) => [f.id, f]));
 const RSS_ITEMS = 50;
 const SKELETON_WINDOW_DAYS = 14;
+const PRUNE_MAX_ROWS = 5000; // per daily prune: ~20k D1 row writes with the indexes
 const KEEP_PER_COUNCIL = 20; // stories kept per council however old (see ingest pruning)
 const RSS_MAX_AGE = 600; // seconds
 
@@ -345,9 +346,13 @@ async function ingest(req: Request, env: Env): Promise<Response> {
     // Old stories go, except each council's latest KEEP_PER_COUNCIL, so a council
     // that publishes rarely still has a non-empty RSS feed.
     stmts.push(env.DB.prepare(
-      `DELETE FROM posts WHERE posted_at < ?1 AND rowid NOT IN (
-         SELECT rowid FROM (SELECT rowid, ROW_NUMBER() OVER (PARTITION BY council_id ORDER BY posted_at DESC) AS rn FROM posts)
-         WHERE rn <= ${KEEP_PER_COUNCIL})`,
+      // At most PRUNE_MAX_ROWS a day: D1's free plan allows 100,000 row writes a
+      // day, and each deleted row also counts once per index (4 writes per row).
+      `DELETE FROM posts WHERE rowid IN (
+         SELECT rowid FROM posts WHERE posted_at < ?1 AND rowid NOT IN (
+           SELECT rowid FROM (SELECT rowid, ROW_NUMBER() OVER (PARTITION BY council_id ORDER BY posted_at DESC) AS rn FROM posts)
+           WHERE rn <= ${KEEP_PER_COUNCIL})
+         ORDER BY posted_at LIMIT ${PRUNE_MAX_ROWS})`,
     ).bind(body.prune_before));
   }
   {
