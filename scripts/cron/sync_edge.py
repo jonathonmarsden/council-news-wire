@@ -4,8 +4,8 @@
 The edge keeps its own copy of what the bot has published, so feeds and RSS
 keep serving when this host is down. This script sends it every story posted
 since the last successful sync (with an hour of overlap; the edge upserts by
-URL, so repeats are harmless), and asks it to drop stories older than
-PRUNE_DAYS.
+URL, so repeats are harmless). When PRUNE_DAYS is set it also asks the edge to
+drop older stories; it is 0 (keep everything) since the move to Workers Paid.
 
 Silent no-op until EDGE_INGEST_TOKEN is set, so it can be scheduled before
 the edge service exists. The last sync time is kept in monitor_state.
@@ -31,7 +31,10 @@ sys.path.insert(0, str(ROOT))
 STATE_KEY = "edge_sync"
 DEFAULT_URL = "https://councilnewswire.au/ingest"
 FIRST_SYNC_DAYS = 90
-PRUNE_DAYS = 120
+# 0 keeps every story: the edge holds the full archive (Workers Paid since
+# 12 Nov 2026, so D1 storage and writes are no longer the constraint). Set a
+# number of days to prune again; each council's latest stories are always kept.
+PRUNE_DAYS = 0
 # Pruning scans the whole edge table (it keeps each council's latest stories
 # however old), so it runs once a day, on the first sync of this UTC hour
 # (16:00 UTC is 2-3am in eastern Australia), not every ten minutes.
@@ -151,7 +154,7 @@ def main() -> int:
     first = True
     for chunk in batches(payload) if payload else [[]]:
         body = {"posts": chunk}
-        if first and prune_due(now):
+        if first and PRUNE_DAYS and prune_due(now):
             body["prune_before"] = prune_before
         first = False
         out = send(url, token, body)
