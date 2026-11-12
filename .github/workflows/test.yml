@@ -8,7 +8,10 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, which has no Python 3.9, and
+    # test (3.9) is a required check. Production runs 3.10 (Playwright jammy
+    # image); drop 3.9 from the matrix and the ruleset together, then unpin.
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11']
