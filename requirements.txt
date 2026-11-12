@@ -2,14 +2,14 @@ requests>=2.32.4
 beautifulsoup4>=4.12.0
 atproto>=0.0.55
 python-dateutil>=2.8.2
-python-dotenv>=1.0.0
+python-dotenv>=1.2.4
 pytest>=7.4.0
 curl_cffi>=0.5.10
 lxml>=6.1.3
 SQLAlchemy>=2.0.0
 alembic>=1.13.0
 psycopg2-binary>=2.9.9
-pytz>=2024.1
+pytz>=2026.6
 Pillow>=10.3.0  # renders the branded fallback link card (core/card_image.py)
 
 playwright==1.58.0  # MUST match the Dockerfile base image (mcr playwright/python:v1.58.0) — browsers are baked in; a version drift means "Executable doesn't exist at /ms-playwright"

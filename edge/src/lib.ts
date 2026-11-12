@@ -327,7 +327,7 @@ export function renderFeedPage(ch: Channel, posts: Post[], site: string, now: Da
 <meta name="description" content="${xmlEscape(ch.description)}">
 <link rel="alternate" type="application/rss+xml" title="${xmlEscape(ch.title)}" href="${xmlEscape(ch.selfUrl)}">
 <link rel="manifest" href="${xmlEscape(manifest)}">
-<link rel="icon" href="/rss/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/rss/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/rss/icon-180.png">
 <meta name="apple-mobile-web-app-title" content="${xmlEscape(shortName(ch.title))}">
 <meta name="theme-color" content="#df842b">

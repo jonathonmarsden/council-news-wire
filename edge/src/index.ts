@@ -17,7 +17,7 @@ import {
   classifyClient, hashId, viewerDid, cacheKey,
 } from "./lib";
 import { legacyRedirect } from "./lib";
-import { ICON_SVG, ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
+import { ICON_180_PNG, ICON_192_PNG, ICON_512_PNG } from "./icons";
 
 type Council = { id: string; name: string; state: string; news_url: string };
 type Env = {
@@ -38,6 +38,8 @@ const COUNCILS: Record<string, Council> = (data as any).councils;
 const FEED_BY_ID = new Map(FEEDS.map((f) => [f.id, f]));
 const RSS_ITEMS = 50;
 const SKELETON_WINDOW_DAYS = 14;
+const PRUNE_MAX_ROWS = 5000; // per daily prune: ~20k D1 row writes with the indexes
+const KEEP_PER_COUNCIL = 20; // stories kept per council however old (see ingest pruning)
 const RSS_MAX_AGE = 600; // seconds
 
 // Headers for the HTML pages (the RSS index and readable feed pages). They are
@@ -217,7 +219,7 @@ function index(env: Env): Response {
   const html = `<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RSS feeds · Council News Wire</title>
 <meta name="description" content="RSS feeds for every Australian council, region and state.">
-<link rel="icon" href="/rss/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/rss/icon-192.png" type="image/png">
 <style>${PAGE_CSS}</style></head><body><main>
 <a class="top" href="${SITE}">Council News Wire</a>
 <h1>RSS feeds</h1>
@@ -301,7 +303,6 @@ const PNG: Record<string, string> = {
 
 function iconResponse(path: string): Response | null {
   const headers = { "cache-control": "public, max-age=604800" };
-  if (path === "/rss/icon.svg") return new Response(ICON_SVG, { headers: { ...headers, "content-type": "image/svg+xml" } });
   const b64 = PNG[path];
   if (!b64) return null;
   const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
@@ -341,7 +342,17 @@ async function ingest(req: Request, env: Env): Promise<Response> {
   ).bind(p.url, p.uri, p.council_id, p.council_name, p.state, p.title, p.excerpt, p.published_at, p.posted_at)));
   let pruned = 0;
   if (typeof body?.prune_before === "string" && /^\d{4}-\d{2}-\d{2}T/.test(body.prune_before)) {
-    stmts.push(env.DB.prepare("DELETE FROM posts WHERE posted_at < ?1").bind(body.prune_before));
+    // Old stories go, except each council's latest KEEP_PER_COUNCIL, so a council
+    // that publishes rarely still has a non-empty RSS feed.
+    stmts.push(env.DB.prepare(
+      // At most PRUNE_MAX_ROWS a day: D1's free plan allows 100,000 row writes a
+      // day, and each deleted row also counts once per index (4 writes per row).
+      `DELETE FROM posts WHERE rowid IN (
+         SELECT rowid FROM posts WHERE posted_at < ?1 AND rowid NOT IN (
+           SELECT rowid FROM (SELECT rowid, ROW_NUMBER() OVER (PARTITION BY council_id ORDER BY posted_at DESC) AS rn FROM posts)
+           WHERE rn <= ${KEEP_PER_COUNCIL})
+         ORDER BY posted_at LIMIT ${PRUNE_MAX_ROWS})`,
+    ).bind(body.prune_before));
   }
   {
     const out = await env.DB.batch(stmts);
