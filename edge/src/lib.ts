@@ -187,7 +187,7 @@ export function cleanPost(x: any): Post | null {
 
 // ---- Readable feed page (for people who open a feed in a browser) ----------
 
-/** Shared look for the edge's HTML pages, matching lgnews.jonathonmarsden.com. */
+/** Shared look for the edge's HTML pages, matching councilnewswire.au. */
 export const PAGE_CSS = `:root{--bg:#f7f4ef;--surface:#fff;--border:#e5ded3;--text:#141414;--text-2:#4a4a4a;--text-3:#7a766f;--accent:#c0711f;--h:Georgia,'Times New Roman',serif}
 @media(prefers-color-scheme:dark){:root{--bg:#0e0d0b;--surface:#1a1814;--border:#302c25;--text:#eeece8;--text-2:#a8a59f;--text-3:#8a867f;--accent:#e8902f}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 ui-sans-serif,-apple-system,'Segoe UI',system-ui,sans-serif}
@@ -240,7 +240,7 @@ export function wantsFeedPage(headers: { get(name: string): string | null }, vie
 // feed to the signed-in Microsoft 365 user.
 const PA_RSS_EMAIL = "https://make.powerautomate.com/templates/details/abd158fa332542ea89f822a590a75a9c";
 
-// Each state's colour on lgnews.jonathonmarsden.com, used for the card edge.
+// Each state's colour on councilnewswire.au, used for the card edge.
 export const STATE_COLORS: Record<string, string> = {
   nsw: "#2a6b98", vic: "#2a4a6f", qld: "#8a1d30", sa: "#b33829",
   wa: "#b07520", tas: "#24663a", nt: "#b05828", act: "#2a5f92",

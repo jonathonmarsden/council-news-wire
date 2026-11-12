@@ -26,7 +26,7 @@ type Env = {
   // records point there, so it must never change. PUBLIC_HOST is where people
   // read the site and RSS; when it differs, FEED_HOST redirects everything
   // except the feed service, the bot's /ingest and /edge to PUBLIC_HOST.
-  FEED_HOST: string; // lgnews.jonathonmarsden.com
+  FEED_HOST: string; // the old host, kept working while anything still calls it
   PUBLIC_HOST: string; // e.g. councilnewswire.au
   PUBLISHER_DID: string; // DID of the account that publishes the feed records
   INGEST_TOKEN: string; // shared with the bot; secret

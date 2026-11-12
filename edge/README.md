@@ -19,12 +19,13 @@ until it is back.
 
 ## Paths
 
-The public site and RSS are on `councilnewswire.au`; every other path on that
-host is the static site. The Bluesky feed service (`/.well-known/did.json`,
-`/xrpc/...`), the bot's `/ingest` and `/edge/*` stay on
-`lgnews.jonathonmarsden.com` for good, because all 89 feed records point at
-`did:web:lgnews.jonathonmarsden.com`. Every other request to that old host is
-301-redirected to the same path on `councilnewswire.au` (see `legacyRedirect`).
+Everything is served on `councilnewswire.au`: the site and RSS, the Bluesky
+feed service (`/.well-known/did.json` and `/xrpc/...`, as
+`did:web:councilnewswire.au`, which all 89 feed records point at), the bot's
+`/ingest` and `/edge/*`. The previous host still answers the feed service,
+`/ingest` and `/edge/*` for anything that hasn't caught up, and 301-redirects
+everything else to the same path on `councilnewswire.au` (see
+`legacyRedirect`).
 
 | Path | What |
 |---|---|

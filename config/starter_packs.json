@@ -1,6 +1,6 @@
 {
   "_comment": "One Bluesky starter pack per state, published from the feeds account by scripts/feeds/publish_starter_packs.py. A national 'follow everything' pack would put ~140 posts a day into a newcomer's timeline, so packs are per state: the state account, the podcast, the feeds account, and the three region feeds most people in that state will want (Bluesky allows three feeds per pack).",
-  "accounts": ["lgnewsrounduppod.bsky.social", "lgnews.jonathonmarsden.com"],
+  "accounts": ["lgnewsrounduppod.bsky.social", "councilnewswire.au"],
   "packs": [
     {"state": "nsw", "name": "NSW council news", "adj": "NSW", "feeds": ["nsw-sydney", "nsw-west-syd", "nsw-hunter"]},
     {"state": "vic", "name": "Victorian council news", "adj": "Victorian", "feeds": ["vic-melbourne", "vic-m9", "vic-geelong"]},

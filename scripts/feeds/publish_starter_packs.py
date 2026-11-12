@@ -15,7 +15,7 @@ a fixed time and the state's position (see record_key). Running this again
 therefore updates the same records in place, and each pack's share link is
 known in advance: https://bsky.app/starter-pack/<handle>/<pack key>.
 
-    FEEDS_HANDLE="lgnews.jonathonmarsden.com" FEEDS_APP_PASSWORD="your-app-password" \\
+    FEEDS_HANDLE="councilnewswire.au" FEEDS_APP_PASSWORD="your-app-password" \\
         python3 scripts/feeds/publish_starter_packs.py           # dry run
         python3 scripts/feeds/publish_starter_packs.py --write   # publish
 
@@ -107,7 +107,7 @@ def main() -> int:
     packs = plan(cfg, feeds)
     if not args.write:
         for st, name, desc, members, feed_ids in packs:
-            print(f"{st}: {name!r}  {share_link('lgnews.jonathonmarsden.com', st)}\n  {desc}\n  ({len(desc)} chars) members: {', '.join(members)}\n  feeds: {', '.join(feed_ids)}")
+            print(f"{st}: {name!r}  {share_link('councilnewswire.au', st)}\n  {desc}\n  ({len(desc)} chars) members: {', '.join(members)}\n  feeds: {', '.join(feed_ids)}")
         print(f"\n{len(packs)} packs. Dry run; add --write to publish.")
         return 0
 
