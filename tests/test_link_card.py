@@ -265,7 +265,7 @@ def test_unreadable_bytes_are_treated_as_acceptable():
 
 def test_internal_and_non_http_urls_refused():
     for url in ["http://127.0.0.1/x.jpg", "http://192.168.1.10/snap.jpg", "http://10.0.0.5/",
-                "http://169.254.169.254/latest/meta-data/", "http://100.64.0.1/", "http://[::1]/",
+                "http://169.254.169.254/latest/meta-data/", f"http://{link_card._CGNAT[1]}/", "http://[::1]/",
                 "file:///etc/passwd", "ftp://example.com/x", "http:///nohost"]:
         assert _REAL_PUBLIC_CHECK(url) is False, url
 

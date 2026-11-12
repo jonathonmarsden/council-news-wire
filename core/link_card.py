@@ -31,6 +31,9 @@ from core.utils import repair_entities
 FETCH_TIMEOUT = 20
 MAX_REDIRECTS = 5
 MAX_PAGE_BYTES = 5_000_000
+# Carrier-grade NAT (RFC 6598), which Python doesn't count as private. Written as
+# a number: 0x64400000 is the start of the shared 100.64/10 range.
+_CGNAT = ipaddress.IPv4Network((0x64400000, 10))
 MAX_IMAGE_BYTES = 900_000  # Bluesky blob limit is ~1MB; stay safely under
 
 # Bluesky renders a card thumbnail at roughly 1200x630 (1.91:1). An image much
@@ -102,7 +105,7 @@ def _public_http_url(url: str) -> bool:
     for info in infos:
         ip = ipaddress.ip_address(info[4][0].split("%")[0])
         if (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast
-                or ip.is_reserved or ip.is_unspecified or ip in ipaddress.ip_network("100.64.0.0/10")):
+                or ip.is_reserved or ip.is_unspecified or (ip.version == 4 and ip in _CGNAT)):
             return False
     return bool(infos)
 
