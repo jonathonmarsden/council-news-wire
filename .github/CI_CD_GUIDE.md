@@ -135,7 +135,7 @@ git push origin master
 ## Monitoring
 
 ### Where to Check Status
-- **GitHub Actions:** https://github.com/jonathonmarsden/council-news-bot/actions
+- **GitHub Actions:** https://github.com/jonathonmarsden/council-news-wire/actions
 - **Discord:** #council-news-alerts channel
 - **VPS directly:** `ssh root@vps.example.com`
 

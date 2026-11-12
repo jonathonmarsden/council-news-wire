@@ -287,7 +287,7 @@ print('Circuit breaker reset')
 ## Emergency Contacts
 
 - **VPS Provider:** DigitalOcean / Vultr (check hosting)
-- **Repository:** https://github.com/jonathonmarsden/council-news-bot
+- **Repository:** https://github.com/jonathonmarsden/council-news-wire
 - **BlueSky Accounts:** See `.env` for handles
 
 ---

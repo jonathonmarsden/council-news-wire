@@ -1,4 +1,4 @@
-# Council News Bot
+# Council News Wire
 
 Collects publicly published news from every Australian local council and
 republishes it as attributed links on eight public Bluesky feeds — one per
@@ -7,7 +7,7 @@ state and territory.
 **Live feeds, all in one place:** <https://councilnewswire.au>
 **About the crawler:** <https://councilnewswire.au/bot.html>
 
-[![Tests](https://github.com/jonathonmarsden/council-news-bot/actions/workflows/test.yml/badge.svg)](https://github.com/jonathonmarsden/council-news-bot/actions/workflows/test.yml)
+[![Tests](https://github.com/jonathonmarsden/council-news-wire/actions/workflows/test.yml/badge.svg)](https://github.com/jonathonmarsden/council-news-wire/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)](requirements.txt)
 
@@ -69,7 +69,7 @@ Councils are configuration, not code: adding one is a JSON entry in
 Requires Python 3.9+ and Docker (for PostgreSQL).
 
 ```bash
-git clone https://github.com/jonathonmarsden/council-news-bot.git
+git clone https://github.com/jonathonmarsden/council-news-wire.git
 cd council-news-bot
 cp .env.example .env          # set DATABASE_URL; Bluesky credentials only if posting
 pip install -r requirements.txt
