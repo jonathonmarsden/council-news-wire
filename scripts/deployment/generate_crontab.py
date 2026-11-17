@@ -208,24 +208,6 @@ def get_queue_processor_line() -> str:
 # Monthly cleanup (1st day, 00:29 UTC)
 29 0 1 * * cd /opt/council-news-bot && flock -s -w 300 {OPS_LOCK} docker compose run --rm bot python3 scripts/maintenance/cleanup_remote_db.py >> /var/log/council_bot_cron.log 2>&1
 
-# === FEED PROMOTION (hourly 21:00-01:00 UTC) ===
-# Posts the scheduled promotions into community hashtags. The rotating
-# schedule lives in core/promotion.py, not here, so the crontab never needs
-# regenerating as the cycle advances: the script decides for itself whether
-# today is a promo day and whether the current hour is inside each channel's
-# local morning window.
-#
-# The window spans 21:00-01:00 UTC because it is 07:30-09:00 in each feed's
-# OWN timezone, and Perth runs 2-3 hours behind the eastern states.
-#
-# Running hourly is safe: every send is recorded in a ledger keyed by channel
-# and occurrence, so repeated ticks (and cron retries) post exactly once.
-#
-# LGNEWS_DATA_DIR points at data/promotion, which is owned by the container's
-# botuser (uid 1001). data/ itself is root-owned, so the ledger cannot be
-# written there - and a ledger that fails to write is a promo that repeats.
-53 21,22,23,0,1 * * * cd /opt/council-news-bot && flock -n /var/lock/cnb-promo.lock flock -s -w 300 {OPS_LOCK} docker compose run --rm -e LGNEWS_DATA_DIR=/app/data/promotion bot python3 scripts/cron/run_promotion.py --window >> /var/log/council_bot_cron.log 2>&1
-
 """
 
 
