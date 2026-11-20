@@ -374,6 +374,7 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "content_selector": "div.elementor-post__excerpt",
+      "exclude_url_contains": ["/councillors/"],
       "use_curl": true,
       "population": 4205,
       "region": "West Coast"
