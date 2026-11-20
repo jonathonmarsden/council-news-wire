@@ -2,7 +2,7 @@
 RSS feed scraper implementation.
 """
 
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Sequence
 from urllib.parse import unquote
 from bs4 import BeautifulSoup
 
@@ -12,9 +12,15 @@ from core.exceptions import ScrapeError
 class RSSScraper(BaseScraper):
     """Scraper for RSS feeds."""
     
-    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome124", **kwargs):
+    def __init__(self, council_id: str, council_name: str, news_url: str, use_curl: bool = False, use_cloudscraper: bool = False, mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, limit: Optional[int] = None, proxy: Optional[str] = None, impersonate: str = "chrome124", exclude_url_contains: Optional[Sequence[str]] = None, **kwargs):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, mobile_mode, limit, proxy, impersonate, **kwargs)
         self.selectors = selectors or {}
+        # Some WordPress feeds mix every page type into /feed/ (West Coast
+        # Council's carries its councillor profile pages). Items whose link
+        # contains any of these strings are not news and are skipped.
+        if isinstance(exclude_url_contains, str):
+            exclude_url_contains = [exclude_url_contains]
+        self.exclude_url_contains = list(exclude_url_contains or [])
     
     def scrape(self) -> List[NewsArticle]:
         content = self.fetch_page_or_raise(self.news_url)
@@ -50,6 +56,9 @@ class RSSScraper(BaseScraper):
                     link = raw_url
             
             if not title_elem or not link:
+                continue
+
+            if any(part in link for part in self.exclude_url_contains):
                 continue
                 
             title = title_elem.get_text(strip=True)
