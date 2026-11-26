@@ -183,6 +183,8 @@
       "news_url": "https://www.dubbo.nsw.gov.au/news-and-media/news-and-resources/council-news",
       "scraper": "card_scraper",
       "enabled": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)",
+      "use_curl": false,
       "population": 55855,
       "region": "Central West",
       "selectors": {
