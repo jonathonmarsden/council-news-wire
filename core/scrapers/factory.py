@@ -4,7 +4,8 @@ Factory for creating scraper instances.
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+import logging
+from typing import Dict, List, Optional
 
 from .base import BaseScraper
 from .card import CardScraper
@@ -56,6 +57,9 @@ def get_scraper_registry() -> Dict[str, type]:
         'alyka_scraper': AlykaScraper,
         'browser_scraper': BrowserScraper,
     }
+
+
+logger = logging.getLogger(__name__)
 
 
 class ScraperFactory:
@@ -113,22 +117,66 @@ class ScraperFactory:
         impersonate = council.get('impersonate', 'chrome124')
         
         # Pass all other council config as kwargs to allow custom scrapers to assume parameters
-        reserved_keys = {'id', 'name', 'news_url', 'scraper', 'selectors', 'limit', 'proxy', 'impersonate', 'use_curl', 'use_cloudscraper', 'mobile_mode', 'verify_ssl'}
+        reserved_keys = {'id', 'name', 'news_url', 'scraper', 'selectors', 'limit', 'proxy', 'impersonate', 'use_curl', 'use_cloudscraper', 'mobile_mode', 'verify_ssl', 'extra_news_urls'}
         extra_kwargs = {k: v for k, v in council.items() if k not in reserved_keys}
         
         verify_ssl = council.get('verify_ssl', True)
 
-        return scraper_class(
-            council_id=council['id'],
-            council_name=council['name'],
-            news_url=council['news_url'],
-            use_curl=use_curl,
-            use_cloudscraper=use_cloudscraper,
-            mobile_mode=mobile_mode,
-            selectors=selectors,
-            limit=limit,
-            proxy=use_proxy,
-            impersonate=impersonate,
-            verify_ssl=verify_ssl,
-            **extra_kwargs
-        )
+        def build(url: str) -> BaseScraper:
+            return scraper_class(
+                council_id=council['id'],
+                council_name=council['name'],
+                news_url=url,
+                use_curl=use_curl,
+                use_cloudscraper=use_cloudscraper,
+                mobile_mode=mobile_mode,
+                selectors=selectors,
+                limit=limit,
+                proxy=use_proxy,
+                impersonate=impersonate,
+                verify_ssl=verify_ssl,
+                **extra_kwargs
+            )
+
+        primary = build(council['news_url'])
+        extra_urls = council.get('extra_news_urls') or []
+        if not extra_urls:
+            return primary
+        return MultiSourceScraper(primary, [build(url) for url in extra_urls])
+
+
+class MultiSourceScraper:
+    """Reads one council from several pages with the same settings.
+
+    Some councils publish announcements in more than one section, such as
+    News and Public Notices. The first page is the council's `news_url`; the
+    rest come from `extra_news_urls`. A story listed on two pages is kept
+    once. A page that fails is skipped while another still returns stories;
+    if nothing is returned at all, the first failure is raised so the
+    council's health record sees it.
+    """
+
+    def __init__(self, primary: BaseScraper, extras: List[BaseScraper]):
+        self.primary = primary
+        self.scrapers = [primary] + list(extras)
+
+    def __getattr__(self, name):
+        # Anything else (council_id, news_url, ...) is the primary's.
+        return getattr(self.primary, name)
+
+    def scrape(self):
+        articles, seen, first_error = [], set(), None
+        for scraper in self.scrapers:
+            try:
+                found = scraper.scrape() or []
+            except Exception as e:
+                logger.warning("%s: %s failed: %s", scraper.council_id, scraper.news_url, e)
+                first_error = first_error or e
+                continue
+            for article in found:
+                if article.url not in seen:
+                    seen.add(article.url)
+                    articles.append(article)
+        if not articles and first_error is not None:
+            raise first_error
+        return articles
