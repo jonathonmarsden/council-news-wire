@@ -776,7 +776,7 @@
     {
       "id": "bellingen-shire-council",
       "name": "Bellingen Shire Council",
-      "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Communications-Engagement-and-Media",
+      "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Council-News-Updates/Council-news-updates",
       "scraper": "opencities_scraper",
       "enabled": true,
       "use_curl": true,
@@ -1425,8 +1425,8 @@
     {
       "id": "tenterfield-shire-council",
       "name": "Tenterfield Shire Council",
-      "news_url": "https://www.tenterfield.nsw.gov.au/news-events/media-releases",
-      "scraper": "curl_scraper",
+      "news_url": "https://www.tenterfield.nsw.gov.au/feed/",
+      "scraper": "rss_scraper",
       "enabled": true,
       "population": 7150,
       "region": "New England"

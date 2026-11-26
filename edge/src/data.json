@@ -1787,7 +1787,7 @@
    "id": "bellingen-shire-council",
    "name": "Bellingen Shire Council",
    "state": "nsw",
-   "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Communications-Engagement-and-Media"
+   "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Council-News-Updates/Council-news-updates"
   },
   "belmont": {
    "id": "belmont",
@@ -4319,7 +4319,7 @@
    "id": "tenterfield-shire-council",
    "name": "Tenterfield Shire Council",
    "state": "nsw",
-   "news_url": "https://www.tenterfield.nsw.gov.au/news-events/media-releases"
+   "news_url": "https://www.tenterfield.nsw.gov.au/feed/"
   },
   "the-hills-shire-council": {
    "id": "the-hills-shire-council",
