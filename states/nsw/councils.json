@@ -1215,12 +1215,13 @@
     {
       "id": "lithgow-city-council",
       "name": "Lithgow City Council",
-      "news_url": "https://council.lithgow.com/news/",
-      "scraper": "wordpress_scraper",
+      "news_url": "https://www.lithgow.nsw.gov.au/News-articles",
+      "scraper": "opencities_scraper",
       "enabled": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)",
+      "use_curl": false,
       "population": 22005,
-      "region": "Central West",
-      "use_curl": true
+      "region": "Central West"
     },
     {
       "id": "liverpool-plains-shire-council",
@@ -1466,8 +1467,8 @@
     {
       "id": "walcha-council",
       "name": "Walcha Council",
-      "news_url": "https://walcha.nsw.gov.au/feed/",
-      "scraper": "rss_scraper",
+      "news_url": "https://walcha.nsw.gov.au/",
+      "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 3160,
       "region": "New England"

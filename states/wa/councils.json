@@ -1220,7 +1220,7 @@
     {
       "id": "subiaco",
       "name": "City of Subiaco",
-      "news_url": "https://www.subiaco.wa.gov.au/umbraco/delivery/api/v2/content?fetch=children%3Acc4a106d-3a72-4fdf-84d7-cd928dd455fb&skip=0&take=12&sort=createDate%3Adesc",
+      "news_url": "https://www.subiaco.wa.gov.au/umbraco/delivery/api/v2/content?fetch=descendants%3Acc4a106d-3a72-4fdf-84d7-cd928dd455fb&filter=contentType%3AnewsArticle&skip=0&take=12&sort=createDate%3Adesc",
       "scraper": "json_scraper",
       "enabled": true,
       "item_selector": "items",
@@ -1355,15 +1355,9 @@
     {
       "id": "wanneroo",
       "name": "City of Wanneroo",
-      "news_url": "https://www.wanneroo.wa.gov.au/news",
+      "news_url": "https://www.wanneroo.wa.gov.au/city-and-council/latest-news",
       "scraper": "wanneroo_scraper",
       "enabled": true,
-      "use_curl": true,
-      "item_selector": "a.item-list__article",
-      "title_selector": ".box-header",
-      "date_selector": ".subtext",
-      "link_selector": "self",
-      "excerpt_selector": "p:not(.subtext)",
       "category": "A",
       "region": "Perth metropolitan"
     },
