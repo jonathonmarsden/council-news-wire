@@ -68,6 +68,7 @@ Check the output:
 | `title_selector` | string | CSS selector for the title (relative to item). |
 | `link_selector` | string | CSS selector for the link (relative to item). Defaults to `self` if item is `<a>`. |
 | `date_selector` | string | CSS selector for the date. |
+| `extra_news_urls` | list | Further pages to read with the same settings, for councils that also publish under Public Notices or similar. |
 | `use_curl` | bool | Set `true` to use `curl_cffi` (WAF bypass). Equivalent to `"scraper": "curl_scraper"`. |
 | `use_cloudscraper` | bool | Set `true` to use `cloudscraper` (Cloudflare-specific bypass). |
 | `mobile_mode` | bool | Set `true` to send an iPhone User-Agent. |
