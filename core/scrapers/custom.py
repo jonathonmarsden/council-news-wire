@@ -110,14 +110,31 @@ class WordPressScraper(BaseScraper):
 
 class BunburyScraper(WordPressScraper):
     """
-    Scraper for City of Bunbury (Next.js / API).
-    Kept for backward compatibility, but now inherits from WordPressScraper.
+    Scraper for City of Bunbury (Next.js front end over a WordPress API).
+
+    The API lives on a separate host, and the "link" it returns points at
+    that host, which does not serve the story to readers. The public page
+    for a story is {PUBLIC_BASE}/<slug>, so links are rebuilt from the slug.
     """
+    API_URL = "https://cdnng.bunbury.wa.gov.au/wp-json/wp/v2/posts"
+    PUBLIC_BASE = "https://www.bunbury.wa.gov.au/news"
+
     def __init__(self, council_id: str, council_name: str, news_url: str, selectors: dict = None, **kwargs):
-        # Bunbury has a specific CDN URL for the API
         selectors = selectors or {}
-        selectors['api_url'] = "https://cdn.bunbury.wa.gov.au/wp-json/wp/v2/posts"
+        selectors['api_url'] = self.API_URL
         super().__init__(council_id, council_name, news_url, selectors, **kwargs)
+
+    @classmethod
+    def public_url(cls, api_link: str) -> str:
+        """Map an API-host link to the public story URL."""
+        slug = urlparse(api_link).path.strip('/').split('/')[-1]
+        return f"{cls.PUBLIC_BASE}/{slug}" if slug else api_link
+
+    def scrape(self) -> List[NewsArticle]:
+        articles = super().scrape()
+        for article in articles:
+            article.url = self.public_url(article.url)
+        return articles
 
 class InnerWestScraper(CardScraper):
     """

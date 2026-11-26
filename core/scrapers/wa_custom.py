@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from datetime import datetime
 from dateutil import parser as date_parser
+import json
 import re
 
 from .base import BaseScraper, NewsArticle
@@ -10,8 +11,19 @@ from core.exceptions import ScrapeError
 
 class WannerooScraper(BaseScraper):
     """
-    Scraper for City of Wanneroo (Jadu CMS).
+    Scraper for City of Wanneroo.
+
+    The news page renders only a few featured stories in its HTML and loads
+    the full list from the site's own search endpoint, which returns JSON.
+    This asks that endpoint the way the page does.
     """
+    SEARCH_PATH = "/ksearch/newsresult"
+    SEARCH_PARAM = [
+        {"key": "classname", "values": ["AWPT.News"], "or": "true", "operator": "eq"},
+        {"key": "searchindexes", "values": ["news"], "or": "true", "operator": "eq"},
+    ]
+    PAGE_SIZE = 12
+
     def __init__(self, council_id: str, council_name: str, news_url: str, 
                  use_curl: bool = False, use_cloudscraper: bool = False, 
                  mobile_mode: bool = False, selectors: Optional[Dict[str, str]] = None, 
@@ -20,42 +32,51 @@ class WannerooScraper(BaseScraper):
         super().__init__(council_id, council_name, news_url, use_curl, use_cloudscraper, 
                          mobile_mode, limit, proxy, impersonate, **kwargs)
 
-    def scrape(self) -> List[NewsArticle]:
-        html = self.fetch_page_or_raise(self.news_url)
+    def fetch_results(self) -> Dict[str, Any]:
+        """POST the listing query and return the decoded JSON."""
+        try:
+            response = self.session.post(
+                urljoin(self.news_url, self.SEARCH_PATH),
+                json={"take": self.PAGE_SIZE, "skip": 0, "page": 1, "pageSize": self.PAGE_SIZE},
+                headers={
+                    "SearchParam": json.dumps(self.SEARCH_PARAM),
+                    "SearchFilter": "[]",
+                    "Accept": "application/json",
+                },
+                timeout=20,
+                verify=self.verify_ssl,
+            )
+            if response.status_code != 200:
+                raise ScrapeError(f"{self.council_id}: news search failed with HTTP {response.status_code}")
+            return response.json()
+        except ScrapeError:
+            raise
+        except Exception as e:
+            raise ScrapeError(f"{self.council_id}: news search fetch/parse failed: {e}") from e
 
-        soup = BeautifulSoup(html, 'html.parser')
+    def scrape(self) -> List[NewsArticle]:
+        return self.parse_results(self.fetch_results())
+
+    def parse_results(self, payload: Dict[str, Any]) -> List[NewsArticle]:
         articles = []
-        
-        # Jadu structure for Wanneroo
-        items = soup.select('a.item-list__article')
-        
-        for item in items:
-            link_url = item.get('href')
-            if not link_url:
+        for item in (payload or {}).get("Data") or []:
+            title = (item.get("ArticleTitle") or "").strip()
+            path = item.get("PageUrl")
+            if not title or not path:
                 continue
-            
-            url = urljoin(self.news_url, link_url)
-            
-            title_tag = item.select_one('.box-header, h2, h3')
-            if not title_tag:
-                continue
-            
-            title = title_tag.get_text(strip=True)
-            
-            # Date: "Published on Tuesday, 20th January 2026"
+
             date = None
-            date_tag = item.select_one('.subtext')
-            if date_tag:
-                date_text = date_tag.get_text(strip=True)
-                # Clean up ordinals (parse_date strips the "Published on" prefix itself)
-                clean_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date_text)
-                date = self.parse_date(clean_date)
+            if item.get("ArticleReleaseDate"):
+                try:
+                    date = date_parser.parse(item["ArticleReleaseDate"])
+                except (ValueError, OverflowError):
+                    date = None
 
             articles.append(self.create_article(
                 title=title,
-                url=url,
+                url=urljoin(self.news_url, path),
                 date=date,
-                excerpt=None
+                excerpt=(item.get("ArticleSummary") or "").strip() or None,
             ))
 
         return articles

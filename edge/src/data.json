@@ -3119,7 +3119,7 @@
    "id": "kingborough",
    "name": "Kingborough Council",
    "state": "tas",
-   "news_url": "https://www.kingborough.tas.gov.au/news-media/news/"
+   "news_url": "https://www.kingborough.tas.gov.au/feed/"
   },
   "kingston": {
    "id": "kingston",
@@ -3269,7 +3269,7 @@
    "id": "lithgow-city-council",
    "name": "Lithgow City Council",
    "state": "nsw",
-   "news_url": "https://council.lithgow.com/news/"
+   "news_url": "https://www.lithgow.nsw.gov.au/News-articles"
   },
   "liverpool-city-council": {
    "id": "liverpool-city-council",
@@ -4241,7 +4241,7 @@
    "id": "subiaco",
    "name": "City of Subiaco",
    "state": "wa",
-   "news_url": "https://www.subiaco.wa.gov.au/umbraco/delivery/api/v2/content?fetch=children%3Acc4a106d-3a72-4fdf-84d7-cd928dd455fb&skip=0&take=12&sort=createDate%3Adesc"
+   "news_url": "https://www.subiaco.wa.gov.au/umbraco/delivery/api/v2/content?fetch=descendants%3Acc4a106d-3a72-4fdf-84d7-cd928dd455fb&filter=contentType%3AnewsArticle&skip=0&take=12&sort=createDate%3Adesc"
   },
   "sunshine-coast": {
    "id": "sunshine-coast",
@@ -4481,7 +4481,7 @@
    "id": "walcha-council",
    "name": "Walcha Council",
    "state": "nsw",
-   "news_url": "https://walcha.nsw.gov.au/feed/"
+   "news_url": "https://walcha.nsw.gov.au/"
   },
   "walgett-shire-council": {
    "id": "walgett-shire-council",
@@ -4511,7 +4511,7 @@
    "id": "wanneroo",
    "name": "City of Wanneroo",
    "state": "wa",
-   "news_url": "https://www.wanneroo.wa.gov.au/news"
+   "news_url": "https://www.wanneroo.wa.gov.au/city-and-council/latest-news"
   },
   "waratah-wynyard": {
    "id": "waratah-wynyard",
