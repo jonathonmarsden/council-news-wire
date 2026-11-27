@@ -184,6 +184,9 @@ def send_discord_embed(webhook_url: Optional[str], embed_dict: Dict, username: s
     data = {
         "embeds": [embed_dict],
         "username": username,
+        # Embed text includes words taken from council pages and error
+        # messages; it must never be able to ping anyone.
+        "allowed_mentions": {"parse": []},
     }
 
     return _send_webhook(webhook_url, data)

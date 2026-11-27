@@ -28,6 +28,7 @@ def make_scraper(**kwargs):
                    "title_selector": "self"},
         **kwargs)
     scraper.fetch_page_or_raise = lambda url: PAGE
+    scraper.is_fetchable = lambda url: True   # example.test does not resolve
 
     def head(url, **_):
         response = MagicMock()

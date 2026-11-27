@@ -51,12 +51,18 @@ def test_results_are_merged_and_a_repeated_story_kept_once():
     assert [x.url for x in merged] == ["https://example.test/a", "https://example.test/b"]
 
 
-def test_one_failing_page_does_not_lose_the_other():
+def test_a_failing_extra_page_does_not_lose_the_news():
+    a = article("https://example.test/a")
+    merged = MultiSourceScraper(Stub("one", [a]), [Stub("two", RuntimeError("down"))]).scrape()
+    assert [x.url for x in merged] == ["https://example.test/a"]
+
+
+def test_a_failing_news_page_is_raised_even_if_an_extra_page_works():
     b = article("https://example.test/b")
-    merged = MultiSourceScraper(Stub("one", RuntimeError("down")), [Stub("two", [b])]).scrape()
-    assert [x.url for x in merged] == ["https://example.test/b"]
-
-
-def test_failure_is_raised_when_nothing_is_returned():
     with pytest.raises(RuntimeError):
-        MultiSourceScraper(Stub("one", RuntimeError("down")), [Stub("two", [])]).scrape()
+        MultiSourceScraper(Stub("one", RuntimeError("down")), [Stub("two", [b])]).scrape()
+
+
+def test_failure_is_raised_when_only_extras_fail_and_nothing_is_returned():
+    with pytest.raises(RuntimeError):
+        MultiSourceScraper(Stub("one", []), [Stub("two", RuntimeError("down"))]).scrape()

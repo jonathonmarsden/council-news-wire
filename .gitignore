@@ -89,3 +89,8 @@ wa_selector_report.json
 _debug_logs/
 _debug_archive/
 crontab_generated.txt
+
+# Deploy state written by scripts/deployment/pull-deploy.sh
+.ops.lock
+.deployed_sha
+.deploy_failed
