@@ -121,7 +121,7 @@
       "news_url": "https://www.burnside.sa.gov.au/Latest-News",
       "enabled": true,
       "parser": "html",
-      "use_curl": true,
+      "use_curl": false,
       "selectors": {
         "container": ".list-item-container",
         "title": ".list-item-title",
@@ -130,8 +130,8 @@
       },
       "population": 47145,
       "region": "Adelaide Metro",
-      "impersonate": "safari15_5",
-      "scraper": "card_scraper"
+      "scraper": "card_scraper",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "campbelltown-city",
@@ -537,7 +537,7 @@
         "container": "div.listing__item",
         "title": "h3.listing__heading",
         "date": "p.listing__subheading",
-   "excerpt": "p.listing__summary",
+        "excerpt": "p.listing__summary",
         "link": "h3.listing__heading a"
       },
       "population": 96915,
@@ -682,7 +682,6 @@
       "news_url": "https://lookeast.npsp.sa.gov.au/council-updates",
       "enabled": true,
       "parser": "html",
-      "use_cloudscraper": true,
       "selectors": {
         "container": "a.posts-gallery__item",
         "title": ".posts-gallery__title",
@@ -690,7 +689,9 @@
         "link": "self"
       },
       "population": 38885,
-      "region": "Adelaide Metro"
+      "region": "Adelaide Metro",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "onkaparinga",
@@ -698,8 +699,7 @@
       "news_url": "https://www.onkaparingacity.com/Council/News-articles",
       "enabled": true,
       "parser": "html",
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "selectors": {
         "container": ".list-item-container article",
         "title": ".list-item-title",
@@ -707,7 +707,8 @@
         "link": "a"
       },
       "population": 179555,
-      "region": "Adelaide Metro"
+      "region": "Adelaide Metro",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "orroroo-carrieton",
@@ -942,7 +943,7 @@
       "news_url": "https://www.unley.sa.gov.au/News-articles",
       "enabled": true,
       "scraper": "card_scraper",
-      "use_curl": true,
+      "use_curl": false,
       "selectors": {
         "container": "article",
         "title": "h2.list-item-title",
@@ -951,7 +952,7 @@
       },
       "population": 40430,
       "region": "Adelaide Metro",
-      "impersonate": "chrome124"
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "victor-harbor",
@@ -1028,7 +1029,7 @@
       "news_url": "https://www.westtorrens.sa.gov.au/news",
       "enabled": true,
       "scraper": "card_scraper",
-      "use_curl": true,
+      "use_curl": false,
       "selectors": {
         "container": "article",
         "title": "h2.list-item-title",
@@ -1037,7 +1038,7 @@
       },
       "population": 65150,
       "region": "Adelaide Metro",
-      "impersonate": "safari15_3"
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "whyalla",
@@ -1095,16 +1096,16 @@
       "name": "Yorke Peninsula Council",
       "news_url": "https://yorke.sa.gov.au/news",
       "enabled": true,
-      "scraper": "curl_scraper",
-      "use_curl": true,
+      "scraper": "card_scraper",
+      "use_curl": false,
       "selectors": {
         "container": "article.post",
         "title": "h1.entry-title a",
         "date": "time.entry-time",
         "link": "h1.entry-title a"
       },
-      "impersonate": "chrome124",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "port-adelaide-enfield",

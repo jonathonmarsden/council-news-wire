@@ -4,29 +4,31 @@
       "id": "hobart",
       "name": "Hobart City Council",
       "news_url": "https://www.hobartcity.com.au/Council/News-publications-and-announcements/Media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".news-list-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
-      "use_curl": true,
+      "use_curl": false,
       "population": 57345,
-      "region": "Greater Hobart"
+      "region": "Greater Hobart",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "launceston",
       "name": "Launceston City Council",
       "news_url": "https://www.launceston.tas.gov.au/News-Media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".news-list-container:not(.list-container-grid) article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
-      "use_curl": true,
+      "use_curl": false,
       "population": 70005,
-      "region": "Northern"
+      "region": "Northern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "clarence",
@@ -39,7 +41,9 @@
       "date_selector": ".post-preview__subtitle",
       "link_selector": ".post-preview__inner",
       "population": 60520,
-      "region": "Greater Hobart"
+      "region": "Greater Hobart",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "glenorchy",
@@ -48,21 +52,24 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 49065,
-      "region": "Greater Hobart"
+      "region": "Greater Hobart",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "burnie",
       "name": "Burnie City Council",
       "news_url": "https://www.burnie.tas.gov.au/Council/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".news-list-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
-      "use_curl": true,
+      "use_curl": false,
       "population": 19835,
-      "region": "North West"
+      "region": "North West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "devonport",
@@ -71,7 +78,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 26555,
-      "region": "North West"
+      "region": "North West",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kingborough",
@@ -95,7 +104,9 @@
       "date_selector": ".grid-item__tag",
       "link_selector": ".grid-item__inner",
       "population": 19250,
-      "region": "Southern"
+      "region": "Southern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "west-tamar",
@@ -108,7 +119,9 @@
       "date_selector": ".grid-item__tag",
       "link_selector": ".grid-item__inner",
       "population": 25955,
-      "region": "Northern"
+      "region": "Northern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "meander-valley",
@@ -121,7 +134,9 @@
       "date_selector": ".date",
       "link_selector": "a",
       "population": 20725,
-      "region": "Northern"
+      "region": "Northern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "break-o-day",
@@ -148,7 +163,9 @@
       "enabled": true,
       "population": 19255,
       "region": "Greater Hobart",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "central-coast",
@@ -157,22 +174,24 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 22335,
-      "region": "North West"
+      "region": "North West",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "central-highlands-tas",
       "name": "Central Highlands Council",
       "news_url": "https://centralhighlands.tas.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 2175,
       "region": "Southern",
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "item_selector": "a[href*='/news/']",
       "note": "2026-11-03: /feed/ returns 500 (new site); HTML listing",
       "title_selector": "h3",
-      "date_selector": "p.date"
+      "date_selector": "p.date",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "circular-head",
@@ -217,7 +236,9 @@
       "date_selector": "span.posted",
       "link_selector": "a.btn",
       "population": 6925,
-      "region": "Northern"
+      "region": "Northern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "flinders-tas",
@@ -229,9 +250,10 @@
       "title_selector": "h2",
       "date_selector": "",
       "link_selector": "self",
-      "use_curl": true,
+      "use_curl": false,
       "population": 1055,
-      "region": "Northern"
+      "region": "Northern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "george-town",
@@ -244,15 +266,17 @@
       "date_selector": "p.date",
       "link_selector": "a",
       "population": 7385,
-      "region": "Northern"
+      "region": "Northern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "glamorgan-spring-bay",
       "name": "Glamorgan Spring Bay Council",
       "news_url": "https://gsbc.tas.gov.au/council/news-media/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 4815,
       "region": "Southern",
       "item_selector": "div.grid-item",
@@ -260,7 +284,8 @@
       "link_selector": "a.grid-item__inner",
       "fetch_date_from_article": true,
       "note": "2026-11-03: tab layout replaced by grid; date only on article page",
-      "content_selector": ".grid-item__description"
+      "content_selector": ".grid-item__description",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kentish",
@@ -278,16 +303,17 @@
       "id": "king-island",
       "name": "King Island Council",
       "news_url": "https://kingisland.tas.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "article.tease-post",
       "title_selector": "h2.entry-title a",
       "date_selector": "div.meta-date span.date",
       "link_selector": "h2.entry-title a",
       "content_selector": "div.post-excerpt",
-      "use_curl": true,
+      "use_curl": false,
       "population": 1735,
-      "region": "North West"
+      "region": "North West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "latrobe-tas",
@@ -309,14 +335,15 @@
       "id": "northern-midlands",
       "name": "Northern Midlands Council",
       "news_url": "https://northernmidlands.tas.gov.au/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 14235,
       "region": "Northern",
       "item_selector": "a.event-list-container[href*='/news/']",
       "note": "2026-11-03: /news is 404 and the listing page is JS-rendered; the homepage carries the latest four with dates",
-      "date_selector": ".date time"
+      "date_selector": ".date time",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "sorell",
@@ -330,22 +357,25 @@
       "link_selector": "a.grid-page__inner",
       "content_selector": "div.grid-page__description p:not(.grid-page__date)",
       "population": 17915,
-      "region": "Greater Hobart"
+      "region": "Greater Hobart",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "southern-midlands",
       "name": "Southern Midlands Council",
       "news_url": "https://www.southernmidlands.tas.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "article.news-item",
       "title_selector": "h2",
       "date_selector": "p.date",
       "link_selector": "h2 a",
       "content_selector": ".content",
-      "use_curl": true,
+      "use_curl": false,
       "population": 6775,
-      "region": "Southern"
+      "region": "Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "tasman",
@@ -354,7 +384,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 2520,
-      "region": "Southern"
+      "region": "Southern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "waratah-wynyard",
@@ -362,9 +394,10 @@
       "news_url": "https://www.warwyn.tas.gov.au/feed/",
       "scraper": "rss_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 14325,
-      "region": "North West"
+      "region": "North West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "west-coast",
@@ -373,10 +406,13 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "content_selector": "div.elementor-post__excerpt",
-      "exclude_url_contains": ["/councillors/"],
-      "use_curl": true,
+      "exclude_url_contains": [
+        "/councillors/"
+      ],
+      "use_curl": false,
       "population": 4205,
-      "region": "West Coast"
+      "region": "West Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     }
   ]
 }

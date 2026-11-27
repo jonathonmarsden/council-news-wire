@@ -7,58 +7,63 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 1530,
-      "region": "Cape York"
+      "region": "Cape York",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "balonne",
       "name": "Balonne Shire Council",
       "news_url": "https://www.balonne.qld.gov.au/About-Council/Publications-Media/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "article a",
       "population": 4450,
-      "region": "South West Queensland"
+      "region": "South West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "banana",
       "name": "Banana Shire Council",
       "news_url": "https://www.banana.qld.gov.au/About-Council/Publication-Scheme-Publications-and-Documents/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "population": 14135,
-      "region": "Central Queensland"
+      "region": "Central Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "barcaldine",
       "name": "Barcaldine Regional Council",
       "news_url": "https://www.barcaldinerc.qld.gov.au/Our-Council/Media-Releases-Public-Notices",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "article a",
       "population": 2940,
-      "region": "Central West Queensland"
+      "region": "Central West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "barcoo",
       "name": "Barcoo Shire Council",
       "news_url": "https://www.barcoo.qld.gov.au/News-Events/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 275,
       "region": "South West Queensland",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "blackall-tambo",
@@ -66,19 +71,21 @@
       "news_url": "https://www.btrc.qld.gov.au/Our-Council/News-and-Events/News-Public-Notices",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1845,
-      "region": "Central West Queensland"
+      "region": "Central West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "boulia",
       "name": "Boulia Shire Council",
       "news_url": "https://www.boulia.qld.gov.au/News-articles",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 530,
-      "region": "Central West Queensland"
+      "region": "Central West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "brisbane",
@@ -100,11 +107,12 @@
       "id": "bulloo",
       "name": "Bulloo Shire Council",
       "news_url": "https://www.bulloo.qld.gov.au/About-Council/Council-Publications/Council-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 360,
-      "region": "South West Queensland"
+      "region": "South West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bundaberg",
@@ -119,21 +127,23 @@
       "id": "burdekin",
       "name": "Burdekin Shire Council",
       "news_url": "https://www.burdekin.qld.gov.au/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 17660,
-      "region": "North Queensland"
+      "region": "North Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "burke",
       "name": "Burke Shire Council",
       "news_url": "https://www.burke.qld.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 500,
-      "region": "Gulf"
+      "region": "Gulf",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cairns",
@@ -155,53 +165,54 @@
       "id": "carpentaria",
       "name": "Carpentaria Shire Council",
       "news_url": "https://www.carpentaria.qld.gov.au/Council/Public-Notices",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "population": 2010,
-      "region": "Gulf"
+      "region": "Gulf",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cassowary-coast",
       "name": "Cassowary Coast Regional Council",
       "news_url": "https://www.cassowarycoast.qld.gov.au/Our-Council/Publications/Council-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "population": 30155,
-      "region": "Far North Queensland"
+      "region": "Far North Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "central-highlands-qld",
       "name": "Central Highlands Regional Council",
       "news_url": "https://chrc.qld.gov.au/council/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "item_selector": ".blog-post",
       "title_selector": ".text-container h4",
       "link_selector": "a.post-top",
       "date_selector": ".full-date",
       "content_selector": ".text-container p",
       "population": 27836,
-      "region": "Central Queensland"
+      "region": "Central Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "charters-towers",
       "name": "Charters Towers Regional Council",
       "news_url": "https://www.charterstowers.qld.gov.au/Council/News/Latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 12465,
       "region": "North Queensland",
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "link_selector": "a",
-      "date_selector": ".published-on"
+      "date_selector": ".published-on",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cherbourg-aboriginal-shire",
@@ -223,11 +234,12 @@
       "id": "cloncurry",
       "name": "Cloncurry Shire Council",
       "news_url": "https://www.cloncurry.qld.gov.au/News-articles",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 3430,
-      "region": "North West Queensland"
+      "region": "North West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cook",
@@ -236,27 +248,31 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 4480,
-      "region": "Cape York"
+      "region": "Cape York",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "croydon",
       "name": "Croydon Shire Council",
       "news_url": "https://www.croydon.qld.gov.au/News-articles",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 285,
-      "region": "North West Queensland"
+      "region": "North West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "diamantina",
       "name": "Diamantina Shire Council",
       "news_url": "https://www.diamantina.qld.gov.au/News/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 305,
-      "region": "Central West Queensland"
+      "region": "Central West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "douglas",
@@ -271,51 +287,55 @@
       "id": "etheridge",
       "name": "Etheridge Shire Council",
       "news_url": "https://www.etheridge.qld.gov.au/Home/Tabs/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "a.profile-list",
       "title_selector": "h2",
       "date_selector": "p.published-on",
       "link_selector": "self",
       "population": 925,
-      "region": "North West Queensland"
+      "region": "North West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "flinders-qld",
       "name": "Flinders Shire Council",
       "news_url": "https://www.flinders.qld.gov.au/Your-Council/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1500,
-      "region": "North West Queensland"
+      "region": "North West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "fraser-coast",
       "name": "Fraser Coast Regional Council",
       "news_url": "https://www.frasercoast.qld.gov.au/media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 111400,
-      "region": "Wide Bay-Burnett"
+      "region": "Wide Bay-Burnett",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gladstone",
       "name": "Gladstone Regional Council",
       "news_url": "https://www.gladstone.qld.gov.au/news/category/all",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 68090,
-      "region": "Central Queensland"
+      "region": "Central Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gold-coast",
       "name": "City of Gold Coast",
       "news_url": "https://www.goldcoast.qld.gov.au/Council/City-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "article",
       "title_selector": "h2.list-item-title",
@@ -323,37 +343,42 @@
       "date_selector": ".published-on",
       "excerpt_selector": "p:not([class])",
       "population": 625470,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "goondiwindi",
       "name": "Goondiwindi Regional Council",
       "news_url": "https://www.grc.qld.gov.au/News-and-Community/News/Council-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 11500,
-      "region": "Darling Downs"
+      "region": "Darling Downs",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gympie",
       "name": "Gympie Regional Council",
       "news_url": "https://www.gympie.qld.gov.au/Council/News-and-Notices/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 55440,
-      "region": "Wide Bay-Burnett"
+      "region": "Wide Bay-Burnett",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "livingstone",
       "name": "Livingstone Shire Council",
       "news_url": "https://www.livingstone.qld.gov.au/Your-Council/Publications-and-Media/Media-Releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 41500,
-      "region": "Central Queensland"
+      "region": "Central Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lockhart-river",
@@ -361,15 +386,15 @@
       "news_url": "https://lockhart.qld.gov.au/waanta-newsletters",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "item_selector": "a.card-no-bs[href$=\".pdf\"]",
       "link_selector": "self",
       "title_selector": ".card-title",
       "date_selector": ".card-title",
       "limit": 3,
       "population": 695,
-      "region": "Cape York"
+      "region": "Cape York",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lockyer-valley",
@@ -382,37 +407,41 @@
       "date_selector": ".date",
       "link_selector": "self",
       "population": 47115,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "logan",
       "name": "City of Logan",
       "news_url": "https://www.logan.qld.gov.au/about-council/media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".news-list-container .list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
-      "use_curl": true,
+      "use_curl": false,
       "population": 367355,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "longreach",
       "name": "Longreach Regional Council",
       "news_url": "https://www.longreach.qld.gov.au/About-Council/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 3615,
-      "region": "Central West Queensland"
+      "region": "Central West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mackay",
       "name": "Mackay Regional Council",
       "news_url": "https://www.mackay.qld.gov.au/about_council/news_and_media/media_releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "article",
       "title_selector": "h2.list-item-title",
@@ -420,28 +449,30 @@
       "date_selector": "p.published-on",
       "population": 126580,
       "region": "Mackay-Isaac-Whitsunday",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mapoon",
       "name": "Mapoon Aboriginal Shire Council",
       "news_url": "https://www.mapoon.qld.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 375,
-      "region": "Cape York"
+      "region": "Cape York",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "maranoa",
       "name": "Maranoa Regional Council",
       "news_url": "https://www.maranoa.qld.gov.au/About-Council/Publications-and-Media/Latest-Council-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 13510,
-      "region": "South West Queensland"
+      "region": "South West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mareeba",
@@ -457,25 +488,27 @@
       "id": "mckinlay",
       "name": "McKinlay Shire Council",
       "news_url": "https://www.mckinlay.qld.gov.au/News/Media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 945,
-      "region": "North West Queensland"
+      "region": "North West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "moreton-bay",
       "name": "City of Moreton Bay",
       "news_url": "https://www.moretonbay.qld.gov.au/News/Media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".news-list-container .list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": "p.small-text",
       "link_selector": "a",
-      "use_curl": true,
+      "use_curl": false,
       "population": 516980,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mornington",
@@ -486,29 +519,31 @@
       "population": 1250,
       "region": "Gulf",
       "fetch_date_from_article": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
-      "note": "2026-11-03: silent on HTML scrape; site advertises this feed"
+      "use_curl": false,
+      "note": "2026-11-03: silent on HTML scrape; site advertises this feed",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mount-isa",
       "name": "Mount Isa City Council",
       "news_url": "https://www.mountisa.qld.gov.au/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 22145,
-      "region": "North West Queensland"
+      "region": "North West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "murweh",
       "name": "Murweh Shire Council",
       "news_url": "https://www.murweh.qld.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 4610,
-      "region": "South West Queensland"
+      "region": "South West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "napranum",
@@ -517,61 +552,68 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 1130,
-      "region": "Cape York"
+      "region": "Cape York",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "noosa",
       "name": "Noosa Shire Council",
       "news_url": "https://www.noosa.qld.gov.au/About-Council/News-and-publications/Media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 60885,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "north-burnett",
       "name": "North Burnett Regional Council",
       "news_url": "https://www.northburnett.qld.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "impersonate": "chrome124",
       "item_selector": "article",
       "title_selector": "h2.entry-title",
       "link_selector": "h2.entry-title a",
       "date_selector": ".post-meta",
       "population": 10895,
-      "region": "Wide Bay-Burnett"
+      "region": "Wide Bay-Burnett",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "northern-peninsula-area",
       "name": "Northern Peninsula Area Regional Council",
       "news_url": "https://www.nparc.qld.gov.au/Our-council/Public-notice",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 3180,
-      "region": "Cape York"
+      "region": "Cape York",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "palm-island",
       "name": "Palm Island Aboriginal Shire Council",
       "news_url": "https://www.palmcouncil.qld.gov.au/News-articles",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 2445,
-      "region": "North Queensland"
+      "region": "North Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "paroo",
       "name": "Paroo Shire Council",
       "news_url": "https://www.paroo.qld.gov.au/News-and-Events/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1785,
-      "region": "South West Queensland"
+      "region": "South West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "pormpuraaw",
@@ -600,13 +642,15 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 167830,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "richmond",
       "name": "Richmond Shire Council",
       "news_url": "https://www.richmond.qld.gov.au/monthly-newsletters",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "div.com-content-article__body p:has(a[href*=\".pdf\"])",
       "link_selector": "a[href*=\".pdf\"]",
@@ -615,65 +659,68 @@
       "limit": 3,
       "population": 870,
       "region": "North West Queensland",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "rockhampton",
       "name": "Rockhampton Regional Council",
       "news_url": "https://www.rockhamptonregion.qld.gov.au/AboutCouncil/News-and-announcements/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".news-list-container .list-item-container article",
       "title_selector": "h2.list-item-title",
       "link_selector": "a",
       "date_selector": "div.list-item-date",
       "content_selector": "div.list-item-content",
-      "use_curl": true,
+      "use_curl": false,
       "population": 86210,
       "region": "Central Queensland",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "scenic-rim",
       "name": "Scenic Rim Regional Council",
       "news_url": "https://www.scenicrim.qld.gov.au/our-council/connect-with-council/news-and-announcements",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 46265,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "somerset",
       "name": "Somerset Regional Council",
       "news_url": "https://www.somerset.qld.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 27085,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "south-burnett",
       "name": "South Burnett Regional Council",
       "news_url": "https://www.southburnett.qld.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "item_selector": ".list-item-container",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "article a",
       "population": 34480,
-      "region": "Wide Bay-Burnett"
+      "region": "Wide Bay-Burnett",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "southern-downs",
       "name": "Southern Downs Regional Council",
       "news_url": "https://www.sdrc.qld.gov.au/council/news-notices/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "div.item",
       "title_selector": "h5",
@@ -681,13 +728,15 @@
       "date_selector": "span.startdate",
       "content_selector": "p",
       "population": 38040,
-      "region": "Darling Downs"
+      "region": "Darling Downs",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "sunshine-coast",
       "name": "Sunshine Coast Regional Council",
       "news_url": "https://www.sunshinecoast.qld.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 380595,
       "region": "South East Queensland",
@@ -695,7 +744,9 @@
       "item_selector": "article.Card",
       "title_selector": "h2 a",
       "link_selector": "a[href]",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "tablelands",
@@ -704,7 +755,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 27045,
-      "region": "Far North Queensland"
+      "region": "Far North Queensland",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "toowoomba",
@@ -712,20 +765,21 @@
       "news_url": "https://www.tr.qld.gov.au/Council/News-and-public-notices/Media-releases",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "population": 178530,
-      "region": "Darling Downs"
+      "region": "Darling Downs",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "torres",
       "name": "Torres Shire Council",
       "news_url": "https://www.torres.qld.gov.au/Council/Media-Release",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 4920,
-      "region": "Torres Strait"
+      "region": "Torres Strait",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "torres-strait-island",
@@ -760,46 +814,51 @@
       "id": "western-downs",
       "name": "Western Downs Regional Council",
       "news_url": "https://www.wdrc.qld.gov.au/Council/News-Public-Updates/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 35830,
-      "region": "Darling Downs"
+      "region": "Darling Downs",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "whitsunday",
       "name": "Whitsunday Regional Council",
       "news_url": "https://www.whitsundayrc.qld.gov.au/Our-Council/Publications-and-Media/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 40335,
-      "region": "Mackay-Isaac-Whitsunday"
+      "region": "Mackay-Isaac-Whitsunday",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "winton",
       "name": "Winton Shire Council",
       "news_url": "https://www.winton.qld.gov.au/News/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1185,
-      "region": "Central West Queensland"
+      "region": "Central West Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "woorabinda",
       "name": "Woorabinda Aboriginal Shire Council",
       "news_url": "https://www.woorabinda.qld.gov.au/News-and-Updates/Council-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1040,
-      "region": "Central Queensland"
+      "region": "Central Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wujal-wujal",
       "name": "Wujal Wujal Aboriginal Shire Council",
       "news_url": "https://www.wujalwujalcouncil.qld.gov.au/Council/News-and-Notices",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".list-item-container",
       "link_selector": "article > a",
@@ -808,8 +867,8 @@
       "excerpt_selector": "a > p:not([class])",
       "population": 325,
       "region": "Far North Queensland",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "yarrabah",
@@ -838,7 +897,6 @@
       "news_url": "https://www.hinchinbrook.qld.gov.au/Our-Council/Latest-News",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "mobile_mode": true,
       "item_selector": ".infinates .item",
       "title_selector": "h5",
       "date_selector": ".date",
@@ -846,39 +904,42 @@
       "content_selector": ".text p:not(.date)",
       "population": 11225,
       "region": "North Queensland",
-      "use_curl": true,
-      "impersonate": "chrome124",
-      "note": "2026-11-03: moved to OpenCities"
+      "use_curl": false,
+      "note": "2026-11-03: moved to OpenCities",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "hope-vale",
       "name": "Hope Vale Aboriginal Shire Council",
       "news_url": "https://www.hopevale.qld.gov.au/Council/News-and-Notices/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1175,
-      "region": "Cape York"
+      "region": "Cape York",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "ipswich",
       "name": "Ipswich City Council",
       "news_url": "https://www.ipswich.qld.gov.au/About-Council/Media-and-Publications/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 254590,
-      "region": "South East Queensland"
+      "region": "South East Queensland",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "isaac",
       "name": "Isaac Regional Council",
       "news_url": "https://www.isaac.qld.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 22465,
-      "region": "Mackay-Isaac-Whitsunday"
+      "region": "Mackay-Isaac-Whitsunday",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kowanyama",
@@ -887,7 +948,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 1205,
-      "region": "Cape York"
+      "region": "Cape York",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     }
   ]
 }

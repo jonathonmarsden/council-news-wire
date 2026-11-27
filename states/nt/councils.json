@@ -11,8 +11,8 @@
       "title_selector": ".h4",
       "link_selector": "a[href*='/news/']",
       "date_selector": ".h5",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Barkly Regional Council",
@@ -21,10 +21,10 @@
       "enabled": true,
       "population": 7595,
       "region": "Barkly",
-      "use_curl": true,
+      "use_curl": false,
       "scraper": "rss_scraper",
-      "impersonate": "chrome124",
-      "note": "2026-11-03: silent on HTML scrape; site advertises this feed"
+      "note": "2026-11-03: silent on HTML scrape; site advertises this feed",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Belyuen Community Government Council",
@@ -33,7 +33,9 @@
       "enabled": true,
       "population": 245,
       "region": "Top End",
-      "scraper": "rss_scraper"
+      "scraper": "rss_scraper",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Central Desert Regional Council",
@@ -43,10 +45,11 @@
       "title_selector": "h2[itemprop='headline']",
       "date_selector": "time[itemprop='dateCreated']",
       "link_selector": "a.link-read-more",
-      "use_curl": true,
+      "use_curl": false,
       "enabled": true,
       "population": 4550,
-      "region": "Central Australia"
+      "region": "Central Australia",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Coomalie Community Government Council",
@@ -59,7 +62,8 @@
       "enabled": true,
       "population": 1525,
       "region": "Top End",
-      "use_curl": true
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "City of Darwin",
@@ -68,12 +72,14 @@
       "enabled": true,
       "population": 84640,
       "region": "Top End",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "item_selector": "div.news-grid-item",
       "title_selector": ".field--name-node-title h3 a",
       "date_selector": "div.news-grid-item",
       "link_selector": ".field--name-node-title h3 a",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "East Arnhem Regional Council",
@@ -86,8 +92,8 @@
       "enabled": true,
       "population": 7875,
       "region": "Arnhem",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Groote Archipelago Regional Council",
@@ -96,10 +102,10 @@
       "enabled": true,
       "population": 2580,
       "region": "Arnhem",
-      "use_curl": true,
+      "use_curl": false,
       "scraper": "rss_scraper",
-      "impersonate": "chrome124",
-      "note": "2026-11-03: silent on HTML scrape; site advertises this feed"
+      "note": "2026-11-03: silent on HTML scrape; site advertises this feed",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Katherine Town Council",
@@ -111,7 +117,9 @@
       "link_selector": "a.btn.btn-primary",
       "enabled": true,
       "population": 10460,
-      "region": "Big Rivers"
+      "region": "Big Rivers",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Litchfield Council",
@@ -120,11 +128,13 @@
       "enabled": true,
       "population": 27580,
       "region": "Top End",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "item_selector": "div.news-article-item",
       "title_selector": "h3 a",
       "date_selector": "time",
-      "link_selector": "h3 a"
+      "link_selector": "h3 a",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "MacDonnell Regional Council",
@@ -137,7 +147,8 @@
       "enabled": true,
       "population": 7200,
       "region": "Central Australia",
-      "use_curl": true
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "City of Palmerston",
@@ -146,12 +157,13 @@
       "enabled": true,
       "population": 41490,
       "region": "Top End",
-      "scraper": "curl_scraper",
-      "use_curl": true,
+      "scraper": "card_scraper",
+      "use_curl": false,
       "item_selector": "article.teaser-card",
       "title_selector": "h3.teaser-card__title a",
       "date_selector": "time.teaser-card__time",
-      "link_selector": "h3.teaser-card__title a"
+      "link_selector": "h3.teaser-card__title a",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Roper Gulf Regional Council",
@@ -160,12 +172,13 @@
       "enabled": true,
       "population": 6915,
       "region": "Big Rivers",
-      "scraper": "curl_scraper",
-      "use_curl": true,
+      "scraper": "card_scraper",
+      "use_curl": false,
       "item_selector": "article.node--type-news",
       "title_selector": "h3",
       "date_selector": ".field--name-field-news-date",
-      "link_selector": "a[href*='/news/']"
+      "link_selector": "a[href*='/news/']",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Tiwi Islands Regional Council",
@@ -177,7 +190,9 @@
       "link_selector": "a.btn.btn-primary",
       "enabled": true,
       "population": 2790,
-      "region": "Top End"
+      "region": "Top End",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Victoria Daly Regional Council",
@@ -186,7 +201,9 @@
       "enabled": true,
       "population": 7230,
       "region": "Big Rivers",
-      "scraper": "rss_scraper"
+      "scraper": "rss_scraper",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "Wagait Shire Council",
@@ -196,7 +213,8 @@
       "population": 590,
       "region": "Top End",
       "scraper": "rss_scraper",
-      "use_curl": true
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "West Arnhem Regional Council",
@@ -209,8 +227,8 @@
       "title_selector": "h2, h3, h4",
       "link_selector": "a[href]",
       "date_selector": "time",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "name": "West Daly Regional Council",
@@ -219,7 +237,9 @@
       "enabled": true,
       "population": 3600,
       "region": "Top End",
-      "scraper": "rss_scraper"
+      "scraper": "rss_scraper",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     }
   ]
 }

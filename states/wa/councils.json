@@ -4,15 +4,16 @@
       "id": "albany",
       "name": "City of Albany",
       "news_url": "https://www.albany.wa.gov.au/news/",
-      "scraper": "curl_scraper",
-      "use_curl": true,
+      "scraper": "card_scraper",
+      "use_curl": false,
       "enabled": true,
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
       "category": "C",
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "armadale",
@@ -35,7 +36,8 @@
       "enabled": true,
       "category": "C",
       "use_curl": false,
-      "region": "Pilbara"
+      "region": "Pilbara",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "augusta-margaret-river",
@@ -59,22 +61,22 @@
       "id": "bassendean",
       "name": "Town of Bassendean",
       "news_url": "https://www.bassendean.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bayswater",
       "name": "City of Bayswater",
       "news_url": "https://www.bayswater.wa.gov.au/city-and-council/news",
-      "scraper": "curl_scraper",
-      "impersonate": "chrome124",
+      "scraper": "card_scraper",
       "check_content": false,
       "item_selector": "article.feed-item",
       "title_selector": "h2",
@@ -82,7 +84,9 @@
       "link_selector": "a",
       "enabled": true,
       "category": "A",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "belmont",
@@ -98,15 +102,16 @@
       "id": "beverley",
       "name": "Shire of Beverley",
       "news_url": "https://www.beverley.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "boddington",
@@ -115,7 +120,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Peel"
+      "region": "Peel",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "boyup-brook",
@@ -124,14 +130,15 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bridgetown-greenbushes",
       "name": "Shire of Bridgetown-Greenbushes",
       "news_url": "https://www.bridgetown.wa.gov.au/news/",
-      "scraper": "curl_scraper",
-      "use_curl": true,
+      "scraper": "card_scraper",
+      "use_curl": false,
       "enabled": true,
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
@@ -139,7 +146,8 @@
       "excerpt_selector": "p",
       "link_selector": "a.btn",
       "category": "C",
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "brookton",
@@ -148,7 +156,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "broome",
@@ -168,29 +177,31 @@
       "id": "broomehill-tambellup",
       "name": "Shire of Broomehill-Tambellup",
       "news_url": "https://www.shirebt.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "article.notices-feed-item",
       "title_selector": ".item-title",
       "date_selector": ".item-date",
       "link_selector": "a",
       "category": "C",
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bruce-rock",
       "name": "Shire of Bruce Rock",
       "news_url": "https://www.brucerock.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bunbury",
@@ -200,7 +211,8 @@
       "enabled": true,
       "category": "A",
       "use_curl": false,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "busselton",
@@ -208,10 +220,11 @@
       "news_url": "https://www.busselton.wa.gov.au/news/?c=17",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cambridge",
@@ -219,9 +232,10 @@
       "news_url": "https://www.cambridge.wa.gov.au/About/News/Latest-News",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "canning",
@@ -229,9 +243,10 @@
       "news_url": "https://www.canning.wa.gov.au/news",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "A",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "capel",
@@ -240,22 +255,24 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "carnamah",
       "name": "Shire of Carnamah",
       "news_url": "https://www.carnamah.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "region": "Mid West",
       "item_selector": "article.options-wrapper",
       "title_selector": "h2:not(:empty), p.entry-excerpt",
       "link_selector": "a.options-link",
       "date_selector": "span.posted-on",
-      "excerpt_selector": "p.entry-excerpt"
+      "excerpt_selector": "p.entry-excerpt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "carnarvon",
@@ -264,7 +281,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Gascoyne"
+      "region": "Gascoyne",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "chapman-valley",
@@ -273,7 +291,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "chittering",
@@ -282,7 +301,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "claremont",
@@ -291,22 +311,24 @@
       "scraper": "claremont_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": true,
-      "region": "Perth metropolitan"
+      "use_curl": false,
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cockburn",
       "name": "City of Cockburn",
       "news_url": "https://www.cockburn.wa.gov.au/City-and-Council/Events-and-News/News-From-The-City",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "article",
       "title_selector": "h2",
       "date_selector": ".hotbox-item span:nth-of-type(2)",
       "link_selector": "a",
       "category": "C",
-      "use_curl": true,
-      "region": "Perth metropolitan"
+      "use_curl": false,
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cocos-keeling-islands",
@@ -315,7 +337,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "category": "C",
-      "region": "Indian Ocean Territories (no RDC)"
+      "region": "Indian Ocean Territories (no RDC)",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "collie",
@@ -340,7 +364,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "coorow",
@@ -350,7 +375,8 @@
       "enabled": true,
       "category": "C",
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cottesloe",
@@ -359,21 +385,23 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cranbrook",
       "name": "Shire of Cranbrook",
       "news_url": "https://www.cranbrook.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "article",
       "title_selector": "a.entry-title",
       "date_selector": ".entry-meta",
       "link_selector": "a.entry-title",
       "category": "C",
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cuballing",
@@ -382,7 +410,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cue",
@@ -391,21 +420,23 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cunderdin",
       "name": "Shire of Cunderdin",
       "news_url": "https://www.cunderdin.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dalwallinu",
@@ -414,7 +445,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dandaragan",
@@ -423,7 +455,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dardanup",
@@ -432,7 +465,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "denmark",
@@ -443,21 +477,23 @@
       "category": "A",
       "use_curl": false,
       "fetch_date_from_article": true,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "derby-west-kimberley",
       "name": "Shire of Derby-West Kimberley",
       "news_url": "https://www.sdwk.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Kimberley"
+      "region": "Kimberley",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "donnybrook-balingup",
@@ -466,7 +502,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dowerin",
@@ -475,7 +512,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dumbleyung",
@@ -483,7 +521,9 @@
       "news_url": "https://us11.campaign-archive.com/feed?u=d3f3bc52ba7c60abb453c7a10&id=56e7c77087",
       "scraper": "rss_scraper",
       "enabled": true,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dundas",
@@ -492,7 +532,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "east-fremantle",
@@ -501,7 +542,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "east-pilbara",
@@ -510,35 +552,40 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Pilbara"
+      "region": "Pilbara",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "esperance",
       "name": "Shire of Esperance",
       "news_url": "https://www.esperance.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
       "enabled": true,
-      "use_curl": true,
-      "region": "Goldfields-Esperance"
+      "use_curl": false,
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "exmouth",
       "name": "Shire of Exmouth",
       "news_url": "https://www.exmouth.wa.gov.au/news/?c=2",
-      "extra_news_urls": ["https://www.exmouth.wa.gov.au/publicnotices/"],
-      "scraper": "curl_scraper",
+      "extra_news_urls": [
+        "https://www.exmouth.wa.gov.au/publicnotices/"
+      ],
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Gascoyne"
+      "region": "Gascoyne",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "fremantle",
@@ -548,7 +595,8 @@
       "enabled": true,
       "category": "A",
       "use_curl": false,
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gingin",
@@ -557,7 +605,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gnowangerup",
@@ -566,7 +615,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "goomalling",
@@ -575,7 +625,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gosnells",
@@ -584,10 +635,10 @@
       "scraper": "opencities_scraper",
       "enabled": true,
       "category": "A",
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "note": "2026-11-03: site moved to OpenCities; old URL dead",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "greater-geraldton",
@@ -596,7 +647,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "halls-creek",
@@ -630,26 +682,30 @@
       "id": "irwin",
       "name": "Shire of Irwin",
       "news_url": "https://irwin.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".eael-grid-post",
       "title_selector": ".eael-entry-title",
       "link_selector": ".eael-entry-title a",
       "date_selector": "meta[property='article:published_time']",
       "limit": 8,
       "category": "C",
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "jerramungup",
       "name": "Shire of Jerramungup",
       "news_url": "https://www.jerramungup.wa.gov.au/news/",
-      "extra_news_urls": ["https://www.jerramungup.wa.gov.au/publicnotices/"],
+      "extra_news_urls": [
+        "https://www.jerramungup.wa.gov.au/publicnotices/"
+      ],
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "joondalup",
@@ -665,9 +721,9 @@
       "id": "kalamunda",
       "name": "City of Kalamunda",
       "news_url": "https://www.kalamunda.wa.gov.au/our-city/news-announcements/media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "selectors": {
         "container": "div.listing__item",
@@ -675,59 +731,66 @@
         "link": "h3.listing__title a",
         "date": ".listing__time"
       },
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kalgoorlie-boulder",
       "name": "City of Kalgoorlie-Boulder",
       "news_url": "https://www.ckb.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "karratha",
       "name": "City of Karratha",
       "news_url": "https://www.karratha.wa.gov.au/council/news/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".views-row",
       "title_selector": ".field-content",
       "link_selector": "a",
       "category": "C",
       "date_selector": "time[datetime]",
-      "region": "Pilbara"
+      "region": "Pilbara",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "katanning",
       "name": "Shire of Katanning",
       "news_url": "https://www.katanning.wa.gov.au/news/",
-      "extra_news_urls": ["https://www.katanning.wa.gov.au/publicnotices/"],
+      "extra_news_urls": [
+        "https://www.katanning.wa.gov.au/publicnotices/"
+      ],
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kellerberrin",
       "name": "Shire of Kellerberrin",
       "news_url": "https://www.kellerberrin.wa.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kent",
@@ -737,7 +800,8 @@
       "enabled": true,
       "category": "C",
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kojonup",
@@ -746,21 +810,23 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "koorda",
       "name": "Shire of Koorda",
       "news_url": "https://www.koorda.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kulin",
@@ -769,7 +835,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kwinana",
@@ -786,7 +853,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "laverton",
@@ -809,7 +877,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mandurah",
@@ -830,9 +899,8 @@
       "id": "manjimup",
       "name": "Shire of Manjimup",
       "news_url": "https://www.manjimup.wa.gov.au/our-shire/news",
-      "scraper": "curl_scraper",
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "scraper": "card_scraper",
+      "use_curl": false,
       "selectors": {
         "container": "#news-listing ul li",
         "title": "h2",
@@ -840,7 +908,8 @@
         "link": "a"
       },
       "enabled": true,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "meekatharra",
@@ -848,10 +917,11 @@
       "news_url": "https://www.meekashire.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "melville",
@@ -866,16 +936,19 @@
       "id": "menzies",
       "name": "Shire of Menzies",
       "news_url": "https://www.menzies.wa.gov.au/news/",
-      "extra_news_urls": ["https://www.menzies.wa.gov.au/publicnotices/"],
-      "scraper": "curl_scraper",
+      "extra_news_urls": [
+        "https://www.menzies.wa.gov.au/publicnotices/"
+      ],
+      "scraper": "card_scraper",
       "enabled": true,
       "category": "C",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "merredin",
@@ -884,21 +957,23 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mingenew",
       "name": "Shire of Mingenew",
       "news_url": "https://mingenew.wa.gov.au/latest-news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": ".card",
       "title_selector": ".card-title",
       "link_selector": ".stretched-link",
       "date_selector": "meta[property='article:published_time']",
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "moora",
@@ -907,7 +982,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "morawa",
@@ -916,77 +992,83 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mosman-park",
       "name": "Town of Mosman Park",
       "news_url": "https://www.mosmanpark.wa.gov.au/council/council/news-2/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "a.options-link",
       "title_selector": "h2",
       "link_selector": "self",
       "category": "C",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mount-magnet",
       "name": "Shire of Mount Magnet",
       "news_url": "https://www.mtmagnet.wa.gov.au/public-notices",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "li.accordion-item:first-of-type .accordion-item__description a[href]",
       "title_selector": "self",
       "link_selector": "self",
       "limit": 6,
       "category": "C",
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mount-marshall",
       "name": "Shire of Mount Marshall",
       "news_url": "https://mtmarshall.wa.gov.au/council-the-shire/shire-news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "article",
       "title_selector": ".elementor-post__title a",
       "link_selector": ".elementor-post__title a",
       "date_selector": ".elementor-post-info__item--type-date",
       "limit": 8,
       "category": "C",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mukinbudin",
       "name": "Shire of Mukinbudin",
       "news_url": "https://www.mukinbudin.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mundaring",
       "name": "Shire of Mundaring",
       "news_url": "https://www.mundaring.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "nannup",
@@ -995,7 +1077,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "South West"
+      "region": "South West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "narembeen",
@@ -1004,7 +1087,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "narrogin",
@@ -1013,21 +1097,23 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "nedlands",
       "name": "City of Nedlands",
       "news_url": "https://www.nedlands.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list .row",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "ngaanyatjarraku",
@@ -1036,7 +1122,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "northam",
@@ -1045,22 +1132,23 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "northampton",
       "name": "Shire of Northampton",
       "news_url": "https://www.northampton.wa.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "item_selector": ".news-item",
       "link_selector": "a.btn",
       "note": "2026-11-03: Catalyst markup replaced by .news-item cards",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "nungarin",
@@ -1069,7 +1157,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "peppermint-grove",
@@ -1077,13 +1166,14 @@
       "news_url": "https://www.peppermintgrove.wa.gov.au/news/",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "category": "C",
       "item_selector": ".module-list > .row",
       "title_selector": ".h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn-primary",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "perenjori",
@@ -1092,7 +1182,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "perth",
@@ -1112,7 +1203,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "plantagenet",
@@ -1121,7 +1213,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "port-hedland",
@@ -1130,19 +1223,22 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Pilbara"
+      "region": "Pilbara",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "quairading",
       "name": "Shire of Quairading",
       "news_url": "https://www.quairading.wa.gov.au/my-council/news-publications/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "item_selector": "article.w-grid-item",
       "title_selector": ".post_title",
       "link_selector": ".news-link a",
       "enabled": true,
       "category": "C",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "ravensthorpe",
@@ -1151,7 +1247,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "rockingham",
@@ -1184,7 +1281,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Peel"
+      "region": "Peel",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "shark-bay",
@@ -1193,7 +1291,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Gascoyne"
+      "region": "Gascoyne",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "south-perth",
@@ -1201,14 +1300,15 @@
       "news_url": "https://www.southperth.wa.gov.au/about-us/news-and-publications/news-and-public-notices",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".sp-news__item",
       "title_selector": "h3.sp-news__title a",
       "date_selector": ".sp-news__date",
       "link_selector": "h3.sp-news__title a",
       "body_selector": ".sp-news__text",
       "category": "A",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "stirling",
@@ -1261,7 +1361,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "three-springs",
@@ -1271,7 +1372,8 @@
       "enabled": true,
       "category": "C",
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "toodyay",
@@ -1280,7 +1382,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "trayning",
@@ -1291,7 +1394,8 @@
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "upper-gascoyne",
@@ -1300,7 +1404,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Gascoyne"
+      "region": "Gascoyne",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "victoria-park",
@@ -1308,10 +1413,11 @@
       "news_url": "https://www.victoriapark.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "victoria-plains",
@@ -1320,23 +1426,24 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "vincent",
       "name": "City of Vincent",
       "news_url": "https://www.vincent.wa.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "item_selector": ".row .col-sm-7",
       "title_selector": "span.h4",
       "date_selector": "span.h5",
       "link_selector": "a.btn",
       "excerpt_selector": "p",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "category": "A",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wagin",
@@ -1345,7 +1452,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wandering",
@@ -1354,7 +1462,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wanneroo",
@@ -1363,7 +1472,9 @@
       "scraper": "wanneroo_scraper",
       "enabled": true,
       "category": "A",
-      "region": "Perth metropolitan"
+      "region": "Perth metropolitan",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "waroona",
@@ -1372,7 +1483,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Peel"
+      "region": "Peel",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "west-arthur",
@@ -1381,7 +1493,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "westonia",
@@ -1389,10 +1502,11 @@
       "news_url": "https://www.westonia.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wickepin",
@@ -1400,10 +1514,11 @@
       "news_url": "https://www.wickepin.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "williams",
@@ -1412,7 +1527,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wiluna",
@@ -1421,7 +1537,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Goldfields-Esperance"
+      "region": "Goldfields-Esperance",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wongan-ballidu",
@@ -1430,7 +1547,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "woodanilling",
@@ -1439,7 +1557,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Great Southern"
+      "region": "Great Southern",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wyalkatchem",
@@ -1447,10 +1566,11 @@
       "news_url": "https://www.wyalkatchem.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wyndham-east-kimberley",
@@ -1459,7 +1579,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Kimberley"
+      "region": "Kimberley",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "yalgoo",
@@ -1467,10 +1588,11 @@
       "news_url": "https://www.yalgoo.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "yilgarn",
@@ -1478,10 +1600,11 @@
       "news_url": "https://www.yilgarn.wa.gov.au/news/",
       "scraper": "catalyst_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "disabled_reason": "Temporarily disabled pending WA scraper quality fixes (2025-12-07).",
       "category": "C",
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "york",
@@ -1490,7 +1613,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "corrigin",
@@ -1499,7 +1623,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kondinin",
@@ -1508,7 +1633,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Wheatbelt"
+      "region": "Wheatbelt",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "murchison",
@@ -1517,7 +1643,8 @@
       "scraper": "catalyst_scraper",
       "enabled": true,
       "use_curl": false,
-      "region": "Mid West"
+      "region": "Mid West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "murray",
@@ -1533,7 +1660,9 @@
         "excerpt": ".summary"
       },
       "fetch_date_from_article": true,
-      "region": "Peel"
+      "region": "Peel",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "christmas-island",
@@ -1544,7 +1673,9 @@
       "enabled": true,
       "category": "C",
       "region": "Indian Ocean Territories (no RDC)",
-      "note": "2026-11-10: Wix site renders notices client-side; read from its public-notices sitemap"
+      "note": "2026-11-10: Wix site renders notices client-side; read from its public-notices sitemap",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     }
   ]
 }

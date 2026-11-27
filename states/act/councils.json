@@ -6,7 +6,9 @@
       "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_directorate_media_releases_rss",
       "scraper": "rss_scraper",
       "enabled": true,
-      "bypass_proxy": true
+      "bypass_proxy": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "act_ministers",
@@ -14,7 +16,9 @@
       "news_url": "https://www.cmtedd.act.gov.au/open_government/functions/functionality/media_release_rss_feeds/latest_minister_media_releases_rss",
       "scraper": "rss_scraper",
       "enabled": true,
-      "bypass_proxy": true
+      "bypass_proxy": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "our_canberra",
@@ -22,7 +26,9 @@
       "news_url": "https://www.act.gov.au/our-canberra/rss",
       "scraper": "rss_scraper",
       "enabled": true,
-      "bypass_proxy": true
+      "bypass_proxy": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     }
   ]
 }
