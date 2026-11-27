@@ -300,7 +300,8 @@ class BlueSkyPoster:
     def post_article(self, council_name: str, title: str, url: str,
                      date: Optional[datetime] = None, excerpt: Optional[str] = None,
                      hashtags: List[str] = None, council_hashtag: Optional[str] = None,
-                     description_is_recurring: Optional[Callable[[str], bool]] = None
+                     description_is_recurring: Optional[Callable[[str], bool]] = None,
+                     user_agent: Optional[str] = None
                      ) -> Optional[str]:
         """
         Post a news article to BlueSky.
@@ -350,7 +351,9 @@ class BlueSkyPoster:
         if self._link_cards_enabled():
             from core.link_card import build_external_embed, fetch_card_data
             from core.card_image import render_card
-            card_data = fetch_card_data(url)
+            # Fetched as the council's scraper fetches: by the declared
+            # crawler name when the council is configured with one.
+            card_data = fetch_card_data(url, user_agent)
             # The raw description is still recorded in og_description below;
             # only its use as lede and card subtitle is filtered here.
             description = _usable_description(
@@ -368,7 +371,7 @@ class BlueSkyPoster:
                 )
 
             embed = build_external_embed(self.client, models, url,
-                                         fallback=_branded_card)
+                                         fallback=_branded_card, user_agent=user_agent)
 
         # Format the post text and get facets for clickable links
         # The card's own description is a perfectly good lede and is often

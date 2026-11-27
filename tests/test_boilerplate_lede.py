@@ -118,7 +118,7 @@ def card_poster(monkeypatch):
     monkeypatch.setattr(link_card, "build_external_embed", lambda *a, **k: object())
 
     def make(description):
-        monkeypatch.setattr(link_card, "fetch_card_data", lambda url: {
+        monkeypatch.setattr(link_card, "fetch_card_data", lambda url, *_a, **_k: {
             "uri": url, "title": "Highway shoulder works", "description": description, "image": None})
         p = BlueSkyPoster("roundupnewsbotvic.bsky.social", "pw", state_code="VIC")
         p.client = CardClient()
