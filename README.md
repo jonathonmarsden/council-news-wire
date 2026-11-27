@@ -65,8 +65,8 @@ Councils are configuration, not code: adding one is a JSON entry in
   capped retries.
 - **Identifies itself (in progress).** Until November 2026 the crawler presented
   as an ordinary browser to most councils and identified itself by name only to
-  councils that asked. During December 2026 it moves to identifying itself to
-  every council whose website accepts it; exceptions will be listed on the
+  councils that asked. It is moving to identifying itself by name to every
+  council whose website accepts it. See the
   [crawler page](https://councilnewswire.au/bot.html).
 - **Small attack surface.** The collector accepts no inbound connections. See
   [SECURITY.md](SECURITY.md).
@@ -122,7 +122,7 @@ The crawler reads your public news, media-release and notice pages, plus a
 few linked story pages, and links back to you. Full details of what it
 requests, how often and how it identifies itself are published at
 <https://councilnewswire.au/bot.html>. To have it use an RSS feed or API
-instead, to be removed, or with any question, email
+instead, or with any question, email
 **hello@councilnewswire.au** and it will be actioned promptly.
 
 ## Licence and contact

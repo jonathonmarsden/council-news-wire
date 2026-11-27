@@ -52,10 +52,10 @@ The service is deliberately built with a small attack surface:
 
 The collector fetches each council's public news listing roughly once per day.
 Until November 2026 it presented as an ordinary browser to most councils and
-identified itself by name only where councils had asked; during December 2026
-it moves to identifying itself wherever a council's website accepts it.
-Details, including request volumes and how to allow, block or opt out, are
-published at <https://councilnewswire.au/bot.html>.
+identified itself by name only where councils had asked. It is moving to
+identifying itself by name wherever a council's website accepts it. Details,
+including request volumes and how to allow it, are published at
+<https://councilnewswire.au/bot.html>.
 
 If you administer a council website and have a concern about the crawler,
 email the address above and it will be actioned promptly.
