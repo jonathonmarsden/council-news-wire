@@ -156,6 +156,23 @@ class CardScraper(BaseScraper):
             if self.limit:
                 articles = articles[:self.limit]
             
+        if self.date_from_file_header:
+            dated = []
+            for article in articles:
+                if not article.date:
+                    article.date = self.file_modified_date(article.url)
+                    time.sleep(0.2)
+                if not article.date:
+                    print(f"Skipping (no file date): {article.url}")
+                    continue
+                dated.append(article)
+            articles = dated
+
+        if self.bare_title_prefix:
+            for article in articles:
+                if self.is_bare_period_title(article.title):
+                    article.title = f"{self.bare_title_prefix}{article.title}"
+
         # Check if we need to fetch details (for date, full content, or full title)
         should_fetch_details = False
         if self.selectors.get('date_selector'):

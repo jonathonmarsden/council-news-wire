@@ -127,14 +127,18 @@
       "id": "break-o-day",
       "name": "Break O'Day Council",
       "news_url": "https://www.bodc.tas.gov.au/community/news-events/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "item_selector": "div[id^=\"tab-\"]",
-      "title_selector": "h1, h2, h3, strong",
-      "date_selector": "time",
+      "item_selector": "a[href$=\".pdf\"]",
+      "title_selector": "self",
       "link_selector": "self",
       "population": 6540,
-      "region": "Northern"
+      "region": "Northern",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)",
+      "date_from_file_header": true,
+      "bare_title_prefix": "Council newsletter: ",
+      "limit": 15
     },
     {
       "id": "brighton",
