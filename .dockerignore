@@ -1,0 +1,16 @@
+# Keep secrets, runtime state and bulk out of the image and build cache.
+# .git stays: the deploy script checks the commit inside the image.
+.env
+.env.*
+!.env.example
+data/
+logs/
+private/
+.ops.lock
+.deployed_sha
+.deploy_failed
+edge/node_modules/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+.venv/

@@ -151,9 +151,9 @@ class MultiSourceScraper:
     Some councils publish announcements in more than one section, such as
     News and Public Notices. The first page is the council's `news_url`; the
     rest come from `extra_news_urls`. A story listed on two pages is kept
-    once. A page that fails is skipped while another still returns stories;
-    if nothing is returned at all, the first failure is raised so the
-    council's health record sees it.
+    once. An extra page that fails is skipped. If the main news page fails,
+    the failure is raised even when an extra page returned stories: otherwise
+    the council would look healthy while its news was no longer carried.
     """
 
     def __init__(self, primary: BaseScraper, extras: List[BaseScraper]):
@@ -170,6 +170,8 @@ class MultiSourceScraper:
             try:
                 found = scraper.scrape() or []
             except Exception as e:
+                if scraper is self.primary:
+                    raise
                 logger.warning("%s: %s failed: %s", scraper.council_id, scraper.news_url, e)
                 first_error = first_error or e
                 continue

@@ -10,6 +10,10 @@ on:
     - cron: '0 21 * * *'   # daily 21:00 UTC = 07:00 AEST
   workflow_dispatch: {}
 
+# Nothing here needs to write to the repository.
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest

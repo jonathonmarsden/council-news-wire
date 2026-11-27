@@ -8,17 +8,43 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 from core.constants import GARBAGE_TITLES
 from core.database import Database
 
-def cleanup_malformed_posts():
-    db = Database()
+FAR_FUTURE_DAYS = 366
+
+
+def far_future_cutoff(now=None):
+    """Dates later than this are treated as mis-parsed."""
+    from datetime import datetime, timedelta
+    return (now or datetime.now()) + timedelta(days=FAR_FUTURE_DAYS)
+
+
+def archive_far_future(session, now=None) -> int:
+    """Archive unposted articles dated implausibly far in the future.
+
+    A mis-parsed date (wrong year, garbage text) can land years ahead; such a
+    row would sit in the queue for ever. It is archived, not deleted, or the
+    scraper would rediscover and repost it.
+
+    The cutoff moves with the calendar. It was once the literal '2027-01-01',
+    which from January 2027 would have archived every current story and
+    stamped each as posted today. Posted rows and posted_at are never touched.
+    """
+    result = session.execute(
+        text("UPDATE articles SET status = 'archived' "
+             "WHERE date > :cutoff AND status NOT IN ('archived', 'posted')"),
+        {"cutoff": far_future_cutoff(now)},
+    )
+    return result.rowcount or 0
+
+
+def cleanup_malformed_posts(db=None):
+    db = db or Database()
     print("Connecting to Database (PostgreSQL)...")
     
     with db.get_session() as session:
-        # 1. Archive articles from the future (Year > 2027)
-        # We must NOT delete them, otherwise the scraper will re-discover them and repost them (Infinite Loop).
-        print("Scanning for future dates (Archiving)...")
-        result = session.execute(text("UPDATE articles SET status = 'archived', posted_at = NOW() WHERE date > '2027-01-01' AND status != 'archived'"))
-        if result.rowcount > 0:
-            print(f"Archived {result.rowcount} future rows.")
+        # 1. Archive unposted articles dated implausibly far in the future.
+        archived = archive_far_future(session)
+        if archived:
+            print(f"Archived {archived} far-future rows.")
 
         # 2. Deletes titles that are just "Posted ..."
         print("Scanning for 'Posted ...' titles...")

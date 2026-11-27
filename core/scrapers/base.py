@@ -252,6 +252,10 @@ class BaseScraper(ABC):
             logger.warning(f"{self.council_id}: per-council time budget exhausted; skipping {url}")
             return None
 
+        if not self.is_fetchable(url):
+            logger.warning(f"{self.council_id}: refusing non-public or non-web address {url[:200]}")
+            return None
+
         # If proxy is configured, we MUST use it to protect IP reputation.
         if self.proxy:
             # Configure requests session
@@ -399,6 +403,7 @@ class BaseScraper(ABC):
             # Try simple curl first (often works better than spoofed headers for Akamai)
             cmd = [
                 'curl', '-s', '-L',
+                '--proto', '=http,https', '--proto-redir', '=http,https',
                 # '-A', self.HEADERS['User-Agent'],
                 # '-H', f"Accept: {self.HEADERS['Accept']}",
                 # '-H', f"Accept-Language: {self.HEADERS['Accept-Language']}",
@@ -415,7 +420,7 @@ class BaseScraper(ABC):
             if use_proxy and self.proxy:
                 cmd.extend(['--proxy', self.proxy])
                 
-            cmd.append(url)
+            cmd.extend(['--', url])
             
             # No text=True: that decodes with the LOCALE encoding and can
             # raise UnicodeDecodeError on UTF-8 pages. Decode explicitly.
@@ -451,8 +456,22 @@ class BaseScraper(ABC):
             logger.error(f"Curl exception for {url}: {e}")
             return None
     
+    @staticmethod
+    def is_fetchable(url: str) -> bool:
+        """True only for http(s) addresses on the public internet.
+
+        Links come from council pages, so a compromised page could list a
+        "story" at file://, gopher:// or an address inside the network this
+        runs on. Those are never fetched. (Redirects are followed by the HTTP
+        client; the curl fallback is limited to http and https on every hop.)
+        """
+        from core.link_card import _public_http_url
+        return _public_http_url(url)
+
     def file_modified_date(self, url: str) -> Optional[datetime]:
         """When the server says the file at `url` was last changed, if it says."""
+        if not self.is_fetchable(url):
+            return None
         try:
             response = self.session.head(url, timeout=20, allow_redirects=True)
             if response.status_code != 200:
