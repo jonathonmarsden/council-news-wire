@@ -69,6 +69,8 @@ Check the output:
 | `link_selector` | string | CSS selector for the link (relative to item). Defaults to `self` if item is `<a>`. |
 | `date_selector` | string | CSS selector for the date. |
 | `extra_news_urls` | list | Further pages to read with the same settings, for councils that also publish under Public Notices or similar. |
+| `date_from_file_header` | bool | For a page that only lists links to files (a newsletter archive): date each item from the file's `Last-Modified` header. Items with no date are dropped. Set a `limit`. |
+| `bare_title_prefix` | string | Text put in front of a title that is only a period, such as "Oct / Nov 2026". |
 | `use_curl` | bool | Set `true` to use `curl_cffi` (WAF bypass). Equivalent to `"scraper": "curl_scraper"`. |
 | `use_cloudscraper` | bool | Set `true` to use `cloudscraper` (Cloudflare-specific bypass). |
 | `mobile_mode` | bool | Set `true` to send an iPhone User-Agent. |

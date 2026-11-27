@@ -892,11 +892,14 @@
     {
       "id": "carrathool-shire-council",
       "name": "Carrathool Shire Council",
-      "news_url": "https://www.carrathool.nsw.gov.au/Council/News",
+      "news_url": "https://carrathool.nsw.gov.au/about-council/publications/council-corner-newsletter/",
       "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 2650,
-      "region": "Western Riverina"
+      "region": "Western Riverina",
+      "extra_news_urls": ["https://carrathool.nsw.gov.au/wp-json/wp/v2/media?search=Council-Corner"],
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "central-darling-shire-council",

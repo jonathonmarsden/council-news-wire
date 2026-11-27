@@ -22,6 +22,10 @@ class WordPressScraper(BaseScraper):
         self.selectors = selectors or {}
         # Allow api_url to be passed in selectors, or derive from news_url
         self.api_url = self.selectors.get('api_url')
+        if not self.api_url and '/wp-json/' in news_url:
+            # The address is already an API listing, such as the media
+            # library filtered to a newsletter's files.
+            self.api_url = news_url
         if not self.api_url:
              # Try to guess: base_url + /wp-json/wp/v2/posts
              from urllib.parse import urlparse
@@ -64,7 +68,9 @@ class WordPressScraper(BaseScraper):
             try:
                 title = post.get('title', {}).get('rendered')
                 # Use 'link' if available, otherwise construct from slug (fallback)
-                url = post.get('link')
+                # A media item's 'link' is an attachment page; readers want
+                # the file itself.
+                url = post.get('source_url') or post.get('link')
                 if not url and post.get('slug'):
                      # Fallback, might not work for all sites
                      from urllib.parse import urlparse

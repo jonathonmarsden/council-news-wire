@@ -13,6 +13,7 @@ import html
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from email.utils import parsedate_to_datetime
 from typing import List, Optional, Dict, Any, Callable
 from urllib.parse import urljoin, quote
 
@@ -32,6 +33,11 @@ logger = get_logger(__name__)
 _BODY_DATE = re.compile(
     r'\b(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|'
     r'September|October|November|December)\s+\d{4})\b', re.IGNORECASE)
+
+
+_MONTH_WORD = re.compile(
+    r'jan(uary)?|feb(ruary)?|mar(ch)?|apr(il)?|may|june?|july?|aug(ust)?|'
+    r'sept?(ember)?|oct(ober)?|nov(ember)?|dec(ember)?', re.IGNORECASE)
 
 
 def _resolve_missing_year(parsed: Optional[datetime], raw: str) -> Optional[datetime]:
@@ -172,6 +178,17 @@ class BaseScraper(ABC):
         # extra request per new article - worth it for the ~40 councils whose
         # listings omit dates entirely, wasteful everywhere else.
         self.fetch_date_from_article = kwargs.pop('fetch_date_from_article', False)
+
+        # Opt-in per council, for pages that are a list of links to files
+        # (a newsletter archive of PDFs) with no dates on the page: ask the
+        # server when each file was last changed and use that as the date.
+        # An item whose date cannot be found is dropped, because an undated
+        # item counts as new and a long archive would all be posted at once.
+        self.date_from_file_header = kwargs.pop('date_from_file_header', False)
+
+        # Put in front of a title that is only a period, such as
+        # "Oct / Nov 2026", so the post says what the link is.
+        self.bare_title_prefix = kwargs.pop('bare_title_prefix', None)
 
         self.session = requests.Session()
         self.session.headers.update(self.HEADERS)
@@ -434,6 +451,23 @@ class BaseScraper(ABC):
             logger.error(f"Curl exception for {url}: {e}")
             return None
     
+    def file_modified_date(self, url: str) -> Optional[datetime]:
+        """When the server says the file at `url` was last changed, if it says."""
+        try:
+            response = self.session.head(url, timeout=20, allow_redirects=True)
+            if response.status_code != 200:
+                return None
+            header = response.headers.get('Last-Modified')
+            return _naive(parsedate_to_datetime(header)) if header else None
+        except Exception as e:
+            logger.warning("%s: no file date for %s: %s", self.council_id, url, e)
+            return None
+
+    def is_bare_period_title(self, title: str) -> bool:
+        """True for a title made only of months, years and punctuation."""
+        words = re.findall(r'[A-Za-z]+', title or '')
+        return bool(words) and all(_MONTH_WORD.fullmatch(w) for w in words)
+
     def parse_html(self, html: str) -> BeautifulSoup:
         """Parse HTML content into BeautifulSoup object, without its comments.
 
