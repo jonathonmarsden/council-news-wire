@@ -263,6 +263,8 @@
       "name": "Douglas Shire Council",
       "news_url": "https://douglas.qld.gov.au/feed/",
       "scraper": "rss_scraper",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)",
+      "use_curl": false,
       "enabled": true,
       "population": 12290,
       "region": "Far North Queensland"

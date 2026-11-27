@@ -17,11 +17,13 @@ import socket
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
+import requests as _plain_requests
+
 try:
     from curl_cffi import requests as _requests
     _IMPERSONATE = {"impersonate": "chrome124"}
 except ImportError:  # pragma: no cover - curl_cffi is a hard dep in prod
-    import requests as _requests  # type: ignore
+    _requests = _plain_requests  # type: ignore
     _IMPERSONATE = {}
 
 from bs4 import BeautifulSoup
@@ -110,15 +112,23 @@ def _public_http_url(url: str) -> bool:
     return bool(infos)
 
 
-def _safe_get(url: str, max_bytes: int):
+def _safe_get(url: str, max_bytes: int, user_agent: Optional[str] = None):
     """GET `url`, following redirects by hand so every hop is checked by
     _public_http_url. Returns the response, or None if refused, failed or
-    larger than `max_bytes`."""
+    larger than `max_bytes`.
+
+    With `user_agent` (the council's declared crawler name) the request is a
+    plain one that says who it is. Without it, the request presents as a
+    browser, as the council's scraper does."""
     for _ in range(MAX_REDIRECTS + 1):
         if not _public_http_url(url):
             return None
         try:
-            resp = _requests.get(url, timeout=FETCH_TIMEOUT, allow_redirects=False, **_IMPERSONATE)
+            if user_agent:
+                resp = _plain_requests.get(url, timeout=FETCH_TIMEOUT, allow_redirects=False,
+                                           headers={"User-Agent": user_agent})
+            else:
+                resp = _requests.get(url, timeout=FETCH_TIMEOUT, allow_redirects=False, **_IMPERSONATE)
         except Exception:
             return None
         if resp.status_code in (301, 302, 303, 307, 308) and resp.headers.get("location"):
@@ -131,14 +141,14 @@ def _safe_get(url: str, max_bytes: int):
     return None
 
 
-def fetch_card_data(url: str) -> Optional[dict]:
+def fetch_card_data(url: str, user_agent: Optional[str] = None) -> Optional[dict]:
     """Fetch OG data for `url`. Returns a dict or None if unusable.
 
     Returns None (caller falls back to text) when: the fetch fails, the page is
     an error page (4xx/5xx), or there is no usable title. An absent image is
     fine - a card with title+description is still worth showing.
     """
-    resp = _safe_get(url, MAX_PAGE_BYTES)
+    resp = _safe_get(url, MAX_PAGE_BYTES, user_agent)
     if resp is None or resp.status_code >= 400:
         return None
 
@@ -159,8 +169,8 @@ def fetch_card_data(url: str) -> Optional[dict]:
     return {"uri": url, "title": title[:300], "description": description[:1000], "image": image}
 
 
-def _download_image(url: str) -> Optional[bytes]:
-    resp = _safe_get(url, MAX_IMAGE_BYTES)
+def _download_image(url: str, user_agent: Optional[str] = None) -> Optional[bytes]:
+    resp = _safe_get(url, MAX_IMAGE_BYTES, user_agent)
     if resp is None or resp.status_code >= 400:
         return None
     data = resp.content
@@ -196,7 +206,7 @@ def _too_small_to_render(data: bytes) -> bool:
 
 
 def build_external_embed(client, models, url: str, require_image: bool = True,
-                         fallback=None):
+                         fallback=None, user_agent: Optional[str] = None):
     """Return an app.bsky.embed.external for `url`, or None to fall back to text.
 
     `client` is an authenticated atproto Client (for uploadBlob); `models` is
@@ -215,13 +225,13 @@ def build_external_embed(client, models, url: str, require_image: bool = True,
     instead of posting as a bare link.
     """
     try:
-        data = fetch_card_data(url)
+        data = fetch_card_data(url, user_agent)
         if not data:
             return None
 
         thumb = None
         if data["image"]:
-            img_bytes = _download_image(data["image"])
+            img_bytes = _download_image(data["image"], user_agent)
             if img_bytes:
                 try:
                     thumb = client.upload_blob(img_bytes).blob
