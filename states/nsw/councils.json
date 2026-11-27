@@ -11,17 +11,20 @@
       "link_selector": "a.event-teaser__link",
       "date_selector": ".bs-date-published",
       "population": 185985,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "blacktown-city-council",
       "name": "Blacktown City Council",
       "news_url": "https://www.blacktown.nsw.gov.au/News-Media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 403315,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "blue-mountains-city-council",
@@ -42,8 +45,7 @@
       "news_url": "https://www.burwood.nsw.gov.au/Our-Council/News-and-Media/News-Stories",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "selectors": {
         "container": ".list-item-container",
         "title": ".list-item-title",
@@ -51,7 +53,8 @@
         "link": "a"
       },
       "population": 44075,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "camden-council",
@@ -73,8 +76,7 @@
       "news_url": "https://www.campbelltown.nsw.gov.au/News",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "selectors": {
         "container": ".list-item-container",
         "title": ".list-item-title",
@@ -82,7 +84,8 @@
         "link": "a"
       },
       "population": 176519,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "city-of-canada-bay",
@@ -96,7 +99,9 @@
       "date_selector": "time",
       "excerpt_selector": ".views-field-body",
       "population": 99805,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "city-of-canterbury-bankstown",
@@ -109,7 +114,9 @@
       "title_selector": "h3",
       "date_selector": "div[data-debug='dmzProperty'] div.ml-2",
       "population": 390570,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "central-coast-council",
@@ -131,8 +138,7 @@
       "news_url": "https://www.cessnock.nsw.gov.au/News/News",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "selectors": {
         "container": ".list-item-container",
         "title": ".list-item-title",
@@ -141,7 +147,8 @@
       },
       "population": 61755,
       "region": "Hunter",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "coffs-harbour-city-council",
@@ -149,8 +156,7 @@
       "news_url": "https://www.coffsharbour.nsw.gov.au/Your-Council/Newsroom/Media-Releases",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome120",
+      "use_curl": false,
       "selectors": {
         "container": ".list-item-container",
         "title": ".list-item-title",
@@ -159,23 +165,24 @@
       },
       "population": 80435,
       "region": "North Coast",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cumberland-city-council",
       "name": "Cumberland City Council",
       "news_url": "https://www.cumberland.nsw.gov.au/media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "safari15_5",
+      "use_curl": false,
       "item_selector": ".content-card",
       "title_selector": ".content-card__title",
       "link_selector": "self",
       "date_selector": ".content-card__date",
       "excerpt_selector": ".content-card__copy",
       "population": 255590,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "dubbo-regional-council",
@@ -198,11 +205,12 @@
       "id": "fairfield-city-council",
       "name": "Fairfield City Council",
       "news_url": "https://www.fairfieldcity.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 220075,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "georges-river-council",
@@ -233,21 +241,23 @@
       "id": "hornsby-shire-council",
       "name": "Hornsby Shire Council",
       "news_url": "https://www.hornsby.nsw.gov.au/Council/Noticeboard/Latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 158760,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "hunters-hill-council",
       "name": "Hunter's Hill Council",
       "news_url": "https://www.huntershill.nsw.gov.au/news/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 15430,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "inner-west-council",
@@ -260,7 +270,9 @@
       "population": 204945,
       "region": "Greater Sydney",
       "date_selector": ".card__date",
-      "link_selector": ".card__title a"
+      "link_selector": ".card__title a",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "ku-ring-gai-council",
@@ -282,30 +294,32 @@
       "news_url": "https://www.lakemac.com.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "safari15_5",
+      "use_curl": false,
       "population": 216785,
-      "region": "Hunter"
+      "region": "Hunter",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lane-cove-council",
       "name": "Lane Cove Council",
       "news_url": "https://www.lanecove.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 41630,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lismore-city-council",
       "name": "Lismore City Council",
       "news_url": "https://www.lismore.nsw.gov.au/Council/News-projects/Latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 44625,
-      "region": "North Coast"
+      "region": "North Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "liverpool-city-council",
@@ -366,7 +380,9 @@
       "title_selector": "h3 a",
       "link_selector": "h3 a",
       "date_selector": "time.datetime",
-      "excerpt_selector": "div.body"
+      "excerpt_selector": "div.body",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "city-of-newcastle",
@@ -377,7 +393,9 @@
       "item_selector": "a[href*='/latest-news/']",
       "date_selector": ".date-info p",
       "population": 172950,
-      "region": "Hunter"
+      "region": "Hunter",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "north-sydney-council",
@@ -387,7 +405,9 @@
       "enabled": true,
       "date_selector": ".meta--date",
       "population": 75890,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "northern-beaches-council",
@@ -407,14 +427,15 @@
       "id": "city-of-parramatta",
       "name": "City of Parramatta Council",
       "news_url": "https://www.cityofparramatta.nsw.gov.au/about-parramatta/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "item_selector": "article",
       "title_selector": "h2.list-item-title",
       "date_selector": "p.published-on",
-      "use_curl": true,
+      "use_curl": false,
       "population": 271480,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "penrith-city-council",
@@ -427,7 +448,9 @@
       "date_selector": ".datestart",
       "link_selector": "a",
       "population": 225200,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "port-macquarie-hastings-council",
@@ -435,9 +458,10 @@
       "news_url": "https://www.pmhc.nsw.gov.au/Your-Council/News-Notices/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 88805,
-      "region": "Mid North Coast"
+      "region": "Mid North Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "port-stephens-council",
@@ -460,27 +484,28 @@
       "id": "randwick-city-council",
       "name": "Randwick City Council",
       "news_url": "https://www.randwick.nsw.gov.au/about-us/news/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "bypass_proxy": true,
       "item_selector": "a.listing__link",
       "title_selector": ".listing__h",
       "date_selector": "dd",
       "link_selector": "self",
       "population": 156630,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "city-of-ryde",
       "name": "City of Ryde",
       "news_url": "https://www.ryde.nsw.gov.au/Council/Media-Centre/News-and-Public-Notices",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 137355,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "shoalhaven-city-council",
@@ -545,10 +570,9 @@
       "id": "tamworth-regional-council",
       "name": "Tamworth Regional Council",
       "news_url": "https://www.tamworth.nsw.gov.au/about/news/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "safari15_5",
+      "use_curl": false,
       "selectors": {
         "container": ".item.margin-bottom-mid",
         "title": "h5 a",
@@ -556,7 +580,8 @@
         "date": ".date, time"
       },
       "population": 66310,
-      "region": "New England"
+      "region": "New England",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "the-hills-shire-council",
@@ -564,10 +589,11 @@
       "news_url": "https://www.thehills.nsw.gov.au/News-and-Publications",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 187995,
       "region": "Greater Sydney",
-      "note": "2026-11-06: was the quarterly community magazine page"
+      "note": "2026-11-06: was the quarterly community magazine page",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "tweed-shire-council",
@@ -620,11 +646,12 @@
       "id": "city-of-willoughby",
       "name": "Willoughby City Council",
       "news_url": "https://www.willoughby.nsw.gov.au/Council/News-and-media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 81560,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wollongong-city-council",
@@ -647,9 +674,10 @@
       "news_url": "https://www.woollahra.nsw.gov.au/News/Latest-news",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 60305,
-      "region": "Greater Sydney"
+      "region": "Greater Sydney",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "armidale-regional-council",
@@ -657,19 +685,21 @@
       "news_url": "https://www.armidale.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 31685,
-      "region": "New England"
+      "region": "New England",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bathurst-regional-council",
       "name": "Bathurst Regional Council",
       "news_url": "https://www.bathurst.nsw.gov.au/Council/News-Media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 46445,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bega-valley-shire-council",
@@ -677,9 +707,10 @@
       "news_url": "https://www.begavalley.nsw.gov.au/News-and-Events/News",
       "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 35765,
-      "region": "South East"
+      "region": "South East",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "eurobodalla-shire-council",
@@ -706,19 +737,20 @@
       "enabled": true,
       "population": 44535,
       "region": "Central West",
-      "use_curl": true,
-      "impersonate": "chrome124"
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "queanbeyan-palerang-regional-council",
       "name": "Queanbeyan-Palerang Regional Council",
       "news_url": "https://www.qprc.nsw.gov.au/News-Media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 64535,
       "region": "Southern Tablelands",
-      "fetch_date_from_article": true
+      "fetch_date_from_article": true,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "snowy-monaro-regional-council",
@@ -738,25 +770,26 @@
       "id": "albury-city-council",
       "name": "Albury City Council",
       "news_url": "https://www.alburycity.nsw.gov.au/news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "population": 56020,
       "region": "Riverina",
       "item_selector": "div.cards a.card-y",
       "fetch_date_from_article": true,
-      "note": "2026-11-03: OpenCities markup gone; now Drupal cards"
+      "note": "2026-11-03: OpenCities markup gone; now Drupal cards",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "ballina-shire-council",
       "name": "Ballina Shire Council",
       "news_url": "https://www.ballina.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 46170,
-      "region": "North Coast"
+      "region": "North Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "balranald-shire-council",
@@ -779,29 +812,32 @@
       "news_url": "https://www.bellingen.nsw.gov.au/Your-Council/Council-News-Updates/Council-news-updates",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 13710,
-      "region": "North Coast"
+      "region": "North Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "berrigan-shire-council",
       "name": "Berrigan Shire Council",
       "news_url": "https://www.berriganshire.nsw.gov.au/News-and-Media",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 8815,
-      "region": "Riverina"
+      "region": "Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bland-shire-council",
       "name": "Bland Shire Council",
       "news_url": "https://www.blandshire.nsw.gov.au/Council/Latest-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 5995,
-      "region": "Western Riverina"
+      "region": "Western Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "blayney-shire-council",
@@ -815,27 +851,29 @@
       "title_selector": "div.card-body h3",
       "link_selector": "div.card-body a",
       "date_selector": "p.card-subtitle",
-      "excerpt_selector": "p.card-text"
+      "excerpt_selector": "p.card-text",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bogan-shire-council",
       "name": "Bogan Shire Council",
       "news_url": "https://bogan.nsw.gov.au/your-council/public-notices/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "item_selector": ".widget-items-container article",
       "title_selector": "h2",
       "link_selector": "h2 a",
       "population": 2835,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "bourke-shire-council",
       "name": "Bourke Shire Council",
       "news_url": "https://bourke.nsw.gov.au/council/media-release/",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 2660,
       "region": "Far West",
@@ -843,7 +881,9 @@
       "title_selector": "td.column-2 a",
       "link_selector": "td.column-2 a",
       "date_selector": "td.column-1",
-      "limit": 20
+      "limit": 20,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "brewarrina-shire-council",
@@ -852,7 +892,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 1610,
-      "region": "Far West"
+      "region": "Far West",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "broken-hill-city-council",
@@ -860,9 +902,10 @@
       "news_url": "https://www.brokenhill.nsw.gov.au/Community/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 17315,
-      "region": "Far West"
+      "region": "Far West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "byron-shire-council",
@@ -883,11 +926,12 @@
       "id": "cabonne-council",
       "name": "Cabonne Council",
       "news_url": "https://www.cabonne.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 14550,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "carrathool-shire-council",
@@ -897,7 +941,9 @@
       "enabled": true,
       "population": 2650,
       "region": "Western Riverina",
-      "extra_news_urls": ["https://carrathool.nsw.gov.au/wp-json/wp/v2/media?search=Council-Corner"],
+      "extra_news_urls": [
+        "https://carrathool.nsw.gov.au/wp-json/wp/v2/media?search=Council-Corner"
+      ],
       "use_curl": false,
       "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
@@ -905,11 +951,12 @@
       "id": "central-darling-shire-council",
       "name": "Central Darling Shire Council",
       "news_url": "https://www.centraldarling.nsw.gov.au/News-articles",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 1795,
-      "region": "Far West"
+      "region": "Far West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "clarence-valley-council",
@@ -917,9 +964,10 @@
       "news_url": "https://www.clarence.nsw.gov.au/Business-and-infrastructure/Doing-business-in-the-Clarence-Valley/Industry-Business-Newsletters",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 54015,
-      "region": "North Coast"
+      "region": "North Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cobar-shire-council",
@@ -928,7 +976,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 4470,
-      "region": "Far West"
+      "region": "Far West",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "coolamon-shire-council",
@@ -937,7 +987,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 4500,
-      "region": "Riverina"
+      "region": "Riverina",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "coonamble-shire-council",
@@ -951,7 +1003,9 @@
       "item_selector": "tr:has(a.literature)",
       "title_selector": "a.literature",
       "link_selector": "a.literature",
-      "date_selector": "a.literature"
+      "date_selector": "a.literature",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cootamundra-gundagai-regional-council",
@@ -960,7 +1014,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 11770,
-      "region": "Riverina"
+      "region": "Riverina",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "cowra-council",
@@ -980,11 +1036,12 @@
       "id": "dungog-shire-council",
       "name": "Dungog Shire Council",
       "news_url": "https://www.dungog.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 9745,
-      "region": "Hunter"
+      "region": "Hunter",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "edward-river-council",
@@ -1005,9 +1062,10 @@
       "news_url": "https://www.federationcouncil.nsw.gov.au/Council/News-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 12920,
-      "region": "Riverina"
+      "region": "Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "forbes-shire-council",
@@ -1020,7 +1078,9 @@
       "item_selector": "li:has(> h6 a[href*='/news/'])",
       "title_selector": "h6 a",
       "link_selector": "h6 a",
-      "date_selector": "span.mainItemDate, span.subItemDate"
+      "date_selector": "span.mainItemDate, span.subItemDate",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gilgandra-shire-council",
@@ -1041,9 +1101,10 @@
       "news_url": "https://www.gisc.nsw.gov.au/News-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 9170,
-      "region": "New England"
+      "region": "New England",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "goulburn-mulwaree-council",
@@ -1051,25 +1112,26 @@
       "news_url": "https://www.goulburn.nsw.gov.au/News-Articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 32755,
-      "region": "Southern Tablelands"
+      "region": "Southern Tablelands",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "greater-hume-council",
       "name": "Greater Hume Shire Council",
       "news_url": "https://www.greaterhume.nsw.gov.au/Newsroom/Current-News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "bypass_proxy": true,
       "item_selector": ".list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
       "population": 11145,
-      "region": "Riverina"
+      "region": "Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "griffith-city-council",
@@ -1093,9 +1155,9 @@
       "enabled": true,
       "population": 13315,
       "region": "North West",
-      "use_curl": true,
-      "impersonate": "chrome124",
-      "note": "2026-11-03: site moved to OpenCities; old URL dead"
+      "use_curl": false,
+      "note": "2026-11-03: site moved to OpenCities; old URL dead",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "gwydir-shire-council",
@@ -1103,25 +1165,27 @@
       "news_url": "https://www.gwydir.nsw.gov.au/Council/Shire-News",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 4945,
-      "region": "New England"
+      "region": "New England",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "hay-shire-council",
       "name": "Hay Shire Council",
       "news_url": "https://www.hay.nsw.gov.au/Inside-Hay-Shire-Council/News-Council-Updates",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 2884,
       "region": "Western Riverina",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": ".news--list",
       "title_selector": "h4 a",
       "link_selector": "h4 a",
       "date_selector": "p.publish_date",
       "excerpt_selector": "div.mt-2 p",
-      "note": "2026-11-06: news listing restored (was PDF newsletters only in Jan 2026)"
+      "note": "2026-11-06: news listing restored (was PDF newsletters only in Jan 2026)",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "hilltops-council",
@@ -1130,7 +1194,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 19685,
-      "region": "Riverina"
+      "region": "Riverina",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "inverell-shire-council",
@@ -1156,7 +1222,9 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 6935,
-      "region": "Riverina"
+      "region": "Riverina",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kempsey-shire-council",
@@ -1164,36 +1232,38 @@
       "news_url": "https://www.kempsey.nsw.gov.au/Your-Council/Council-news-public-notices/Council-news-updates",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 30895,
-      "region": "North Coast"
+      "region": "North Coast",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kiama-municipal-council",
       "name": "Kiama Municipal Council",
       "news_url": "https://www.kiama.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 23350,
-      "region": "Illawarra"
+      "region": "Illawarra",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "kyogle-council",
       "name": "Kyogle Council",
       "news_url": "https://www.kyogle.nsw.gov.au/latest-news",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "population": 9635,
       "region": "North Coast",
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "item_selector": "div.node--news-page",
       "title_selector": "h3.node--card__title",
       "link_selector": "a.node--card__link-wrapper",
       "date_selector": "time",
       "content_selector": ".node--card__teaser",
-      "note": "2026-11-03: site re-platformed (Drupal); old /feed/ is 404"
+      "note": "2026-11-03: site re-platformed (Drupal); old /feed/ is 404",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lachlan-shire-council",
@@ -1201,9 +1271,10 @@
       "news_url": "https://www.lachlan.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 6295,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "leeton-shire-council",
@@ -1211,9 +1282,10 @@
       "news_url": "https://www.leeton.nsw.gov.au/Your-Council/Council-News/Media-Releases",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 11675,
-      "region": "Western Riverina"
+      "region": "Western Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lithgow-city-council",
@@ -1230,11 +1302,12 @@
       "id": "liverpool-plains-shire-council",
       "name": "Liverpool Plains Shire Council",
       "news_url": "https://www.liverpoolplains.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 8030,
-      "region": "North West"
+      "region": "North West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "lockhart-shire-council",
@@ -1244,12 +1317,13 @@
       "enabled": true,
       "population": 3110,
       "region": "Riverina",
-      "use_curl": true,
+      "use_curl": false,
       "selectors": {
         "container": "a[href*='.pdf']",
         "title": "self",
         "link": "self"
-      }
+      },
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "mid-western-regional-council",
@@ -1257,9 +1331,10 @@
       "news_url": "https://www.midwestern.nsw.gov.au/Council/Media-and-news/Latest-news",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 25965,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "moree-plains-shire-council",
@@ -1280,9 +1355,10 @@
       "news_url": "https://www.murrayriver.nsw.gov.au/Council/News/Media-releases",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 12195,
-      "region": "Riverina"
+      "region": "Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "murrumbidgee-council",
@@ -1290,9 +1366,10 @@
       "news_url": "https://www.murrumbidgee.nsw.gov.au/News-notices/News-articles-Mayoral-Messages",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 4155,
-      "region": "Western Riverina"
+      "region": "Western Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "muswellbrook-shire-council",
@@ -1301,7 +1378,9 @@
       "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 17230,
-      "region": "Hunter"
+      "region": "Hunter",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "nambucca-valley-council",
@@ -1309,21 +1388,22 @@
       "news_url": "https://www.nambucca.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 21155,
       "region": "North Coast",
-      "impersonate": "chrome124",
-      "note": "2026-11-03: site moved to OpenCities; old URL dead"
+      "note": "2026-11-03: site moved to OpenCities; old URL dead",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "narrabri-shire-council",
       "name": "Narrabri Shire Council",
       "news_url": "https://www.narrabri.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 13275,
-      "region": "North West"
+      "region": "North West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "narrandera-shire-council",
@@ -1333,7 +1413,8 @@
       "enabled": true,
       "population": 6110,
       "region": "Western Riverina",
-      "use_curl": true
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "narromine-shire-council",
@@ -1341,10 +1422,11 @@
       "news_url": "https://www.narromine.nsw.gov.au/council/media-releases",
       "scraper": "narromine_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "limit": 20,
       "population": 6480,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "oberon-council",
@@ -1352,9 +1434,10 @@
       "news_url": "https://www.oberon.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 5680,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "parkes-shire-council",
@@ -1362,9 +1445,10 @@
       "news_url": "https://www.parkes.nsw.gov.au/Council/News-media-and-projects/Community-News",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 16185,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "richmond-valley-council",
@@ -1373,7 +1457,9 @@
       "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 24225,
-      "region": "North Coast"
+      "region": "North Coast",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "shellharbour-city-council",
@@ -1383,22 +1469,24 @@
       "enabled": true,
       "population": 78445,
       "region": "Illawarra",
-      "use_curl": true,
+      "use_curl": false,
       "item_selector": "table.views-table tbody tr",
       "title_selector": "td.views-field-title a",
       "link_selector": "td.views-field-title a",
       "date_selector": "td.views-field-field-mr-date",
-      "note": "2026-11-03: Drupal views table; dates were never read"
+      "note": "2026-11-03: Drupal views table; dates were never read",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "singleton-council",
       "name": "Singleton Council",
       "news_url": "https://www.singleton.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 24350,
-      "region": "Hunter"
+      "region": "Hunter",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "snowy-valleys-council",
@@ -1406,10 +1494,10 @@
       "news_url": "https://www.snowyvalleys.nsw.gov.au/News-Media",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome110",
+      "use_curl": false,
       "population": 15055,
-      "region": "Riverina"
+      "region": "Riverina",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "temora-shire-council",
@@ -1432,17 +1520,20 @@
       "scraper": "rss_scraper",
       "enabled": true,
       "population": 7150,
-      "region": "New England"
+      "region": "New England",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "upper-hunter-shire-council",
       "name": "Upper Hunter Shire Council",
       "news_url": "https://www.upperhunter.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 15125,
-      "region": "Hunter"
+      "region": "Hunter",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "upper-lachlan-shire-council",
@@ -1452,7 +1543,8 @@
       "enabled": true,
       "population": 8555,
       "region": "Riverina",
-      "use_curl": true
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "uralla-shire-council",
@@ -1474,7 +1566,9 @@
       "scraper": "wordpress_scraper",
       "enabled": true,
       "population": 3160,
-      "region": "New England"
+      "region": "New England",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "walgett-shire-council",
@@ -1494,11 +1588,13 @@
       "id": "warren-shire-council",
       "name": "Warren Shire Council",
       "news_url": "https://www.warren.nsw.gov.au/council/media-releases",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
       "limit": 5,
       "population": 2785,
-      "region": "Central West"
+      "region": "Central West",
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "warrumbungle-shire-council",
@@ -1506,32 +1602,35 @@
       "news_url": "https://www.warrumbungle.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 9485,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "weddin-shire-council",
       "name": "Weddin Shire Council",
       "news_url": "https://www.weddin.nsw.gov.au/News",
-      "scraper": "curl_scraper",
+      "scraper": "card_scraper",
       "enabled": true,
-      "use_curl": true,
-      "impersonate": "chrome124",
+      "use_curl": false,
       "bypass_proxy": true,
       "item_selector": ".list-item-container article",
       "title_selector": ".list-item-title",
       "date_selector": ".published-on",
       "link_selector": "a",
       "population": 3630,
-      "region": "Central West"
+      "region": "Central West",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wentworth-shire-council",
       "name": "Wentworth Shire Council",
       "news_url": "https://www.wentworth.nsw.gov.au/feed/",
       "scraper": "rss_scraper",
-      "enabled": true
+      "enabled": true,
+      "use_curl": false,
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "wingecarribee-shire-council",
@@ -1554,7 +1653,7 @@
       "enabled": true,
       "population": 57300,
       "region": "Greater Sydney",
-      "use_curl": true,
+      "use_curl": false,
       "selectors": {
         "container": "h3",
         "title": "a",
@@ -1565,7 +1664,8 @@
       "title_selector": "h3 a",
       "link_selector": "h3 a",
       "date_selector": "p.blog-post-meta a",
-      "note": "2026-11-03: default selectors matched bare h3s; date is relative text in the meta line"
+      "note": "2026-11-03: default selectors matched bare h3s; date is relative text in the meta line",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     },
     {
       "id": "yass-valley-council",
@@ -1573,9 +1673,10 @@
       "news_url": "https://www.yassvalley.nsw.gov.au/News-articles",
       "scraper": "opencities_scraper",
       "enabled": true,
-      "use_curl": true,
+      "use_curl": false,
       "population": 18275,
-      "region": "Southern Tablelands"
+      "region": "Southern Tablelands",
+      "user_agent": "LGNewsRoundupBot/1.0 (+https://lgnews.jonathonmarsden.com/bot.html)"
     }
   ]
 }
