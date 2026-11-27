@@ -23,7 +23,8 @@ residents visit.
 This project closes that gap. It reads each council's public news page once a
 day and posts the headline, with a link back to the council's own site, to a
 free public feed for that state. There is no paywall, no advertising, no
-tracking, and no editorial curation. Every post sends readers to the council.
+cookies, and no editorial curation: nothing is chosen or left out by a person.
+Every post sends readers to the council.
 
 It is the companion data service to
 [LG News Roundup](https://lgnewsroundup.com), Chris Eddy's local government
@@ -57,12 +58,18 @@ Councils are configuration, not code: adding one is a JSON entry in
   are recorded differently. Silent degradation is treated as the primary bug
   class, because it is the one that hides for months.
 - **Exactly once.** Articles are claimed atomically before publishing.
-- **Data minimisation.** Headline, URL, date, excerpt. Nothing else is
-  collected or stored.
-- **Polite by default.** One pass per council per day, capped retries, and an
-  identifiable User-Agent for councils that ask for one.
-- **Small attack surface.** No inbound network exposure, no accounts, no user
-  input. See [SECURITY.md](SECURITY.md).
+- **Data minimisation.** Headline, URL, date, a short excerpt and, for link
+  cards, the story page's own preview image and description. No personal
+  information.
+- **Polite.** One pass per council per day, a handful of requests per pass,
+  capped retries.
+- **Identifies itself (in progress).** Until November 2026 the crawler presented
+  as an ordinary browser to most councils and identified itself by name only to
+  councils that asked. During December 2026 it moves to identifying itself to
+  every council whose website accepts it; exceptions will be listed on the
+  [crawler page](https://councilnewswire.au/bot.html).
+- **Small attack surface.** The collector accepts no inbound connections. See
+  [SECURITY.md](SECURITY.md).
 
 ## Quick start
 
@@ -111,10 +118,11 @@ still detected. See [docs/](docs/) for runbooks.
 
 ## For council web administrators
 
-The crawler reads only your public news listing and links back to you. Full
-details of what it requests and how often are published at
-<https://councilnewswire.au/bot.html>. If you would like it to use an
-RSS feed or API instead, or have any question, email
+The crawler reads your public news, media-release and notice pages, plus a
+few linked story pages, and links back to you. Full details of what it
+requests, how often and how it identifies itself are published at
+<https://councilnewswire.au/bot.html>. To have it use an RSS feed or API
+instead, to be removed, or with any question, email
 **hello@councilnewswire.au** and it will be actioned promptly.
 
 ## Licence and contact
